@@ -17,6 +17,7 @@ import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass, Extensions } from "@tiptap/core";
 import { NovelContext } from "./provider";
 import { UseCompletionOptions } from "ai";
+import { CommandListProps } from "./interface";
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -31,6 +32,7 @@ export default function Editor({
   disableLocalStorage = false,
   grabEditor,
   useCustomCompletion,
+  lastTextKey = '++',
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -85,9 +87,11 @@ export default function Editor({
    */
   disableLocalStorage?: boolean;
 
-  useCustomCompletion?: (props?: UseCompletionOptions) => UseCompletionHelpers;
+  useCustomCompletion?: (props?: CommandListProps) => UseCompletionHelpers;
 
   grabEditor?: (editor: EditorClass | null) => void;
+
+  lastTextKey?: string;
 }) {
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
@@ -102,6 +106,8 @@ export default function Editor({
     }
   }, debounceDuration);
 
+  const lastTextLen = lastTextKey.length;
+
   const editor = useEditor({
     extensions: [...defaultExtensions, ...extensions],
     editorProps: {
@@ -110,12 +116,12 @@ export default function Editor({
     },
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2,
+      const lastChars = getPrevText(e.editor, {
+        chars: lastTextLen,
       });
-      if (lastTwo === "++" && !isLoading) {
+      if (lastChars === lastTextKey && !isLoading) {
         e.editor.commands.deleteRange({
-          from: selection.from - 2,
+          from: selection.from - lastTextLen,
           to: selection.from,
         });
         complete(
@@ -133,9 +139,6 @@ export default function Editor({
     autofocus: "end",
   });
 
-  if (grabEditor) grabEditor(editor);
-
-
   const defaultComplete = useCompletion({
     id: "novel",
     api: completionApi,
@@ -151,8 +154,7 @@ export default function Editor({
       //   va.track("Rate Limit Reached");
       // }
     },
-  }); 
-  // :{complete: () => {}, completion: "", isLoading: false, stop: () => {}};
+  });
 
   const { complete, completion, isLoading, stop } = useCustomCompletion ? useCustomCompletion() : defaultComplete;
 
@@ -177,7 +179,7 @@ export default function Editor({
             to: editor.state.selection.from,
           });
         }
-        editor?.commands.insertContent("++");
+        editor?.commands.insertContent(lastTextKey);
       }
     };
     const mousedownHandler = (e: MouseEvent) => {
@@ -212,13 +214,19 @@ export default function Editor({
       editor.commands.setContent(value);
       setHydrated(true);
     }
+
+    if (grabEditor) {
+      grabEditor(editor);
+    }
+
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
   return (
     <NovelContext.Provider
       value={{
+        lastTextKey,
         completionApi,
-        useCustomCompletion(){
+        useCustomCompletion() {
           return useCustomCompletion ? useCustomCompletion() : defaultComplete
         }
       }}

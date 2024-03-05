@@ -535,6 +535,7 @@ var getPrevText = (editor, {
 // src/ui/editor/provider.tsx
 var import_react = require("react");
 var NovelContext = (0, import_react.createContext)({
+  lastTextKey: "++",
   completionApi: "/api/generate",
   useCustomCompletion: (...props) => ({})
 });
@@ -702,15 +703,11 @@ var updateScrollView = (container, item) => {
     container.scrollTop += bottom - containerHeight - container.scrollTop + 5;
   }
 };
-var CommandList = ({
-  items,
-  command,
-  editor,
-  range
-}) => {
+var CommandList = (props) => {
+  const { items, command, editor, range } = props;
   const [selectedIndex, setSelectedIndex] = (0, import_react2.useState)(0);
-  const { completionApi } = (0, import_react2.useContext)(NovelContext);
-  const { complete, isLoading } = (0, import_react4.useCompletion)({
+  const { completionApi, useCustomCompletion } = (0, import_react2.useContext)(NovelContext);
+  const { complete, isLoading } = useCustomCompletion ? useCustomCompletion(props) : (0, import_react4.useCompletion)({
     id: "novel",
     api: completionApi,
     onResponse: (response) => {
@@ -1009,6 +1006,7 @@ function DragHandle(options) {
     }
   }
   return new import_state3.Plugin({
+    key: dragDrop,
     view: (view) => {
       var _a, _b;
       dragHandleElement = document.createElement("div");
@@ -16692,7 +16690,8 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   grabEditor,
-  useCustomCompletion
+  useCustomCompletion,
+  lastTextKey = "++"
 }) {
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react11.useState)(false);
@@ -16703,17 +16702,18 @@ function Editor2({
       setContent(json);
     }
   }), debounceDuration);
+  const lastTextLen = lastTextKey.length;
   const editor = (0, import_react12.useEditor)({
     extensions: [...defaultExtensions, ...extensions],
     editorProps: __spreadValues(__spreadValues({}, defaultEditorProps), editorProps),
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2
+      const lastChars = getPrevText(e.editor, {
+        chars: lastTextLen
       });
-      if (lastTwo === "++" && !isLoading) {
+      if (lastChars === lastTextKey && !isLoading) {
         e.editor.commands.deleteRange({
-          from: selection.from - 2,
+          from: selection.from - lastTextLen,
           to: selection.from
         });
         complete(
@@ -16728,8 +16728,6 @@ function Editor2({
     },
     autofocus: "end"
   });
-  if (grabEditor)
-    grabEditor(editor);
   const defaultComplete = (0, import_react13.useCompletion)({
     id: "novel",
     api: completionApi,
@@ -16760,7 +16758,7 @@ function Editor2({
             to: editor.state.selection.from
           });
         }
-        editor == null ? void 0 : editor.commands.insertContent("++");
+        editor == null ? void 0 : editor.commands.insertContent(lastTextKey);
       }
     };
     const mousedownHandler = (e) => {
@@ -16791,11 +16789,15 @@ function Editor2({
       editor.commands.setContent(value);
       setHydrated(true);
     }
+    if (grabEditor) {
+      grabEditor(editor);
+    }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
     NovelContext.Provider,
     {
       value: {
+        lastTextKey,
         completionApi,
         useCustomCompletion() {
           return useCustomCompletion ? useCustomCompletion() : defaultComplete;

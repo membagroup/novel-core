@@ -116,7 +116,8 @@ function DragHandle(options: DragHandleOptions) {
     }
   }
 
-  return new Plugin({
+  return new Plugin({    
+    key: dragDrop,
     view: (view) => {
       dragHandleElement = document.createElement("div");
       dragHandleElement.draggable = true;

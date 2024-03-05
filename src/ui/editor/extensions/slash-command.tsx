@@ -33,23 +33,14 @@ import { getPrevText } from "@/lib/editor";
 import { startImageUpload } from "@/ui/editor/plugins/upload-images";
 import { NovelContext } from "../provider";
 import { PluginKey } from "@tiptap/pm/state";
+import { CommandItemProps, CommandListProps, CommandProps } from "../interface";
 const slashCommand = new PluginKey("slash-command");
 
-interface CommandItemProps {
-  title: string;
-  description: string;
-  icon: ReactNode;
-}
-
-interface CommandProps {
-  editor: Editor;
-  range: Range;
-}
 
 const Command = Extension.create({
   name: "slash-command",
   addOptions() {
-    return {
+    return {      
       suggestion: {
         char: "/",
         command: ({
@@ -248,43 +239,34 @@ export const updateScrollView = (container: HTMLElement, item: HTMLElement) => {
   }
 };
 
-const CommandList = ({
-  items,
-  command,
-  editor,
-  range,
-}: {
-  items: CommandItemProps[];
-  command: any;
-  editor: any;
-  range: any;
-}) => {
+const CommandList = (props: CommandListProps) => {
+  const { items, command, editor, range, } = props;
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { completionApi } = useContext(NovelContext);
+  const { completionApi, useCustomCompletion } = useContext(NovelContext);
 
-  const { complete, isLoading } = useCompletion({
-    id: "novel",
-    api: completionApi,
-    onResponse: (response) => {
-      if (response.status === 429) {
-        toast.error("You have reached your request limit for the day.");
-        // va.track("Rate Limit Reached");
-        return;
-      }
-      editor.chain().focus().deleteRange(range).run();
-    },
-    onFinish: (_prompt, completion) => {
-      // highlight the generated text
-      editor.commands.setTextSelection({
-        from: range.from,
-        to: range.from + completion.length,
-      });
-    },
-    onError: (e) => {
-      toast.error(e.message);
-    },
-  });
+  const { complete, isLoading } = useCustomCompletion ? useCustomCompletion(props) : useCompletion({
+      id: "novel",
+      api: completionApi,
+      onResponse: (response) => {
+        if (response.status === 429) {
+          toast.error("You have reached your request limit for the day.");
+          // va.track("Rate Limit Reached");
+          return;
+        }
+        editor.chain().focus().deleteRange(range).run();
+      },
+      onFinish: (_prompt, completion) => {
+        // highlight the generated text
+        editor.commands.setTextSelection({
+          from: range.from,
+          to: range.from + completion.length,
+        });
+      },
+      onError: (e) => {
+        toast.error(e.message);
+      },
+    });
 
   const selectItem = useCallback(
     (index: number) => {
@@ -358,11 +340,10 @@ const CommandList = ({
       {items.map((item: CommandItemProps, index: number) => {
         return (
           <button
-            className={`novel-flex novel-w-full novel-items-center novel-space-x-2 novel-rounded-md novel-px-2 novel-py-1 novel-text-left novel-text-sm novel-text-stone-900 hover:novel-bg-stone-100 ${
-              index === selectedIndex
+            className={`novel-flex novel-w-full novel-items-center novel-space-x-2 novel-rounded-md novel-px-2 novel-py-1 novel-text-left novel-text-sm novel-text-stone-900 hover:novel-bg-stone-100 ${index === selectedIndex
                 ? "novel-bg-stone-100 novel-text-stone-900"
                 : ""
-            }`}
+              }`}
             key={index}
             onClick={() => selectItem(index)}
           >

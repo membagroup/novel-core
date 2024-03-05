@@ -521,6 +521,7 @@ var getPrevText = (editor, {
 // src/ui/editor/provider.tsx
 import { createContext } from "react";
 var NovelContext = createContext({
+  lastTextKey: "++",
   completionApi: "/api/generate",
   useCustomCompletion: (...props) => ({})
 });
@@ -688,15 +689,11 @@ var updateScrollView = (container, item) => {
     container.scrollTop += bottom - containerHeight - container.scrollTop + 5;
   }
 };
-var CommandList = ({
-  items,
-  command,
-  editor,
-  range
-}) => {
+var CommandList = (props) => {
+  const { items, command, editor, range } = props;
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { completionApi } = useContext(NovelContext);
-  const { complete, isLoading } = useCompletion({
+  const { completionApi, useCustomCompletion } = useContext(NovelContext);
+  const { complete, isLoading } = useCustomCompletion ? useCustomCompletion(props) : useCompletion({
     id: "novel",
     api: completionApi,
     onResponse: (response) => {
@@ -995,6 +992,7 @@ function DragHandle(options) {
     }
   }
   return new Plugin2({
+    key: dragDrop,
     view: (view) => {
       var _a, _b;
       dragHandleElement = document.createElement("div");
@@ -16695,7 +16693,8 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   grabEditor,
-  useCustomCompletion
+  useCustomCompletion,
+  lastTextKey = "++"
 }) {
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState4(false);
@@ -16706,17 +16705,18 @@ function Editor2({
       setContent(json);
     }
   }), debounceDuration);
+  const lastTextLen = lastTextKey.length;
   const editor = useEditor({
     extensions: [...defaultExtensions, ...extensions],
     editorProps: __spreadValues(__spreadValues({}, defaultEditorProps), editorProps),
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2
+      const lastChars = getPrevText(e.editor, {
+        chars: lastTextLen
       });
-      if (lastTwo === "++" && !isLoading) {
+      if (lastChars === lastTextKey && !isLoading) {
         e.editor.commands.deleteRange({
-          from: selection.from - 2,
+          from: selection.from - lastTextLen,
           to: selection.from
         });
         complete(
@@ -16731,8 +16731,6 @@ function Editor2({
     },
     autofocus: "end"
   });
-  if (grabEditor)
-    grabEditor(editor);
   const defaultComplete = useCompletion2({
     id: "novel",
     api: completionApi,
@@ -16763,7 +16761,7 @@ function Editor2({
             to: editor.state.selection.from
           });
         }
-        editor == null ? void 0 : editor.commands.insertContent("++");
+        editor == null ? void 0 : editor.commands.insertContent(lastTextKey);
       }
     };
     const mousedownHandler = (e) => {
@@ -16794,11 +16792,15 @@ function Editor2({
       editor.commands.setContent(value);
       setHydrated(true);
     }
+    if (grabEditor) {
+      grabEditor(editor);
+    }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
   return /* @__PURE__ */ jsx9(
     NovelContext.Provider,
     {
       value: {
+        lastTextKey,
         completionApi,
         useCustomCompletion() {
           return useCustomCompletion ? useCustomCompletion() : defaultComplete;
