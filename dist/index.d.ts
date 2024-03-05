@@ -1,10 +1,26 @@
+import { ReactNode } from 'react';
+import { Editor as Editor$1, Range, Extensions } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
 import { UseCompletionHelpers } from 'ai/react';
 import { EditorProps } from '@tiptap/pm/view';
-import { Extensions, Editor as Editor$1 } from '@tiptap/core';
-import { UseCompletionOptions } from 'ai';
 
-declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, grabEditor, useCustomCompletion, }: {
+interface CommandItemProps {
+    title: string;
+    description: string;
+    icon: ReactNode;
+}
+interface CommandProps {
+    editor: Editor$1;
+    range: Range;
+}
+interface CommandListProps {
+    items: CommandItemProps[];
+    command: any;
+    editor: any;
+    range: any;
+}
+
+declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, grabEditor, useCustomCompletion, lastTextKey, }: {
     /**
      * The API route to use for the OpenAI completion API.
      * Defaults to "/api/generate".
@@ -55,8 +71,9 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
      * Defaults to false.
      */
     disableLocalStorage?: boolean;
-    useCustomCompletion?: (props?: UseCompletionOptions) => UseCompletionHelpers;
+    useCustomCompletion?: (props?: CommandListProps) => UseCompletionHelpers;
     grabEditor?: (editor: Editor$1 | null) => void;
+    lastTextKey?: string;
 }): JSX.Element;
 
-export { Editor };
+export { CommandItemProps, CommandListProps, CommandProps, Editor };
