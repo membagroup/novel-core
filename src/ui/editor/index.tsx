@@ -155,7 +155,6 @@ export default function Editor({
       // }
     },
   });
-  // :{complete: () => {}, completion: "", isLoading: false, stop: () => {}};
 
   const { complete, completion, isLoading, stop } = useCustomCompletion ? useCustomCompletion() : defaultComplete;
 

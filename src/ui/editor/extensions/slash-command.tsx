@@ -40,7 +40,7 @@ const slashCommand = new PluginKey("slash-command");
 const Command = Extension.create({
   name: "slash-command",
   addOptions() {
-    return {
+    return {      
       suggestion: {
         char: "/",
         command: ({

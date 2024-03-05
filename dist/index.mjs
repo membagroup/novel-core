@@ -992,6 +992,7 @@ function DragHandle(options) {
     }
   }
   return new Plugin2({
+    key: dragDrop,
     view: (view) => {
       var _a, _b;
       dragHandleElement = document.createElement("div");

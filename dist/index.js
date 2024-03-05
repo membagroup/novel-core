@@ -1006,6 +1006,7 @@ function DragHandle(options) {
     }
   }
   return new import_state3.Plugin({
+    key: dragDrop,
     view: (view) => {
       var _a, _b;
       dragHandleElement = document.createElement("div");
