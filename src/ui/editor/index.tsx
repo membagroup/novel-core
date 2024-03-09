@@ -33,6 +33,7 @@ export default function Editor({
   grabEditor,
   useCustomCompletion,
   lastTextKey = '++',
+  disableHistory = false,
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -92,6 +93,8 @@ export default function Editor({
   grabEditor?: (editor: EditorClass | null) => void;
 
   lastTextKey?: string;
+
+  disableHistory?: boolean;
 }) {
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
@@ -109,7 +112,7 @@ export default function Editor({
   const lastTextLen = lastTextKey.length;
 
   const editor = useEditor({
-    extensions: [...defaultExtensions, ...extensions],
+    extensions: [...defaultExtensions({ disableHistory }), ...extensions],
     editorProps: {
       ...defaultEditorProps,
       ...editorProps,
