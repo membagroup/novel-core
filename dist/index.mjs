@@ -1078,8 +1078,8 @@ var DragAndDrop = Extension3.create({
 var drag_and_drop_default = DragAndDrop;
 
 // src/ui/editor/extensions/index.tsx
-var defaultExtensions = [
-  StarterKit.configure({
+var defaultExtensions = ({ disableHistory = false }) => [
+  StarterKit.configure(__spreadValues({
     bulletList: {
       HTMLAttributes: {
         class: "novel-list-disc novel-list-outside novel-leading-3 novel--mt-2"
@@ -1117,7 +1117,7 @@ var defaultExtensions = [
       width: 4
     },
     gapcursor: false
-  }),
+  }, disableHistory && { history: false })),
   // patch to fix horizontal rule bug: https://github.com/ueberdosis/tiptap/pull/3859#issuecomment-1536799740
   HorizontalRule.extend({
     addInputRules() {
@@ -16694,7 +16694,8 @@ function Editor2({
   disableLocalStorage = false,
   grabEditor,
   useCustomCompletion,
-  lastTextKey = "++"
+  lastTextKey = "++",
+  disableHistory = false
 }) {
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState4(false);
@@ -16707,7 +16708,7 @@ function Editor2({
   }), debounceDuration);
   const lastTextLen = lastTextKey.length;
   const editor = useEditor({
-    extensions: [...defaultExtensions, ...extensions],
+    extensions: [...defaultExtensions({ disableHistory }), ...extensions],
     editorProps: __spreadValues(__spreadValues({}, defaultEditorProps), editorProps),
     onUpdate: (e) => {
       const selection = e.editor.state.selection;

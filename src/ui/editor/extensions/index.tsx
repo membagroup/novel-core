@@ -17,7 +17,7 @@ import UpdatedImage from "./updated-image";
 import CustomKeymap from "./custom-keymap";
 import DragAndDrop from "./drag-and-drop";
 
-export const defaultExtensions = [
+export const defaultExtensions = ({ disableHistory = false }: { disableHistory?: boolean }) => [
   StarterKit.configure({
     bulletList: {
       HTMLAttributes: {
@@ -59,6 +59,7 @@ export const defaultExtensions = [
       width: 4,
     },
     gapcursor: false,
+    ...(disableHistory && { history: false })
   }),
   // patch to fix horizontal rule bug: https://github.com/ueberdosis/tiptap/pull/3859#issuecomment-1536799740
   HorizontalRule.extend({
