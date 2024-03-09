@@ -112,7 +112,7 @@ export default function Editor({
   const lastTextLen = lastTextKey.length;
 
   const editor = useEditor({
-    extensions: [...defaultExtensions({ disableHistory }), ...extensions],
+    extensions: [...defaultExtensions({ disableHistory }), ...extensions] as any[],
     editorProps: {
       ...defaultEditorProps,
       ...editorProps,
