@@ -34,6 +34,7 @@ export default function Editor({
   useCustomCompletion,
   lastTextKey = '++',
   disableHistory = false,
+  feedbackCallback = () => { },
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -95,6 +96,8 @@ export default function Editor({
   lastTextKey?: string;
 
   disableHistory?: boolean;
+
+  feedbackCallback?: () => void;
 }) {
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
@@ -227,6 +230,7 @@ export default function Editor({
   return (
     <NovelContext.Provider
       value={{
+        feedbackCallback,
         lastTextKey,
         completionApi,
         useCustomCompletion() {

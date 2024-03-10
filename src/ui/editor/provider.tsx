@@ -9,9 +9,11 @@ import { CommandListProps } from "./interface";
 export const NovelContext = createContext<{
   lastTextKey: string;
   completionApi: string;
-  useCustomCompletion: (props?: CommandListProps)=> UseCompletionHelpers;
+  feedbackCallback: () => void;
+  useCustomCompletion: (props?: CommandListProps) => UseCompletionHelpers;
 }>({
   lastTextKey: '++',
   completionApi: "/api/generate",
+  feedbackCallback: () => { },
   useCustomCompletion: (...props) => ({} as UseCompletionHelpers),
 });
