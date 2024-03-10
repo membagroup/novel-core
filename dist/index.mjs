@@ -523,6 +523,8 @@ import { createContext } from "react";
 var NovelContext = createContext({
   lastTextKey: "++",
   completionApi: "/api/generate",
+  feedbackCallback: () => {
+  },
   useCustomCompletion: (...props) => ({})
 });
 
@@ -562,15 +564,6 @@ var getSuggestionItems = ({ query }) => {
       description: "Use AI to expand your thoughts.",
       searchTerms: ["gpt"],
       icon: /* @__PURE__ */ jsx3(Magic, { className: "novel-w-7" })
-    },
-    {
-      title: "Send Feedback",
-      description: "Let us know how we can improve.",
-      icon: /* @__PURE__ */ jsx3(MessageSquarePlus, { size: 18 }),
-      command: ({ editor, range }) => {
-        editor.chain().focus().deleteRange(range).run();
-        window.open("/feedback", "_blank");
-      }
     },
     {
       title: "Text",
@@ -669,6 +662,14 @@ var getSuggestionItems = ({ query }) => {
         });
         input.click();
       }
+    },
+    {
+      title: "Send Feedback",
+      description: "Let us know how we can improve.",
+      icon: /* @__PURE__ */ jsx3(MessageSquarePlus, { size: 18 }),
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).run();
+      }
     }
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
@@ -692,7 +693,7 @@ var updateScrollView = (container, item) => {
 var CommandList = (props) => {
   const { items, command, editor, range } = props;
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { completionApi, useCustomCompletion } = useContext(NovelContext);
+  const { completionApi, useCustomCompletion, feedbackCallback } = useContext(NovelContext);
   const { complete, isLoading } = useCustomCompletion ? useCustomCompletion(props) : useCompletion({
     id: "novel",
     api: completionApi,
@@ -728,6 +729,9 @@ var CommandList = (props) => {
           );
         } else {
           command(item);
+          if (item.title === "Send Feedback") {
+            feedbackCallback && feedbackCallback();
+          }
         }
       }
     },
@@ -16695,7 +16699,9 @@ function Editor2({
   grabEditor,
   useCustomCompletion,
   lastTextKey = "++",
-  disableHistory = false
+  disableHistory = false,
+  feedbackCallback = () => {
+  }
 }) {
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState4(false);
@@ -16801,6 +16807,7 @@ function Editor2({
     NovelContext.Provider,
     {
       value: {
+        feedbackCallback,
         lastTextKey,
         completionApi,
         useCustomCompletion() {
