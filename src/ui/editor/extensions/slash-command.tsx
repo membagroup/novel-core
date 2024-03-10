@@ -40,7 +40,7 @@ const slashCommand = new PluginKey("slash-command");
 const Command = Extension.create({
   name: "slash-command",
   addOptions() {
-    return {      
+    return {
       suggestion: {
         char: "/",
         command: ({
@@ -75,15 +75,6 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       description: "Use AI to expand your thoughts.",
       searchTerms: ["gpt"],
       icon: <Magic className="novel-w-7" />,
-    },
-    {
-      title: "Send Feedback",
-      description: "Let us know how we can improve.",
-      icon: <MessageSquarePlus size={18} />,
-      command: ({ editor, range }: CommandProps) => {
-        editor.chain().focus().deleteRange(range).run();
-        window.open("/feedback", "_blank");
-      },
     },
     {
       title: "Text",
@@ -211,6 +202,15 @@ const getSuggestionItems = ({ query }: { query: string }) => {
         input.click();
       },
     },
+    {
+      title: "Send Feedback",
+      description: "Let us know how we can improve.",
+      icon: <MessageSquarePlus size={18} />,
+      command: ({ editor, range }: CommandProps) => {
+        editor.chain().focus().deleteRange(range).run();
+        // window.open("/feedback", "_blank");
+      },
+    },
   ].filter((item) => {
     if (typeof query === "string" && query.length > 0) {
       const search = query.toLowerCase();
@@ -243,30 +243,30 @@ const CommandList = (props: CommandListProps) => {
   const { items, command, editor, range, } = props;
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { completionApi, useCustomCompletion } = useContext(NovelContext);
+  const { completionApi, useCustomCompletion, feedbackCallback } = useContext(NovelContext);
 
   const { complete, isLoading } = useCustomCompletion ? useCustomCompletion(props) : useCompletion({
-      id: "novel",
-      api: completionApi,
-      onResponse: (response) => {
-        if (response.status === 429) {
-          toast.error("You have reached your request limit for the day.");
-          // va.track("Rate Limit Reached");
-          return;
-        }
-        editor.chain().focus().deleteRange(range).run();
-      },
-      onFinish: (_prompt, completion) => {
-        // highlight the generated text
-        editor.commands.setTextSelection({
-          from: range.from,
-          to: range.from + completion.length,
-        });
-      },
-      onError: (e) => {
-        toast.error(e.message);
-      },
-    });
+    id: "novel",
+    api: completionApi,
+    onResponse: (response) => {
+      if (response.status === 429) {
+        toast.error("You have reached your request limit for the day.");
+        // va.track("Rate Limit Reached");
+        return;
+      }
+      editor.chain().focus().deleteRange(range).run();
+    },
+    onFinish: (_prompt, completion) => {
+      // highlight the generated text
+      editor.commands.setTextSelection({
+        from: range.from,
+        to: range.from + completion.length,
+      });
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    },
+  });
 
   const selectItem = useCallback(
     (index: number) => {
@@ -285,6 +285,9 @@ const CommandList = (props: CommandListProps) => {
           );
         } else {
           command(item);
+          if (item.title === 'Send Feedback') {
+            feedbackCallback && feedbackCallback();
+          }
         }
       }
     },
@@ -341,8 +344,8 @@ const CommandList = (props: CommandListProps) => {
         return (
           <button
             className={`novel-flex novel-w-full novel-items-center novel-space-x-2 novel-rounded-md novel-px-2 novel-py-1 novel-text-left novel-text-sm novel-text-stone-900 hover:novel-bg-stone-100 ${index === selectedIndex
-                ? "novel-bg-stone-100 novel-text-stone-900"
-                : ""
+              ? "novel-bg-stone-100 novel-text-stone-900"
+              : ""
               }`}
             key={index}
             onClick={() => selectItem(index)}
