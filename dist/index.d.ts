@@ -72,7 +72,7 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
      */
     disableLocalStorage?: boolean;
     useCustomCompletion?: (props?: CommandListProps) => UseCompletionHelpers;
-    grabEditor?: (editor: Editor$1 | null) => void;
+    grabEditor?: (editor: Editor$1) => void;
     lastTextKey?: string;
     disableHistory?: boolean;
 }): JSX.Element;

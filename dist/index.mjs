@@ -16793,7 +16793,7 @@ function Editor2({
       editor.commands.setContent(value);
       setHydrated(true);
     }
-    if (grabEditor) {
+    if (grabEditor && editor) {
       grabEditor(editor);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
