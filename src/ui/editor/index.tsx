@@ -90,7 +90,7 @@ export default function Editor({
 
   useCustomCompletion?: (props?: CommandListProps) => UseCompletionHelpers;
 
-  grabEditor?: (editor: EditorClass | null) => void;
+  grabEditor?: (editor: EditorClass) => void;
 
   lastTextKey?: string;
 
@@ -218,7 +218,7 @@ export default function Editor({
       setHydrated(true);
     }
 
-    if (grabEditor) {
+    if (grabEditor && editor) {
       grabEditor(editor);
     }
 
