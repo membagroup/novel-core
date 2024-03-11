@@ -382,7 +382,7 @@ const renderItems = () => {
       });
 
       // @ts-ignore
-      popup = tippy("body", {
+      const instances = tippy("body", {
         getReferenceClientRect: props.clientRect,
         appendTo: () => document.body,
         content: component.element,
@@ -391,19 +391,22 @@ const renderItems = () => {
         trigger: "manual",
         placement: "bottom-start",
       });
+
+      popup = instances[0];
     },
     onUpdate: (props: { editor: Editor; clientRect: DOMRect }) => {
       component?.updateProps(props);
 
+      if (!popup || popup?.state?.isDestroyed) return;
       popup &&
-        popup[0].setProps({
+        popup.setProps({
           getReferenceClientRect: props.clientRect,
         });
     },
     onKeyDown: (props: { event: KeyboardEvent }) => {
       if (props.event.key === "Escape") {
-        popup?.[0].hide();
-
+        if (!popup || popup?.state?.isDestroyed) return;
+        popup?.hide();
         return true;
       }
 
@@ -411,7 +414,8 @@ const renderItems = () => {
       return component?.ref?.onKeyDown(props);
     },
     onExit: () => {
-      popup?.[0].destroy();
+      if (!popup || popup?.state?.isDestroyed) return;
+      popup?.destroy();
       component?.destroy();
     },
   };
