@@ -821,7 +821,7 @@ var renderItems = () => {
         props,
         editor: props.editor
       });
-      popup = (0, import_tippy.default)("body", {
+      const instances = (0, import_tippy.default)("body", {
         getReferenceClientRect: props.clientRect,
         appendTo: () => document.body,
         content: component.element,
@@ -830,23 +830,32 @@ var renderItems = () => {
         trigger: "manual",
         placement: "bottom-start"
       });
+      popup = instances[0];
     },
     onUpdate: (props) => {
+      var _a;
       component == null ? void 0 : component.updateProps(props);
-      popup && popup[0].setProps({
+      if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed))
+        return;
+      popup && popup.setProps({
         getReferenceClientRect: props.clientRect
       });
     },
     onKeyDown: (props) => {
-      var _a;
+      var _a, _b;
       if (props.event.key === "Escape") {
-        popup == null ? void 0 : popup[0].hide();
+        if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed))
+          return;
+        popup == null ? void 0 : popup.hide();
         return true;
       }
-      return (_a = component == null ? void 0 : component.ref) == null ? void 0 : _a.onKeyDown(props);
+      return (_b = component == null ? void 0 : component.ref) == null ? void 0 : _b.onKeyDown(props);
     },
     onExit: () => {
-      popup == null ? void 0 : popup[0].destroy();
+      var _a;
+      if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed))
+        return;
+      popup == null ? void 0 : popup.destroy();
       component == null ? void 0 : component.destroy();
     }
   };
