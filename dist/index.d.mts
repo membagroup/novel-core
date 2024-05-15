@@ -20,7 +20,7 @@ interface CommandListProps {
     range: any;
 }
 
-declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, grabEditor, useCustomCompletion, lastTextKey, disableHistory, feedbackCallback, }: {
+declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, grabEditor, useCustomCompletion, lastTextKey, disableHistory, feedbackCallback, isFetching, Loader, }: {
     /**
      * The API route to use for the OpenAI completion API.
      * Defaults to "/api/generate".
@@ -76,6 +76,8 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
     lastTextKey?: string;
     disableHistory?: boolean;
     feedbackCallback?: () => void;
+    isFetching?: boolean;
+    Loader?: JSX.Element;
 }): JSX.Element;
 
 export { CommandItemProps, CommandListProps, CommandProps, Editor };

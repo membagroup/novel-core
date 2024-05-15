@@ -18,6 +18,7 @@ import { Editor as EditorClass, Extensions } from "@tiptap/core";
 import { NovelContext } from "./provider";
 import { UseCompletionOptions } from "ai";
 import { CommandListProps } from "./interface";
+import { LoadingCircle } from "@/ui/icons";
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -35,6 +36,8 @@ export default function Editor({
   lastTextKey = '++',
   disableHistory = false,
   feedbackCallback = () => { },
+  isFetching = false,
+  Loader,
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -98,6 +101,9 @@ export default function Editor({
   disableHistory?: boolean;
 
   feedbackCallback?: () => void;
+
+  isFetching?: boolean;
+  Loader?: JSX.Element;
 }) {
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
@@ -120,6 +126,13 @@ export default function Editor({
       ...defaultEditorProps,
       ...editorProps,
     },
+    // onCreate: (e) => {
+    //   grabEditor?.(e.editor);
+    //   if (content) {
+    //     e.editor.commands.setContent(content);
+    //   }
+    //   setHydrated(true);
+    // },
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastChars = getPrevText(e.editor, {
@@ -138,6 +151,7 @@ export default function Editor({
         // complete(e.editor.storage.markdown.getMarkdown());
         // va.track("Autocomplete Shortcut Used");
       } else {
+        // grabEditor && grabEditor(e.editor);
         onUpdate(e.editor);
         debouncedUpdates(e);
       }
@@ -227,6 +241,10 @@ export default function Editor({
 
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
+  // useEffect(() => {
+  //   editor?.setEditable(isFetching ? false : true);
+  // }, [isFetching]);
+
   return (
     <NovelContext.Provider
       value={{
@@ -247,6 +265,7 @@ export default function Editor({
         {editor && <EditorBubbleMenu editor={editor} />}
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
+        {isLoading || isFetching ? (Loader ? <>{Loader}</> : <div className="novel-fixed novel-top-[50%] novel-left-[40%]"><LoadingCircle dimensions={`novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]`} /></div>) : null}
       </div>
     </NovelContext.Provider>
   );
