@@ -236,7 +236,7 @@ export default function Editor({
     if (grabEditor && editor) {
       grabEditor(editor);
     }
-    
+
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
   return (
@@ -259,7 +259,7 @@ export default function Editor({
         {editor && <EditorBubbleMenu editor={editor} />}
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {isLoading || isFetching ? (<div className="novel-absolute novel-top-[50%] novel-left-[50%] novel-w-[5rem] novel-h-[5rem]"><LoadingCircle /></div>) : null}
+        {isLoading || isFetching ? (<div className="novel-fixed novel-top-[50%] novel-left-[50%]"><LoadingCircle dimensions={`novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]`} /></div>) : null}
       </div>
     </NovelContext.Provider>
   );
