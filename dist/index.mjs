@@ -857,6 +857,23 @@ var slash_command_default = SlashCommand;
 // src/ui/editor/extensions/index.tsx
 import { InputRule } from "@tiptap/core";
 
+// src/ui/editor/extensions/updated-image.ts
+import Image2 from "@tiptap/extension-image";
+var UpdatedImage = Image2.extend({
+  addAttributes() {
+    var _a;
+    return __spreadProps(__spreadValues({}, (_a = this.parent) == null ? void 0 : _a.call(this)), {
+      width: {
+        default: null
+      },
+      height: {
+        default: null
+      }
+    });
+  }
+});
+var updated_image_default = UpdatedImage;
+
 // src/ui/editor/extensions/custom-keymap.ts
 import { Extension as Extension2 } from "@tiptap/core";
 var CustomKeymap = Extension2.create({
@@ -1153,11 +1170,11 @@ var defaultExtensions = ({ disableHistory = false }) => [
       class: "novel-rounded-lg novel-border novel-border-stone-200"
     }
   }),
-  // UpdatedImage.configure({
-  //   HTMLAttributes: {
-  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
-  //   },
-  // }),
+  updated_image_default.configure({
+    HTMLAttributes: {
+      class: "novel-rounded-lg novel-border novel-border-stone-200"
+    }
+  }),
   // Placeholder.configure({
   //   placeholder: ({ node }) => {
   //     if (node.type.name === "heading") {
@@ -16708,7 +16725,15 @@ function Editor2({
   const editor = useEditor({
     extensions: [...defaultExtensions({ disableHistory }), ...extensions],
     editorProps: __spreadValues(__spreadValues({}, defaultEditorProps), editorProps),
+    // onCreate: (e) => {
+    //   grabEditor?.(e.editor);
+    //   if (content) {
+    //     e.editor.commands.setContent(content);
+    //   }
+    //   setHydrated(true);
+    // },
     onUpdate: (e) => {
+      grabEditor && grabEditor(e.editor);
       const selection = e.editor.state.selection;
       const lastChars = getPrevText(e.editor, {
         chars: lastTextLen
@@ -16791,40 +16816,39 @@ function Editor2({
       editor.commands.setContent(value);
       setHydrated(true);
     }
+  }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
+  useEffect5(() => {
     if (grabEditor && editor) {
       grabEditor(editor);
     }
-  }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-  return /* @__PURE__ */ jsxs8(Fragment2, { children: [
-    /* @__PURE__ */ jsx9("h1", { children: "helloworld1" }),
-    /* @__PURE__ */ jsx9(
-      NovelContext.Provider,
-      {
-        value: {
-          feedbackCallback,
-          lastTextKey,
-          completionApi,
-          useCustomCompletion() {
-            return useCustomCompletion ? useCustomCompletion() : defaultComplete;
-          }
-        },
-        children: /* @__PURE__ */ jsxs8(
-          "div",
-          {
-            onClick: () => {
-              editor == null ? void 0 : editor.chain().focus().run();
-            },
-            className,
-            children: [
-              editor && /* @__PURE__ */ jsx9(EditorBubbleMenu, { editor }),
-              (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx9(ImageResizer, { editor }),
-              /* @__PURE__ */ jsx9(EditorContent, { editor })
-            ]
-          }
-        )
-      }
-    )
-  ] });
+  }, [editor, grabEditor]);
+  return /* @__PURE__ */ jsx9(Fragment2, { children: /* @__PURE__ */ jsx9(
+    NovelContext.Provider,
+    {
+      value: {
+        feedbackCallback,
+        lastTextKey,
+        completionApi,
+        useCustomCompletion() {
+          return useCustomCompletion ? useCustomCompletion() : defaultComplete;
+        }
+      },
+      children: /* @__PURE__ */ jsxs8(
+        "div",
+        {
+          onClick: () => {
+            editor == null ? void 0 : editor.chain().focus().run();
+          },
+          className,
+          children: [
+            editor && /* @__PURE__ */ jsx9(EditorBubbleMenu, { editor }),
+            (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx9(ImageResizer, { editor }),
+            /* @__PURE__ */ jsx9(EditorContent, { editor })
+          ]
+        }
+      )
+    }
+  ) });
 }
 export {
   Editor2 as Editor

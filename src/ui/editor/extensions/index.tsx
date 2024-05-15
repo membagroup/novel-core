@@ -13,7 +13,7 @@ import Highlight from "@tiptap/extension-highlight";
 import SlashCommand from "./slash-command";
 import { InputRule } from "@tiptap/core";
 import UploadImagesPlugin from "@/ui/editor/plugins/upload-images";
-// import UpdatedImage from "./updated-image";
+import UpdatedImage from "./updated-image";
 import CustomKeymap from "./custom-keymap";
 import DragAndDrop from "./drag-and-drop";
 
@@ -103,11 +103,11 @@ export const defaultExtensions = ({ disableHistory = false }: { disableHistory?:
       class: "novel-rounded-lg novel-border novel-border-stone-200",
     },
   }),
-  // UpdatedImage.configure({
-  //   HTMLAttributes: {
-  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
-  //   },
-  // }),
+  UpdatedImage.configure({
+    HTMLAttributes: {
+      class: "novel-rounded-lg novel-border novel-border-stone-200",
+    },
+  }),
   // Placeholder.configure({
   //   placeholder: ({ node }) => {
   //     if (node.type.name === "heading") {

@@ -121,7 +121,15 @@ export default function Editor({
       ...defaultEditorProps,
       ...editorProps,
     },
+    // onCreate: (e) => {
+    //   grabEditor?.(e.editor);
+    //   if (content) {
+    //     e.editor.commands.setContent(content);
+    //   }
+    //   setHydrated(true);
+    // },
     onUpdate: (e) => {
+      grabEditor && grabEditor(e.editor);
       const selection = e.editor.state.selection;
       const lastChars = getPrevText(e.editor, {
         chars: lastTextLen,
@@ -222,15 +230,18 @@ export default function Editor({
       setHydrated(true);
     }
 
-    if (grabEditor && editor) {
+  }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
+
+
+  useEffect(() => {
+     if (grabEditor && editor) {
       grabEditor(editor);
     }
-
-  }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
+  }, [editor, grabEditor]);
 
   return (
     <>
-    <h1>helloworld1</h1>  
+    {/* <h1>helloworld1</h1>   */}
     <NovelContext.Provider
       value={{
         feedbackCallback,
