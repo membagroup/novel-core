@@ -236,6 +236,7 @@ export default function Editor({
     if (grabEditor && editor) {
       grabEditor(editor);
     }
+    
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
   return (
