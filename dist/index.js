@@ -265,6 +265,45 @@ var import_sonner = require("sonner");
 var import_state = require("@tiptap/pm/state");
 var import_view = require("@tiptap/pm/view");
 var uploadKey = new import_state.PluginKey("upload-image");
+var UploadImagesPlugin = () => new import_state.Plugin({
+  key: uploadKey,
+  state: {
+    init() {
+      return import_view.DecorationSet.empty;
+    },
+    apply(tr, set) {
+      set = set.map(tr.mapping, tr.doc);
+      const action = tr.getMeta(this);
+      if (action && action.add) {
+        const { id, pos, src } = action.add;
+        const placeholder = document.createElement("div");
+        placeholder.setAttribute("class", "img-placeholder");
+        const image = document.createElement("img");
+        image.setAttribute(
+          "class",
+          "opacity-40 rounded-lg border border-stone-200"
+        );
+        image.src = src;
+        placeholder.appendChild(image);
+        const deco = import_view.Decoration.widget(pos + 1, placeholder, {
+          id
+        });
+        set = set.add(tr.doc, [deco]);
+      } else if (action && action.remove) {
+        set = set.remove(
+          set.find(void 0, void 0, (spec) => spec.id == action.remove.id)
+        );
+      }
+      return set;
+    }
+  },
+  props: {
+    decorations(state) {
+      return this.getState(state);
+    }
+  }
+});
+var upload_images_default = UploadImagesPlugin;
 function findPlaceholder(state, id) {
   const decos = uploadKey.getState(state);
   const found = decos.find(null, null, (spec) => spec.id == id);
@@ -385,6 +424,7 @@ var defaultEditorProps = {
 var import_starter_kit = __toESM(require("@tiptap/starter-kit"));
 var import_extension_horizontal_rule = __toESM(require("@tiptap/extension-horizontal-rule"));
 var import_extension_link = __toESM(require("@tiptap/extension-link"));
+var import_extension_image2 = __toESM(require("@tiptap/extension-image"));
 var import_extension_underline = __toESM(require("@tiptap/extension-underline"));
 var import_extension_text_style = __toESM(require("@tiptap/extension-text-style"));
 var import_extension_color = require("@tiptap/extension-color");
@@ -831,6 +871,23 @@ var slash_command_default = SlashCommand;
 // src/ui/editor/extensions/index.tsx
 var import_core4 = require("@tiptap/core");
 
+// src/ui/editor/extensions/updated-image.ts
+var import_extension_image = __toESM(require("@tiptap/extension-image"));
+var UpdatedImage = import_extension_image.default.extend({
+  addAttributes() {
+    var _a;
+    return __spreadProps(__spreadValues({}, (_a = this.parent) == null ? void 0 : _a.call(this)), {
+      width: {
+        default: null
+      },
+      height: {
+        default: null
+      }
+    });
+  }
+});
+var updated_image_default = UpdatedImage;
+
 // src/ui/editor/extensions/custom-keymap.ts
 var import_core2 = require("@tiptap/core");
 var CustomKeymap = import_core2.Extension.create({
@@ -1117,21 +1174,21 @@ var defaultExtensions = ({ disableHistory = false }) => [
       class: "novel-text-stone-400 novel-underline novel-underline-offset-[3px] hover:novel-text-stone-600 novel-transition-colors novel-cursor-pointer"
     }
   }),
-  // TiptapImage.extend({
-  //   addProseMirrorPlugins() {
-  //     return [UploadImagesPlugin()];
-  //   },
-  // }).configure({
-  //   allowBase64: true,
-  //   HTMLAttributes: {
-  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
-  //   },
-  // }),
-  // UpdatedImage.configure({
-  //   HTMLAttributes: {
-  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
-  //   },
-  // }),
+  import_extension_image2.default.extend({
+    addProseMirrorPlugins() {
+      return [upload_images_default()];
+    }
+  }).configure({
+    allowBase64: true,
+    HTMLAttributes: {
+      class: "novel-rounded-lg novel-border novel-border-stone-200"
+    }
+  }),
+  updated_image_default.configure({
+    HTMLAttributes: {
+      class: "novel-rounded-lg novel-border novel-border-stone-200"
+    }
+  }),
   // Placeholder.configure({
   //   placeholder: ({ node }) => {
   //     if (node.type.name === "heading") {

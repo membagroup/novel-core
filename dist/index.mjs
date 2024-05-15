@@ -232,6 +232,45 @@ import { toast } from "sonner";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 var uploadKey = new PluginKey("upload-image");
+var UploadImagesPlugin = () => new Plugin({
+  key: uploadKey,
+  state: {
+    init() {
+      return DecorationSet.empty;
+    },
+    apply(tr, set) {
+      set = set.map(tr.mapping, tr.doc);
+      const action = tr.getMeta(this);
+      if (action && action.add) {
+        const { id, pos, src } = action.add;
+        const placeholder = document.createElement("div");
+        placeholder.setAttribute("class", "img-placeholder");
+        const image = document.createElement("img");
+        image.setAttribute(
+          "class",
+          "opacity-40 rounded-lg border border-stone-200"
+        );
+        image.src = src;
+        placeholder.appendChild(image);
+        const deco = Decoration.widget(pos + 1, placeholder, {
+          id
+        });
+        set = set.add(tr.doc, [deco]);
+      } else if (action && action.remove) {
+        set = set.remove(
+          set.find(void 0, void 0, (spec) => spec.id == action.remove.id)
+        );
+      }
+      return set;
+    }
+  },
+  props: {
+    decorations(state) {
+      return this.getState(state);
+    }
+  }
+});
+var upload_images_default = UploadImagesPlugin;
 function findPlaceholder(state, id) {
   const decos = uploadKey.getState(state);
   const found = decos.find(null, null, (spec) => spec.id == id);
@@ -352,6 +391,7 @@ var defaultEditorProps = {
 import StarterKit from "@tiptap/starter-kit";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import TiptapLink from "@tiptap/extension-link";
+import TiptapImage from "@tiptap/extension-image";
 import TiptapUnderline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
@@ -817,6 +857,23 @@ var slash_command_default = SlashCommand;
 // src/ui/editor/extensions/index.tsx
 import { InputRule } from "@tiptap/core";
 
+// src/ui/editor/extensions/updated-image.ts
+import Image2 from "@tiptap/extension-image";
+var UpdatedImage = Image2.extend({
+  addAttributes() {
+    var _a;
+    return __spreadProps(__spreadValues({}, (_a = this.parent) == null ? void 0 : _a.call(this)), {
+      width: {
+        default: null
+      },
+      height: {
+        default: null
+      }
+    });
+  }
+});
+var updated_image_default = UpdatedImage;
+
 // src/ui/editor/extensions/custom-keymap.ts
 import { Extension as Extension2 } from "@tiptap/core";
 var CustomKeymap = Extension2.create({
@@ -1103,21 +1160,21 @@ var defaultExtensions = ({ disableHistory = false }) => [
       class: "novel-text-stone-400 novel-underline novel-underline-offset-[3px] hover:novel-text-stone-600 novel-transition-colors novel-cursor-pointer"
     }
   }),
-  // TiptapImage.extend({
-  //   addProseMirrorPlugins() {
-  //     return [UploadImagesPlugin()];
-  //   },
-  // }).configure({
-  //   allowBase64: true,
-  //   HTMLAttributes: {
-  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
-  //   },
-  // }),
-  // UpdatedImage.configure({
-  //   HTMLAttributes: {
-  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
-  //   },
-  // }),
+  TiptapImage.extend({
+    addProseMirrorPlugins() {
+      return [upload_images_default()];
+    }
+  }).configure({
+    allowBase64: true,
+    HTMLAttributes: {
+      class: "novel-rounded-lg novel-border novel-border-stone-200"
+    }
+  }),
+  updated_image_default.configure({
+    HTMLAttributes: {
+      class: "novel-rounded-lg novel-border novel-border-stone-200"
+    }
+  }),
   // Placeholder.configure({
   //   placeholder: ({ node }) => {
   //     if (node.type.name === "heading") {
