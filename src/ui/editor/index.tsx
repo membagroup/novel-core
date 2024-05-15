@@ -18,7 +18,7 @@ import { Editor as EditorClass, Extensions } from "@tiptap/core";
 import { NovelContext } from "./provider";
 import { UseCompletionOptions } from "ai";
 import { CommandListProps } from "./interface";
-import { LoadingCircle } from "../icons";
+import { LoadingCircle } from "@/ui/icons";
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -261,8 +261,8 @@ export default function Editor({
         >
           {editor && <EditorBubbleMenu editor={editor} />}
           {editor?.isActive("image") && <ImageResizer editor={editor} />}
-          {isLoading || isFetching ? (<LoadingCircle/>) : null}
           <EditorContent editor={editor} />
+          {isLoading || isFetching ? (<div className="novel-absolute novel-top-[50%] novel-left-[50%] novel-w-40 novel-h-40"><LoadingCircle /></div>) : null}
         </div>
       </NovelContext.Provider>
     </>
