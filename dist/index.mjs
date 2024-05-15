@@ -16710,7 +16710,8 @@ function Editor2({
   lastTextKey = "++",
   disableHistory = false,
   feedbackCallback = () => {
-  }
+  },
+  isFetching = false
 }) {
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState4(false);
@@ -16843,6 +16844,7 @@ function Editor2({
           children: [
             editor && /* @__PURE__ */ jsx9(EditorBubbleMenu, { editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx9(ImageResizer, { editor }),
+            isLoading || isFetching ? /* @__PURE__ */ jsx9(LoadingCircle, {}) : null,
             /* @__PURE__ */ jsx9(EditorContent, { editor })
           ]
         }

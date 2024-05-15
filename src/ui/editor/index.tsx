@@ -36,6 +36,7 @@ export default function Editor({
   lastTextKey = '++',
   disableHistory = false,
   feedbackCallback = () => { },
+  isFetching = false,
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -99,6 +100,8 @@ export default function Editor({
   disableHistory?: boolean;
 
   feedbackCallback?: () => void;
+
+  isFetching?: boolean;
 }) {
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
@@ -232,35 +235,36 @@ export default function Editor({
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
   useEffect(() => {
-     if (grabEditor && editor) {
+    if (grabEditor && editor) {
       grabEditor(editor);
     }
   }, [editor, grabEditor]);
 
   return (
     <>
-    {/* <h1>helloworld1</h1>   */}
-    <NovelContext.Provider
-      value={{
-        feedbackCallback,
-        lastTextKey,
-        completionApi,
-        useCustomCompletion() {
-          return useCustomCompletion ? useCustomCompletion() : defaultComplete
-        }
-      }}
-    >
-      <div
-        onClick={() => {
-          editor?.chain().focus().run();
+      {/* <h1>helloworld1</h1>   */}
+      <NovelContext.Provider
+        value={{
+          feedbackCallback,
+          lastTextKey,
+          completionApi,
+          useCustomCompletion() {
+            return useCustomCompletion ? useCustomCompletion() : defaultComplete
+          }
         }}
-        className={className}
       >
-        {editor && <EditorBubbleMenu editor={editor} />}
-        {editor?.isActive("image") && <ImageResizer editor={editor} />}
-        <EditorContent editor={editor} />
-      </div>
-    </NovelContext.Provider>
+        <div
+          onClick={() => {
+            editor?.chain().focus().run();
+          }}
+          className={className}
+        >
+          {editor && <EditorBubbleMenu editor={editor} />}
+          {editor?.isActive("image") && <ImageResizer editor={editor} />}
+          {isLoading || isFetching ? (<LoadingCircle/>) : null}
+          <EditorContent editor={editor} />
+        </div>
+      </NovelContext.Provider>
     </>
   );
 }
