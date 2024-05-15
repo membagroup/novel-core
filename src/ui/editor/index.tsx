@@ -18,6 +18,7 @@ import { Editor as EditorClass, Extensions } from "@tiptap/core";
 import { NovelContext } from "./provider";
 import { UseCompletionOptions } from "ai";
 import { CommandListProps } from "./interface";
+import { LoadingCircle } from "../icons";
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -228,6 +229,8 @@ export default function Editor({
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
   return (
+    <>
+    <h1>helloworld1</h1>  
     <NovelContext.Provider
       value={{
         feedbackCallback,
@@ -249,5 +252,6 @@ export default function Editor({
         <EditorContent editor={editor} />
       </div>
     </NovelContext.Provider>
+    </>
   );
 }

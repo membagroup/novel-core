@@ -16691,7 +16691,7 @@ var ImageResizer = ({ editor }) => {
 };
 
 // src/ui/editor/index.tsx
-import { jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
 function Editor2({
   completionApi = "/api/generate",
   className = "novel-relative novel-min-h-[500px] novel-w-full novel-max-w-screen-lg novel-border-stone-200 novel-bg-white sm:novel-mb-[calc(20vh)] sm:novel-rounded-lg sm:novel-border sm:novel-shadow-lg",
@@ -16812,33 +16812,36 @@ function Editor2({
       grabEditor(editor);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-  return /* @__PURE__ */ jsx9(
-    NovelContext.Provider,
-    {
-      value: {
-        feedbackCallback,
-        lastTextKey,
-        completionApi,
-        useCustomCompletion() {
-          return useCustomCompletion ? useCustomCompletion() : defaultComplete;
-        }
-      },
-      children: /* @__PURE__ */ jsxs8(
-        "div",
-        {
-          onClick: () => {
-            editor == null ? void 0 : editor.chain().focus().run();
-          },
-          className,
-          children: [
-            editor && /* @__PURE__ */ jsx9(EditorBubbleMenu, { editor }),
-            (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx9(ImageResizer, { editor }),
-            /* @__PURE__ */ jsx9(EditorContent, { editor })
-          ]
-        }
-      )
-    }
-  );
+  return /* @__PURE__ */ jsxs8(Fragment2, { children: [
+    /* @__PURE__ */ jsx9("h1", { children: "helloworld1" }),
+    /* @__PURE__ */ jsx9(
+      NovelContext.Provider,
+      {
+        value: {
+          feedbackCallback,
+          lastTextKey,
+          completionApi,
+          useCustomCompletion() {
+            return useCustomCompletion ? useCustomCompletion() : defaultComplete;
+          }
+        },
+        children: /* @__PURE__ */ jsxs8(
+          "div",
+          {
+            onClick: () => {
+              editor == null ? void 0 : editor.chain().focus().run();
+            },
+            className,
+            children: [
+              editor && /* @__PURE__ */ jsx9(EditorBubbleMenu, { editor }),
+              (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx9(ImageResizer, { editor }),
+              /* @__PURE__ */ jsx9(EditorContent, { editor })
+            ]
+          }
+        )
+      }
+    )
+  ] });
 }
 export {
   Editor2 as Editor

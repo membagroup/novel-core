@@ -16809,33 +16809,36 @@ function Editor2({
       grabEditor(editor);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-    NovelContext.Provider,
-    {
-      value: {
-        feedbackCallback,
-        lastTextKey,
-        completionApi,
-        useCustomCompletion() {
-          return useCustomCompletion ? useCustomCompletion() : defaultComplete;
-        }
-      },
-      children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-        "div",
-        {
-          onClick: () => {
-            editor == null ? void 0 : editor.chain().focus().run();
-          },
-          className,
-          children: [
-            editor && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(EditorBubbleMenu, { editor }),
-            (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ImageResizer, { editor }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_react12.EditorContent, { editor })
-          ]
-        }
-      )
-    }
-  );
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h1", { children: "helloworld1" }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      NovelContext.Provider,
+      {
+        value: {
+          feedbackCallback,
+          lastTextKey,
+          completionApi,
+          useCustomCompletion() {
+            return useCustomCompletion ? useCustomCompletion() : defaultComplete;
+          }
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+          "div",
+          {
+            onClick: () => {
+              editor == null ? void 0 : editor.chain().focus().run();
+            },
+            className,
+            children: [
+              editor && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(EditorBubbleMenu, { editor }),
+              (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ImageResizer, { editor }),
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_react12.EditorContent, { editor })
+            ]
+          }
+        )
+      }
+    )
+  ] });
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
