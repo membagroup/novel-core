@@ -424,7 +424,7 @@ var defaultEditorProps = {
 var import_starter_kit = __toESM(require("@tiptap/starter-kit"));
 var import_extension_horizontal_rule = __toESM(require("@tiptap/extension-horizontal-rule"));
 var import_extension_link = __toESM(require("@tiptap/extension-link"));
-var import_extension_image2 = __toESM(require("@tiptap/extension-image"));
+var import_extension_image = __toESM(require("@tiptap/extension-image"));
 var import_extension_underline = __toESM(require("@tiptap/extension-underline"));
 var import_extension_text_style = __toESM(require("@tiptap/extension-text-style"));
 var import_extension_color = require("@tiptap/extension-color");
@@ -871,23 +871,6 @@ var slash_command_default = SlashCommand;
 // src/ui/editor/extensions/index.tsx
 var import_core4 = require("@tiptap/core");
 
-// src/ui/editor/extensions/updated-image.ts
-var import_extension_image = __toESM(require("@tiptap/extension-image"));
-var UpdatedImage = import_extension_image.default.extend({
-  addAttributes() {
-    var _a;
-    return __spreadProps(__spreadValues({}, (_a = this.parent) == null ? void 0 : _a.call(this)), {
-      width: {
-        default: null
-      },
-      height: {
-        default: null
-      }
-    });
-  }
-});
-var updated_image_default = UpdatedImage;
-
 // src/ui/editor/extensions/custom-keymap.ts
 var import_core2 = require("@tiptap/core");
 var CustomKeymap = import_core2.Extension.create({
@@ -1174,7 +1157,7 @@ var defaultExtensions = ({ disableHistory = false }) => [
       class: "novel-text-stone-400 novel-underline novel-underline-offset-[3px] hover:novel-text-stone-600 novel-transition-colors novel-cursor-pointer"
     }
   }),
-  import_extension_image2.default.extend({
+  import_extension_image.default.extend({
     addProseMirrorPlugins() {
       return [upload_images_default()];
     }
@@ -1184,11 +1167,11 @@ var defaultExtensions = ({ disableHistory = false }) => [
       class: "novel-rounded-lg novel-border novel-border-stone-200"
     }
   }),
-  updated_image_default.configure({
-    HTMLAttributes: {
-      class: "novel-rounded-lg novel-border novel-border-stone-200"
-    }
-  }),
+  // UpdatedImage.configure({
+  //   HTMLAttributes: {
+  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
+  //   },
+  // }),
   // Placeholder.configure({
   //   placeholder: ({ node }) => {
   //     if (node.type.name === "heading") {

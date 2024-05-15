@@ -857,23 +857,6 @@ var slash_command_default = SlashCommand;
 // src/ui/editor/extensions/index.tsx
 import { InputRule } from "@tiptap/core";
 
-// src/ui/editor/extensions/updated-image.ts
-import Image2 from "@tiptap/extension-image";
-var UpdatedImage = Image2.extend({
-  addAttributes() {
-    var _a;
-    return __spreadProps(__spreadValues({}, (_a = this.parent) == null ? void 0 : _a.call(this)), {
-      width: {
-        default: null
-      },
-      height: {
-        default: null
-      }
-    });
-  }
-});
-var updated_image_default = UpdatedImage;
-
 // src/ui/editor/extensions/custom-keymap.ts
 import { Extension as Extension2 } from "@tiptap/core";
 var CustomKeymap = Extension2.create({
@@ -1170,11 +1153,11 @@ var defaultExtensions = ({ disableHistory = false }) => [
       class: "novel-rounded-lg novel-border novel-border-stone-200"
     }
   }),
-  updated_image_default.configure({
-    HTMLAttributes: {
-      class: "novel-rounded-lg novel-border novel-border-stone-200"
-    }
-  }),
+  // UpdatedImage.configure({
+  //   HTMLAttributes: {
+  //     class: "novel-rounded-lg novel-border novel-border-stone-200",
+  //   },
+  // }),
   // Placeholder.configure({
   //   placeholder: ({ node }) => {
   //     if (node.type.name === "heading") {
