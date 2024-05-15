@@ -241,9 +241,9 @@ export default function Editor({
 
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
-  useEffect(() => {
-    editor?.setEditable(isFetching ? false : true);
-  }, [isFetching]);
+  // useEffect(() => {
+  //   editor?.setEditable(isFetching ? false : true);
+  // }, [isFetching]);
 
   return (
     <NovelContext.Provider
@@ -265,7 +265,7 @@ export default function Editor({
         {editor && <EditorBubbleMenu editor={editor} />}
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {isLoading || isFetching ? (Loader ? Loader : <div className="novel-fixed novel-top-[50%] novel-left-[50%]"><LoadingCircle dimensions={`novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]`} /></div>) : null}
+        {isLoading || isFetching ? (Loader ? <>{Loader}</> : <div className="novel-fixed novel-top-[50%] novel-left-[40%]"><LoadingCircle dimensions={`novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]`} /></div>) : null}
       </div>
     </NovelContext.Provider>
   );
