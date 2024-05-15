@@ -229,9 +229,7 @@ export default function Editor({
       editor.commands.setContent(value);
       setHydrated(true);
     }
-
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-
 
   useEffect(() => {
      if (grabEditor && editor) {
