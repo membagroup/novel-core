@@ -241,6 +241,10 @@ export default function Editor({
 
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
+  useEffect(() => {
+    editor?.setEditable(isFetching ? false : true);
+  }, [isFetching]);
+
   return (
     <NovelContext.Provider
       value={{
