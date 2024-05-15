@@ -132,7 +132,6 @@ export default function Editor({
     //   setHydrated(true);
     // },
     onUpdate: (e) => {
-      grabEditor && grabEditor(e.editor);
       const selection = e.editor.state.selection;
       const lastChars = getPrevText(e.editor, {
         chars: lastTextLen,
@@ -150,6 +149,7 @@ export default function Editor({
         // complete(e.editor.storage.markdown.getMarkdown());
         // va.track("Autocomplete Shortcut Used");
       } else {
+        // grabEditor && grabEditor(e.editor);
         onUpdate(e.editor);
         debouncedUpdates(e);
       }
@@ -232,39 +232,34 @@ export default function Editor({
       editor.commands.setContent(value);
       setHydrated(true);
     }
-  }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
-  useEffect(() => {
     if (grabEditor && editor) {
       grabEditor(editor);
     }
-  }, [editor, grabEditor]);
+  }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
   return (
-    <>
-      {/* <h1>helloworld1</h1>   */}
-      <NovelContext.Provider
-        value={{
-          feedbackCallback,
-          lastTextKey,
-          completionApi,
-          useCustomCompletion() {
-            return useCustomCompletion ? useCustomCompletion() : defaultComplete
-          }
+    <NovelContext.Provider
+      value={{
+        feedbackCallback,
+        lastTextKey,
+        completionApi,
+        useCustomCompletion() {
+          return useCustomCompletion ? useCustomCompletion() : defaultComplete
+        }
+      }}
+    >
+      <div
+        onClick={() => {
+          editor?.chain().focus().run();
         }}
+        className={className}
       >
-        <div
-          onClick={() => {
-            editor?.chain().focus().run();
-          }}
-          className={className}
-        >
-          {editor && <EditorBubbleMenu editor={editor} />}
-          {editor?.isActive("image") && <ImageResizer editor={editor} />}
-          <EditorContent editor={editor} />
-          {isLoading || isFetching ? (<div className="novel-absolute novel-top-[50%] novel-left-[50%] novel-w-40 novel-h-40"><LoadingCircle /></div>) : null}
-        </div>
-      </NovelContext.Provider>
-    </>
+        {editor && <EditorBubbleMenu editor={editor} />}
+        {editor?.isActive("image") && <ImageResizer editor={editor} />}
+        <EditorContent editor={editor} />
+        {isLoading || isFetching ? (<div className="novel-absolute novel-top-[50%] novel-left-[50%] novel-w-[5rem] novel-h-[5rem]"><LoadingCircle /></div>) : null}
+      </div>
+    </NovelContext.Provider>
   );
 }
