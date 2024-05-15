@@ -16712,7 +16712,7 @@ function Editor2({
   feedbackCallback = () => {
   },
   isFetching = false,
-  Loader = /* @__PURE__ */ jsx9("div", { className: "novel-fixed novel-top-[50%] novel-left-[50%]", children: /* @__PURE__ */ jsx9(LoadingCircle, { dimensions: `novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]` }) })
+  Loader
 }) {
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState4(false);
@@ -16846,7 +16846,7 @@ function Editor2({
             editor && /* @__PURE__ */ jsx9(EditorBubbleMenu, { editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx9(ImageResizer, { editor }),
             /* @__PURE__ */ jsx9(EditorContent, { editor }),
-            isLoading || isFetching ? Loader : null
+            isLoading || isFetching ? Loader ? Loader : /* @__PURE__ */ jsx9("div", { className: "novel-fixed novel-top-[50%] novel-left-[50%]", children: /* @__PURE__ */ jsx9(LoadingCircle, { dimensions: `novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]` }) }) : null
           ]
         }
       )

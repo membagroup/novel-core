@@ -77,7 +77,7 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
     disableHistory?: boolean;
     feedbackCallback?: () => void;
     isFetching?: boolean;
-    Loader: JSX.Element;
+    Loader?: JSX.Element;
 }): JSX.Element;
 
 export { CommandItemProps, CommandListProps, CommandProps, Editor };

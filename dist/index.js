@@ -16709,7 +16709,7 @@ function Editor2({
   feedbackCallback = () => {
   },
   isFetching = false,
-  Loader = /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "novel-fixed novel-top-[50%] novel-left-[50%]", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(LoadingCircle, { dimensions: `novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]` }) })
+  Loader
 }) {
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react11.useState)(false);
@@ -16843,7 +16843,7 @@ function Editor2({
             editor && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(EditorBubbleMenu, { editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ImageResizer, { editor }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_react12.EditorContent, { editor }),
-            isLoading || isFetching ? Loader : null
+            isLoading || isFetching ? Loader ? Loader : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "novel-fixed novel-top-[50%] novel-left-[50%]", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(LoadingCircle, { dimensions: `novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]` }) }) : null
           ]
         }
       )

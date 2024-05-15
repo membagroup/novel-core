@@ -37,7 +37,7 @@ export default function Editor({
   disableHistory = false,
   feedbackCallback = () => { },
   isFetching = false,
-  Loader = <div className="novel-fixed novel-top-[50%] novel-left-[50%]"><LoadingCircle dimensions={`novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]`} /></div>,
+  Loader,
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -103,7 +103,7 @@ export default function Editor({
   feedbackCallback?: () => void;
 
   isFetching?: boolean;
-  Loader: JSX.Element;
+  Loader?: JSX.Element;
 }) {
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
@@ -265,7 +265,7 @@ export default function Editor({
         {editor && <EditorBubbleMenu editor={editor} />}
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {isLoading || isFetching ? Loader : null}
+        {isLoading || isFetching ? (Loader ? Loader : <div className="novel-fixed novel-top-[50%] novel-left-[50%]"><LoadingCircle dimensions={`novel-text-purple-500 novel-w-[10rem] novel-h-[10rem]`} /></div>) : null}
       </div>
     </NovelContext.Provider>
   );
