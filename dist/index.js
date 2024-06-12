@@ -68,7 +68,8 @@ var __async = (__this, __arguments, generator) => {
 // src/index.ts
 var src_exports = {};
 __export(src_exports, {
-  Editor: () => Editor2
+  Editor: () => Editor2,
+  NovelContext: () => NovelContext
 });
 module.exports = __toCommonJS(src_exports);
 
@@ -16849,7 +16850,8 @@ function Editor2({
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  Editor
+  Editor,
+  NovelContext
 });
 /*! Bundled license information:
 

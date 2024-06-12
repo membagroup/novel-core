@@ -1,8 +1,10 @@
+import * as react from 'react';
 import { ReactNode } from 'react';
 import { Editor as Editor$1, Range, Extensions } from '@tiptap/core';
 import { JSONContent } from '@tiptap/react';
 import { UseCompletionHelpers } from 'ai/react';
 import { EditorProps } from '@tiptap/pm/view';
+import { UseCompletionHelpers as UseCompletionHelpers$1 } from 'ai/react/dist';
 
 interface CommandItemProps {
     title: string;
@@ -80,4 +82,11 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
     Loader?: JSX.Element;
 }): JSX.Element;
 
-export { CommandItemProps, CommandListProps, CommandProps, Editor };
+declare const NovelContext: react.Context<{
+    lastTextKey: string;
+    completionApi: string;
+    feedbackCallback: () => void;
+    useCustomCompletion: (props?: CommandListProps) => UseCompletionHelpers$1;
+}>;
+
+export { CommandItemProps, CommandListProps, CommandProps, Editor, NovelContext };
