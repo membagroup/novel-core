@@ -121,6 +121,9 @@ export default function Editor({
   const lastTextLen = lastTextKey.length;
 
   const editor = useEditor({
+    enableInputRules: true,
+    // https://github.com/ueberdosis/tiptap/pull/5178/files#diff-9b7c004a70a95a9e7b2b49f3761403a4abfe14fae1490e32c86306794017e27dR77
+    enableContentCheck: false,
     extensions: [...defaultExtensions({ disableHistory }), ...extensions] as any[],
     editorProps: {
       ...defaultEditorProps,
