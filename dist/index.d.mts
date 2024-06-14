@@ -80,4 +80,4 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
     Loader?: JSX.Element;
 }): JSX.Element;
 
-export { CommandItemProps, CommandListProps, CommandProps, Editor };
+export { type CommandItemProps, type CommandListProps, type CommandProps, Editor };

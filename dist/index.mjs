@@ -41,8 +41,7 @@ var __async = (__this, __arguments, generator) => {
 
 // #style-inject:#style-inject
 function styleInject(css2, { insertAt } = {}) {
-  if (!css2 || typeof document === "undefined")
-    return;
+  if (!css2 || typeof document === "undefined") return;
   const head = document.head || document.getElementsByTagName("head")[0];
   const style = document.createElement("style");
   style.type = "text/css";
@@ -66,7 +65,7 @@ function styleInject(css2, { insertAt } = {}) {
 styleInject(':root {\n  --novel-black: rgb(0 0 0);\n  --novel-white: rgb(255 255 255);\n  --novel-stone-50: rgb(250 250 249);\n  --novel-stone-100: rgb(245 245 244);\n  --novel-stone-200: rgb(231 229 228);\n  --novel-stone-300: rgb(214 211 209);\n  --novel-stone-400: rgb(168 162 158);\n  --novel-stone-500: rgb(120 113 108);\n  --novel-stone-600: rgb(87 83 78);\n  --novel-stone-700: rgb(68 64 60);\n  --novel-stone-800: rgb(41 37 36);\n  --novel-stone-900: rgb(28 25 23);\n  --novel-highlight-default: #ffffff;\n  --novel-highlight-purple: #f6f3f8;\n  --novel-highlight-red: #fdebeb;\n  --novel-highlight-yellow: #fbf4a2;\n  --novel-highlight-blue: #c1ecf9;\n  --novel-highlight-green: #acf79f;\n  --novel-highlight-orange: #faebdd;\n  --novel-highlight-pink: #faf1f5;\n  --novel-highlight-gray: #f1f1ef;\n  --font-title: "Cal Sans", sans-serif;\n}\n.dark-theme {\n  --novel-black: rgb(255 255 255);\n  --novel-white: rgb(25 25 25);\n  --novel-stone-50: rgb(35 35 34);\n  --novel-stone-100: rgb(41 37 36);\n  --novel-stone-200: rgb(66 69 71);\n  --novel-stone-300: rgb(112 118 123);\n  --novel-stone-400: rgb(160 167 173);\n  --novel-stone-500: rgb(193 199 204);\n  --novel-stone-600: rgb(212 217 221);\n  --novel-stone-700: rgb(229 232 235);\n  --novel-stone-800: rgb(232 234 235);\n  --novel-stone-900: rgb(240, 240, 241);\n  --novel-highlight-default: #000000;\n  --novel-highlight-purple: #3f2c4b;\n  --novel-highlight-red: #5c1a1a;\n  --novel-highlight-yellow: #5c4b1a;\n  --novel-highlight-blue: #1a3d5c;\n  --novel-highlight-green: #1a5c20;\n  --novel-highlight-orange: #5c3a1a;\n  --novel-highlight-pink: #5c1a3a;\n  --novel-highlight-gray: #3a3a3a;\n}\n@font-face {\n  font-family: "Cal Sans";\n  src: local("Cal Sans"), url(CalSans-SemiBold.otf) format("otf");\n}\n');
 
 // src/styles/tailwind.css
-styleInject('*,\n::before,\n::after {\n  box-sizing: border-box;\n  border-width: 0;\n  border-style: solid;\n  border-color: #e5e7eb;\n}\n::before,\n::after {\n  --tw-content: "";\n}\nhtml {\n  line-height: 1.5;\n  -webkit-text-size-adjust: 100%;\n  -moz-tab-size: 4;\n  -o-tab-size: 4;\n  tab-size: 4;\n  font-family:\n    ui-sans-serif,\n    system-ui,\n    -apple-system,\n    BlinkMacSystemFont,\n    "Segoe UI",\n    Roboto,\n    "Helvetica Neue",\n    Arial,\n    "Noto Sans",\n    sans-serif,\n    "Apple Color Emoji",\n    "Segoe UI Emoji",\n    "Segoe UI Symbol",\n    "Noto Color Emoji";\n  font-feature-settings: normal;\n  font-variation-settings: normal;\n}\nbody {\n  margin: 0;\n  line-height: inherit;\n}\nhr {\n  height: 0;\n  color: inherit;\n  border-top-width: 1px;\n}\nabbr:where([title]) {\n  -webkit-text-decoration: underline dotted;\n  text-decoration: underline dotted;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-size: inherit;\n  font-weight: inherit;\n}\na {\n  color: inherit;\n  text-decoration: inherit;\n}\nb,\nstrong {\n  font-weight: bolder;\n}\ncode,\nkbd,\nsamp,\npre {\n  font-family:\n    ui-monospace,\n    SFMono-Regular,\n    Menlo,\n    Monaco,\n    Consolas,\n    "Liberation Mono",\n    "Courier New",\n    monospace;\n  font-size: 1em;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\nsub {\n  bottom: -0.25em;\n}\nsup {\n  top: -0.5em;\n}\ntable {\n  text-indent: 0;\n  border-color: inherit;\n  border-collapse: collapse;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  font-family: inherit;\n  font-feature-settings: inherit;\n  font-variation-settings: inherit;\n  font-size: 100%;\n  font-weight: inherit;\n  line-height: inherit;\n  color: inherit;\n  margin: 0;\n  padding: 0;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\n[type=button],\n[type=reset],\n[type=submit] {\n  -webkit-appearance: button;\n  background-color: transparent;\n  background-image: none;\n}\n:-moz-focusring {\n  outline: auto;\n}\n:-moz-ui-invalid {\n  box-shadow: none;\n}\nprogress {\n  vertical-align: baseline;\n}\n::-webkit-inner-spin-button,\n::-webkit-outer-spin-button {\n  height: auto;\n}\n[type=search] {\n  -webkit-appearance: textfield;\n  outline-offset: -2px;\n}\n::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n::-webkit-file-upload-button {\n  -webkit-appearance: button;\n  font: inherit;\n}\nsummary {\n  display: list-item;\n}\nblockquote,\ndl,\ndd,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\nhr,\nfigure,\np,\npre {\n  margin: 0;\n}\nfieldset {\n  margin: 0;\n  padding: 0;\n}\nlegend {\n  padding: 0;\n}\nol,\nul,\nmenu {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\ndialog {\n  padding: 0;\n}\ntextarea {\n  resize: vertical;\n}\ninput::-moz-placeholder,\ntextarea::-moz-placeholder {\n  opacity: 1;\n  color: #9ca3af;\n}\ninput::placeholder,\ntextarea::placeholder {\n  opacity: 1;\n  color: #9ca3af;\n}\nbutton,\n[role=button] {\n  cursor: pointer;\n}\n:disabled {\n  cursor: default;\n}\nimg,\nsvg,\nvideo,\ncanvas,\naudio,\niframe,\nembed,\nobject {\n  display: block;\n  vertical-align: middle;\n}\nimg,\nvideo {\n  max-width: 100%;\n  height: auto;\n}\n[hidden] {\n  display: none;\n}\n*,\n::before,\n::after {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x: ;\n  --tw-pan-y: ;\n  --tw-pinch-zoom: ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position: ;\n  --tw-gradient-via-position: ;\n  --tw-gradient-to-position: ;\n  --tw-ordinal: ;\n  --tw-slashed-zero: ;\n  --tw-numeric-figure: ;\n  --tw-numeric-spacing: ;\n  --tw-numeric-fraction: ;\n  --tw-ring-inset: ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur: ;\n  --tw-brightness: ;\n  --tw-contrast: ;\n  --tw-grayscale: ;\n  --tw-hue-rotate: ;\n  --tw-invert: ;\n  --tw-saturate: ;\n  --tw-sepia: ;\n  --tw-drop-shadow: ;\n  --tw-backdrop-blur: ;\n  --tw-backdrop-brightness: ;\n  --tw-backdrop-contrast: ;\n  --tw-backdrop-grayscale: ;\n  --tw-backdrop-hue-rotate: ;\n  --tw-backdrop-invert: ;\n  --tw-backdrop-opacity: ;\n  --tw-backdrop-saturate: ;\n  --tw-backdrop-sepia: ;\n}\n::backdrop {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x: ;\n  --tw-pan-y: ;\n  --tw-pinch-zoom: ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position: ;\n  --tw-gradient-via-position: ;\n  --tw-gradient-to-position: ;\n  --tw-ordinal: ;\n  --tw-slashed-zero: ;\n  --tw-numeric-figure: ;\n  --tw-numeric-spacing: ;\n  --tw-numeric-fraction: ;\n  --tw-ring-inset: ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur: ;\n  --tw-brightness: ;\n  --tw-contrast: ;\n  --tw-grayscale: ;\n  --tw-hue-rotate: ;\n  --tw-invert: ;\n  --tw-saturate: ;\n  --tw-sepia: ;\n  --tw-drop-shadow: ;\n  --tw-backdrop-blur: ;\n  --tw-backdrop-brightness: ;\n  --tw-backdrop-contrast: ;\n  --tw-backdrop-grayscale: ;\n  --tw-backdrop-hue-rotate: ;\n  --tw-backdrop-invert: ;\n  --tw-backdrop-opacity: ;\n  --tw-backdrop-saturate: ;\n  --tw-backdrop-sepia: ;\n}\n.novel-prose-lg {\n  font-size: 1.125rem;\n  line-height: 1.7777778;\n}\n.novel-prose-lg :where(p):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n  margin-bottom: 1.3333333em;\n}\n.novel-prose-lg :where([class~=lead]):not(:where([class~=novel-not-prose] *)) {\n  font-size: 1.2222222em;\n  line-height: 1.4545455;\n  margin-top: 1.0909091em;\n  margin-bottom: 1.0909091em;\n}\n.novel-prose-lg :where(blockquote):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.6666667em;\n  margin-bottom: 1.6666667em;\n  padding-left: 1em;\n}\n.novel-prose-lg :where(h1):not(:where([class~=novel-not-prose] *)) {\n  font-size: 2.6666667em;\n  margin-top: 0;\n  margin-bottom: 0.8333333em;\n  line-height: 1;\n}\n.novel-prose-lg :where(h2):not(:where([class~=novel-not-prose] *)) {\n  font-size: 1.6666667em;\n  margin-top: 1.8666667em;\n  margin-bottom: 1.0666667em;\n  line-height: 1.3333333;\n}\n.novel-prose-lg :where(h3):not(:where([class~=novel-not-prose] *)) {\n  font-size: 1.3333333em;\n  margin-top: 1.6666667em;\n  margin-bottom: 0.6666667em;\n  line-height: 1.5;\n}\n.novel-prose-lg :where(h4):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 0.4444444em;\n  line-height: 1.5555556;\n}\n.novel-prose-lg :where(img):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 1.7777778em;\n}\n.novel-prose-lg :where(video):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 1.7777778em;\n}\n.novel-prose-lg :where(figure):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 1.7777778em;\n}\n.novel-prose-lg :where(figure > *):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0;\n  margin-bottom: 0;\n}\n.novel-prose-lg :where(figcaption):not(:where([class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n  line-height: 1.5;\n  margin-top: 1em;\n}\n.novel-prose-lg :where(code):not(:where([class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n}\n.novel-prose-lg :where(h2 code):not(:where([class~=novel-not-prose] *)) {\n  font-size: 0.8666667em;\n}\n.novel-prose-lg :where(h3 code):not(:where([class~=novel-not-prose] *)) {\n  font-size: 0.875em;\n}\n.novel-prose-lg :where(pre):not(:where([class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n  line-height: 1.75;\n  margin-top: 2em;\n  margin-bottom: 2em;\n  border-radius: 0.375rem;\n  padding-top: 1em;\n  padding-right: 1.5em;\n  padding-bottom: 1em;\n  padding-left: 1.5em;\n}\n.novel-prose-lg :where(ol):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n  margin-bottom: 1.3333333em;\n  padding-left: 1.5555556em;\n}\n.novel-prose-lg :where(ul):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n  margin-bottom: 1.3333333em;\n  padding-left: 1.5555556em;\n}\n.novel-prose-lg :where(li):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0.6666667em;\n  margin-bottom: 0.6666667em;\n}\n.novel-prose-lg :where(ol > li):not(:where([class~=novel-not-prose] *)) {\n  padding-left: 0.4444444em;\n}\n.novel-prose-lg :where(ul > li):not(:where([class~=novel-not-prose] *)) {\n  padding-left: 0.4444444em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ul > li p):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0.8888889em;\n  margin-bottom: 0.8888889em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ul > li > *:first-child):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ul > li > *:last-child):not(:where([class~=novel-not-prose] *)) {\n  margin-bottom: 1.3333333em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ol > li > *:first-child):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ol > li > *:last-child):not(:where([class~=novel-not-prose] *)) {\n  margin-bottom: 1.3333333em;\n}\n.novel-prose-lg :where(ul ul, ul ol, ol ul, ol ol):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0.8888889em;\n  margin-bottom: 0.8888889em;\n}\n.novel-prose-lg :where(hr):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 3.1111111em;\n  margin-bottom: 3.1111111em;\n}\n.novel-prose-lg :where(hr + *):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(h2 + *):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(h3 + *):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(h4 + *):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(table):not(:where([class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n  line-height: 1.5;\n}\n.novel-prose-lg :where(thead th):not(:where([class~=novel-not-prose] *)) {\n  padding-right: 0.75em;\n  padding-bottom: 0.75em;\n  padding-left: 0.75em;\n}\n.novel-prose-lg :where(thead th:first-child):not(:where([class~=novel-not-prose] *)) {\n  padding-left: 0;\n}\n.novel-prose-lg :where(thead th:last-child):not(:where([class~=novel-not-prose] *)) {\n  padding-right: 0;\n}\n.novel-prose-lg :where(tbody td, tfoot td):not(:where([class~=novel-not-prose] *)) {\n  padding-top: 0.75em;\n  padding-right: 0.75em;\n  padding-bottom: 0.75em;\n  padding-left: 0.75em;\n}\n.novel-prose-lg :where(tbody td:first-child, tfoot td:first-child):not(:where([class~=novel-not-prose] *)) {\n  padding-left: 0;\n}\n.novel-prose-lg :where(tbody td:last-child, tfoot td:last-child):not(:where([class~=novel-not-prose] *)) {\n  padding-right: 0;\n}\n.novel-prose-lg :where(.novel-prose-lg > :first-child):not(:where([class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(.novel-prose-lg > :last-child):not(:where([class~=novel-not-prose] *)) {\n  margin-bottom: 0;\n}\n.novel-prose-stone {\n  --tw-prose-body: #44403c;\n  --tw-prose-headings: #1c1917;\n  --tw-prose-lead: #57534e;\n  --tw-prose-links: #1c1917;\n  --tw-prose-bold: #1c1917;\n  --tw-prose-counters: #78716c;\n  --tw-prose-bullets: #d6d3d1;\n  --tw-prose-hr: #e7e5e4;\n  --tw-prose-quotes: #1c1917;\n  --tw-prose-quote-borders: #e7e5e4;\n  --tw-prose-captions: #78716c;\n  --tw-prose-code: #1c1917;\n  --tw-prose-pre-code: #e7e5e4;\n  --tw-prose-pre-bg: #292524;\n  --tw-prose-th-borders: #d6d3d1;\n  --tw-prose-td-borders: #e7e5e4;\n  --tw-prose-invert-body: #d6d3d1;\n  --tw-prose-invert-headings: #fff;\n  --tw-prose-invert-lead: #a8a29e;\n  --tw-prose-invert-links: #fff;\n  --tw-prose-invert-bold: #fff;\n  --tw-prose-invert-counters: #a8a29e;\n  --tw-prose-invert-bullets: #57534e;\n  --tw-prose-invert-hr: #44403c;\n  --tw-prose-invert-quotes: #f5f5f4;\n  --tw-prose-invert-quote-borders: #44403c;\n  --tw-prose-invert-captions: #a8a29e;\n  --tw-prose-invert-code: #fff;\n  --tw-prose-invert-pre-code: #d6d3d1;\n  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);\n  --tw-prose-invert-th-borders: #57534e;\n  --tw-prose-invert-td-borders: #44403c;\n}\n.novel-fixed {\n  position: fixed;\n}\n.novel-relative {\n  position: relative;\n}\n.novel-left-\\[40\\%\\] {\n  left: 40%;\n}\n.novel-top-\\[50\\%\\] {\n  top: 50%;\n}\n.novel-top-full {\n  top: 100%;\n}\n.novel-z-50 {\n  z-index: 50;\n}\n.novel-z-\\[99999\\] {\n  z-index: 99999;\n}\n.novel-my-1 {\n  margin-top: 0.25rem;\n  margin-bottom: 0.25rem;\n}\n.novel-my-4 {\n  margin-top: 1rem;\n  margin-bottom: 1rem;\n}\n.novel--mb-2 {\n  margin-bottom: -0.5rem;\n}\n.novel--mt-2 {\n  margin-top: -0.5rem;\n}\n.novel-mb-1 {\n  margin-bottom: 0.25rem;\n}\n.novel-mb-6 {\n  margin-bottom: 1.5rem;\n}\n.novel-mt-1 {\n  margin-top: 0.25rem;\n}\n.novel-mt-2 {\n  margin-top: 0.5rem;\n}\n.novel-mt-4 {\n  margin-top: 1rem;\n}\n.novel-flex {\n  display: flex;\n}\n.novel-h-10 {\n  height: 2.5rem;\n}\n.novel-h-3 {\n  height: 0.75rem;\n}\n.novel-h-4 {\n  height: 1rem;\n}\n.novel-h-\\[10rem\\] {\n  height: 10rem;\n}\n.novel-h-auto {\n  height: auto;\n}\n.novel-h-full {\n  height: 100%;\n}\n.novel-max-h-80 {\n  max-height: 20rem;\n}\n.novel-max-h-\\[330px\\] {\n  max-height: 330px;\n}\n.novel-min-h-\\[500px\\] {\n  min-height: 500px;\n}\n.novel-w-10 {\n  width: 2.5rem;\n}\n.novel-w-3 {\n  width: 0.75rem;\n}\n.novel-w-4 {\n  width: 1rem;\n}\n.novel-w-48 {\n  width: 12rem;\n}\n.novel-w-60 {\n  width: 15rem;\n}\n.novel-w-7 {\n  width: 1.75rem;\n}\n.novel-w-72 {\n  width: 18rem;\n}\n.novel-w-\\[10rem\\] {\n  width: 10rem;\n}\n.novel-w-fit {\n  width: -moz-fit-content;\n  width: fit-content;\n}\n.novel-w-full {\n  width: 100%;\n}\n.novel-max-w-full {\n  max-width: 100%;\n}\n.novel-max-w-screen-lg {\n  max-width: 1024px;\n}\n.novel-flex-1 {\n  flex: 1 1 0%;\n}\n@keyframes novel-spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n.novel-animate-spin {\n  animation: novel-spin 1s linear infinite;\n}\n.novel-cursor-pointer {\n  cursor: pointer;\n}\n.novel-list-outside {\n  list-style-position: outside;\n}\n.novel-list-decimal {\n  list-style-type: decimal;\n}\n.novel-list-disc {\n  list-style-type: disc;\n}\n.novel-flex-col {\n  flex-direction: column;\n}\n.novel-items-start {\n  align-items: flex-start;\n}\n.novel-items-center {\n  align-items: center;\n}\n.novel-justify-center {\n  justify-content: center;\n}\n.novel-justify-between {\n  justify-content: space-between;\n}\n.novel-gap-1 {\n  gap: 0.25rem;\n}\n.novel-space-x-2 > :not([hidden]) ~ :not([hidden]) {\n  --tw-space-x-reverse: 0;\n  margin-right: calc(0.5rem * var(--tw-space-x-reverse));\n  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));\n}\n.novel-divide-x > :not([hidden]) ~ :not([hidden]) {\n  --tw-divide-x-reverse: 0;\n  border-right-width: calc(1px * var(--tw-divide-x-reverse));\n  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));\n}\n.novel-divide-stone-200 > :not([hidden]) ~ :not([hidden]) {\n  border-color: var(--novel-stone-200);\n}\n.novel-overflow-hidden {\n  overflow: hidden;\n}\n.novel-overflow-y-auto {\n  overflow-y: auto;\n}\n.novel-whitespace-nowrap {\n  white-space: nowrap;\n}\n.novel-rounded {\n  border-radius: 0.25rem;\n}\n.novel-rounded-lg {\n  border-radius: 0.5rem;\n}\n.novel-rounded-md {\n  border-radius: 0.375rem;\n}\n.novel-rounded-sm {\n  border-radius: 0.125rem;\n}\n.novel-border {\n  border-width: 1px;\n}\n.novel-border-l-4 {\n  border-left-width: 4px;\n}\n.novel-border-t {\n  border-top-width: 1px;\n}\n.novel-border-stone-200 {\n  border-color: var(--novel-stone-200);\n}\n.novel-border-stone-300 {\n  border-color: var(--novel-stone-300);\n}\n.novel-border-stone-700 {\n  border-color: var(--novel-stone-700);\n}\n.novel-bg-stone-100 {\n  background-color: var(--novel-stone-100);\n}\n.novel-bg-stone-200 {\n  background-color: var(--novel-stone-200);\n}\n.novel-bg-white {\n  background-color: var(--novel-white);\n}\n.novel-fill-stone-600 {\n  fill: var(--novel-stone-600);\n}\n.novel-p-1 {\n  padding: 0.25rem;\n}\n.novel-p-2 {\n  padding: 0.5rem;\n}\n.novel-p-5 {\n  padding: 1.25rem;\n}\n.novel-px-1 {\n  padding-left: 0.25rem;\n  padding-right: 0.25rem;\n}\n.novel-px-1\\.5 {\n  padding-left: 0.375rem;\n  padding-right: 0.375rem;\n}\n.novel-px-2 {\n  padding-left: 0.5rem;\n  padding-right: 0.5rem;\n}\n.novel-px-3 {\n  padding-left: 0.75rem;\n  padding-right: 0.75rem;\n}\n.novel-py-1 {\n  padding-top: 0.25rem;\n  padding-bottom: 0.25rem;\n}\n.novel-py-1\\.5 {\n  padding-top: 0.375rem;\n  padding-bottom: 0.375rem;\n}\n.novel-py-2 {\n  padding-top: 0.5rem;\n  padding-bottom: 0.5rem;\n}\n.novel-py-px {\n  padding-top: 1px;\n  padding-bottom: 1px;\n}\n.novel-pl-2 {\n  padding-left: 0.5rem;\n}\n.novel-text-left {\n  text-align: left;\n}\n.novel-font-default {\n  font-family:\n    var(--font-default),\n    system-ui,\n    sans-serif;\n}\n.novel-font-mono {\n  font-family:\n    ui-monospace,\n    SFMono-Regular,\n    Menlo,\n    Monaco,\n    Consolas,\n    "Liberation Mono",\n    "Courier New",\n    monospace;\n}\n.novel-text-base {\n  font-size: 1rem;\n  line-height: 1.5rem;\n}\n.novel-text-sm {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n}\n.novel-text-xs {\n  font-size: 0.75rem;\n  line-height: 1rem;\n}\n.novel-font-medium {\n  font-weight: 500;\n}\n.novel-leading-3 {\n  line-height: .75rem;\n}\n.novel-leading-normal {\n  line-height: 1.5;\n}\n.novel-text-blue-500 {\n  --tw-text-opacity: 1;\n  color: rgb(59 130 246 / var(--tw-text-opacity));\n}\n.novel-text-purple-500 {\n  --tw-text-opacity: 1;\n  color: rgb(168 85 247 / var(--tw-text-opacity));\n}\n.novel-text-red-600 {\n  --tw-text-opacity: 1;\n  color: rgb(220 38 38 / var(--tw-text-opacity));\n}\n.novel-text-stone-200 {\n  color: var(--novel-stone-200);\n}\n.novel-text-stone-400 {\n  color: var(--novel-stone-400);\n}\n.novel-text-stone-500 {\n  color: var(--novel-stone-500);\n}\n.novel-text-stone-600 {\n  color: var(--novel-stone-600);\n}\n.novel-text-stone-800 {\n  color: var(--novel-stone-800);\n}\n.novel-text-stone-900 {\n  color: var(--novel-stone-900);\n}\n.novel-underline {\n  text-decoration-line: underline;\n}\n.novel-decoration-stone-400 {\n  text-decoration-color: var(--novel-stone-400);\n}\n.novel-underline-offset-4 {\n  text-underline-offset: 4px;\n}\n.novel-underline-offset-\\[3px\\] {\n  text-underline-offset: 3px;\n}\n.novel-shadow-md {\n  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);\n  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow, 0 0 #0000),\n    var(--tw-ring-shadow, 0 0 #0000),\n    var(--tw-shadow);\n}\n.novel-shadow-xl {\n  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);\n  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow, 0 0 #0000),\n    var(--tw-ring-shadow, 0 0 #0000),\n    var(--tw-shadow);\n}\n.novel-outline-none {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n}\n.novel-transition-all {\n  transition-property: all;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n.novel-transition-colors {\n  transition-property:\n    color,\n    background-color,\n    border-color,\n    text-decoration-color,\n    fill,\n    stroke;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n@keyframes enter {\n  from {\n    opacity: var(--tw-enter-opacity, 1);\n    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0));\n  }\n}\n@keyframes exit {\n  to {\n    opacity: var(--tw-exit-opacity, 1);\n    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));\n  }\n}\n.novel-animate-in {\n  animation-name: enter;\n  animation-duration: 150ms;\n  --tw-enter-opacity: initial;\n  --tw-enter-scale: initial;\n  --tw-enter-rotate: initial;\n  --tw-enter-translate-x: initial;\n  --tw-enter-translate-y: initial;\n}\n.novel-fade-in {\n  --tw-enter-opacity: 0;\n}\n.novel-slide-in-from-top-1 {\n  --tw-enter-translate-y: -0.25rem;\n}\n:is(.novel-dark-theme .dark\\:novel-prose-invert) {\n  --tw-prose-body: var(--tw-prose-invert-body);\n  --tw-prose-headings: var(--tw-prose-invert-headings);\n  --tw-prose-lead: var(--tw-prose-invert-lead);\n  --tw-prose-links: var(--tw-prose-invert-links);\n  --tw-prose-bold: var(--tw-prose-invert-bold);\n  --tw-prose-counters: var(--tw-prose-invert-counters);\n  --tw-prose-bullets: var(--tw-prose-invert-bullets);\n  --tw-prose-hr: var(--tw-prose-invert-hr);\n  --tw-prose-quotes: var(--tw-prose-invert-quotes);\n  --tw-prose-quote-borders: var(--tw-prose-invert-quote-borders);\n  --tw-prose-captions: var(--tw-prose-invert-captions);\n  --tw-prose-code: var(--tw-prose-invert-code);\n  --tw-prose-pre-code: var(--tw-prose-invert-pre-code);\n  --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);\n  --tw-prose-th-borders: var(--tw-prose-invert-th-borders);\n  --tw-prose-td-borders: var(--tw-prose-invert-td-borders);\n}\n.hover\\:novel-bg-red-100:hover {\n  --tw-bg-opacity: 1;\n  background-color: rgb(254 226 226 / var(--tw-bg-opacity));\n}\n.hover\\:novel-bg-stone-100:hover {\n  background-color: var(--novel-stone-100);\n}\n.hover\\:novel-text-stone-600:hover {\n  color: var(--novel-stone-600);\n}\n.focus\\:novel-outline-none:focus {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n}\n.active\\:novel-bg-stone-200:active {\n  background-color: var(--novel-stone-200);\n}\n.prose-headings\\:novel-font-title :is(:where(h1, h2, h3, h4, h5, h6, th):not(:where([class~=novel-not-prose] *))) {\n  font-family:\n    var(--font-title),\n    system-ui,\n    sans-serif;\n}\n:is(.novel-dark-theme .dark\\:hover\\:novel-bg-red-800:hover) {\n  --tw-bg-opacity: 1;\n  background-color: rgb(153 27 27 / var(--tw-bg-opacity));\n}\n@media (min-width: 640px) {\n  .sm\\:novel-mb-\\[calc\\(20vh\\)\\] {\n    margin-bottom: calc(20vh);\n  }\n  .sm\\:novel-rounded-lg {\n    border-radius: 0.5rem;\n  }\n  .sm\\:novel-border {\n    border-width: 1px;\n  }\n  .sm\\:novel-shadow-lg {\n    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);\n    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);\n    box-shadow:\n      var(--tw-ring-offset-shadow, 0 0 #0000),\n      var(--tw-ring-shadow, 0 0 #0000),\n      var(--tw-shadow);\n  }\n}\n');
+styleInject('*,\n::before,\n::after {\n  box-sizing: border-box;\n  border-width: 0;\n  border-style: solid;\n  border-color: #e5e7eb;\n}\n::before,\n::after {\n  --tw-content: "";\n}\nhtml,\n:host {\n  line-height: 1.5;\n  -webkit-text-size-adjust: 100%;\n  -moz-tab-size: 4;\n  -o-tab-size: 4;\n  tab-size: 4;\n  font-family:\n    ui-sans-serif,\n    system-ui,\n    sans-serif,\n    "Apple Color Emoji",\n    "Segoe UI Emoji",\n    "Segoe UI Symbol",\n    "Noto Color Emoji";\n  font-feature-settings: normal;\n  font-variation-settings: normal;\n  -webkit-tap-highlight-color: transparent;\n}\nbody {\n  margin: 0;\n  line-height: inherit;\n}\nhr {\n  height: 0;\n  color: inherit;\n  border-top-width: 1px;\n}\nabbr:where([title]) {\n  -webkit-text-decoration: underline dotted;\n  text-decoration: underline dotted;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-size: inherit;\n  font-weight: inherit;\n}\na {\n  color: inherit;\n  text-decoration: inherit;\n}\nb,\nstrong {\n  font-weight: bolder;\n}\ncode,\nkbd,\nsamp,\npre {\n  font-family:\n    ui-monospace,\n    SFMono-Regular,\n    Menlo,\n    Monaco,\n    Consolas,\n    "Liberation Mono",\n    "Courier New",\n    monospace;\n  font-feature-settings: normal;\n  font-variation-settings: normal;\n  font-size: 1em;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\nsub {\n  bottom: -0.25em;\n}\nsup {\n  top: -0.5em;\n}\ntable {\n  text-indent: 0;\n  border-color: inherit;\n  border-collapse: collapse;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  font-family: inherit;\n  font-feature-settings: inherit;\n  font-variation-settings: inherit;\n  font-size: 100%;\n  font-weight: inherit;\n  line-height: inherit;\n  color: inherit;\n  margin: 0;\n  padding: 0;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\n[type=button],\n[type=reset],\n[type=submit] {\n  -webkit-appearance: button;\n  background-color: transparent;\n  background-image: none;\n}\n:-moz-focusring {\n  outline: auto;\n}\n:-moz-ui-invalid {\n  box-shadow: none;\n}\nprogress {\n  vertical-align: baseline;\n}\n::-webkit-inner-spin-button,\n::-webkit-outer-spin-button {\n  height: auto;\n}\n[type=search] {\n  -webkit-appearance: textfield;\n  outline-offset: -2px;\n}\n::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n::-webkit-file-upload-button {\n  -webkit-appearance: button;\n  font: inherit;\n}\nsummary {\n  display: list-item;\n}\nblockquote,\ndl,\ndd,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\nhr,\nfigure,\np,\npre {\n  margin: 0;\n}\nfieldset {\n  margin: 0;\n  padding: 0;\n}\nlegend {\n  padding: 0;\n}\nol,\nul,\nmenu {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\ndialog {\n  padding: 0;\n}\ntextarea {\n  resize: vertical;\n}\ninput::-moz-placeholder,\ntextarea::-moz-placeholder {\n  opacity: 1;\n  color: #9ca3af;\n}\ninput::placeholder,\ntextarea::placeholder {\n  opacity: 1;\n  color: #9ca3af;\n}\nbutton,\n[role=button] {\n  cursor: pointer;\n}\n:disabled {\n  cursor: default;\n}\nimg,\nsvg,\nvideo,\ncanvas,\naudio,\niframe,\nembed,\nobject {\n  display: block;\n  vertical-align: middle;\n}\nimg,\nvideo {\n  max-width: 100%;\n  height: auto;\n}\n[hidden] {\n  display: none;\n}\n*,\n::before,\n::after {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x: ;\n  --tw-pan-y: ;\n  --tw-pinch-zoom: ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position: ;\n  --tw-gradient-via-position: ;\n  --tw-gradient-to-position: ;\n  --tw-ordinal: ;\n  --tw-slashed-zero: ;\n  --tw-numeric-figure: ;\n  --tw-numeric-spacing: ;\n  --tw-numeric-fraction: ;\n  --tw-ring-inset: ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur: ;\n  --tw-brightness: ;\n  --tw-contrast: ;\n  --tw-grayscale: ;\n  --tw-hue-rotate: ;\n  --tw-invert: ;\n  --tw-saturate: ;\n  --tw-sepia: ;\n  --tw-drop-shadow: ;\n  --tw-backdrop-blur: ;\n  --tw-backdrop-brightness: ;\n  --tw-backdrop-contrast: ;\n  --tw-backdrop-grayscale: ;\n  --tw-backdrop-hue-rotate: ;\n  --tw-backdrop-invert: ;\n  --tw-backdrop-opacity: ;\n  --tw-backdrop-saturate: ;\n  --tw-backdrop-sepia: ;\n}\n::backdrop {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x: ;\n  --tw-pan-y: ;\n  --tw-pinch-zoom: ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position: ;\n  --tw-gradient-via-position: ;\n  --tw-gradient-to-position: ;\n  --tw-ordinal: ;\n  --tw-slashed-zero: ;\n  --tw-numeric-figure: ;\n  --tw-numeric-spacing: ;\n  --tw-numeric-fraction: ;\n  --tw-ring-inset: ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur: ;\n  --tw-brightness: ;\n  --tw-contrast: ;\n  --tw-grayscale: ;\n  --tw-hue-rotate: ;\n  --tw-invert: ;\n  --tw-saturate: ;\n  --tw-sepia: ;\n  --tw-drop-shadow: ;\n  --tw-backdrop-blur: ;\n  --tw-backdrop-brightness: ;\n  --tw-backdrop-contrast: ;\n  --tw-backdrop-grayscale: ;\n  --tw-backdrop-hue-rotate: ;\n  --tw-backdrop-invert: ;\n  --tw-backdrop-opacity: ;\n  --tw-backdrop-saturate: ;\n  --tw-backdrop-sepia: ;\n}\n.novel-prose-lg {\n  font-size: 1.125rem;\n  line-height: 1.7777778;\n}\n.novel-prose-lg :where(p):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n  margin-bottom: 1.3333333em;\n}\n.novel-prose-lg :where([class~=lead]):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 1.2222222em;\n  line-height: 1.4545455;\n  margin-top: 1.0909091em;\n  margin-bottom: 1.0909091em;\n}\n.novel-prose-lg :where(blockquote):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.6666667em;\n  margin-bottom: 1.6666667em;\n  padding-left: 1em;\n}\n.novel-prose-lg :where(h1):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 2.6666667em;\n  margin-top: 0;\n  margin-bottom: 0.8333333em;\n  line-height: 1;\n}\n.novel-prose-lg :where(h2):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 1.6666667em;\n  margin-top: 1.8666667em;\n  margin-bottom: 1.0666667em;\n  line-height: 1.3333333;\n}\n.novel-prose-lg :where(h3):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 1.3333333em;\n  margin-top: 1.6666667em;\n  margin-bottom: 0.6666667em;\n  line-height: 1.5;\n}\n.novel-prose-lg :where(h4):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 0.4444444em;\n  line-height: 1.5555556;\n}\n.novel-prose-lg :where(img):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 1.7777778em;\n}\n.novel-prose-lg :where(picture):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 1.7777778em;\n}\n.novel-prose-lg :where(picture > img):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0;\n  margin-bottom: 0;\n}\n.novel-prose-lg :where(video):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 1.7777778em;\n}\n.novel-prose-lg :where(kbd):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n  border-radius: 0.3125rem;\n  padding-top: 0.2222222em;\n  padding-right: 0.4444444em;\n  padding-bottom: 0.2222222em;\n  padding-left: 0.4444444em;\n}\n.novel-prose-lg :where(code):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n}\n.novel-prose-lg :where(h2 code):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 0.8666667em;\n}\n.novel-prose-lg :where(h3 code):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 0.875em;\n}\n.novel-prose-lg :where(pre):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n  line-height: 1.75;\n  margin-top: 2em;\n  margin-bottom: 2em;\n  border-radius: 0.375rem;\n  padding-top: 1em;\n  padding-right: 1.5em;\n  padding-bottom: 1em;\n  padding-left: 1.5em;\n}\n.novel-prose-lg :where(ol):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n  margin-bottom: 1.3333333em;\n  padding-left: 1.5555556em;\n}\n.novel-prose-lg :where(ul):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n  margin-bottom: 1.3333333em;\n  padding-left: 1.5555556em;\n}\n.novel-prose-lg :where(li):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0.6666667em;\n  margin-bottom: 0.6666667em;\n}\n.novel-prose-lg :where(ol > li):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-left: 0.4444444em;\n}\n.novel-prose-lg :where(ul > li):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-left: 0.4444444em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ul > li p):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0.8888889em;\n  margin-bottom: 0.8888889em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ul > li > *:first-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ul > li > *:last-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-bottom: 1.3333333em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ol > li > *:first-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n}\n.novel-prose-lg :where(.novel-prose-lg > ol > li > *:last-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-bottom: 1.3333333em;\n}\n.novel-prose-lg :where(ul ul, ul ol, ol ul, ol ol):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0.8888889em;\n  margin-bottom: 0.8888889em;\n}\n.novel-prose-lg :where(dl):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n  margin-bottom: 1.3333333em;\n}\n.novel-prose-lg :where(dt):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.3333333em;\n}\n.novel-prose-lg :where(dd):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0.6666667em;\n  padding-left: 1.5555556em;\n}\n.novel-prose-lg :where(hr):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 3.1111111em;\n  margin-bottom: 3.1111111em;\n}\n.novel-prose-lg :where(hr + *):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(h2 + *):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(h3 + *):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(h4 + *):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(table):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n  line-height: 1.5;\n}\n.novel-prose-lg :where(thead th):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-right: 0.75em;\n  padding-bottom: 0.75em;\n  padding-left: 0.75em;\n}\n.novel-prose-lg :where(thead th:first-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-left: 0;\n}\n.novel-prose-lg :where(thead th:last-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-right: 0;\n}\n.novel-prose-lg :where(tbody td, tfoot td):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-top: 0.75em;\n  padding-right: 0.75em;\n  padding-bottom: 0.75em;\n  padding-left: 0.75em;\n}\n.novel-prose-lg :where(tbody td:first-child, tfoot td:first-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-left: 0;\n}\n.novel-prose-lg :where(tbody td:last-child, tfoot td:last-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  padding-right: 0;\n}\n.novel-prose-lg :where(figure):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 1.7777778em;\n  margin-bottom: 1.7777778em;\n}\n.novel-prose-lg :where(figure > *):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0;\n  margin-bottom: 0;\n}\n.novel-prose-lg :where(figcaption):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  font-size: 0.8888889em;\n  line-height: 1.5;\n  margin-top: 1em;\n}\n.novel-prose-lg :where(.novel-prose-lg > :first-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-top: 0;\n}\n.novel-prose-lg :where(.novel-prose-lg > :last-child):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *)) {\n  margin-bottom: 0;\n}\n.novel-prose-stone {\n  --tw-prose-body: #44403c;\n  --tw-prose-headings: #1c1917;\n  --tw-prose-lead: #57534e;\n  --tw-prose-links: #1c1917;\n  --tw-prose-bold: #1c1917;\n  --tw-prose-counters: #78716c;\n  --tw-prose-bullets: #d6d3d1;\n  --tw-prose-hr: #e7e5e4;\n  --tw-prose-quotes: #1c1917;\n  --tw-prose-quote-borders: #e7e5e4;\n  --tw-prose-captions: #78716c;\n  --tw-prose-kbd: #1c1917;\n  --tw-prose-kbd-shadows: 28 25 23;\n  --tw-prose-code: #1c1917;\n  --tw-prose-pre-code: #e7e5e4;\n  --tw-prose-pre-bg: #292524;\n  --tw-prose-th-borders: #d6d3d1;\n  --tw-prose-td-borders: #e7e5e4;\n  --tw-prose-invert-body: #d6d3d1;\n  --tw-prose-invert-headings: #fff;\n  --tw-prose-invert-lead: #a8a29e;\n  --tw-prose-invert-links: #fff;\n  --tw-prose-invert-bold: #fff;\n  --tw-prose-invert-counters: #a8a29e;\n  --tw-prose-invert-bullets: #57534e;\n  --tw-prose-invert-hr: #44403c;\n  --tw-prose-invert-quotes: #f5f5f4;\n  --tw-prose-invert-quote-borders: #44403c;\n  --tw-prose-invert-captions: #a8a29e;\n  --tw-prose-invert-kbd: #fff;\n  --tw-prose-invert-kbd-shadows: 255 255 255;\n  --tw-prose-invert-code: #fff;\n  --tw-prose-invert-pre-code: #d6d3d1;\n  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);\n  --tw-prose-invert-th-borders: #57534e;\n  --tw-prose-invert-td-borders: #44403c;\n}\n.novel-fixed {\n  position: fixed;\n}\n.novel-relative {\n  position: relative;\n}\n.novel-left-\\[40\\%\\] {\n  left: 40%;\n}\n.novel-top-\\[50\\%\\] {\n  top: 50%;\n}\n.novel-top-full {\n  top: 100%;\n}\n.novel-z-50 {\n  z-index: 50;\n}\n.novel-z-\\[99999\\] {\n  z-index: 99999;\n}\n.novel-my-1 {\n  margin-top: 0.25rem;\n  margin-bottom: 0.25rem;\n}\n.novel-my-4 {\n  margin-top: 1rem;\n  margin-bottom: 1rem;\n}\n.novel--mb-2 {\n  margin-bottom: -0.5rem;\n}\n.novel--mt-2 {\n  margin-top: -0.5rem;\n}\n.novel-mb-1 {\n  margin-bottom: 0.25rem;\n}\n.novel-mb-6 {\n  margin-bottom: 1.5rem;\n}\n.novel-mt-1 {\n  margin-top: 0.25rem;\n}\n.novel-mt-2 {\n  margin-top: 0.5rem;\n}\n.novel-mt-4 {\n  margin-top: 1rem;\n}\n.novel-flex {\n  display: flex;\n}\n.novel-h-10 {\n  height: 2.5rem;\n}\n.novel-h-3 {\n  height: 0.75rem;\n}\n.novel-h-4 {\n  height: 1rem;\n}\n.novel-h-\\[10rem\\] {\n  height: 10rem;\n}\n.novel-h-auto {\n  height: auto;\n}\n.novel-h-full {\n  height: 100%;\n}\n.novel-max-h-80 {\n  max-height: 20rem;\n}\n.novel-max-h-\\[330px\\] {\n  max-height: 330px;\n}\n.novel-min-h-\\[500px\\] {\n  min-height: 500px;\n}\n.novel-w-10 {\n  width: 2.5rem;\n}\n.novel-w-3 {\n  width: 0.75rem;\n}\n.novel-w-4 {\n  width: 1rem;\n}\n.novel-w-48 {\n  width: 12rem;\n}\n.novel-w-60 {\n  width: 15rem;\n}\n.novel-w-7 {\n  width: 1.75rem;\n}\n.novel-w-72 {\n  width: 18rem;\n}\n.novel-w-\\[10rem\\] {\n  width: 10rem;\n}\n.novel-w-fit {\n  width: -moz-fit-content;\n  width: fit-content;\n}\n.novel-w-full {\n  width: 100%;\n}\n.novel-max-w-full {\n  max-width: 100%;\n}\n.novel-max-w-screen-lg {\n  max-width: 1024px;\n}\n.novel-flex-1 {\n  flex: 1 1 0%;\n}\n@keyframes novel-spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n.novel-animate-spin {\n  animation: novel-spin 1s linear infinite;\n}\n.novel-cursor-pointer {\n  cursor: pointer;\n}\n.novel-list-outside {\n  list-style-position: outside;\n}\n.novel-list-decimal {\n  list-style-type: decimal;\n}\n.novel-list-disc {\n  list-style-type: disc;\n}\n.novel-flex-col {\n  flex-direction: column;\n}\n.novel-items-start {\n  align-items: flex-start;\n}\n.novel-items-center {\n  align-items: center;\n}\n.novel-justify-center {\n  justify-content: center;\n}\n.novel-justify-between {\n  justify-content: space-between;\n}\n.novel-gap-1 {\n  gap: 0.25rem;\n}\n.novel-space-x-2 > :not([hidden]) ~ :not([hidden]) {\n  --tw-space-x-reverse: 0;\n  margin-right: calc(0.5rem * var(--tw-space-x-reverse));\n  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));\n}\n.novel-divide-x > :not([hidden]) ~ :not([hidden]) {\n  --tw-divide-x-reverse: 0;\n  border-right-width: calc(1px * var(--tw-divide-x-reverse));\n  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));\n}\n.novel-divide-stone-200 > :not([hidden]) ~ :not([hidden]) {\n  border-color: var(--novel-stone-200);\n}\n.novel-overflow-hidden {\n  overflow: hidden;\n}\n.novel-overflow-y-auto {\n  overflow-y: auto;\n}\n.novel-whitespace-nowrap {\n  white-space: nowrap;\n}\n.novel-rounded {\n  border-radius: 0.25rem;\n}\n.novel-rounded-lg {\n  border-radius: 0.5rem;\n}\n.novel-rounded-md {\n  border-radius: 0.375rem;\n}\n.novel-rounded-sm {\n  border-radius: 0.125rem;\n}\n.novel-border {\n  border-width: 1px;\n}\n.novel-border-l-4 {\n  border-left-width: 4px;\n}\n.novel-border-t {\n  border-top-width: 1px;\n}\n.novel-border-stone-200 {\n  border-color: var(--novel-stone-200);\n}\n.novel-border-stone-300 {\n  border-color: var(--novel-stone-300);\n}\n.novel-border-stone-700 {\n  border-color: var(--novel-stone-700);\n}\n.novel-bg-stone-100 {\n  background-color: var(--novel-stone-100);\n}\n.novel-bg-stone-200 {\n  background-color: var(--novel-stone-200);\n}\n.novel-bg-white {\n  background-color: var(--novel-white);\n}\n.novel-fill-stone-600 {\n  fill: var(--novel-stone-600);\n}\n.novel-p-1 {\n  padding: 0.25rem;\n}\n.novel-p-2 {\n  padding: 0.5rem;\n}\n.novel-p-5 {\n  padding: 1.25rem;\n}\n.novel-px-1 {\n  padding-left: 0.25rem;\n  padding-right: 0.25rem;\n}\n.novel-px-1\\.5 {\n  padding-left: 0.375rem;\n  padding-right: 0.375rem;\n}\n.novel-px-2 {\n  padding-left: 0.5rem;\n  padding-right: 0.5rem;\n}\n.novel-px-3 {\n  padding-left: 0.75rem;\n  padding-right: 0.75rem;\n}\n.novel-py-1 {\n  padding-top: 0.25rem;\n  padding-bottom: 0.25rem;\n}\n.novel-py-1\\.5 {\n  padding-top: 0.375rem;\n  padding-bottom: 0.375rem;\n}\n.novel-py-2 {\n  padding-top: 0.5rem;\n  padding-bottom: 0.5rem;\n}\n.novel-py-px {\n  padding-top: 1px;\n  padding-bottom: 1px;\n}\n.novel-pl-2 {\n  padding-left: 0.5rem;\n}\n.novel-text-left {\n  text-align: left;\n}\n.novel-font-default {\n  font-family:\n    var(--font-default),\n    system-ui,\n    sans-serif;\n}\n.novel-font-mono {\n  font-family:\n    ui-monospace,\n    SFMono-Regular,\n    Menlo,\n    Monaco,\n    Consolas,\n    "Liberation Mono",\n    "Courier New",\n    monospace;\n}\n.novel-text-base {\n  font-size: 1rem;\n  line-height: 1.5rem;\n}\n.novel-text-sm {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n}\n.novel-text-xs {\n  font-size: 0.75rem;\n  line-height: 1rem;\n}\n.novel-font-medium {\n  font-weight: 500;\n}\n.novel-leading-3 {\n  line-height: .75rem;\n}\n.novel-leading-normal {\n  line-height: 1.5;\n}\n.novel-text-blue-500 {\n  --tw-text-opacity: 1;\n  color: rgb(59 130 246 / var(--tw-text-opacity));\n}\n.novel-text-purple-500 {\n  --tw-text-opacity: 1;\n  color: rgb(168 85 247 / var(--tw-text-opacity));\n}\n.novel-text-red-600 {\n  --tw-text-opacity: 1;\n  color: rgb(220 38 38 / var(--tw-text-opacity));\n}\n.novel-text-stone-200 {\n  color: var(--novel-stone-200);\n}\n.novel-text-stone-400 {\n  color: var(--novel-stone-400);\n}\n.novel-text-stone-500 {\n  color: var(--novel-stone-500);\n}\n.novel-text-stone-600 {\n  color: var(--novel-stone-600);\n}\n.novel-text-stone-800 {\n  color: var(--novel-stone-800);\n}\n.novel-text-stone-900 {\n  color: var(--novel-stone-900);\n}\n.novel-underline {\n  text-decoration-line: underline;\n}\n.novel-decoration-stone-400 {\n  text-decoration-color: var(--novel-stone-400);\n}\n.novel-underline-offset-4 {\n  text-underline-offset: 4px;\n}\n.novel-underline-offset-\\[3px\\] {\n  text-underline-offset: 3px;\n}\n.novel-shadow-md {\n  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);\n  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow, 0 0 #0000),\n    var(--tw-ring-shadow, 0 0 #0000),\n    var(--tw-shadow);\n}\n.novel-shadow-xl {\n  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);\n  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow, 0 0 #0000),\n    var(--tw-ring-shadow, 0 0 #0000),\n    var(--tw-shadow);\n}\n.novel-outline-none {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n}\n.novel-transition-all {\n  transition-property: all;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n.novel-transition-colors {\n  transition-property:\n    color,\n    background-color,\n    border-color,\n    text-decoration-color,\n    fill,\n    stroke;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n@keyframes enter {\n  from {\n    opacity: var(--tw-enter-opacity, 1);\n    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0));\n  }\n}\n@keyframes exit {\n  to {\n    opacity: var(--tw-exit-opacity, 1);\n    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));\n  }\n}\n.novel-animate-in {\n  animation-name: enter;\n  animation-duration: 150ms;\n  --tw-enter-opacity: initial;\n  --tw-enter-scale: initial;\n  --tw-enter-rotate: initial;\n  --tw-enter-translate-x: initial;\n  --tw-enter-translate-y: initial;\n}\n.novel-fade-in {\n  --tw-enter-opacity: 0;\n}\n.novel-slide-in-from-top-1 {\n  --tw-enter-translate-y: -0.25rem;\n}\n:is(.novel-dark-theme .dark\\:novel-prose-invert) {\n  --tw-prose-body: var(--tw-prose-invert-body);\n  --tw-prose-headings: var(--tw-prose-invert-headings);\n  --tw-prose-lead: var(--tw-prose-invert-lead);\n  --tw-prose-links: var(--tw-prose-invert-links);\n  --tw-prose-bold: var(--tw-prose-invert-bold);\n  --tw-prose-counters: var(--tw-prose-invert-counters);\n  --tw-prose-bullets: var(--tw-prose-invert-bullets);\n  --tw-prose-hr: var(--tw-prose-invert-hr);\n  --tw-prose-quotes: var(--tw-prose-invert-quotes);\n  --tw-prose-quote-borders: var(--tw-prose-invert-quote-borders);\n  --tw-prose-captions: var(--tw-prose-invert-captions);\n  --tw-prose-kbd: var(--tw-prose-invert-kbd);\n  --tw-prose-kbd-shadows: var(--tw-prose-invert-kbd-shadows);\n  --tw-prose-code: var(--tw-prose-invert-code);\n  --tw-prose-pre-code: var(--tw-prose-invert-pre-code);\n  --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);\n  --tw-prose-th-borders: var(--tw-prose-invert-th-borders);\n  --tw-prose-td-borders: var(--tw-prose-invert-td-borders);\n}\n.hover\\:novel-bg-red-100:hover {\n  --tw-bg-opacity: 1;\n  background-color: rgb(254 226 226 / var(--tw-bg-opacity));\n}\n.hover\\:novel-bg-stone-100:hover {\n  background-color: var(--novel-stone-100);\n}\n.hover\\:novel-text-stone-600:hover {\n  color: var(--novel-stone-600);\n}\n.focus\\:novel-outline-none:focus {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n}\n.active\\:novel-bg-stone-200:active {\n  background-color: var(--novel-stone-200);\n}\n.prose-headings\\:novel-font-title :is(:where(h1, h2, h3, h4, h5, h6, th):not(:where([class~=novel-not-prose], [class~=novel-not-prose] *))) {\n  font-family:\n    var(--font-title),\n    system-ui,\n    sans-serif;\n}\n:is(.novel-dark-theme .dark\\:hover\\:novel-bg-red-800:hover) {\n  --tw-bg-opacity: 1;\n  background-color: rgb(153 27 27 / var(--tw-bg-opacity));\n}\n@media (min-width: 640px) {\n  .sm\\:novel-mb-\\[calc\\(20vh\\)\\] {\n    margin-bottom: calc(20vh);\n  }\n  .sm\\:novel-rounded-lg {\n    border-radius: 0.5rem;\n  }\n  .sm\\:novel-border {\n    border-width: 1px;\n  }\n  .sm\\:novel-shadow-lg {\n    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);\n    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);\n    box-shadow:\n      var(--tw-ring-offset-shadow, 0 0 #0000),\n      var(--tw-ring-shadow, 0 0 #0000),\n      var(--tw-shadow);\n  }\n}\n');
 
 // src/styles/prosemirror.css
 styleInject(`.ProseMirror {
@@ -286,8 +285,7 @@ function startImageUpload(file, view, pos) {
   }
   const id = {};
   const tr = view.state.tr;
-  if (!tr.selection.empty)
-    tr.deleteSelection();
+  if (!tr.selection.empty) tr.deleteSelection();
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = () => {
@@ -303,8 +301,7 @@ function startImageUpload(file, view, pos) {
   handleImageUpload(file).then((src) => {
     const { schema } = view.state;
     let pos2 = findPlaceholder(view.state, id);
-    if (pos2 == null)
-      return;
+    if (pos2 == null) return;
     const imageSrc = typeof src === "object" ? reader.result : src;
     const node = schema.nodes.image.create({ src: imageSrc });
     const transaction = view.state.tr.replaceWith(pos2, pos2, node).setMeta(uploadKey, { remove: { id } });
@@ -719,8 +716,7 @@ var CommandList = (props) => {
       const item = items[index];
       if (item) {
         if (item.title === "Continue writing") {
-          if (isLoading)
-            return;
+          if (isLoading) return;
           complete(
             getPrevText(editor, {
               chars: 5e3,
@@ -769,8 +765,7 @@ var CommandList = (props) => {
   useLayoutEffect(() => {
     const container = commandListContainer == null ? void 0 : commandListContainer.current;
     const item = container == null ? void 0 : container.children[selectedIndex];
-    if (item && container)
-      updateScrollView(container, item);
+    if (item && container) updateScrollView(container, item);
   }, [selectedIndex]);
   return items.length > 0 ? /* @__PURE__ */ jsx3(
     "div",
@@ -821,8 +816,7 @@ var renderItems = () => {
     onUpdate: (props) => {
       var _a;
       component == null ? void 0 : component.updateProps(props);
-      if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed))
-        return;
+      if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed)) return;
       popup && popup.setProps({
         getReferenceClientRect: props.clientRect
       });
@@ -830,8 +824,7 @@ var renderItems = () => {
     onKeyDown: (props) => {
       var _a, _b;
       if (props.event.key === "Escape") {
-        if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed))
-          return;
+        if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed)) return;
         popup == null ? void 0 : popup.hide();
         return true;
       }
@@ -839,8 +832,7 @@ var renderItems = () => {
     },
     onExit: () => {
       var _a;
-      if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed))
-        return;
+      if (!popup || ((_a = popup == null ? void 0 : popup.state) == null ? void 0 : _a.isDestroyed)) return;
       popup == null ? void 0 : popup.destroy();
       component == null ? void 0 : component.destroy();
     }
@@ -954,17 +946,14 @@ function nodePosAtDOM(node, view) {
 function DragHandle(options) {
   function handleDragStart(event, view) {
     view.focus();
-    if (!event.dataTransfer)
-      return;
+    if (!event.dataTransfer) return;
     const node = nodeDOMAtCoords({
       x: event.clientX + 50 + options.dragHandleWidth,
       y: event.clientY
     });
-    if (!(node instanceof Element))
-      return;
+    if (!(node instanceof Element)) return;
     const nodePos = nodePosAtDOM(node, view);
-    if (nodePos == null || nodePos < 0)
-      return;
+    if (nodePos == null || nodePos < 0) return;
     view.dispatch(
       view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos))
     );
@@ -984,11 +973,9 @@ function DragHandle(options) {
       x: event.clientX + 50 + options.dragHandleWidth,
       y: event.clientY
     });
-    if (!(node instanceof Element))
-      return;
+    if (!(node instanceof Element)) return;
     const nodePos = nodePosAtDOM(node, view);
-    if (!nodePos)
-      return;
+    if (!nodePos) return;
     view.dispatch(
       view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos))
     );
@@ -1052,8 +1039,7 @@ function DragHandle(options) {
             rect.left -= options.dragHandleWidth;
           }
           rect.width = options.dragHandleWidth;
-          if (!dragHandleElement)
-            return;
+          if (!dragHandleElement) return;
           dragHandleElement.style.left = `${rect.left - rect.width}px`;
           dragHandleElement.style.top = `${rect.top}px`;
           showDragHandle();
@@ -1805,8 +1791,7 @@ function isValidUrl(url) {
   }
 }
 function getUrlFromString(str) {
-  if (isValidUrl(str))
-    return str;
+  if (isValidUrl(str)) return str;
   try {
     if (str.includes(".") && !str.includes(" ")) {
       return new URL(`https://${str}`).toString();
@@ -2015,7 +2000,7 @@ var EditorBubbleMenu = (props) => {
   );
 };
 
-// ../../node_modules/.pnpm/@egjs+agent@2.4.3/node_modules/@egjs/agent/dist/agent.esm.js
+// ../../node_modules/@egjs/agent/dist/agent.esm.js
 function some(arr, callback) {
   var length = arr.length;
   for (var i = 0; i < length; ++i) {
@@ -2334,7 +2319,7 @@ function agent(userAgent) {
 }
 var agent_esm_default = agent;
 
-// ../../node_modules/.pnpm/framework-utils@1.1.0/node_modules/framework-utils/dist/utils.esm.js
+// ../../node_modules/framework-utils/dist/utils.esm.js
 function prefixNames(prefix2) {
   var classNames = [];
   for (var _i = 1; _i < arguments.length; _i++) {
@@ -2388,7 +2373,7 @@ function withMethods(methods, duplicate) {
   };
 }
 
-// ../../node_modules/.pnpm/@daybrush+utils@1.13.0/node_modules/@daybrush/utils/dist/utils.esm.js
+// ../../node_modules/@daybrush/utils/dist/utils.esm.js
 var FUNCTION = "function";
 var OBJECT = "object";
 var STRING = "string";
@@ -2459,11 +2444,8 @@ var DEFAULT_UNIT_PRESETS = {
   }
 };
 function __spreadArrays() {
-  for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-    s += arguments[i].length;
-  for (var r = Array(s), k = 0, i = 0; i < il; i++)
-    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-      r[k] = a[j];
+  for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+  for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
   return r;
 }
 function dot(a1, a2, b1, b2) {
@@ -2532,10 +2514,8 @@ function findClose(closeCharacter, texts, index, length, openCloseCharacters) {
   for (var i = index; i < length; ++i) {
     var state_1 = _loop_1(i);
     i = out_i_1;
-    if (typeof state_1 === "object")
-      return state_1.value;
-    if (state_1 === "break")
-      break;
+    if (typeof state_1 === "object") return state_1.value;
+    if (state_1 === "break") break;
   }
   return -1;
 }
@@ -2620,10 +2600,8 @@ function splitText(text, splitOptions) {
   for (var i = 0; i < length; ++i) {
     var state_2 = _loop_2(i);
     i = out_i_2;
-    if (typeof state_2 === "object")
-      return state_2.value;
-    if (state_2 === "break")
-      break;
+    if (typeof state_2 === "object") return state_2.value;
+    if (state_2 === "break") break;
   }
   if (tempValues.length) {
     values.push(tempValues.join(""));
@@ -2871,7 +2849,7 @@ function isNode(el) {
   return isObject(el) && el.nodeName && el.nodeType && "ownerDocument" in el;
 }
 
-// ../../node_modules/.pnpm/@scena+matrix@1.1.1/node_modules/@scena/matrix/dist/matrix.esm.js
+// ../../node_modules/@scena/matrix/dist/matrix.esm.js
 function add(matrix, inverseMatrix, startIndex, fromIndex, n, k) {
   for (var i = 0; i < n; ++i) {
     var x = startIndex + i * n;
@@ -3154,14 +3132,12 @@ function createWarpMatrix(pos0, pos1, pos2, pos3, nextPos0, nextPos1, nextPos2, 
   return convertDimension(transpose(h), 3, 4);
 }
 
-// ../../node_modules/.pnpm/css-to-mat@1.1.1/node_modules/css-to-mat/dist/css-to-mat.esm.js
+// ../../node_modules/css-to-mat/dist/css-to-mat.esm.js
 var __assign = function() {
   __assign = Object.assign || function __assign7(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
-      for (var p in s)
-        if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
   };
@@ -3322,7 +3298,7 @@ function parse(transform, size) {
   });
 }
 
-// ../../node_modules/.pnpm/@egjs+list-differ@1.0.1/node_modules/@egjs/list-differ/dist/list-differ.esm.js
+// ../../node_modules/@egjs/list-differ/dist/list-differ.esm.js
 var PolyMap = /* @__PURE__ */ function() {
   function PolyMap2() {
     this.keys = [];
@@ -3533,16 +3509,14 @@ var ListDiffer = /* @__PURE__ */ function() {
 }();
 var list_differ_esm_default = ListDiffer;
 
-// ../../node_modules/.pnpm/@egjs+children-differ@1.0.1/node_modules/@egjs/children-differ/dist/children-differ.esm.js
+// ../../node_modules/@egjs/children-differ/dist/children-differ.esm.js
 var extendStatics = function(d, b) {
   extendStatics = Object.setPrototypeOf || {
     __proto__: []
   } instanceof Array && function(d2, b2) {
     d2.__proto__ = b2;
   } || function(d2, b2) {
-    for (var p in b2)
-      if (b2.hasOwnProperty(p))
-        d2[p] = b2[p];
+    for (var p in b2) if (b2.hasOwnProperty(p)) d2[p] = b2[p];
   };
   return extendStatics(d, b);
 };
@@ -3553,7 +3527,7 @@ function __extends(d, b) {
   }
   d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
-var findKeyCallback = typeof Map === "function" ? void 0 : function() {
+var findKeyCallback = typeof Map === "function" ? void 0 : /* @__PURE__ */ function() {
   var childrenCount = 0;
   return function(el) {
     return el.__DIFF_KEY__ || (el.__DIFF_KEY__ = ++childrenCount);
@@ -3574,25 +3548,20 @@ function diff2(prevList, list) {
 }
 var children_differ_esm_default = ChildrenDiffer;
 
-// ../../node_modules/.pnpm/@scena+event-emitter@1.0.5/node_modules/@scena/event-emitter/dist/event-emitter.esm.js
+// ../../node_modules/@scena/event-emitter/dist/event-emitter.esm.js
 var __assign2 = function() {
   __assign2 = Object.assign || function __assign7(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
-      for (var p in s)
-        if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
   };
   return __assign2.apply(this, arguments);
 };
 function __spreadArrays2() {
-  for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-    s += arguments[i].length;
-  for (var r = Array(s), k = 0, i = 0; i < il; i++)
-    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-      r[k] = a[j];
+  for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+  for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
   return r;
 }
 var EventEmitter = /* @__PURE__ */ function() {
@@ -3686,16 +3655,14 @@ var EventEmitter = /* @__PURE__ */ function() {
 }();
 var event_emitter_esm_default = EventEmitter;
 
-// ../../node_modules/.pnpm/@scena+dragscroll@1.4.0/node_modules/@scena/dragscroll/dist/dragscroll.esm.js
+// ../../node_modules/@scena/dragscroll/dist/dragscroll.esm.js
 var extendStatics2 = function(d, b) {
   extendStatics2 = Object.setPrototypeOf || {
     __proto__: []
   } instanceof Array && function(d2, b2) {
     d2.__proto__ = b2;
   } || function(d2, b2) {
-    for (var p in b2)
-      if (b2.hasOwnProperty(p))
-        d2[p] = b2[p];
+    for (var p in b2) if (b2.hasOwnProperty(p)) d2[p] = b2[p];
   };
   return extendStatics2(d, b);
 };
@@ -3710,9 +3677,7 @@ var __assign3 = function() {
   __assign3 = Object.assign || function __assign7(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
-      for (var p in s)
-        if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
   };
@@ -3950,13 +3915,10 @@ var DragScroll = /* @__PURE__ */ function(_super) {
 }(event_emitter_esm_default);
 var dragscroll_esm_default = DragScroll;
 
-// ../../node_modules/.pnpm/overlap-area@1.1.0/node_modules/overlap-area/dist/overlap-area.esm.js
+// ../../node_modules/overlap-area/dist/overlap-area.esm.js
 function __spreadArrays3() {
-  for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-    s += arguments[i].length;
-  for (var r = Array(s), k = 0, i = 0; i < il; i++)
-    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-      r[k] = a[j];
+  for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+  for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
   return r;
 }
 function tinyThrottle(num) {
@@ -4315,18 +4277,16 @@ function getOverlapSize(points1, points2) {
   return getAreaSize(points);
 }
 
-// ../../node_modules/.pnpm/react-moveable@0.54.1/node_modules/react-moveable/dist/moveable.esm.js
+// ../../node_modules/react-moveable/dist/moveable.esm.js
 import * as React2 from "react";
 import { createElement as createElement3 } from "react";
 
-// ../../node_modules/.pnpm/gesto@1.19.4/node_modules/gesto/dist/gesto.esm.js
+// ../../node_modules/gesto/dist/gesto.esm.js
 var extendStatics3 = function(d, b) {
   extendStatics3 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
     d2.__proto__ = b2;
   } || function(d2, b2) {
-    for (var p in b2)
-      if (b2.hasOwnProperty(p))
-        d2[p] = b2[p];
+    for (var p in b2) if (b2.hasOwnProperty(p)) d2[p] = b2[p];
   };
   return extendStatics3(d, b);
 };
@@ -4341,9 +4301,7 @@ var __assign4 = function() {
   __assign4 = Object.assign || function __assign7(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
-      for (var p in s)
-        if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
   };
@@ -5007,7 +4965,7 @@ var Gesto = /* @__PURE__ */ function(_super) {
   return Gesto2;
 }(event_emitter_esm_default);
 
-// ../../node_modules/.pnpm/css-styled@1.0.8/node_modules/css-styled/dist/styled.esm.js
+// ../../node_modules/css-styled/dist/styled.esm.js
 function hash(str) {
   var hash2 = 5381, i = str.length;
   while (i) {
@@ -5100,15 +5058,13 @@ function styled(css2) {
 }
 var styled_esm_default = styled;
 
-// ../../node_modules/.pnpm/react-css-styled@1.1.9/node_modules/react-css-styled/dist/styled.esm.js
+// ../../node_modules/react-css-styled/dist/styled.esm.js
 import { version, createElement, Component, forwardRef, useRef as useRef3, useImperativeHandle, useEffect as useEffect4 } from "react";
 var __assign5 = function() {
   __assign5 = Object.assign || function __assign7(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
-      for (var p in s)
-        if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
   };
@@ -5116,14 +5072,10 @@ var __assign5 = function() {
 };
 function __rest(s, e) {
   var t = {};
-  for (var p in s)
-    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-      t[p] = s[p];
-  if (s != null && typeof Object.getOwnPropertySymbols === "function")
-    for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-      if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-        t[p[i]] = s[p[i]];
-    }
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
   return t;
 }
 function styled2(Tag, css2) {
@@ -5151,14 +5103,12 @@ function styled2(Tag, css2) {
   });
 }
 
-// ../../node_modules/.pnpm/react-moveable@0.54.1/node_modules/react-moveable/dist/moveable.esm.js
+// ../../node_modules/react-moveable/dist/moveable.esm.js
 var extendStatics4 = function(d, b) {
   extendStatics4 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
     d2.__proto__ = b2;
   } || function(d2, b2) {
-    for (var p in b2)
-      if (Object.prototype.hasOwnProperty.call(b2, p))
-        d2[p] = b2[p];
+    for (var p in b2) if (Object.prototype.hasOwnProperty.call(b2, p)) d2[p] = b2[p];
   };
   return extendStatics4(d, b);
 };
@@ -5175,9 +5125,7 @@ var __assign6 = function() {
   __assign6 = Object.assign || function __assign7(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
-      for (var p in s)
-        if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
   };
@@ -5185,9 +5133,8 @@ var __assign6 = function() {
 };
 function __rest2(s, e) {
   var t = {};
-  for (var p in s)
-    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-      t[p] = s[p];
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+    t[p] = s[p];
   if (s != null && typeof Object.getOwnPropertySymbols === "function")
     for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
       if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
@@ -5197,58 +5144,45 @@ function __rest2(s, e) {
 }
 function __decorate(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-    r = Reflect.decorate(decorators, target, key, desc);
-  else
-    for (var i = decorators.length - 1; i >= 0; i--)
-      if (d = decorators[i])
-        r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 function __values(o) {
   var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-  if (m)
-    return m.call(o);
-  if (o && typeof o.length === "number")
-    return {
-      next: function() {
-        if (o && i >= o.length)
-          o = void 0;
-        return { value: o && o[i++], done: !o };
-      }
-    };
+  if (m) return m.call(o);
+  if (o && typeof o.length === "number") return {
+    next: function() {
+      if (o && i >= o.length) o = void 0;
+      return { value: o && o[i++], done: !o };
+    }
+  };
   throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 }
 function __read(o, n) {
   var m = typeof Symbol === "function" && o[Symbol.iterator];
-  if (!m)
-    return o;
+  if (!m) return o;
   var i = m.call(o), r, ar = [], e;
   try {
-    while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
-      ar.push(r.value);
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
   } catch (error) {
     e = { error };
   } finally {
     try {
-      if (r && !r.done && (m = i["return"]))
-        m.call(i);
+      if (r && !r.done && (m = i["return"])) m.call(i);
     } finally {
-      if (e)
-        throw e.error;
+      if (e) throw e.error;
     }
   }
   return ar;
 }
 function __spreadArray(to, from, pack) {
-  if (pack || arguments.length === 2)
-    for (var i = 0, l = from.length, ar; i < l; i++) {
-      if (ar || !(i in from)) {
-        if (!ar)
-          ar = Array.prototype.slice.call(from, 0, i);
-        ar[i] = from[i];
-      }
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
     }
+  }
   return to.concat(ar || Array.prototype.slice.call(from));
 }
 function makeAble(name, able) {
@@ -10618,16 +10552,15 @@ function getSVGGraphicsOffset(el, origin, isGTarget) {
   if (!el.getBBox || !isGTarget && el.tagName.toLowerCase() === "g") {
     return [0, 0, 0, 0];
   }
+  var getStyle = getCachedStyle(el);
+  var isFillBox = getStyle("transform-box") === "fill-box";
   var bbox = el.getBBox();
   var viewBox = getSVGViewBox(el.ownerSVGElement);
   var left = bbox.x - viewBox.x;
   var top = bbox.y - viewBox.y;
-  return [
-    left,
-    top,
-    origin[0] - left,
-    origin[1] - top
-  ];
+  var originX = isFillBox ? origin[0] : origin[0] - left;
+  var originY = isFillBox ? origin[1] : origin[1] - top;
+  return [left, top, originX, originY];
 }
 function calculatePosition(matrix, pos, n) {
   return calculate(matrix, convertPositionMatrix(pos, n), n);
@@ -12437,7 +12370,7 @@ var Scrollable = {
       triggerEvent(moveable, eventName, params);
     }).on("move", function(_a2) {
       var offsetX = _a2.offsetX, offsetY = _a2.offsetY, inputEvent = _a2.inputEvent;
-      moveable[gestoName].scrollBy(offsetX, offsetY, inputEvent.inputEvent, true);
+      moveable[gestoName].scrollBy(offsetX, offsetY, inputEvent.inputEvent, false);
     }).on("scrollDrag", function(_a2) {
       var next = _a2.next;
       next(moveable[gestoName].getCurrentEvent());
@@ -14013,7 +13946,8 @@ var Roundable = {
         originalPos[0] += roundPadding;
       }
       var pos = minus(calculatePosition(allMatrix, originalPos, n), basePos);
-      var isDisplay = v.vertical ? verticalCount <= maxRoundControls[1] && (isDisplayShadowRoundControls || !v.virtual) : horizontalCount <= maxRoundControls[0] && (isDisplayShadowRoundControls || !v.virtual);
+      var isDisplayVerticalShadow = isDisplayShadowRoundControls && isDisplayShadowRoundControls !== "horizontal";
+      var isDisplay = v.vertical ? verticalCount <= maxRoundControls[1] && (isDisplayVerticalShadow || !v.virtual) : horizontalCount <= maxRoundControls[0] && (isDisplayShadowRoundControls || !v.virtual);
       return React3.createElement("div", { key: "borderRadiusControl".concat(i), className: prefix("control", "border-radius", v.vertical ? "vertical" : "", v.virtual ? "virtual" : ""), "data-radius-index": i, style: {
         display: isDisplay ? "block" : "none",
         transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) scale(").concat(zoom, ")")
@@ -15628,11 +15562,9 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
         e_1 = { error: e_1_1 };
       } finally {
         try {
-          if (records_1_1 && !records_1_1.done && (_a2 = records_1.return))
-            _a2.call(records_1);
+          if (records_1_1 && !records_1_1.done && (_a2 = records_1.return)) _a2.call(records_1);
         } finally {
-          if (e_1)
-            throw e_1.error;
+          if (e_1) throw e_1.error;
         }
       }
     });
@@ -16810,8 +16742,7 @@ function Editor2({
     };
   }, [stop, isLoading, editor, complete, completion.length]);
   useEffect5(() => {
-    if (!editor || hydrated)
-      return;
+    if (!editor || hydrated) return;
     const value = disableLocalStorage ? defaultValue : content;
     if (value) {
       editor.commands.setContent(value);

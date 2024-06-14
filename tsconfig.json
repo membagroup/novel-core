@@ -1,11 +1,25 @@
 {
-  "extends": "./node_modules/tsconfig/react.json",
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"],
+  "extends": "../tsconfig/react.json",
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
+  ],
   "compilerOptions": {
     "baseUrl": ".",
+    // https://github.com/reduxjs/react-redux/issues/1886#issuecomment-1096512504
+    "jsx": "react-jsx",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ],
+      // https://github.com/facebook/react/issues/24304#issuecomment-1111184798
+      "react": [
+        "../../node_modules/@types/react"
+      ],
     }
   }
 }
