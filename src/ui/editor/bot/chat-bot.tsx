@@ -25,10 +25,10 @@ export function ChatBot({ editor }: { editor: Editor }) {
   const { completionApi, plan } = useContext(NovelContext);
 
   const initialMessage = {
-      id: "start",
-      role: 'system' as 'system',
-      content: "Here, how can I help you?",
-    };
+    id: "start",
+    role: 'system' as 'system',
+    content: "Here, how can I help you?",
+  };
 
   const {
     messages,
@@ -85,11 +85,12 @@ export function ChatBot({ editor }: { editor: Editor }) {
       <motion.div
         className="novel-rounded-full"
         initial={{ borderRadius: "50%", x: 0 }}
-        animate={{ borderRadius: isOpen ? "0%" : "50%", x:0
-        // x: isOpen ? 0 : 35
-       }}
+        animate={{
+          borderRadius: isOpen ? "0%" : "50%", x: 0
+          // x: isOpen ? 0 : 35
+        }}
         transition={{ duration: 0.2 }}
-        >
+      >
         {isOpen ? (
           <div className="novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg">
             <div className="msgs novel-p-2">
