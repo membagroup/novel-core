@@ -27981,6 +27981,11 @@ function ChatBot({ editor }) {
   const [isOpen, setIsOpen] = useState11(false);
   const inputRef = useRef10(null);
   const { completionApi, plan } = useContext13(NovelContext);
+  const initialMessage = {
+    id: "start",
+    role: "system",
+    content: "Here, how can I help you?"
+  };
   const {
     messages,
     setMessages,
@@ -27993,13 +27998,7 @@ function ChatBot({ editor }) {
     id: "ai-bot",
     api: `${completionApi}/bot`,
     body: { plan, system: editor.getText() },
-    initialMessages: [
-      {
-        id: "start",
-        role: "system",
-        content: "Here, how can I help you?"
-      }
-    ],
+    initialMessages: [initialMessage],
     onError: (err) => {
       if (err.message !== "Failed to fetch" && err.message !== "network error") {
         toast5.error(err.message);
@@ -28048,7 +28047,7 @@ function ChatBot({ editor }) {
                   /* @__PURE__ */ jsx17(
                     Trash4,
                     {
-                      onClick: () => setMessages([]),
+                      onClick: () => setMessages([initialMessage]),
                       className: "novel-float-right novel-rounded-md novel-cursor-pointer novel-w-4 novel-h-4 hover:novel-text-red-300 novel-text-slate-600"
                     }
                   ),
@@ -28149,7 +28148,7 @@ function ChatBot({ editor }) {
                   style: { maxHeight: "150px", minHeight: "40px" },
                   rows: 1,
                   className: "novel-flex-grow novel-text-sm novel-border-l novel-border-y novel-border-gray-100 novel-shadow-inner novel-rounded-l-lg novel-px-4 novel-py-2 focus:novel-outline-none",
-                  placeholder: "Ask note...",
+                  placeholder: "Ask...",
                   value: input,
                   onChange: handleInputChange,
                   onKeyDown: handleKeyPress

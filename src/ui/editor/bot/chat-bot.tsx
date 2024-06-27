@@ -24,6 +24,12 @@ export function ChatBot({ editor }: { editor: Editor }) {
 
   const { completionApi, plan } = useContext(NovelContext);
 
+  const initialMessage = {
+      id: "start",
+      role: 'system' as 'system',
+      content: "Here, how can I help you?",
+    };
+
   const {
     messages,
     setMessages,
@@ -36,13 +42,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
     id: "ai-bot",
     api: `${completionApi}/bot`,
     body: { plan, system: editor.getText() },
-    initialMessages: [
-      {
-        id: "start",
-        role: "system",
-        content: "Here, how can I help you?",
-      },
-    ],
+    initialMessages: [initialMessage],
     onError: (err) => {
       if (
         err.message !== "Failed to fetch" &&
@@ -95,7 +95,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                 <span className="novel-font-semibold">Chat</span>
                 <div className="novel-flex novel-items-center novel-gap-3">
                   <Trash
-                    onClick={() => setMessages([])}
+                    onClick={() => setMessages([initialMessage])}
                     className="novel-float-right novel-rounded-md novel-cursor-pointer novel-w-4 novel-h-4 hover:novel-text-red-300 novel-text-slate-600"
                   />
                   <Minus
@@ -184,7 +184,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                 style={{ maxHeight: "150px", minHeight: "40px" }}
                 rows={1}
                 className="novel-flex-grow novel-text-sm novel-border-l novel-border-y novel-border-gray-100 novel-shadow-inner novel-rounded-l-lg novel-px-4 novel-py-2 focus:novel-outline-none"
-                placeholder="Ask note..."
+                placeholder="Ask..."
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}

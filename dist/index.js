@@ -27915,6 +27915,11 @@ function ChatBot({ editor }) {
   const [isOpen, setIsOpen] = (0, import_react52.useState)(false);
   const inputRef = (0, import_react52.useRef)(null);
   const { completionApi, plan } = (0, import_react52.useContext)(NovelContext);
+  const initialMessage = {
+    id: "start",
+    role: "system",
+    content: "Here, how can I help you?"
+  };
   const {
     messages,
     setMessages,
@@ -27927,13 +27932,7 @@ function ChatBot({ editor }) {
     id: "ai-bot",
     api: `${completionApi}/bot`,
     body: { plan, system: editor.getText() },
-    initialMessages: [
-      {
-        id: "start",
-        role: "system",
-        content: "Here, how can I help you?"
-      }
-    ],
+    initialMessages: [initialMessage],
     onError: (err) => {
       if (err.message !== "Failed to fetch" && err.message !== "network error") {
         import_sonner5.toast.error(err.message);
@@ -27982,7 +27981,7 @@ function ChatBot({ editor }) {
                   /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                     import_lucide_react13.Trash,
                     {
-                      onClick: () => setMessages([]),
+                      onClick: () => setMessages([initialMessage]),
                       className: "novel-float-right novel-rounded-md novel-cursor-pointer novel-w-4 novel-h-4 hover:novel-text-red-300 novel-text-slate-600"
                     }
                   ),
@@ -28083,7 +28082,7 @@ function ChatBot({ editor }) {
                   style: { maxHeight: "150px", minHeight: "40px" },
                   rows: 1,
                   className: "novel-flex-grow novel-text-sm novel-border-l novel-border-y novel-border-gray-100 novel-shadow-inner novel-rounded-l-lg novel-px-4 novel-py-2 focus:novel-outline-none",
-                  placeholder: "Ask note...",
+                  placeholder: "Ask...",
                   value: input,
                   onChange: handleInputChange,
                   onKeyDown: handleKeyPress
