@@ -117,7 +117,7 @@ export const AISelector: FC<AISelectorProps> = ({
 
   return (
     <div className="novel-relative novel-h-full">
-      <div className="novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-cyan-500 hover:novel-bg-stone-100 active:novel-bg-stone-200">
+      <div className="novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200">
         <button
           className="novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2"
           onClick={() => {
@@ -160,7 +160,7 @@ export const AISelector: FC<AISelectorProps> = ({
               defaultValue={editor.getAttributes("link").href || ""}
             />
             <button className="novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100">
-              <Send className="novel-h-4 novel-w-4 novel-text-cyan-500" />
+              <Send className="novel-h-4 novel-w-4 novel-text-purple-500" />
             </button>
           </form>
           <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
@@ -178,7 +178,7 @@ export const AISelector: FC<AISelectorProps> = ({
                   }}
                   className="novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100">
                   <div className="novel-flex novel-items-center novel-space-x-2">
-                    <item.icon className="novel-h-4 novel-w-4 novel-text-cyan-500" />
+                    <item.icon className="novel-h-4 novel-w-4 novel-text-purple-500" />
                     <span>{item.name}</span>
                   </div>
                   {/* <CornerDownLeft className="novel-hidden novel-h-4 novel-w-4 group-hover:novel-block" /> */}

@@ -85,13 +85,16 @@ export function ChatBot({ editor }: { editor: Editor }) {
       <motion.div
         className="novel-rounded-full"
         initial={{ borderRadius: "50%", x: 0 }}
-        animate={{ borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 }}
-        transition={{ duration: 0.2 }}>
+        animate={{ borderRadius: isOpen ? "0%" : "50%", x:0
+        // x: isOpen ? 0 : 35
+       }}
+        transition={{ duration: 0.2 }}
+        >
         {isOpen ? (
           <div className="novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg">
             <div className="msgs novel-p-2">
               <div className="flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center">
-                <Magic1 className="novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" />
+                <Magic1 className="novel-h-6 novel-w-6 translate-y-1 novel-text-purple-400" />
                 <span className="novel-font-semibold">Chat</span>
                 <div className="novel-flex novel-items-center novel-gap-3">
                   <Trash
@@ -134,7 +137,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                         {m.content}
                       </ReactMarkdown>
                       <span className="novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full">
-                        <Baby className="novel-w-5 novel-h-5 novel-text-blue-400" />
+                        <Baby className="novel-w-5 novel-h-5 novel-text-purple-400" />
                       </span>
                     </motion.div>
                   ) : (
@@ -145,7 +148,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                       transition={{ duration: 0.3 }}
                       key={index}>
                       <span className="novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full">
-                        <Bot className="novel-w-5 novel-h-5 novel-text-cyan-400" />
+                        <Bot className="novel-w-5 novel-h-5 novel-text-purple-400" />
                       </span>
                       <ReactMarkdown className="novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md">
                         {m.content}
@@ -176,7 +179,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
             <div className="novel-flex novel-p-2 novel-items-end novel-justify-center">
               <Bot
                 onClick={toggleOpen}
-                className="novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-cyan-500"
+                className="novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-purple-500"
               />
               <textarea
                 ref={inputRef}
@@ -195,7 +198,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                   type="submit"
                   className="novel-px-3 novel-py-3 novel-bg-slate-100 novel-text-white novel-rounded-r-lg hover:novel-bg-slate-300">
                   {!isLoading ? (
-                    <Send className="novel-h-4 novel-w-4 novel-text-blue-400" />
+                    <Send className="novel-h-4 novel-w-4 novel-text-purple-400" />
                   ) : (
                     <PauseCircle className="novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" />
                   )}
@@ -226,9 +229,9 @@ export function ChatBot({ editor }: { editor: Editor }) {
           </div>
         ) : (
           <button
-            className="novel-p-3.5 hover:-novel-translate-x-6 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
+            className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
             onClick={toggleOpen}>
-            <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-cyan-500" />
+            <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
           </button>
         )}
       </motion.div>

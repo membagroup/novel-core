@@ -34,7 +34,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
           className={cn(
             "novel-underline novel-decoration-stone-400 novel-underline-offset-4",
             {
-              "novel-text-blue-500": editor.isActive("link"),
+              "novel-text-purple-500": editor.isActive("link"),
             }
           )}>
           Link

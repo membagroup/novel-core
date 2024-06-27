@@ -1276,25 +1276,13 @@ video {
 .novel-leading-normal {
   line-height: 1.5;
 }
-.novel-text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
-}
-.novel-text-blue-500 {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
-}
-.novel-text-cyan-400 {
-  --tw-text-opacity: 1;
-  color: rgb(34 211 238 / var(--tw-text-opacity));
-}
-.novel-text-cyan-500 {
-  --tw-text-opacity: 1;
-  color: rgb(6 182 212 / var(--tw-text-opacity));
-}
 .novel-text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+.novel-text-purple-400 {
+  --tw-text-opacity: 1;
+  color: rgb(192 132 252 / var(--tw-text-opacity));
 }
 .novel-text-purple-500 {
   --tw-text-opacity: 1;
@@ -1467,10 +1455,6 @@ video {
   --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);
   --tw-prose-th-borders: var(--tw-prose-invert-th-borders);
   --tw-prose-td-borders: var(--tw-prose-invert-td-borders);
-}
-.hover\\:-novel-translate-x-6:hover {
-  --tw-translate-x: -1.5rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .hover\\:novel-bg-red-100:hover {
   --tw-bg-opacity: 1;
@@ -3394,7 +3378,7 @@ var LinkSelector = ({
               className: cn(
                 "novel-underline novel-decoration-stone-400 novel-underline-offset-4",
                 {
-                  "novel-text-blue-500": editor.isActive("link")
+                  "novel-text-purple-500": editor.isActive("link")
                 }
               ),
               children: "Link"
@@ -5974,7 +5958,7 @@ var AISelector = ({
     body: { plan }
   });
   return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ jsx8("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-cyan-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ jsxs8(
+    /* @__PURE__ */ jsx8("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ jsxs8(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -6024,7 +6008,7 @@ var AISelector = ({
                 defaultValue: editor.getAttributes("link").href || ""
               }
             ),
-            /* @__PURE__ */ jsx8("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx8(Send, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }) })
+            /* @__PURE__ */ jsx8("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx8(Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
         }
       ),
@@ -6042,7 +6026,7 @@ var AISelector = ({
           },
           className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
           children: /* @__PURE__ */ jsxs8("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
-            /* @__PURE__ */ jsx8(item.icon, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }),
+            /* @__PURE__ */ jsx8(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
             /* @__PURE__ */ jsx8("span", { children: item.name })
           ] })
         },
@@ -6296,7 +6280,7 @@ var EditorBubbleMenu = (props) => {
               item.icon,
               {
                 className: cn("novel-h-4 novel-w-4", {
-                  "novel-text-blue-500": item.isActive()
+                  "novel-text-purple-500": item.isActive()
                 })
               }
             )
@@ -21066,7 +21050,7 @@ var AIEditorBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ jsx13("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs12("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ jsx13(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ jsx13(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ jsx13("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx13(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ jsxs12("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ jsx13("button", { children: /* @__PURE__ */ jsx13(
@@ -21153,7 +21137,7 @@ var AITranslateBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ jsx15("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs14("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs14("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ jsx15(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ jsx15(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ jsx15("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx15(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ jsxs14("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ jsx15("button", { children: /* @__PURE__ */ jsx15(
@@ -28036,12 +28020,16 @@ function ChatBot({ editor }) {
         {
           className: "novel-rounded-full",
           initial: { borderRadius: "50%", x: 0 },
-          animate: { borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 },
+          animate: {
+            borderRadius: isOpen ? "0%" : "50%",
+            x: 0
+            // x: isOpen ? 0 : 35
+          },
           transition: { duration: 0.2 },
           children: isOpen ? /* @__PURE__ */ jsxs15("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ jsxs15("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ jsxs15("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
-                /* @__PURE__ */ jsx17(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" }),
+                /* @__PURE__ */ jsx17(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-purple-400" }),
                 /* @__PURE__ */ jsx17("span", { className: "novel-font-semibold", children: "Chat" }),
                 /* @__PURE__ */ jsxs15("div", { className: "novel-flex novel-items-center novel-gap-3", children: [
                   /* @__PURE__ */ jsx17(
@@ -28091,7 +28079,7 @@ function ChatBot({ editor }) {
                         )
                       ] }),
                       /* @__PURE__ */ jsx17(ReactMarkdown3, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
-                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Baby, { className: "novel-w-5 novel-h-5 novel-text-blue-400" }) })
+                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Baby, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) })
                     ]
                   },
                   index2
@@ -28103,7 +28091,7 @@ function ChatBot({ editor }) {
                     animate: { opacity: 1 },
                     transition: { duration: 0.3 },
                     children: [
-                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Bot, { className: "novel-w-5 novel-h-5 novel-text-cyan-400" }) }),
+                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Bot, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) }),
                       /* @__PURE__ */ jsx17(ReactMarkdown3, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
                       /* @__PURE__ */ jsxs15("div", { className: "novel-hidden novel-h-full novel-mt-auto group-hover:novel-block", children: [
                         /* @__PURE__ */ jsx17(
@@ -28137,7 +28125,7 @@ function ChatBot({ editor }) {
                 Bot,
                 {
                   onClick: toggleOpen,
-                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-cyan-500"
+                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-purple-500"
                 }
               ),
               /* @__PURE__ */ jsx17(
@@ -28160,7 +28148,7 @@ function ChatBot({ editor }) {
                   onClick: handleChat,
                   type: "submit",
                   className: "novel-px-3 novel-py-3 novel-bg-slate-100 novel-text-white novel-rounded-r-lg hover:novel-bg-slate-300",
-                  children: !isLoading ? /* @__PURE__ */ jsx17(Send2, { className: "novel-h-4 novel-w-4 novel-text-blue-400" }) : /* @__PURE__ */ jsx17(PauseCircle5, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
+                  children: !isLoading ? /* @__PURE__ */ jsx17(Send2, { className: "novel-h-4 novel-w-4 novel-text-purple-400" }) : /* @__PURE__ */ jsx17(PauseCircle5, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
                 }
               ) })
             ] }),
@@ -28189,9 +28177,9 @@ function ChatBot({ editor }) {
           ] }) : /* @__PURE__ */ jsx17(
             "button",
             {
-              className: "novel-p-3.5 hover:-novel-translate-x-6 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
+              className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
               onClick: toggleOpen,
-              children: /* @__PURE__ */ jsx17(Bot, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-cyan-500" })
+              children: /* @__PURE__ */ jsx17(Bot, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
             }
           )
         }
@@ -28237,11 +28225,11 @@ function CollaborationInfo({
 }) {
   var _a, _b, _c, _d, _e, _f;
   return /* @__PURE__ */ jsx18("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ jsxs16("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
-    /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
+    /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
     /* @__PURE__ */ jsx18("span", { className: "novel-text-xs novel-text-slate-500", children: (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.length }),
     /* @__PURE__ */ jsxs16("div", { className: "novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block", children: [
       /* @__PURE__ */ jsxs16("p", { className: "novel-gap-2 novel-mb-1 novel-items-center novel-flex novel-text-xs novel-text-slate-600 novel-pb-1 novel-border-b novel-border-slate-100", children: [
-        /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
+        /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
         editor.storage.collaborationCursor.users.length,
         " user",
         editor.storage.collaborationCursor.users.length === 1 ? "" : "s",
