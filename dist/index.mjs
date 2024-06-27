@@ -800,8 +800,8 @@ video {
 .novel-z-\\[99999\\] {
   z-index: 99999;
 }
-.novel-z-\\[9999\\] {
-  z-index: 9999;
+.novel-z-\\[999\\] {
+  z-index: 999;
 }
 .novel-float-right {
   float: right;
@@ -27997,7 +27997,7 @@ function ChatBot({ editor }) {
       {
         id: "start",
         role: "system",
-        content: "Here, ask me about your note :)"
+        content: "Here, how can I help you?"
       }
     ],
     onError: (err) => {
@@ -28039,11 +28039,11 @@ function ChatBot({ editor }) {
           initial: { borderRadius: "50%", x: 0 },
           animate: { borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 },
           transition: { duration: 0.2 },
-          children: isOpen ? /* @__PURE__ */ jsxs15("div", { className: "chat novel-border novel-relative novel-w-[350px] novel-border-slate-100  novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
+          children: isOpen ? /* @__PURE__ */ jsxs15("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ jsxs15("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ jsxs15("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
                 /* @__PURE__ */ jsx17(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" }),
-                /* @__PURE__ */ jsx17("span", { className: "novel-font-semibold", children: "Chat with note" }),
+                /* @__PURE__ */ jsx17("span", { className: "novel-font-semibold", children: "Chat" }),
                 /* @__PURE__ */ jsxs15("div", { className: "novel-flex novel-items-center novel-gap-3", children: [
                   /* @__PURE__ */ jsx17(
                     Trash4,
@@ -28208,12 +28208,12 @@ import { HocuspocusProvider } from "@hocuspocus/provider";
 import { useMemo as useMemo7 } from "react";
 import { Users } from "lucide-react";
 import { jsx as jsx18, jsxs as jsxs16 } from "react/jsx-runtime";
-function useCollaborationExt(active, id3, user) {
+function useCollaborationExt(active, id3, user, _provider) {
   const collaborationData = useMemo7(() => {
     if (!active)
       return {};
     const name = `inke-${id3}`;
-    const provider = new HocuspocusProvider({
+    const provider = _provider || new HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
       name
@@ -28237,7 +28237,7 @@ function CollaborationInfo({
   editor
 }) {
   var _a, _b, _c, _d, _e, _f;
-  return /* @__PURE__ */ jsx18("div", { className: "novel-fixed novel-z-[9999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ jsxs16("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
+  return /* @__PURE__ */ jsx18("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ jsxs16("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
     /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
     /* @__PURE__ */ jsx18("span", { className: "novel-text-xs novel-text-slate-500", children: (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.length }),
     /* @__PURE__ */ jsxs16("div", { className: "novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block", children: [
@@ -28267,7 +28267,7 @@ function CollaborationInfo({
                 }
               }
             ),
-            /* @__PURE__ */ jsx18("span", { children: i.name })
+            /* @__PURE__ */ jsx18("span", { children: i == null ? void 0 : i.name })
           ]
         },
         i.clientId

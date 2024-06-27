@@ -808,8 +808,8 @@ video {
 .novel-z-\\[99999\\] {
   z-index: 99999;
 }
-.novel-z-\\[9999\\] {
-  z-index: 9999;
+.novel-z-\\[999\\] {
+  z-index: 999;
 }
 .novel-float-right {
   float: right;
@@ -27931,7 +27931,7 @@ function ChatBot({ editor }) {
       {
         id: "start",
         role: "system",
-        content: "Here, ask me about your note :)"
+        content: "Here, how can I help you?"
       }
     ],
     onError: (err) => {
@@ -27973,11 +27973,11 @@ function ChatBot({ editor }) {
           initial: { borderRadius: "50%", x: 0 },
           animate: { borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 },
           transition: { duration: 0.2 },
-          children: isOpen ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "chat novel-border novel-relative novel-w-[350px] novel-border-slate-100  novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
+          children: isOpen ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-font-semibold", children: "Chat with note" }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-font-semibold", children: "Chat" }),
                 /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-flex novel-items-center novel-gap-3", children: [
                   /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                     import_lucide_react13.Trash,
@@ -28142,12 +28142,12 @@ var import_provider7 = require("@hocuspocus/provider");
 var import_react54 = require("react");
 var import_lucide_react14 = require("lucide-react");
 var import_jsx_runtime18 = require("react/jsx-runtime");
-function useCollaborationExt(active, id3, user) {
+function useCollaborationExt(active, id3, user, _provider) {
   const collaborationData = (0, import_react54.useMemo)(() => {
     if (!active)
       return {};
     const name = `inke-${id3}`;
-    const provider = new import_provider7.HocuspocusProvider({
+    const provider = _provider || new import_provider7.HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
       name
@@ -28171,7 +28171,7 @@ function CollaborationInfo({
   editor
 }) {
   var _a, _b, _c, _d, _e, _f;
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[9999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-xs novel-text-slate-500", children: (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.length }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block", children: [
@@ -28201,7 +28201,7 @@ function CollaborationInfo({
                 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: i.name })
+            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: i == null ? void 0 : i.name })
           ]
         },
         i.clientId

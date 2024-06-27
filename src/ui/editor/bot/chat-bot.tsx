@@ -40,7 +40,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
       {
         id: "start",
         role: "system",
-        content: "Here, ask me about your note :)",
+        content: "Here, how can I help you?",
       },
     ],
     onError: (err) => {
@@ -88,11 +88,11 @@ export function ChatBot({ editor }: { editor: Editor }) {
         animate={{ borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 }}
         transition={{ duration: 0.2 }}>
         {isOpen ? (
-          <div className="chat novel-border novel-relative novel-w-[350px] novel-border-slate-100  novel-bg-white novel-shadow-lg novel-rounded-lg">
+          <div className="novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg">
             <div className="msgs novel-p-2">
               <div className="flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center">
                 <Magic1 className="novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" />
-                <span className="novel-font-semibold">Chat with note</span>
+                <span className="novel-font-semibold">Chat</span>
                 <div className="novel-flex novel-items-center novel-gap-3">
                   <Trash
                     onClick={() => setMessages([])}
