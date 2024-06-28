@@ -22,7 +22,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi } = useContext(NovelContext);
 
   const initialMessage = {
     id: "start",
@@ -41,7 +41,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
   } = useChat({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { plan, system: editor.getText() },
+    body: { system: editor.getText() },
     initialMessages: [initialMessage],
     onError: (err) => {
       if (

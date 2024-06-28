@@ -41,7 +41,6 @@ export default function Editor({
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  plan = "5",
   bot = false,
   collaboration = false,
   id = "",
@@ -109,11 +108,6 @@ export default function Editor({
    * Defaults to true.
    */
   editable?: boolean;
-  /**
-   * User plan.
-   * Defaults to "5".
-   */
-  plan?: string;
   /**
    * Bot: chat with note.
    * Defaults to false.
@@ -213,7 +207,7 @@ export default function Editor({
   const { complete, completion, isLoading, stop } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: { },
     onFinish: (_prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -254,7 +248,6 @@ export default function Editor({
     <NovelContext.Provider
       value={{
         completionApi,
-        plan,
       }}>
       <div
         onClick={() => {

@@ -2,7 +2,7 @@ import { JSONContent } from '@tiptap/react';
 import { EditorProps } from '@tiptap/pm/view';
 import { Extensions, Editor as Editor$1 } from '@tiptap/core';
 
-declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, editable, plan, bot, collaboration, id, userName, }: {
+declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, editable, bot, collaboration, id, userName, }: {
     /**
      * The API route to use for the OpenAI completion API.
      * Defaults to "/api/generate".
@@ -58,11 +58,6 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
      * Defaults to true.
      */
     editable?: boolean;
-    /**
-     * User plan.
-     * Defaults to "5".
-     */
-    plan?: string;
     /**
      * Bot: chat with note.
      * Defaults to false.

@@ -75,12 +75,12 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
     };
   }, [isOpen]);
 
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi } = useContext(NovelContext);
 
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan },
+    body: { },
   });
 
   return (

@@ -107,12 +107,12 @@ export const AISelector: FC<AISelectorProps> = ({
     inputRef.current && inputRef.current?.focus();
   });
 
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi, } = useContext(NovelContext);
 
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan },
+    body: { },
   });
 
   return (

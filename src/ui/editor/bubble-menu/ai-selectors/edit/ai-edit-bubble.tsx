@@ -16,12 +16,12 @@ type Props = {
 const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
   const [isShow, setIsShow] = useState(false);
 
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi } = useContext(NovelContext);
 
   const { completion, setCompletion, isLoading, stop } = useCompletion({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan },
+    body: { },
     onError: (err) => {
       toast.error(err.message);
     },

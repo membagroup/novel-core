@@ -1999,8 +1999,7 @@ var getPrevText = (editor, {
 // src/ui/editor/provider.tsx
 var import_react = require("react");
 var NovelContext = (0, import_react.createContext)({
-  completionApi: "/api/generate",
-  plan: "5"
+  completionApi: "/api/generate"
 });
 
 // src/ui/editor/extensions/slash-command.tsx
@@ -2065,10 +2064,7 @@ var Command = import_core.Extension.create({
     ];
   }
 });
-var getSuggestionItems = ({
-  query,
-  plan
-}) => {
+var getSuggestionItems = ({ query }) => {
   return [
     {
       title: "Continue writing",
@@ -2240,11 +2236,11 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = (0, import_react2.useState)(0);
-  const { completionApi, plan } = (0, import_react2.useContext)(NovelContext);
+  const { completionApi } = (0, import_react2.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react4.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: {},
     onResponse: (response) => {
       if (response.status === 429) {
         import_sonner2.toast.error("You have reached your request limit for the day.");
@@ -5895,11 +5891,11 @@ var AISelector = ({
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi, plan } = (0, import_react22.useContext)(NovelContext);
+  const { completionApi } = (0, import_react22.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react23.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan }
+    body: {}
   });
   return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
@@ -6047,11 +6043,11 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi, plan } = (0, import_react24.useContext)(NovelContext);
+  const { completionApi } = (0, import_react24.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react25.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan }
+    body: {}
   });
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -20967,11 +20963,11 @@ var import_react_markdown = __toESM(require("react-markdown"));
 var import_jsx_runtime13 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react31.useState)(false);
-  const { completionApi, plan } = (0, import_react31.useContext)(NovelContext);
+  const { completionApi } = (0, import_react31.useContext)(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react30.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan },
+    body: {},
     onError: (err) => {
       import_sonner3.toast.error(err.message);
     }
@@ -21054,11 +21050,11 @@ var import_react_markdown2 = __toESM(require("react-markdown"));
 var import_jsx_runtime15 = require("react/jsx-runtime");
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react33.useState)(false);
-  const { completionApi, plan } = (0, import_react33.useContext)(NovelContext);
+  const { completionApi } = (0, import_react33.useContext)(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react32.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan },
+    body: {},
     onError: (err) => {
       import_sonner4.toast.error(err.message);
     }
@@ -27898,7 +27894,7 @@ var import_jsx_runtime17 = require("react/jsx-runtime");
 function ChatBot({ editor }) {
   const [isOpen, setIsOpen] = (0, import_react52.useState)(false);
   const inputRef = (0, import_react52.useRef)(null);
-  const { completionApi, plan } = (0, import_react52.useContext)(NovelContext);
+  const { completionApi } = (0, import_react52.useContext)(NovelContext);
   const initialMessage = {
     id: "start",
     role: "system",
@@ -27915,7 +27911,7 @@ function ChatBot({ editor }) {
   } = (0, import_react53.useChat)({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { plan, system: editor.getText() },
+    body: { system: editor.getText() },
     initialMessages: [initialMessage],
     onError: (err) => {
       if (err.message !== "Failed to fetch" && err.message !== "network error") {
@@ -28221,7 +28217,6 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  plan = "5",
   bot = false,
   collaboration = false,
   id: id3 = "",
@@ -28292,7 +28287,7 @@ function Editor2({
   const { complete, completion, isLoading, stop: stop2 } = (0, import_react57.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: {},
     onFinish: (_prompt, completion2) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion2.length,
@@ -28325,8 +28320,7 @@ function Editor2({
     NovelContext.Provider,
     {
       value: {
-        completionApi,
-        plan
+        completionApi
       },
       children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
         "div",
