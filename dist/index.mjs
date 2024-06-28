@@ -2012,7 +2012,8 @@ var getPrevText = (editor, {
 // src/ui/editor/provider.tsx
 import { createContext } from "react";
 var NovelContext = createContext({
-  completionApi: "/api/generate"
+  completionApi: "/api/generate",
+  additionalData: {}
 });
 
 // src/ui/editor/extensions/slash-command.tsx
@@ -2249,11 +2250,11 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { completionApi } = useContext(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: {},
+    body: __spreadValues({}, body || {}),
     onResponse: (response) => {
       if (response.status === 429) {
         toast2.error("You have reached your request limit for the day.");
@@ -5877,7 +5878,6 @@ import { useCompletion as useCompletion2 } from "ai/react";
 import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
 var AISelector = ({
   editor,
-  body,
   isOpen,
   setIsOpen
 }) => {
@@ -5948,7 +5948,7 @@ var AISelector = ({
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi } = useContext3(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext3(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion2({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -6040,7 +6040,6 @@ import { useCompletion as useCompletion3 } from "ai/react";
 import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
 var TranslateSelector = ({
   editor,
-  body,
   isOpen,
   setIsOpen
 }) => {
@@ -6101,7 +6100,7 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi } = useContext4(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext4(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion3({
     id: "ai-translate",
     api: `${completionApi}/translate`,
@@ -6211,7 +6210,6 @@ var EditorBubbleMenu = (props) => {
         /* @__PURE__ */ jsx10(
           AISelector,
           {
-            body: props == null ? void 0 : props.body,
             editor: props.editor,
             isOpen: isAISelectorOpen,
             setIsOpen: () => {
@@ -6304,7 +6302,6 @@ var EditorBubbleMenu = (props) => {
         /* @__PURE__ */ jsx10(
           TranslateSelector,
           {
-            body: props == null ? void 0 : props.body,
             editor: props.editor,
             isOpen: isTranslateSelectorOpen,
             setIsOpen: () => {
@@ -21021,9 +21018,9 @@ import { useContext as useContext5, useEffect as useEffect12, useState as useSta
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
-var AIEditorBubble = ({ editor, body }) => {
+var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState9(false);
-  const { completionApi } = useContext5(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext5(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -21108,9 +21105,9 @@ import { useContext as useContext6, useEffect as useEffect13, useState as useSta
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
-var AITranslateBubble = ({ editor, body }) => {
+var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
-  const { completionApi } = useContext6(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext6(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion5({
     id: "ai-translate",
     api: `${completionApi}/translate`,
@@ -27961,10 +27958,10 @@ var motion = /* @__PURE__ */ createMotionProxy((Component2, config) => createDom
 import ReactMarkdown3 from "react-markdown";
 import { toast as toast5 } from "sonner";
 import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
-function ChatBot({ editor, body }) {
+function ChatBot({ editor }) {
   const [isOpen, setIsOpen] = useState11(false);
   const inputRef = useRef10(null);
-  const { completionApi } = useContext13(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext13(NovelContext);
   const initialMessage = {
     id: "start",
     role: "system",
@@ -28293,7 +28290,7 @@ function Editor2({
     userName: "unknown"
   }
 }) {
-  const { bot, collaboration, id: id3, userName } = additionalData;
+  const { bot, collaboration, id: id3, userName, body } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
@@ -28360,7 +28357,7 @@ function Editor2({
   const { complete, completion, isLoading, stop: stop2 } = useCompletion6({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: {},
+    body: __spreadValues({}, body || {}),
     onFinish: (_prompt, completion2) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion2.length,
@@ -28393,7 +28390,8 @@ function Editor2({
     NovelContext.Provider,
     {
       value: {
-        completionApi
+        completionApi,
+        additionalData
       },
       children: /* @__PURE__ */ jsxs17(
         "div",
@@ -28404,15 +28402,15 @@ function Editor2({
           className,
           children: [
             editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
-              /* @__PURE__ */ jsx19(EditorBubbleMenu, { body: additionalData == null ? void 0 : additionalData.body, editor }),
-              /* @__PURE__ */ jsx19(ai_edit_bubble_default, { body: additionalData == null ? void 0 : additionalData.body, editor }),
-              /* @__PURE__ */ jsx19(ai_translate_bubble_default, { body: additionalData == null ? void 0 : additionalData.body, editor })
+              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
+              /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
+              /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
             ] }),
             editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
             /* @__PURE__ */ jsx19(EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ jsx19(ChatBot, { body: additionalData == null ? void 0 : additionalData.body, editor })
+            bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor })
           ]
         }
       )

@@ -18,11 +18,11 @@ import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 
-export function ChatBot({ editor, body }: { editor: Editor, body?: Record<string, any> }) {
+export function ChatBot({ editor, }: { editor: Editor, }) {
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { completionApi } = useContext(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext(NovelContext);
 
   const initialMessage = {
     id: "start",

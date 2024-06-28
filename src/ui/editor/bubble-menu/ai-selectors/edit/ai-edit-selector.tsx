@@ -28,12 +28,10 @@ interface AISelectorProps {
   editor: Editor;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  body?: Record<string, any>;
 }
 
 export const AISelector: FC<AISelectorProps> = ({
   editor,
-  body,
   isOpen,
   setIsOpen,
 }) => {
@@ -109,7 +107,7 @@ export const AISelector: FC<AISelectorProps> = ({
     inputRef.current && inputRef.current?.focus();
   });
 
-  const { completionApi, } = useContext(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext(NovelContext);
 
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-edit",

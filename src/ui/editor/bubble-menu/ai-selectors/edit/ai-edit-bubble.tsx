@@ -11,13 +11,12 @@ import ReactMarkdown from "react-markdown";
 
 type Props = {
   editor: Editor;
-  body?: Record<string, any>;
 };
 
-const AIEditorBubble: React.FC<Props> = ({ editor, body }: Props) => {
+const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
   const [isShow, setIsShow] = useState(false);
 
-  const { completionApi } = useContext(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext(NovelContext);
 
   const { completion, setCompletion, isLoading, stop } = useCompletion({
     id: "ai-edit",

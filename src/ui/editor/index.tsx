@@ -115,7 +115,7 @@ export default function Editor({
   */
   additionalData?: Record<string, any>;
 }) {
-  const { bot, collaboration, id, userName } = additionalData;
+  const { bot, collaboration, id, userName, body } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
@@ -197,7 +197,7 @@ export default function Editor({
   const { complete, completion, isLoading, stop } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: {},
+    body: { ...(body || {}) },
     onFinish: (_prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -238,6 +238,7 @@ export default function Editor({
     <NovelContext.Provider
       value={{
         completionApi,
+        additionalData,
       }}>
       <div
         onClick={() => {
@@ -246,9 +247,9 @@ export default function Editor({
         className={className}>
         {editor && (
           <>
-            <EditorBubbleMenu body={additionalData?.body} editor={editor} />
-            <AIEditorBubble body={additionalData?.body} editor={editor} />
-            <AITranslateBubble body={additionalData?.body} editor={editor} />
+            <EditorBubbleMenu editor={editor} />
+            <AIEditorBubble editor={editor} />
+            <AITranslateBubble editor={editor} />
           </>
         )}
         {editor && collaboration && (
@@ -262,7 +263,7 @@ export default function Editor({
             <AIGeneratingLoading stop={stop} />
           </div>
         )}
-        {bot && editor && <ChatBot body={additionalData?.body} editor={editor} />}
+        {bot && editor && <ChatBot editor={editor} />}
       </div>
     </NovelContext.Provider>
   );

@@ -311,12 +311,12 @@ const CommandList = ({
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { completionApi } = useContext(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext(NovelContext);
 
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: {},
+    body: { ...(body || {}) },
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error("You have reached your request limit for the day.");
@@ -412,8 +412,8 @@ const CommandList = ({
         return (
           <button
             className={`novel-flex novel-w-full novel-items-center novel-space-x-2 novel-rounded-md novel-px-2 novel-py-1 novel-text-left novel-text-sm novel-text-stone-900 hover:novel-bg-stone-100 ${index === selectedIndex
-                ? "novel-bg-stone-100 novel-text-stone-900"
-                : ""
+              ? "novel-bg-stone-100 novel-text-stone-900"
+              : ""
               }`}
             key={index}
             onClick={() => selectItem(index)}>

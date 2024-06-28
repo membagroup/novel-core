@@ -9,12 +9,10 @@ interface TranslateSelectorProps {
   editor: Editor;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  body?: Record<string, any>;
 }
 
 export const TranslateSelector: FC<TranslateSelectorProps> = ({
   editor,
-  body,
   isOpen,
   setIsOpen,
 }) => {
@@ -77,7 +75,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
     };
   }, [isOpen]);
 
-  const { completionApi } = useContext(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext(NovelContext);
 
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-translate",
