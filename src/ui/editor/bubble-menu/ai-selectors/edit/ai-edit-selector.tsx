@@ -28,10 +28,12 @@ interface AISelectorProps {
   editor: Editor;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  body?: Record<string, any>;
 }
 
 export const AISelector: FC<AISelectorProps> = ({
   editor,
+  body,
   isOpen,
   setIsOpen,
 }) => {
@@ -112,7 +114,7 @@ export const AISelector: FC<AISelectorProps> = ({
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { },
+    body: { ...(body || {}) },
   });
 
   return (

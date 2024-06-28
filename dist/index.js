@@ -5821,6 +5821,7 @@ var import_react23 = require("ai/react");
 var import_jsx_runtime8 = require("react/jsx-runtime");
 var AISelector = ({
   editor,
+  body,
   isOpen,
   setIsOpen
 }) => {
@@ -5895,7 +5896,7 @@ var AISelector = ({
   const { complete, isLoading, stop: stop2 } = (0, import_react23.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: {}
+    body: __spreadValues({}, body || {})
   });
   return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
@@ -5983,6 +5984,7 @@ var import_react25 = require("ai/react");
 var import_jsx_runtime9 = require("react/jsx-runtime");
 var TranslateSelector = ({
   editor,
+  body,
   isOpen,
   setIsOpen
 }) => {
@@ -6047,7 +6049,7 @@ var TranslateSelector = ({
   const { complete, isLoading, stop: stop2 } = (0, import_react25.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: {}
+    body: __spreadValues({}, body || {})
   });
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -6153,6 +6155,7 @@ var EditorBubbleMenu = (props) => {
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           AISelector,
           {
+            body: props == null ? void 0 : props.body,
             editor: props.editor,
             isOpen: isAISelectorOpen,
             setIsOpen: () => {
@@ -6245,6 +6248,7 @@ var EditorBubbleMenu = (props) => {
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           TranslateSelector,
           {
+            body: props == null ? void 0 : props.body,
             editor: props.editor,
             isOpen: isTranslateSelectorOpen,
             setIsOpen: () => {
@@ -20961,13 +20965,13 @@ var import_react31 = require("react");
 var import_sonner3 = require("sonner");
 var import_react_markdown = __toESM(require("react-markdown"));
 var import_jsx_runtime13 = require("react/jsx-runtime");
-var AIEditorBubble = ({ editor }) => {
+var AIEditorBubble = ({ editor, body }) => {
   const [isShow, setIsShow] = (0, import_react31.useState)(false);
   const { completionApi } = (0, import_react31.useContext)(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react30.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: {},
+    body: __spreadValues({}, body || {}),
     onError: (err) => {
       import_sonner3.toast.error(err.message);
     }
@@ -21048,13 +21052,13 @@ var import_react33 = require("react");
 var import_sonner4 = require("sonner");
 var import_react_markdown2 = __toESM(require("react-markdown"));
 var import_jsx_runtime15 = require("react/jsx-runtime");
-var AITranslateBubble = ({ editor }) => {
+var AITranslateBubble = ({ editor, body }) => {
   const [isShow, setIsShow] = (0, import_react33.useState)(false);
   const { completionApi } = (0, import_react33.useContext)(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react32.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: {},
+    body: __spreadValues({}, body || {}),
     onError: (err) => {
       import_sonner4.toast.error(err.message);
     }
@@ -27891,7 +27895,7 @@ var motion = /* @__PURE__ */ createMotionProxy((Component2, config) => createDom
 var import_react_markdown3 = __toESM(require("react-markdown"));
 var import_sonner5 = require("sonner");
 var import_jsx_runtime17 = require("react/jsx-runtime");
-function ChatBot({ editor }) {
+function ChatBot({ editor, body }) {
   const [isOpen, setIsOpen] = (0, import_react52.useState)(false);
   const inputRef = (0, import_react52.useRef)(null);
   const { completionApi } = (0, import_react52.useContext)(NovelContext);
@@ -27911,7 +27915,7 @@ function ChatBot({ editor }) {
   } = (0, import_react53.useChat)({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { system: editor.getText() },
+    body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
     initialMessages: [initialMessage],
     onError: (err) => {
       if (err.message !== "Failed to fetch" && err.message !== "network error") {
@@ -27955,7 +27959,6 @@ function ChatBot({ editor }) {
             x: 0
             // x: isOpen ? 0 : 35
           },
-          transition: { duration: 0.2 },
           children: isOpen ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
@@ -28125,12 +28128,12 @@ var import_provider7 = require("@hocuspocus/provider");
 var import_react54 = require("react");
 var import_lucide_react14 = require("lucide-react");
 var import_jsx_runtime18 = require("react/jsx-runtime");
-function useCollaborationExt(active, id3, user, _provider) {
+function useCollaborationExt(active, id3, user, customProvider) {
   const collaborationData = (0, import_react54.useMemo)(() => {
     if (!active)
       return {};
     const name = `inke-${id3}`;
-    const provider = _provider || new import_provider7.HocuspocusProvider({
+    const provider = customProvider || new import_provider7.HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
       name
@@ -28217,11 +28220,14 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  bot = false,
-  collaboration = false,
-  id: id3 = "",
-  userName = "unkown"
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userName: "unknown"
+  }
 }) {
+  const { bot, collaboration, id: id3, userName } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react55.useState)(false);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react55.useState)(false);
@@ -28242,7 +28248,8 @@ function Editor2({
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id3,
-    user
+    user,
+    additionalData == null ? void 0 : additionalData.customProvider
   );
   const editor = (0, import_react56.useEditor)({
     extensions: [
@@ -28331,15 +28338,15 @@ function Editor2({
           className,
           children: [
             editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { editor }),
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_edit_bubble_default, { editor }),
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_translate_bubble_default, { editor })
+              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { body: additionalData == null ? void 0 : additionalData.body, editor }),
+              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_edit_bubble_default, { body: additionalData == null ? void 0 : additionalData.body, editor }),
+              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_translate_bubble_default, { body: additionalData == null ? void 0 : additionalData.body, editor })
             ] }),
             editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
             /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react56.EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor })
+            bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { body: additionalData == null ? void 0 : additionalData.body, editor })
           ]
         }
       )

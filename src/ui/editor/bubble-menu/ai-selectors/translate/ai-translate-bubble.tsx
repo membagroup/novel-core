@@ -10,9 +10,10 @@ import ReactMarkdown from "react-markdown";
 
 type Props = {
   editor: Editor;
+  body?: Record<string, any>;
 };
 
-const AITranslateBubble: React.FC<Props> = ({ editor }: Props) => {
+const AITranslateBubble: React.FC<Props> = ({ editor, body }: Props) => {
   const [isShow, setIsShow] = useState(false);
 
   const { completionApi } = useContext(NovelContext);
@@ -20,7 +21,7 @@ const AITranslateBubble: React.FC<Props> = ({ editor }: Props) => {
   const { completion, setCompletion, isLoading, stop } = useCompletion({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { },
+    body: { ...(body || {}) },
     onError: (err) => {
       toast.error(err.message);
     },

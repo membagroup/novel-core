@@ -5877,6 +5877,7 @@ import { useCompletion as useCompletion2 } from "ai/react";
 import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
 var AISelector = ({
   editor,
+  body,
   isOpen,
   setIsOpen
 }) => {
@@ -5951,7 +5952,7 @@ var AISelector = ({
   const { complete, isLoading, stop: stop2 } = useCompletion2({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: {}
+    body: __spreadValues({}, body || {})
   });
   return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ jsx8("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ jsxs8(
@@ -6039,6 +6040,7 @@ import { useCompletion as useCompletion3 } from "ai/react";
 import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
 var TranslateSelector = ({
   editor,
+  body,
   isOpen,
   setIsOpen
 }) => {
@@ -6103,7 +6105,7 @@ var TranslateSelector = ({
   const { complete, isLoading, stop: stop2 } = useCompletion3({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: {}
+    body: __spreadValues({}, body || {})
   });
   return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ jsx9("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
@@ -6209,6 +6211,7 @@ var EditorBubbleMenu = (props) => {
         /* @__PURE__ */ jsx10(
           AISelector,
           {
+            body: props == null ? void 0 : props.body,
             editor: props.editor,
             isOpen: isAISelectorOpen,
             setIsOpen: () => {
@@ -6301,6 +6304,7 @@ var EditorBubbleMenu = (props) => {
         /* @__PURE__ */ jsx10(
           TranslateSelector,
           {
+            body: props == null ? void 0 : props.body,
             editor: props.editor,
             isOpen: isTranslateSelectorOpen,
             setIsOpen: () => {
@@ -21017,13 +21021,13 @@ import { useContext as useContext5, useEffect as useEffect12, useState as useSta
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
-var AIEditorBubble = ({ editor }) => {
+var AIEditorBubble = ({ editor, body }) => {
   const [isShow, setIsShow] = useState9(false);
   const { completionApi } = useContext5(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: {},
+    body: __spreadValues({}, body || {}),
     onError: (err) => {
       toast3.error(err.message);
     }
@@ -21104,13 +21108,13 @@ import { useContext as useContext6, useEffect as useEffect13, useState as useSta
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
-var AITranslateBubble = ({ editor }) => {
+var AITranslateBubble = ({ editor, body }) => {
   const [isShow, setIsShow] = useState10(false);
   const { completionApi } = useContext6(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion5({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: {},
+    body: __spreadValues({}, body || {}),
     onError: (err) => {
       toast4.error(err.message);
     }
@@ -27957,7 +27961,7 @@ var motion = /* @__PURE__ */ createMotionProxy((Component2, config) => createDom
 import ReactMarkdown3 from "react-markdown";
 import { toast as toast5 } from "sonner";
 import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
-function ChatBot({ editor }) {
+function ChatBot({ editor, body }) {
   const [isOpen, setIsOpen] = useState11(false);
   const inputRef = useRef10(null);
   const { completionApi } = useContext13(NovelContext);
@@ -27977,7 +27981,7 @@ function ChatBot({ editor }) {
   } = useChat({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { system: editor.getText() },
+    body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
     initialMessages: [initialMessage],
     onError: (err) => {
       if (err.message !== "Failed to fetch" && err.message !== "network error") {
@@ -28021,7 +28025,6 @@ function ChatBot({ editor }) {
             x: 0
             // x: isOpen ? 0 : 35
           },
-          transition: { duration: 0.2 },
           children: isOpen ? /* @__PURE__ */ jsxs15("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ jsxs15("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ jsxs15("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
@@ -28191,12 +28194,12 @@ import { HocuspocusProvider } from "@hocuspocus/provider";
 import { useMemo as useMemo7 } from "react";
 import { Users } from "lucide-react";
 import { jsx as jsx18, jsxs as jsxs16 } from "react/jsx-runtime";
-function useCollaborationExt(active, id3, user, _provider) {
+function useCollaborationExt(active, id3, user, customProvider) {
   const collaborationData = useMemo7(() => {
     if (!active)
       return {};
     const name = `inke-${id3}`;
-    const provider = _provider || new HocuspocusProvider({
+    const provider = customProvider || new HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
       name
@@ -28283,11 +28286,14 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  bot = false,
-  collaboration = false,
-  id: id3 = "",
-  userName = "unkown"
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userName: "unknown"
+  }
 }) {
+  const { bot, collaboration, id: id3, userName } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
@@ -28308,7 +28314,8 @@ function Editor2({
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id3,
-    user
+    user,
+    additionalData == null ? void 0 : additionalData.customProvider
   );
   const editor = useEditor({
     extensions: [
@@ -28397,15 +28404,15 @@ function Editor2({
           className,
           children: [
             editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
-              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
-              /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
-              /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
+              /* @__PURE__ */ jsx19(EditorBubbleMenu, { body: additionalData == null ? void 0 : additionalData.body, editor }),
+              /* @__PURE__ */ jsx19(ai_edit_bubble_default, { body: additionalData == null ? void 0 : additionalData.body, editor }),
+              /* @__PURE__ */ jsx19(ai_translate_bubble_default, { body: additionalData == null ? void 0 : additionalData.body, editor })
             ] }),
             editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
             /* @__PURE__ */ jsx19(EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor })
+            bot && editor && /* @__PURE__ */ jsx19(ChatBot, { body: additionalData == null ? void 0 : additionalData.body, editor })
           ]
         }
       )

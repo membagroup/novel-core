@@ -18,7 +18,7 @@ import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 
-export function ChatBot({ editor }: { editor: Editor }) {
+export function ChatBot({ editor, body }: { editor: Editor, body?: Record<string, any> }) {
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -41,7 +41,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
   } = useChat({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { system: editor.getText() },
+    body: { ...(body || {}), system: editor.getText() },
     initialMessages: [initialMessage],
     onError: (err) => {
       if (
@@ -89,7 +89,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
           borderRadius: isOpen ? "0%" : "50%", x: 0
           // x: isOpen ? 0 : 35
         }}
-        transition={{ duration: 0.2 }}
+      // transition={{ duration: 0.2 }}
       >
         {isOpen ? (
           <div className="novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg">

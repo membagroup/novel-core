@@ -17,13 +17,13 @@ export function useCollaborationExt(
   active: boolean,
   id: string,
   user: User,
-  _provider?: HocuspocusProvider,
+  customProvider?: HocuspocusProvider,
 ): any {
   const collaborationData = useMemo(() => {
     if (!active) return {};
 
     const name = `inke-${id}`;
-    const provider = _provider || new HocuspocusProvider({
+    const provider = customProvider || new HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
       name,

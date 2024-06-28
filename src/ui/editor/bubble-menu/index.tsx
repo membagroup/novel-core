@@ -22,7 +22,7 @@ export interface BubbleMenuItem {
   icon: typeof BoldIcon;
 }
 
-type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">;
+type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children"> & { body?: Record<string, any> };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const items: BubbleMenuItem[] = [
@@ -100,6 +100,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       {props.editor && (
         <>
           <AISelector
+            body={props?.body}
             editor={props.editor}
             isOpen={isAISelectorOpen}
             setIsOpen={() => {
@@ -177,6 +178,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
             }}
           />
           <TranslateSelector
+            body={props?.body}
             editor={props.editor}
             isOpen={isTranslateSelectorOpen}
             setIsOpen={() => {

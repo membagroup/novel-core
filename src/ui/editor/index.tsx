@@ -35,16 +35,18 @@ export default function Editor({
   defaultValue = defaultEditorContent,
   extensions = [],
   editorProps = {},
-  onUpdate = () => {},
-  onDebouncedUpdate = () => {},
+  onUpdate = () => { },
+  onDebouncedUpdate = () => { },
   debounceDuration = 750,
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  bot = false,
-  collaboration = false,
-  id = "",
-  userName = "unkown",
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userName: "unknown",
+  }
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -108,25 +110,12 @@ export default function Editor({
    * Defaults to true.
    */
   editable?: boolean;
-  /**
-   * Bot: chat with note.
-   * Defaults to false.
-   */
-  bot?: boolean;
-  /**
-   * Id: collaboration room id.
-   */
-  id?: string;
-  /**
-   * Collaboration: enable collaboration space.
-   * Defaults to false.
-   */
-  collaboration?: boolean;
-  /**
-   * userName: collaboration userName.
-   */
-  userName?: string;
+  /** 
+   * Additional Data
+  */
+  additionalData?: Record<string, any>;
 }) {
+  const { bot, collaboration, id, userName } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
@@ -155,7 +144,8 @@ export default function Editor({
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id,
-    user
+    user,
+    additionalData?.customProvider
   );
 
   const editor = useEditor({
@@ -207,7 +197,7 @@ export default function Editor({
   const { complete, completion, isLoading, stop } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { },
+    body: {},
     onFinish: (_prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -256,9 +246,9 @@ export default function Editor({
         className={className}>
         {editor && (
           <>
-            <EditorBubbleMenu editor={editor} />
-            <AIEditorBubble editor={editor} />
-            <AITranslateBubble editor={editor} />
+            <EditorBubbleMenu body={additionalData?.body} editor={editor} />
+            <AIEditorBubble body={additionalData?.body} editor={editor} />
+            <AITranslateBubble body={additionalData?.body} editor={editor} />
           </>
         )}
         {editor && collaboration && (
@@ -272,7 +262,7 @@ export default function Editor({
             <AIGeneratingLoading stop={stop} />
           </div>
         )}
-        {bot && editor && <ChatBot editor={editor} />}
+        {bot && editor && <ChatBot body={additionalData?.body} editor={editor} />}
       </div>
     </NovelContext.Provider>
   );
