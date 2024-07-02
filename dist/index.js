@@ -28123,11 +28123,10 @@ function useCollaborationExt(active, id3, user, customProvider) {
   const collaborationData = (0, import_react54.useMemo)(() => {
     if (!active)
       return {};
-    const name = `inke-${id3}`;
     const provider = customProvider || new import_provider7.HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
-      name
+      name: `inke-${id3}`
     });
     return {
       collaborates: [
