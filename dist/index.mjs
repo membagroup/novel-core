@@ -28287,10 +28287,10 @@ function Editor2({
     bot: false,
     collaboration: false,
     id: "",
-    userName: "unknown"
+    userDetails: {}
   }
 }) {
-  const { bot, collaboration, id: id3, userName, body } = additionalData;
+  const { bot, collaboration, id: id3, userDetails, body, customProvider } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
@@ -28304,15 +28304,14 @@ function Editor2({
     }
   }), debounceDuration);
   const [status, setStatus] = useState12("connecting");
-  const user = {
-    name: userName,
+  const user = __spreadProps(__spreadValues({}, userDetails), {
     color: generateRandomColorCode()
-  };
+  });
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id3,
     user,
-    additionalData == null ? void 0 : additionalData.customProvider
+    customProvider
   );
   const editor = useEditor({
     extensions: [

@@ -45,7 +45,7 @@ export default function Editor({
     bot: false,
     collaboration: false,
     id: "",
-    userName: "unknown",
+    userDetails: {},
   }
 }: {
   /**
@@ -115,7 +115,7 @@ export default function Editor({
   */
   additionalData?: Record<string, any>;
 }) {
-  const { bot, collaboration, id, userName, body } = additionalData;
+  const { bot, collaboration, id, userDetails, body, customProvider } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
@@ -137,7 +137,7 @@ export default function Editor({
 
   const [status, setStatus] = useState("connecting");
   const user = {
-    name: userName,
+    ...userDetails,
     color: generateRandomColorCode(),
   };
 
@@ -145,7 +145,7 @@ export default function Editor({
     collaboration,
     id,
     user,
-    additionalData?.customProvider
+    customProvider
   );
 
   const editor = useEditor({
