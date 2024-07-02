@@ -140,7 +140,7 @@ export default function Editor({
   const [status, setStatus] = useState("connecting");
   const user = {
     ...userDetails,
-    color: generateRandomColorCode(),
+    color: userDetails?.color || generateRandomColorCode(),
   };
 
   const { collaborates, provider } = useCollaborationExt(

@@ -28234,7 +28234,7 @@ function Editor2({
   }), debounceDuration);
   const [status, setStatus] = (0, import_react55.useState)("connecting");
   const user = __spreadProps(__spreadValues({}, userDetails), {
-    color: generateRandomColorCode()
+    color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
   });
   const { collaborates, provider } = useCollaborationExt(
     collaboration,

@@ -28300,7 +28300,7 @@ function Editor2({
   }), debounceDuration);
   const [status, setStatus] = useState12("connecting");
   const user = __spreadProps(__spreadValues({}, userDetails), {
-    color: generateRandomColorCode()
+    color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
   });
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
