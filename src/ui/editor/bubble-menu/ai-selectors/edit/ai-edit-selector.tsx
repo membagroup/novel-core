@@ -13,7 +13,7 @@ import {
   PauseCircle,
   Scissors,
   Send,
-  SprayCan,
+  Bot,
   Trash,
   Wand,
 } from "lucide-react";
@@ -127,7 +127,7 @@ export const AISelector: FC<AISelectorProps> = ({
             setIsOpen(!isOpen);
             editor.chain().blur().run();
           }}>
-          <SprayCan className="novel-h-5 novel-w-5" />
+          <Bot className="novel-h-5 novel-w-5" />
           {isLoading ? (
             <PauseCircle
               onClick={stop}

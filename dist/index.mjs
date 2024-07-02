@@ -3572,7 +3572,7 @@ import {
   PauseCircle as PauseCircle2,
   Scissors,
   Send,
-  SprayCan,
+  Bot,
   Wand
 } from "lucide-react";
 import { useContext as useContext3, useEffect as useEffect9, useRef as useRef6 } from "react";
@@ -5961,7 +5961,7 @@ var AISelector = ({
           editor.chain().blur().run();
         },
         children: [
-          /* @__PURE__ */ jsx8(SprayCan, { className: "novel-h-5 novel-w-5" }),
+          /* @__PURE__ */ jsx8(Bot, { className: "novel-h-5 novel-w-5" }),
           isLoading ? /* @__PURE__ */ jsx8(
             PauseCircle2,
             {
@@ -21167,7 +21167,7 @@ import { useContext as useContext13, useEffect as useEffect17, useRef as useRef1
 import { useChat } from "ai/react";
 import {
   Baby,
-  Bot,
+  Bot as Bot2,
   Clipboard as Clipboard3,
   Minus,
   PauseCircle as PauseCircle5,
@@ -28081,7 +28081,7 @@ function ChatBot({ editor }) {
                     animate: { opacity: 1 },
                     transition: { duration: 0.3 },
                     children: [
-                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Bot, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) }),
+                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Bot2, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) }),
                       /* @__PURE__ */ jsx17(ReactMarkdown3, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
                       /* @__PURE__ */ jsxs15("div", { className: "novel-hidden novel-h-full novel-mt-auto group-hover:novel-block", children: [
                         /* @__PURE__ */ jsx17(
@@ -28112,7 +28112,7 @@ function ChatBot({ editor }) {
             ] }),
             /* @__PURE__ */ jsxs15("div", { className: "novel-flex novel-p-2 novel-items-end novel-justify-center", children: [
               /* @__PURE__ */ jsx17(
-                Bot,
+                Bot2,
                 {
                   onClick: toggleOpen,
                   className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-purple-500"
@@ -28169,7 +28169,7 @@ function ChatBot({ editor }) {
             {
               className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
               onClick: toggleOpen,
-              children: /* @__PURE__ */ jsx17(Bot, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
+              children: /* @__PURE__ */ jsx17(Bot2, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
             }
           )
         }

@@ -5905,7 +5905,7 @@ var AISelector = ({
           editor.chain().blur().run();
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.SprayCan, { className: "novel-h-5 novel-w-5" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Bot, { className: "novel-h-5 novel-w-5" }),
           isLoading ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             import_lucide_react7.PauseCircle,
             {
