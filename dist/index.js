@@ -1982,7 +1982,6 @@ function Magic({ className }) {
 
 // src/ui/editor/extensions/slash-command.tsx
 var import_sonner2 = require("sonner");
-var import_analytics = __toESM(require("@vercel/analytics"));
 
 // src/lib/editor.ts
 var getPrevText = (editor, {
@@ -2245,7 +2244,6 @@ var CommandList = ({
     onResponse: (response) => {
       if (response.status === 429) {
         import_sonner2.toast.error("You have reached your request limit for the day.");
-        import_analytics.default.track("Rate Limit Reached");
         return;
       }
       editor.chain().focus().deleteRange(range).run();
@@ -2263,9 +2261,6 @@ var CommandList = ({
   const selectItem = (0, import_react2.useCallback)(
     (index2) => {
       const item = items[index2];
-      import_analytics.default.track("Slash Command Used", {
-        command: item.title
-      });
       if (item) {
         if (item.title === "Continue writing") {
           if (isLoading)
@@ -2918,7 +2913,6 @@ var use_local_storage_default = useLocalStorage;
 var import_use_debounce = require("use-debounce");
 var import_react57 = require("ai/react");
 var import_sonner6 = require("sonner");
-var import_analytics2 = __toESM(require("@vercel/analytics"));
 
 // src/ui/editor/default-content.tsx
 var defaultEditorContent = {
@@ -28272,7 +28266,6 @@ function Editor2({
             chars: 5e3
           })
         );
-        import_analytics2.default.track("Autocomplete Shortcut Used");
       } else {
         onUpdate(e.editor);
         debouncedUpdates(e);

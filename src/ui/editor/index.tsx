@@ -8,7 +8,7 @@ import useLocalStorage from "@/lib/hooks/use-local-storage";
 import { useDebouncedCallback } from "use-debounce";
 import { useCompletion } from "ai/react";
 import { toast } from "sonner";
-import va from "@vercel/analytics";
+// import va from "@vercel/analytics";
 import { defaultEditorContent } from "./default-content";
 import { EditorBubbleMenu } from "./bubble-menu";
 import { getPrevText } from "@/lib/editor";
@@ -176,7 +176,7 @@ export default function Editor({
             chars: 5000,
           })
         );
-        va.track("Autocomplete Shortcut Used");
+        // va.track("Autocomplete Shortcut Used");
       } else {
         onUpdate(e.editor);
         debouncedUpdates(e);

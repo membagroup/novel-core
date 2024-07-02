@@ -1995,7 +1995,6 @@ function Magic({ className }) {
 
 // src/ui/editor/extensions/slash-command.tsx
 import { toast as toast2 } from "sonner";
-import va from "@vercel/analytics";
 
 // src/lib/editor.ts
 var getPrevText = (editor, {
@@ -2258,7 +2257,6 @@ var CommandList = ({
     onResponse: (response) => {
       if (response.status === 429) {
         toast2.error("You have reached your request limit for the day.");
-        va.track("Rate Limit Reached");
         return;
       }
       editor.chain().focus().deleteRange(range).run();
@@ -2276,9 +2274,6 @@ var CommandList = ({
   const selectItem = useCallback(
     (index2) => {
       const item = items[index2];
-      va.track("Slash Command Used", {
-        command: item.title
-      });
       if (item) {
         if (item.title === "Continue writing") {
           if (isLoading)
@@ -2931,7 +2926,6 @@ var use_local_storage_default = useLocalStorage;
 import { useDebouncedCallback } from "use-debounce";
 import { useCompletion as useCompletion6 } from "ai/react";
 import { toast as toast6 } from "sonner";
-import va2 from "@vercel/analytics";
 
 // src/ui/editor/default-content.tsx
 var defaultEditorContent = {
@@ -28338,7 +28332,6 @@ function Editor2({
             chars: 5e3
           })
         );
-        va2.track("Autocomplete Shortcut Used");
       } else {
         onUpdate(e.editor);
         debouncedUpdates(e);
