@@ -35,17 +35,18 @@ export default function Editor({
   defaultValue = defaultEditorContent,
   extensions = [],
   editorProps = {},
-  onUpdate = () => {},
-  onDebouncedUpdate = () => {},
+  onUpdate = () => { },
+  onDebouncedUpdate = () => { },
   debounceDuration = 750,
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  plan = "5",
-  bot = false,
-  collaboration = false,
-  id = "",
-  userName = "unkown",
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userDetails: {},
+  }
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -109,30 +110,12 @@ export default function Editor({
    * Defaults to true.
    */
   editable?: boolean;
-  /**
-   * User plan.
-   * Defaults to "5".
-   */
-  plan?: string;
-  /**
-   * Bot: chat with note.
-   * Defaults to false.
-   */
-  bot?: boolean;
-  /**
-   * Id: collaboration room id.
-   */
-  id?: string;
-  /**
-   * Collaboration: enable collaboration space.
-   * Defaults to false.
-   */
-  collaboration?: boolean;
-  /**
-   * userName: collaboration userName.
-   */
-  userName?: string;
+  /** 
+   * Additional Data
+  */
+  additionalData?: Record<string, any>;
 }) {
+  const { bot, collaboration, id, userDetails, body, customProvider } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
@@ -154,14 +137,15 @@ export default function Editor({
 
   const [status, setStatus] = useState("connecting");
   const user = {
-    name: userName,
+    ...userDetails,
     color: generateRandomColorCode(),
   };
 
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id,
-    user
+    user,
+    customProvider
   );
 
   const editor = useEditor({
@@ -213,7 +197,7 @@ export default function Editor({
   const { complete, completion, isLoading, stop } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: { ...(body || {}) },
     onFinish: (_prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -254,7 +238,7 @@ export default function Editor({
     <NovelContext.Provider
       value={{
         completionApi,
-        plan,
+        additionalData,
       }}>
       <div
         onClick={() => {

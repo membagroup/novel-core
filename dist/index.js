@@ -808,8 +808,8 @@ video {
 .novel-z-\\[99999\\] {
   z-index: 99999;
 }
-.novel-z-\\[9999\\] {
-  z-index: 9999;
+.novel-z-\\[999\\] {
+  z-index: 999;
 }
 .novel-float-right {
   float: right;
@@ -1284,25 +1284,13 @@ video {
 .novel-leading-normal {
   line-height: 1.5;
 }
-.novel-text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
-}
-.novel-text-blue-500 {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
-}
-.novel-text-cyan-400 {
-  --tw-text-opacity: 1;
-  color: rgb(34 211 238 / var(--tw-text-opacity));
-}
-.novel-text-cyan-500 {
-  --tw-text-opacity: 1;
-  color: rgb(6 182 212 / var(--tw-text-opacity));
-}
 .novel-text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+.novel-text-purple-400 {
+  --tw-text-opacity: 1;
+  color: rgb(192 132 252 / var(--tw-text-opacity));
 }
 .novel-text-purple-500 {
   --tw-text-opacity: 1;
@@ -1475,10 +1463,6 @@ video {
   --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);
   --tw-prose-th-borders: var(--tw-prose-invert-th-borders);
   --tw-prose-td-borders: var(--tw-prose-invert-td-borders);
-}
-.hover\\:-novel-translate-x-6:hover {
-  --tw-translate-x: -1.5rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .hover\\:novel-bg-red-100:hover {
   --tw-bg-opacity: 1;
@@ -2016,7 +2000,7 @@ var getPrevText = (editor, {
 var import_react = require("react");
 var NovelContext = (0, import_react.createContext)({
   completionApi: "/api/generate",
-  plan: "5"
+  additionalData: {}
 });
 
 // src/ui/editor/extensions/slash-command.tsx
@@ -2081,10 +2065,7 @@ var Command = import_core.Extension.create({
     ];
   }
 });
-var getSuggestionItems = ({
-  query,
-  plan
-}) => {
+var getSuggestionItems = ({ query }) => {
   return [
     {
       title: "Continue writing",
@@ -2256,11 +2237,11 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = (0, import_react2.useState)(0);
-  const { completionApi, plan } = (0, import_react2.useContext)(NovelContext);
+  const { completionApi, additionalData: { body } } = (0, import_react2.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react4.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
     onResponse: (response) => {
       if (response.status === 429) {
         import_sonner2.toast.error("You have reached your request limit for the day.");
@@ -3361,7 +3342,7 @@ var LinkSelector = ({
               className: cn(
                 "novel-underline novel-decoration-stone-400 novel-underline-offset-4",
                 {
-                  "novel-text-blue-500": editor.isActive("link")
+                  "novel-text-purple-500": editor.isActive("link")
                 }
               ),
               children: "Link"
@@ -5911,14 +5892,14 @@ var AISelector = ({
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi, plan } = (0, import_react22.useContext)(NovelContext);
+  const { completionApi, additionalData: { body } } = (0, import_react22.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react23.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan }
+    body: __spreadValues({}, body || {})
   });
   return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-cyan-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -5968,7 +5949,7 @@ var AISelector = ({
                 defaultValue: editor.getAttributes("link").href || ""
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }) })
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
         }
       ),
@@ -5986,7 +5967,7 @@ var AISelector = ({
           },
           className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
           children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: item.name })
           ] })
         },
@@ -6063,11 +6044,11 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi, plan } = (0, import_react24.useContext)(NovelContext);
+  const { completionApi, additionalData: { body } } = (0, import_react24.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react25.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan }
+    body: __spreadValues({}, body || {})
   });
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -6240,7 +6221,7 @@ var EditorBubbleMenu = (props) => {
               item.icon,
               {
                 className: cn("novel-h-4 novel-w-4", {
-                  "novel-text-blue-500": item.isActive()
+                  "novel-text-purple-500": item.isActive()
                 })
               }
             )
@@ -20983,11 +20964,11 @@ var import_react_markdown = __toESM(require("react-markdown"));
 var import_jsx_runtime13 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react31.useState)(false);
-  const { completionApi, plan } = (0, import_react31.useContext)(NovelContext);
+  const { completionApi, additionalData: { body } } = (0, import_react31.useContext)(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react30.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
     onError: (err) => {
       import_sonner3.toast.error(err.message);
     }
@@ -21010,7 +20991,7 @@ var AIEditorBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
@@ -21070,11 +21051,11 @@ var import_react_markdown2 = __toESM(require("react-markdown"));
 var import_jsx_runtime15 = require("react/jsx-runtime");
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react33.useState)(false);
-  const { completionApi, plan } = (0, import_react33.useContext)(NovelContext);
+  const { completionApi, additionalData: { body } } = (0, import_react33.useContext)(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react32.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
     onError: (err) => {
       import_sonner4.toast.error(err.message);
     }
@@ -21097,7 +21078,7 @@ var AITranslateBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
@@ -27914,7 +27895,12 @@ var import_jsx_runtime17 = require("react/jsx-runtime");
 function ChatBot({ editor }) {
   const [isOpen, setIsOpen] = (0, import_react52.useState)(false);
   const inputRef = (0, import_react52.useRef)(null);
-  const { completionApi, plan } = (0, import_react52.useContext)(NovelContext);
+  const { completionApi, additionalData: { body } } = (0, import_react52.useContext)(NovelContext);
+  const initialMessage = {
+    id: "start",
+    role: "system",
+    content: "Here, how can I help you?"
+  };
   const {
     messages,
     setMessages,
@@ -27926,14 +27912,8 @@ function ChatBot({ editor }) {
   } = (0, import_react53.useChat)({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { plan, system: editor.getText() },
-    initialMessages: [
-      {
-        id: "start",
-        role: "system",
-        content: "Here, ask me about your note :)"
-      }
-    ],
+    body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
+    initialMessages: [initialMessage],
     onError: (err) => {
       if (err.message !== "Failed to fetch" && err.message !== "network error") {
         import_sonner5.toast.error(err.message);
@@ -27971,18 +27951,21 @@ function ChatBot({ editor }) {
         {
           className: "novel-rounded-full",
           initial: { borderRadius: "50%", x: 0 },
-          animate: { borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 },
-          transition: { duration: 0.2 },
-          children: isOpen ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "chat novel-border novel-relative novel-w-[350px] novel-border-slate-100  novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
+          animate: {
+            borderRadius: isOpen ? "0%" : "50%",
+            x: 0
+            // x: isOpen ? 0 : 35
+          },
+          children: isOpen ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-font-semibold", children: "Chat with note" }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-purple-400" }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-font-semibold", children: "Chat" }),
                 /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-flex novel-items-center novel-gap-3", children: [
                   /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                     import_lucide_react13.Trash,
                     {
-                      onClick: () => setMessages([]),
+                      onClick: () => setMessages([initialMessage]),
                       className: "novel-float-right novel-rounded-md novel-cursor-pointer novel-w-4 novel-h-4 hover:novel-text-red-300 novel-text-slate-600"
                     }
                   ),
@@ -28026,7 +28009,7 @@ function ChatBot({ editor }) {
                         )
                       ] }),
                       /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_react_markdown3.default, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Baby, { className: "novel-w-5 novel-h-5 novel-text-blue-400" }) })
+                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Baby, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) })
                     ]
                   },
                   index2
@@ -28038,7 +28021,7 @@ function ChatBot({ editor }) {
                     animate: { opacity: 1 },
                     transition: { duration: 0.3 },
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Bot, { className: "novel-w-5 novel-h-5 novel-text-cyan-400" }) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Bot, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) }),
                       /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_react_markdown3.default, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
                       /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-hidden novel-h-full novel-mt-auto group-hover:novel-block", children: [
                         /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
@@ -28072,7 +28055,7 @@ function ChatBot({ editor }) {
                 import_lucide_react13.Bot,
                 {
                   onClick: toggleOpen,
-                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-cyan-500"
+                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-purple-500"
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
@@ -28083,7 +28066,7 @@ function ChatBot({ editor }) {
                   style: { maxHeight: "150px", minHeight: "40px" },
                   rows: 1,
                   className: "novel-flex-grow novel-text-sm novel-border-l novel-border-y novel-border-gray-100 novel-shadow-inner novel-rounded-l-lg novel-px-4 novel-py-2 focus:novel-outline-none",
-                  placeholder: "Ask note...",
+                  placeholder: "Ask...",
                   value: input,
                   onChange: handleInputChange,
                   onKeyDown: handleKeyPress
@@ -28095,7 +28078,7 @@ function ChatBot({ editor }) {
                   onClick: handleChat,
                   type: "submit",
                   className: "novel-px-3 novel-py-3 novel-bg-slate-100 novel-text-white novel-rounded-r-lg hover:novel-bg-slate-300",
-                  children: !isLoading ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Send, { className: "novel-h-4 novel-w-4 novel-text-blue-400" }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.PauseCircle, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
+                  children: !isLoading ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-400" }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.PauseCircle, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
                 }
               ) })
             ] }),
@@ -28124,9 +28107,9 @@ function ChatBot({ editor }) {
           ] }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
             "button",
             {
-              className: "novel-p-3.5 hover:-novel-translate-x-6 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
+              className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
               onClick: toggleOpen,
-              children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Bot, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-cyan-500" })
+              children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Bot, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
             }
           )
         }
@@ -28142,12 +28125,12 @@ var import_provider7 = require("@hocuspocus/provider");
 var import_react54 = require("react");
 var import_lucide_react14 = require("lucide-react");
 var import_jsx_runtime18 = require("react/jsx-runtime");
-function useCollaborationExt(active, id3, user) {
+function useCollaborationExt(active, id3, user, customProvider) {
   const collaborationData = (0, import_react54.useMemo)(() => {
     if (!active)
       return {};
     const name = `inke-${id3}`;
-    const provider = new import_provider7.HocuspocusProvider({
+    const provider = customProvider || new import_provider7.HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
       name
@@ -28171,12 +28154,12 @@ function CollaborationInfo({
   editor
 }) {
   var _a, _b, _c, _d, _e, _f;
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[9999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-xs novel-text-slate-500", children: (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.length }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block", children: [
       /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("p", { className: "novel-gap-2 novel-mb-1 novel-items-center novel-flex novel-text-xs novel-text-slate-600 novel-pb-1 novel-border-b novel-border-slate-100", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
         editor.storage.collaborationCursor.users.length,
         " user",
         editor.storage.collaborationCursor.users.length === 1 ? "" : "s",
@@ -28201,7 +28184,7 @@ function CollaborationInfo({
                 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: i.name })
+            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: i == null ? void 0 : i.name })
           ]
         },
         i.clientId
@@ -28234,12 +28217,14 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  plan = "5",
-  bot = false,
-  collaboration = false,
-  id: id3 = "",
-  userName = "unkown"
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userDetails: {}
+  }
 }) {
+  const { bot, collaboration, id: id3, userDetails, body, customProvider } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react55.useState)(false);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react55.useState)(false);
@@ -28253,14 +28238,14 @@ function Editor2({
     }
   }), debounceDuration);
   const [status, setStatus] = (0, import_react55.useState)("connecting");
-  const user = {
-    name: userName,
+  const user = __spreadProps(__spreadValues({}, userDetails), {
     color: generateRandomColorCode()
-  };
+  });
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id3,
-    user
+    user,
+    customProvider
   );
   const editor = (0, import_react56.useEditor)({
     extensions: [
@@ -28305,7 +28290,7 @@ function Editor2({
   const { complete, completion, isLoading, stop: stop2 } = (0, import_react57.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
     onFinish: (_prompt, completion2) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion2.length,
@@ -28339,7 +28324,7 @@ function Editor2({
     {
       value: {
         completionApi,
-        plan
+        additionalData
       },
       children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
         "div",

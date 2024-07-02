@@ -16,12 +16,12 @@ type Props = {
 const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
   const [isShow, setIsShow] = useState(false);
 
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi, additionalData: { body } } = useContext(NovelContext);
 
   const { completion, setCompletion, isLoading, stop } = useCompletion({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan },
+    body: { ...(body || {}) },
     onError: (err) => {
       toast.error(err.message);
     },
@@ -50,7 +50,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
     <div className="novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1">
       <div className="novel-w-64 novel-max-h-48 novel-overflow-y-auto">
         <div className=" novel-flex novel-gap-2 novel-items-center novel-text-slate-500">
-          <Magic className="novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" />
+          <Magic className="novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" />
           {isLoading && (
             <div className="novel-mr-auto novel-flex novel-items-center">
               <LoadingDots color="#9e9e9e" />

@@ -4,8 +4,8 @@ import { createContext } from "react";
 
 export const NovelContext = createContext<{
   completionApi: string;
-  plan: string;
+  additionalData: Record<string, any>;
 }>({
   completionApi: "/api/generate",
-  plan: "5",
+  additionalData: {},
 });
