@@ -28196,6 +28196,7 @@ function generateRandomColorCode() {
 }
 
 // src/ui/editor/index.tsx
+var import_isEmpty = __toESM(require("lodash/isEmpty"));
 var import_jsx_runtime19 = require("react/jsx-runtime");
 function Editor2({
   completionApi = "/api/generate",
@@ -28305,7 +28306,7 @@ function Editor2({
     }
   }, [isLoading, editor, completion]);
   (0, import_react55.useEffect)(() => {
-    if (!editor || hydrated)
+    if (!editor || hydrated || disableLocalStorage !== false)
       return;
     const value = disableLocalStorage ? defaultValue : content;
     if (value) {
@@ -28313,6 +28314,11 @@ function Editor2({
       setHydrated(true);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
+  (0, import_react55.useEffect)(() => {
+    if (!editor || (0, import_isEmpty.default)(defaultValue) || disableLocalStorage !== true)
+      return;
+    editor.commands.setContent(defaultValue);
+  }, [defaultValue]);
   return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
     NovelContext.Provider,
     {

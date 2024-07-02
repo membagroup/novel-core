@@ -28,6 +28,7 @@ import {
   useCollaborationExt,
 } from "./extensions/collaboration";
 import { Users } from "lucide-react";
+import isEmpty from 'lodash/isEmpty';
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -225,15 +226,20 @@ export default function Editor({
   // Default: Hydrate the editor with the content from localStorage.
   // If disableLocalStorage is true, hydrate the editor with the defaultValue.
   useEffect(() => {
-    if (!editor || hydrated) return;
+    if (!editor || hydrated || disableLocalStorage !== false) return;
 
     const value = disableLocalStorage ? defaultValue : content;
-
+    
     if (value) {
       editor.commands.setContent(value);
       setHydrated(true);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
+
+  useEffect(() => {
+    if (!editor || isEmpty(defaultValue) || disableLocalStorage !== true) return;
+    editor.commands.setContent(defaultValue)
+  }, [defaultValue]);
 
   return (
     <NovelContext.Provider

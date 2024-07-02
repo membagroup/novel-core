@@ -28262,6 +28262,7 @@ function generateRandomColorCode() {
 }
 
 // src/ui/editor/index.tsx
+import isEmpty from "lodash/isEmpty";
 import { Fragment as Fragment6, jsx as jsx19, jsxs as jsxs17 } from "react/jsx-runtime";
 function Editor2({
   completionApi = "/api/generate",
@@ -28371,7 +28372,7 @@ function Editor2({
     }
   }, [isLoading, editor, completion]);
   useEffect18(() => {
-    if (!editor || hydrated)
+    if (!editor || hydrated || disableLocalStorage !== false)
       return;
     const value = disableLocalStorage ? defaultValue : content;
     if (value) {
@@ -28379,6 +28380,11 @@ function Editor2({
       setHydrated(true);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
+  useEffect18(() => {
+    if (!editor || isEmpty(defaultValue) || disableLocalStorage !== true)
+      return;
+    editor.commands.setContent(defaultValue);
+  }, [defaultValue]);
   return /* @__PURE__ */ jsx19(
     NovelContext.Provider,
     {
