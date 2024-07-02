@@ -2840,7 +2840,7 @@ var defaultExtensions = (collaboration) => [
       if (node.type.name === "heading") {
         return `Heading ${node.attrs.level}`;
       }
-      return "Press '/' for commands, or '??' for AI autocomplete...";
+      return "Press '/' for commands, or '++' for AI autocomplete...";
     },
     includeChildren: true
   }),
@@ -2883,7 +2883,7 @@ var defaultExtensions = (collaboration) => [
     allowTableNodeSelection: true
   }),
   import_extension_youtube.default.configure({
-    origin: "inke.app",
+    origin: "grantwriteai.com",
     controls: true,
     inline: false
   }),
@@ -28221,10 +28221,11 @@ function Editor2({
     bot: false,
     collaboration: false,
     id: "",
-    userDetails: {}
+    userDetails: {},
+    lastTextKey: "++"
   }
 }) {
-  const { bot, collaboration, id: id3, userDetails, body, customProvider } = additionalData;
+  const { bot, collaboration, id: id3, userDetails, body, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react55.useState)(false);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react55.useState)(false);
@@ -28260,7 +28261,7 @@ function Editor2({
       const lastTwo = getPrevText(e.editor, {
         chars: 2
       });
-      if (lastTwo === "??" && !isLoading) {
+      if (lastTwo === lastTextKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
