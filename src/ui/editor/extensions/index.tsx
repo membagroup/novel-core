@@ -142,7 +142,7 @@ export const defaultExtensions = (collaboration: boolean) => [
       if (node.type.name === "heading") {
         return `Heading ${node.attrs.level}`;
       }
-      return "Press '/' for commands, or '??' for AI autocomplete...";
+      return "Press '/' for commands, or '++' for AI autocomplete...";
     },
     includeChildren: true,
   }),
@@ -185,7 +185,7 @@ export const defaultExtensions = (collaboration: boolean) => [
     allowTableNodeSelection: true,
   }),
   Youtube.configure({
-    origin: "inke.app",
+    origin: "grantwriteai.com",
     controls: true,
     inline: false,
   }),

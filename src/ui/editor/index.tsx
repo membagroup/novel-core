@@ -46,6 +46,7 @@ export default function Editor({
     collaboration: false,
     id: "",
     userDetails: {},
+    lastTextKey: '++',
   }
 }: {
   /**
@@ -115,7 +116,7 @@ export default function Editor({
   */
   additionalData?: Record<string, any>;
 }) {
-  const { bot, collaboration, id, userDetails, body, customProvider } = additionalData;
+  const { bot, collaboration, id, userDetails, body, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
@@ -164,7 +165,7 @@ export default function Editor({
       const lastTwo = getPrevText(e.editor, {
         chars: 2,
       });
-      if (lastTwo === "??" && !isLoading) {
+      if (lastTwo === lastTextKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
