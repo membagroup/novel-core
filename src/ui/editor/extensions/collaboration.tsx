@@ -89,7 +89,7 @@ export function CollaborationInfo({
                     transition: "all 0.5s",
                   }}
                 />
-                <span>{i?.name}</span>
+                <span>{`${i?.name} ${localStorage?.getItem('userId') === i.clientId ? '(you)' : ''}`}</span>
               </div>
             ))}
           </div>

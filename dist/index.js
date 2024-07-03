@@ -28177,7 +28177,7 @@ function CollaborationInfo({
                 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: i == null ? void 0 : i.name })
+            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: `${i == null ? void 0 : i.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === i.clientId ? "(you)" : ""}` })
           ]
         },
         i.clientId

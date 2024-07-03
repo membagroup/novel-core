@@ -28243,7 +28243,7 @@ function CollaborationInfo({
                 }
               }
             ),
-            /* @__PURE__ */ jsx18("span", { children: i == null ? void 0 : i.name })
+            /* @__PURE__ */ jsx18("span", { children: `${i == null ? void 0 : i.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === i.clientId ? "(you)" : ""}` })
           ]
         },
         i.clientId
