@@ -28212,20 +28212,21 @@ function CollaborationInfo({
   status,
   editor
 }) {
-  var _a, _b, _c, _d, _e, _f;
+  var _a, _b, _c;
+  const usersList = (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.filter((u) => (u == null ? void 0 : u.name) !== void 0);
   return /* @__PURE__ */ jsx18("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ jsxs16("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
     /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
-    /* @__PURE__ */ jsx18("span", { className: "novel-text-xs novel-text-slate-500", children: (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.length }),
+    /* @__PURE__ */ jsx18("span", { className: "novel-text-xs novel-text-slate-500", children: usersList == null ? void 0 : usersList.length }),
     /* @__PURE__ */ jsxs16("div", { className: "novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block", children: [
       /* @__PURE__ */ jsxs16("p", { className: "novel-gap-2 novel-mb-1 novel-items-center novel-flex novel-text-xs novel-text-slate-600 novel-pb-1 novel-border-b novel-border-slate-100", children: [
         /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
-        editor.storage.collaborationCursor.users.length,
+        usersList.length,
         " user",
-        editor.storage.collaborationCursor.users.length === 1 ? "" : "s",
+        usersList.length === 1 ? "" : "s",
         " ",
         "online"
       ] }),
-      (_f = (_e = (_d = editor.storage) == null ? void 0 : _d.collaborationCursor) == null ? void 0 : _e.users) == null ? void 0 : _f.map((i) => /* @__PURE__ */ jsxs16(
+      usersList == null ? void 0 : usersList.map((i) => /* @__PURE__ */ jsxs16(
         "div",
         {
           className: "novel-truncate novel-flex novel-items-center novel-gap-2 novel-cursor-pointer hover:novel-opacity-80 novel-font-mono novel-pt-1 novel-text-xs novel-text-slate-500",
