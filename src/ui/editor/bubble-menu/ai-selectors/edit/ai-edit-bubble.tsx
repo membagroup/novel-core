@@ -5,7 +5,7 @@ import { useCompletion } from "ai/react";
 import { X, Clipboard, Replace } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import va from "@vercel/analytics";
+// import va from "@vercel/analytics";
 import { NovelContext } from "../../../provider";
 import ReactMarkdown from "react-markdown";
 

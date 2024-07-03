@@ -5874,7 +5874,8 @@ import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-run
 var AISelector = ({
   editor,
   isOpen,
-  setIsOpen
+  setIsOpen,
+  showSubmenu
 }) => {
   const items = [
     {
@@ -5928,6 +5929,11 @@ var AISelector = ({
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
+      } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
+        stop2();
+        if (e.key === "Escape") {
+          setIsOpen(false);
+        }
       }
     };
     if (isOpen) {
@@ -6005,7 +6011,7 @@ var AISelector = ({
           ]
         }
       ),
-      /* @__PURE__ */ jsx8(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx8(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx8(
+      showSubmenu ? /* @__PURE__ */ jsx8(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx8(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx8(
         Le.Item,
         {
           onSelect: () => {
@@ -6024,7 +6030,7 @@ var AISelector = ({
           ] })
         },
         index2
-      )) }) })
+      )) }) }) : null
     ] })
   ] });
 };
@@ -6176,6 +6182,7 @@ var EditorBubbleMenu = (props) => {
     shouldShow: ({ state, editor }) => {
       const { selection } = state;
       const { empty } = selection;
+      setHasSection(!empty);
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
@@ -6193,6 +6200,7 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
+  const [hasSelection, setHasSection] = useState8(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState8(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState8(false);
   const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState8(false);
@@ -6209,6 +6217,7 @@ var EditorBubbleMenu = (props) => {
           {
             editor: props.editor,
             isOpen: isAISelectorOpen,
+            showSubmenu: hasSelection,
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);

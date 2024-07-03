@@ -5818,7 +5818,8 @@ var import_jsx_runtime8 = require("react/jsx-runtime");
 var AISelector = ({
   editor,
   isOpen,
-  setIsOpen
+  setIsOpen,
+  showSubmenu
 }) => {
   const items = [
     {
@@ -5872,6 +5873,11 @@ var AISelector = ({
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
+      } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
+        stop2();
+        if (e.key === "Escape") {
+          setIsOpen(false);
+        }
       }
     };
     if (isOpen) {
@@ -5949,7 +5955,7 @@ var AISelector = ({
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      showSubmenu ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
         Le.Item,
         {
           onSelect: () => {
@@ -5968,7 +5974,7 @@ var AISelector = ({
           ] })
         },
         index2
-      )) }) })
+      )) }) }) : null
     ] })
   ] });
 };
@@ -6120,6 +6126,7 @@ var EditorBubbleMenu = (props) => {
     shouldShow: ({ state, editor }) => {
       const { selection } = state;
       const { empty } = selection;
+      setHasSection(!empty);
       if (editor.isActive("image") || (0, import_react26.isNodeSelection)(selection)) {
         return false;
       }
@@ -6137,6 +6144,7 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
+  const [hasSelection, setHasSection] = (0, import_react27.useState)(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = (0, import_react27.useState)(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = (0, import_react27.useState)(false);
   const [isLinkSelectorOpen, setIsLinkSelectorOpen] = (0, import_react27.useState)(false);
@@ -6153,6 +6161,7 @@ var EditorBubbleMenu = (props) => {
           {
             editor: props.editor,
             isOpen: isAISelectorOpen,
+            showSubmenu: hasSelection,
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);

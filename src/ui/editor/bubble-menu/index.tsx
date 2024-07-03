@@ -63,7 +63,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     shouldShow: ({ state, editor }) => {
       const { selection } = state;
       const { empty } = selection;
-
+      setHasSection(!empty);
       // don't show bubble menu if:
       // - the selected node is an image
       // - the selection is empty
@@ -87,6 +87,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     },
   };
 
+  const [hasSelection, setHasSection] = useState(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
   const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState(false);
@@ -103,6 +104,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
           <AISelector
             editor={props.editor}
             isOpen={isAISelectorOpen}
+            showSubmenu={hasSelection}
             setIsOpen={() => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
