@@ -97,7 +97,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
           <button className="p-2">
             <Languages
               onClick={() => setIsOpen(!isOpen)}
-              className="novel-h-5 novel-text-stone-600 novel-w-4"
+              className="novel-h-5 novel-text-stone-600 novel-w-4 novel-text-purple-500"
             />
           </button>
         )}

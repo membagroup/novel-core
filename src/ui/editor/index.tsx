@@ -229,7 +229,7 @@ export default function Editor({
     if (!editor || hydrated || disableLocalStorage !== false) return;
 
     const value = disableLocalStorage ? defaultValue : content;
-    
+
     if (value) {
       editor.commands.setContent(value);
       setHydrated(true);
@@ -248,9 +248,7 @@ export default function Editor({
         additionalData,
       }}>
       <div
-        onClick={() => {
-          editor?.chain().focus().run();
-        }}
+        onClick={() => { editor?.chain().focus().run(); }}
         className={className}>
         {editor && (
           <>

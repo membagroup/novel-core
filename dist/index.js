@@ -6055,7 +6055,7 @@ var TranslateSelector = ({
       import_lucide_react8.Languages,
       {
         onClick: () => setIsOpen(!isOpen),
-        className: "novel-h-5 novel-text-stone-600 novel-w-4"
+        className: "novel-h-5 novel-text-stone-600 novel-w-4 novel-text-purple-500"
       }
     ) }) }),
     isOpen && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -6117,7 +6117,7 @@ var EditorBubbleMenu = (props) => {
     shouldShow: ({ state, editor }) => {
       const { selection } = state;
       const { empty } = selection;
-      if (editor.isActive("image") || empty || (0, import_react26.isNodeSelection)(selection)) {
+      if (editor.isActive("image") || (0, import_react26.isNodeSelection)(selection)) {
         return false;
       }
       return true;
