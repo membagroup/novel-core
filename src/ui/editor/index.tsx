@@ -117,7 +117,7 @@ export default function Editor({
   */
   additionalData?: Record<string, any>;
 }) {
-  const { bot, collaboration, id, userDetails, body, customProvider, lastTextKey } = additionalData;
+  const { bot, collaboration, id, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
@@ -200,6 +200,7 @@ export default function Editor({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: { ...(body || {}) },
+    headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,

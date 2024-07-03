@@ -2249,11 +2249,12 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { completionApi, additionalData: { body } } = useContext(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onResponse: (response) => {
       if (response.status === 429) {
         toast2.error("You have reached your request limit for the day.");
@@ -5942,11 +5943,12 @@ var AISelector = ({
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi, additionalData: { body } } = useContext3(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext3(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion2({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: __spreadValues({}, body || {})
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {})
   });
   return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ jsx8("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ jsxs8(
@@ -6094,11 +6096,12 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi, additionalData: { body } } = useContext4(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext4(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion3({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: __spreadValues({}, body || {})
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {})
   });
   return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", children: [
     /* @__PURE__ */ jsx9("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
@@ -21014,11 +21017,12 @@ import ReactMarkdown from "react-markdown";
 import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState9(false);
-  const { completionApi, additionalData: { body } } = useContext5(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext5(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       toast3.error(err.message);
     }
@@ -21101,11 +21105,12 @@ import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
-  const { completionApi, additionalData: { body } } = useContext6(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext6(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion5({
     id: "ai-translate",
     api: `${completionApi}/translate`,
     body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       toast4.error(err.message);
     }
@@ -27955,7 +27960,7 @@ import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
 function ChatBot({ editor }) {
   const [isOpen, setIsOpen] = useState11(false);
   const inputRef = useRef10(null);
-  const { completionApi, additionalData: { body } } = useContext13(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext13(NovelContext);
   const initialMessage = {
     id: "start",
     role: "system",
@@ -27973,6 +27978,7 @@ function ChatBot({ editor }) {
     id: "ai-bot",
     api: `${completionApi}/bot`,
     body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
+    headers: __spreadValues({}, headers || {}),
     initialMessages: [initialMessage],
     onError: (err) => {
       if (err.message !== "Failed to fetch" && err.message !== "network error") {
@@ -28286,7 +28292,7 @@ function Editor2({
     lastTextKey: "++"
   }
 }) {
-  const { bot, collaboration, id: id3, userDetails, body, customProvider, lastTextKey } = additionalData;
+  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
@@ -28352,6 +28358,7 @@ function Editor2({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion2) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion2.length,
