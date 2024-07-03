@@ -5997,7 +5997,7 @@ var AISelector = ({
                 ref: inputRef,
                 type: "text",
                 placeholder: "Enter a prompt or question...",
-                className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none",
+                className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
                 defaultValue: editor.getAttributes("link").href || ""
               }
             ),
@@ -6104,7 +6104,7 @@ var TranslateSelector = ({
     headers: __spreadValues({}, headers || {})
   });
   return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ jsx9("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
+    /* @__PURE__ */ jsx9("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-text-purple-500 novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
       PauseCircle3,
       {
         onClick: stop2,
@@ -6114,7 +6114,7 @@ var TranslateSelector = ({
       Languages,
       {
         onClick: () => setIsOpen(!isOpen),
-        className: "novel-h-5 novel-text-stone-600 novel-w-4 novel-text-purple-500"
+        className: "novel-h-5 novel-text-stone-600 novel-w-4"
       }
     ) }) }),
     isOpen && /* @__PURE__ */ jsx9(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx9(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx9(

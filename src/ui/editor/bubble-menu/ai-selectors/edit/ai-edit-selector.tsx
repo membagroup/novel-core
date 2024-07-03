@@ -157,7 +157,7 @@ export const AISelector: FC<AISelectorProps> = ({
               ref={inputRef}
               type="text"
               placeholder="Enter a prompt or question..."
-              className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none"
+              className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500"
               defaultValue={editor.getAttributes("link").href || ""}
             />
             <button className="novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100">
