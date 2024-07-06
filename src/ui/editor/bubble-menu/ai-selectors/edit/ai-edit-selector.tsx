@@ -89,15 +89,26 @@ export const AISelector: FC<AISelectorProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const handleSubmit = (input: HTMLInputElement) => {
+    if (!input.value) return;
+    const { from, to } = editor.state.selection;
+    const text = editor.state.doc.textBetween(from, to, " ");
+    complete(`${input.value}:\n ${text}`);
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
+        if (e.key === "Enter" && inputRef?.current) {
+          handleSubmit(inputRef.current);
+        }
       }
       else if (e.key === "Escape" || (e.metaKey && e.key === "z")) {
         stop();
         if (e.key === "Escape") {
-         setIsOpen(false);
+          setIsOpen(false);
         }
       }
     };
@@ -154,11 +165,7 @@ export const AISelector: FC<AISelectorProps> = ({
             onSubmit={(e) => {
               e.preventDefault();
               const input = e.currentTarget[0] as HTMLInputElement;
-              if (!input.value) return;
-              const { from, to } = editor.state.selection;
-              const text = editor.state.doc.textBetween(from, to, " ");
-              complete(`${input.value}:\n ${text}`);
-              setIsOpen(false);
+              handleSubmit(input);
             }}
             className="novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
             <input

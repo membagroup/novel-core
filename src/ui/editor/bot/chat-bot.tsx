@@ -12,6 +12,7 @@ import {
   Send,
   Trash,
   Trash2,
+  MessageCircle,
 } from "lucide-react";
 import Magic1 from "@/ui/icons/magic-1";
 import { motion } from "framer-motion";
@@ -233,7 +234,7 @@ export function ChatBot({ editor, }: { editor: Editor, }) {
           <button
             className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
             onClick={toggleOpen}>
-            <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
+            <MessageCircle className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
           </button>
         )}
       </motion.div>

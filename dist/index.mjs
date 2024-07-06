@@ -5925,10 +5925,22 @@ var AISelector = ({
     }
   ];
   const inputRef = useRef6(null);
+  const handleSubmit = (input) => {
+    if (!input.value)
+      return;
+    const { from, to } = editor.state.selection;
+    const text = editor.state.doc.textBetween(from, to, " ");
+    complete(`${input.value}:
+ ${text}`);
+    setIsOpen(false);
+  };
   useEffect9(() => {
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
+        if (e.key === "Enter" && (inputRef == null ? void 0 : inputRef.current)) {
+          handleSubmit(inputRef.current);
+        }
       } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
         stop2();
         if (e.key === "Escape") {
@@ -5987,13 +5999,7 @@ var AISelector = ({
           onSubmit: (e) => {
             e.preventDefault();
             const input = e.currentTarget[0];
-            if (!input.value)
-              return;
-            const { from, to } = editor.state.selection;
-            const text = editor.state.doc.textBetween(from, to, " ");
-            complete(`${input.value}:
- ${text}`);
-            setIsOpen(false);
+            handleSubmit(input);
           },
           className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
           children: [
@@ -6186,9 +6192,18 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
+      if (!empty) {
+        return true;
+      }
+      if ((props == null ? void 0 : props.panelOpen) !== void 0) {
+        setIsAISelectorOpen(props == null ? void 0 : props.panelOpen);
+        return props == null ? void 0 : props.panelOpen;
+      }
       return true;
     },
     tippyOptions: {
+      // https://atomiks.github.io/tippyjs/v6/all-props/#placement
+      placement: "bottom",
       moveTransition: "transform 0.15s ease-out",
       onHidden: () => {
         setIsNodeSelectorOpen(false);
@@ -21188,7 +21203,8 @@ import {
   RefreshCcw,
   Send as Send2,
   Trash as Trash4,
-  Trash2 as Trash22
+  Trash2 as Trash22,
+  MessageCircle
 } from "lucide-react";
 
 // src/ui/icons/magic-1.tsx
@@ -28184,7 +28200,7 @@ function ChatBot({ editor }) {
             {
               className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
               onClick: toggleOpen,
-              children: /* @__PURE__ */ jsx17(Bot2, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
+              children: /* @__PURE__ */ jsx17(MessageCircle, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
             }
           )
         }
@@ -28277,6 +28293,7 @@ function generateRandomColorCode() {
 }
 
 // src/ui/editor/index.tsx
+import { Bot as Bot3 } from "lucide-react";
 import isEmpty from "lodash/isEmpty";
 import { Fragment as Fragment6, jsx as jsx19, jsxs as jsxs17 } from "react/jsx-runtime";
 function Editor2({
@@ -28304,6 +28321,7 @@ function Editor2({
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
+  const [panelOpen, setPanelOpen] = useState12(false);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28314,6 +28332,12 @@ function Editor2({
       setContent(json);
     }
   }), debounceDuration);
+  const togglePanel = () => {
+    if (!editor)
+      return;
+    editor.chain().blur().run();
+    setPanelOpen(!panelOpen);
+  };
   const [status, setStatus] = useState12("connecting");
   const user = __spreadProps(__spreadValues({}, userDetails), {
     color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
@@ -28417,7 +28441,7 @@ function Editor2({
           className,
           children: [
             editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
-              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
+              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor, panelOpen }),
               /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
               /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
             ] }),
@@ -28425,6 +28449,14 @@ function Editor2({
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
             /* @__PURE__ */ jsx19(EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
+            editor && /* @__PURE__ */ jsx19(
+              "button",
+              {
+                className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
+                onClick: togglePanel,
+                children: /* @__PURE__ */ jsx19(Bot3, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
+              }
+            ),
             bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor })
           ]
         }

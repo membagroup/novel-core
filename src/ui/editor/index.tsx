@@ -27,7 +27,7 @@ import {
   generateRandomColorCode,
   useCollaborationExt,
 } from "./extensions/collaboration";
-import { Users } from "lucide-react";
+import { Users, Bot } from "lucide-react";
 import isEmpty from 'lodash/isEmpty';
 
 export default function Editor({
@@ -121,6 +121,7 @@ export default function Editor({
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -136,6 +137,12 @@ export default function Editor({
       setContent(json);
     }
   }, debounceDuration);
+
+  const togglePanel = () => {
+    if (!editor) return;
+    editor.chain().blur().run();
+    setPanelOpen(!panelOpen);
+  };
 
   const [status, setStatus] = useState("connecting");
   const user = {
@@ -253,7 +260,7 @@ export default function Editor({
         className={className}>
         {editor && (
           <>
-            <EditorBubbleMenu editor={editor} />
+            <EditorBubbleMenu editor={editor} panelOpen={panelOpen} />
             <AIEditorBubble editor={editor} />
             <AITranslateBubble editor={editor} />
           </>
@@ -269,6 +276,13 @@ export default function Editor({
             <AIGeneratingLoading stop={stop} />
           </div>
         )}
+        {editor &&
+          <button
+            className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
+            onClick={togglePanel}>
+            <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
+          </button>
+        }
         {bot && editor && <ChatBot editor={editor} />}
       </div>
     </NovelContext.Provider>

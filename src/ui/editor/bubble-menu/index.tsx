@@ -22,7 +22,7 @@ export interface BubbleMenuItem {
   icon: typeof BoldIcon;
 }
 
-type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">;
+type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children"> & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const items: BubbleMenuItem[] = [
@@ -68,13 +68,21 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       // - the selected node is an image
       // - the selection is empty
       // - the selection is a node selection (for drag handles)
-      // if (editor.isActive("image") || empty || isNodeSelection(selection)) {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
+      }
+      if(!empty) {
+        return true;
+      }
+      if (props?.panelOpen !== undefined) {
+        setIsAISelectorOpen(props?.panelOpen);
+        return props?.panelOpen;
       }
       return true;
     },
     tippyOptions: {
+      // https://atomiks.github.io/tippyjs/v6/all-props/#placement
+      placement: 'bottom',
       moveTransition: "transform 0.15s ease-out",
       onHidden: () => {
         setIsNodeSelectorOpen(false);
