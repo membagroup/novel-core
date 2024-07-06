@@ -121,7 +121,7 @@ export default function Editor({
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true);
+  // const [panelOpen, setPanelOpen] = useState(true);
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -138,11 +138,11 @@ export default function Editor({
     }
   }, debounceDuration);
 
-  const togglePanel = () => {
-    // if (!editor) return;
-    // editor.chain().blur().run();
-    setPanelOpen(!panelOpen);
-  };
+  // const togglePanel = () => {
+  //   // if (!editor) return;
+  //   // editor.chain().blur().run();
+  //   setPanelOpen(!panelOpen);
+  // };
 
   const [status, setStatus] = useState("connecting");
   const user = {
@@ -260,7 +260,7 @@ export default function Editor({
         className={className}>
         {editor && (
           <>
-            <EditorBubbleMenu editor={editor} panelOpen={panelOpen} />
+            <EditorBubbleMenu editor={editor} />
             <AIEditorBubble editor={editor} />
             <AITranslateBubble editor={editor} />
           </>
@@ -276,7 +276,7 @@ export default function Editor({
             <AIGeneratingLoading stop={stop} />
           </div>
         )}
-        {editor &&
+        {/* {editor &&
           <div className="novel-fixed novel-bottom-[7.25rem] novel-right-3">
             <button
               className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
@@ -284,7 +284,7 @@ export default function Editor({
               <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
             </button>
           </div>
-        }
+        } */}
         {bot && editor && <ChatBot editor={editor} />}
       </div>
     </NovelContext.Provider>

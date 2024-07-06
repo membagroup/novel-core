@@ -2945,7 +2945,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useRef as useRef7, useState as useState8 } from "react";
+import { useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -3400,7 +3400,7 @@ var LinkSelector = ({
               ref: inputRef,
               type: "text",
               placeholder: "Paste a link",
-              className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none",
+              className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
               defaultValue: editor.getAttributes("link").href || ""
             }
           ),
@@ -6155,8 +6155,6 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 import { Fragment as Fragment4, jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
-  const openRef = useRef7();
-  openRef.current = props == null ? void 0 : props.panelOpen;
   const items = [
     {
       name: "bold",
@@ -6200,7 +6198,7 @@ var EditorBubbleMenu = (props) => {
       if (!empty) {
         return true;
       }
-      return openRef.current || true;
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6325,7 +6323,7 @@ var EditorBubbleMenu = (props) => {
           TranslateSelector,
           {
             editor: props.editor,
-            isOpen: isTranslateSelectorOpen,
+            isOpen: hasSelection && isTranslateSelectorOpen,
             setIsOpen: () => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -28294,7 +28292,6 @@ function generateRandomColorCode() {
 }
 
 // src/ui/editor/index.tsx
-import { Bot as Bot3 } from "lucide-react";
 import isEmpty from "lodash/isEmpty";
 import { Fragment as Fragment6, jsx as jsx19, jsxs as jsxs17 } from "react/jsx-runtime";
 function Editor2({
@@ -28322,7 +28319,6 @@ function Editor2({
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
-  const [panelOpen, setPanelOpen] = useState12(true);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28333,9 +28329,6 @@ function Editor2({
       setContent(json);
     }
   }), debounceDuration);
-  const togglePanel = () => {
-    setPanelOpen(!panelOpen);
-  };
   const [status, setStatus] = useState12("connecting");
   const user = __spreadProps(__spreadValues({}, userDetails), {
     color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
@@ -28439,7 +28432,7 @@ function Editor2({
           className,
           children: [
             editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
-              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor, panelOpen }),
+              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
               /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
               /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
             ] }),
@@ -28447,14 +28440,6 @@ function Editor2({
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
             /* @__PURE__ */ jsx19(EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-            editor && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-[7.25rem] novel-right-3", children: /* @__PURE__ */ jsx19(
-              "button",
-              {
-                className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
-                onClick: togglePanel,
-                children: /* @__PURE__ */ jsx19(Bot3, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
-              }
-            ) }),
             bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor })
           ]
         }

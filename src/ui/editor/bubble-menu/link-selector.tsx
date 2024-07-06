@@ -54,7 +54,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
             ref={inputRef}
             type="text"
             placeholder="Paste a link"
-            className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none"
+            className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500"
             defaultValue={editor.getAttributes("link").href || ""}
           />
           {editor.getAttributes("link").href ? (

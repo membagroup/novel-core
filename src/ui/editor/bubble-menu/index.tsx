@@ -25,9 +25,6 @@ export interface BubbleMenuItem {
 type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children"> & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
-  // https://github.com/ueberdosis/tiptap/issues/2305
-  const openRef = useRef<boolean>();
-  openRef.current = props?.panelOpen;
   const items: BubbleMenuItem[] = [
     {
       name: "bold",
@@ -76,8 +73,9 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       }
       if(!empty) {
         return true;
-      }     
-      return openRef.current || true;
+      }
+      // https://github.com/ueberdosis/tiptap/issues/2305
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -188,7 +186,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
           />
           <TranslateSelector
             editor={props.editor}
-            isOpen={isTranslateSelectorOpen}
+            isOpen={hasSelection && isTranslateSelectorOpen}
             setIsOpen={() => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
