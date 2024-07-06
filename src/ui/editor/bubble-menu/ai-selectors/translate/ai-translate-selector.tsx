@@ -86,7 +86,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
 
   return (
     <div className="novel-relative novel-h-full">
-      <div className={`novel-flex novel-h-full novel-items-center novel-text-sm  novel-text-stone-600 novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : ''}`}>
+      <div className={`novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}>
         {isLoading ? (
           <button className="p-2">
             <PauseCircle

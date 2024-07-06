@@ -25,7 +25,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
     <div className="novel-relative">
       <button
         type="button"
-        className={`novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : ''}`}
+        className={`novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}
         onClick={() => {
           setIsOpen(!isOpen);
         }}>

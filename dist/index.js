@@ -3027,7 +3027,7 @@ var NodeSelector = ({
     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
       Popover.Trigger,
       {
-        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : ""}`,
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: activeItem == null ? void 0 : activeItem.name }),
@@ -3191,7 +3191,7 @@ var ColorSelector = ({
     /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
       Popover2.Trigger,
       {
-        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : ""}`,
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
@@ -3328,7 +3328,7 @@ var LinkSelector = ({
       "button",
       {
         type: "button",
-        className: `novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : ""}`,
+        className: `novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => {
           setIsOpen(!isOpen);
         },
@@ -3459,7 +3459,7 @@ var TableSelector = ({
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
       Popover3.Trigger,
       {
-        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : ""}`,
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "novel-rounded-sm novel-px-1", children: "Table" }),
@@ -6063,7 +6063,7 @@ var TranslateSelector = ({
     headers: __spreadValues({}, headers || {})
   });
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm  novel-text-stone-600 novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : ""}`, children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
       import_lucide_react8.PauseCircle,
       {
         onClick: stop2,
