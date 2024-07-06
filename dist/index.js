@@ -5916,7 +5916,7 @@ var AISelector = ({
     headers: __spreadValues({}, headers || {})
   });
   return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200`, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -6168,7 +6168,7 @@ var EditorBubbleMenu = (props) => {
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
     import_react26.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
-      className: "novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl",
+      className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           AISelector,
@@ -28280,6 +28280,11 @@ function Editor2({
     ],
     editorProps: __spreadValues(__spreadValues({}, defaultEditorProps), editorProps),
     editable,
+    onCreate: (e) => {
+      if (additionalData == null ? void 0 : additionalData.getEditor) {
+        additionalData.getEditor(e.editor);
+      }
+    },
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastTwo = getPrevText(e.editor, {

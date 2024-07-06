@@ -5972,7 +5972,7 @@ var AISelector = ({
     headers: __spreadValues({}, headers || {})
   });
   return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ jsx8("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200`, children: /* @__PURE__ */ jsxs8(
+    /* @__PURE__ */ jsx8("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ jsxs8(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -6224,7 +6224,7 @@ var EditorBubbleMenu = (props) => {
   return /* @__PURE__ */ jsx10(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
-      className: "novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl",
+      className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && /* @__PURE__ */ jsxs10(Fragment4, { children: [
         /* @__PURE__ */ jsx10(
           AISelector,
@@ -28347,6 +28347,11 @@ function Editor2({
     ],
     editorProps: __spreadValues(__spreadValues({}, defaultEditorProps), editorProps),
     editable,
+    onCreate: (e) => {
+      if (additionalData == null ? void 0 : additionalData.getEditor) {
+        additionalData.getEditor(e.editor);
+      }
+    },
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastTwo = getPrevText(e.editor, {

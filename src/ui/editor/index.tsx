@@ -168,6 +168,11 @@ export default function Editor({
       ...editorProps,
     },
     editable: editable,
+    onCreate: (e) => {
+      if(additionalData?.getEditor) {
+        additionalData.getEditor(e.editor);
+      }
+    },
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastTwo = getPrevText(e.editor, {
