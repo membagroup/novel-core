@@ -770,8 +770,8 @@ video {
 .novel-bottom-3 {
   bottom: 0.75rem;
 }
-.novel-bottom-\\[4\\.5rem\\] {
-  bottom: 4.5rem;
+.novel-bottom-\\[7\\.25rem\\] {
+  bottom: 7.25rem;
 }
 .novel-left-1\\/2 {
   left: 50%;
@@ -1705,7 +1705,7 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-import { useEffect as useEffect18, useRef as useRef11, useState as useState12 } from "react";
+import { useEffect as useEffect19, useRef as useRef11, useState as useState12 } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
 // src/ui/editor/plugins/upload-images.tsx
@@ -2945,7 +2945,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useState as useState8 } from "react";
+import { useEffect as useEffect11, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -6199,7 +6199,6 @@ var EditorBubbleMenu = (props) => {
         return true;
       }
       if ((props == null ? void 0 : props.panelOpen) !== void 0) {
-        setIsAISelectorOpen(props == null ? void 0 : props.panelOpen);
         return props == null ? void 0 : props.panelOpen;
       }
       return true;
@@ -6225,6 +6224,11 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = useState8(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = useState8(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState8(false);
+  useEffect11(() => {
+    if ((props == null ? void 0 : props.panelOpen) !== void 0) {
+      setIsAISelectorOpen(props.panelOpen);
+    }
+  }, [props == null ? void 0 : props.panelOpen]);
   return /* @__PURE__ */ jsx10(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
@@ -9429,7 +9433,7 @@ function styled(css3) {
 var styled_esm_default = styled;
 
 // ../../node_modules/.pnpm/react-css-styled@1.1.9/node_modules/react-css-styled/dist/styled.esm.js
-import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef7, useImperativeHandle, useEffect as useEffect11 } from "react";
+import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef7, useImperativeHandle, useEffect as useEffect12 } from "react";
 var __assign6 = function() {
   __assign6 = Object.assign || function __assign8(t2) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9463,7 +9467,7 @@ function styled2(Tag, css3) {
     useImperativeHandle(ref2, function() {
       return targetRef.current;
     }, []);
-    useEffect11(function() {
+    useEffect12(function() {
       var injectResult = injector.inject(targetRef.current, {
         nonce: props.cspNonce
       });
@@ -21038,7 +21042,7 @@ var loading_dots_default = LoadingDots;
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
 import { useCompletion as useCompletion4 } from "ai/react";
 import { X, Clipboard, Replace } from "lucide-react";
-import { useContext as useContext5, useEffect as useEffect12, useState as useState9 } from "react";
+import { useContext as useContext5, useEffect as useEffect13, useState as useState9 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
@@ -21054,7 +21058,7 @@ var AIEditorBubble = ({ editor }) => {
       toast3.error(err.message);
     }
   });
-  useEffect12(() => {
+  useEffect13(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21126,7 +21130,7 @@ function AIGeneratingLoading({ stop: stop2 }) {
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-bubble.tsx
 import { useCompletion as useCompletion5 } from "ai/react";
 import { X as X2, Clipboard as Clipboard2, Replace as Replace2 } from "lucide-react";
-import { useContext as useContext6, useEffect as useEffect13, useState as useState10 } from "react";
+import { useContext as useContext6, useEffect as useEffect14, useState as useState10 } from "react";
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
@@ -21142,7 +21146,7 @@ var AITranslateBubble = ({ editor }) => {
       toast4.error(err.message);
     }
   });
-  useEffect13(() => {
+  useEffect14(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21195,7 +21199,7 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext13, useEffect as useEffect17, useRef as useRef10, useState as useState11 } from "react";
+import { useContext as useContext13, useEffect as useEffect18, useRef as useRef10, useState as useState11 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
@@ -21253,20 +21257,20 @@ import { createContext as createContext4 } from "react";
 var MotionContext = createContext4({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-import { useContext as useContext7, useRef as useRef8, useInsertionEffect, useEffect as useEffect15 } from "react";
+import { useContext as useContext7, useRef as useRef8, useInsertionEffect, useEffect as useEffect16 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
 import { createContext as createContext5 } from "react";
 var PresenceContext = createContext5(null);
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-import { useLayoutEffect as useLayoutEffect4, useEffect as useEffect14 } from "react";
+import { useLayoutEffect as useLayoutEffect4, useEffect as useEffect15 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/is-browser.mjs
 var isBrowser = typeof document !== "undefined";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-var useIsomorphicLayoutEffect2 = isBrowser ? useLayoutEffect4 : useEffect14;
+var useIsomorphicLayoutEffect2 = isBrowser ? useLayoutEffect4 : useEffect15;
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/LazyContext.mjs
 import { createContext as createContext6 } from "react";
@@ -21297,10 +21301,10 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
   useIsomorphicLayoutEffect2(() => {
     visualElement && visualElement.render();
   });
-  useEffect15(() => {
+  useEffect16(() => {
     visualElement && visualElement.updateFeatures();
   });
-  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : useEffect15;
+  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : useEffect16;
   useAnimateChangesEffect(() => {
     if (visualElement && visualElement.animationState) {
       visualElement.animationState.animateChanges();
@@ -25690,14 +25694,14 @@ var PanGesture = class extends Feature {
 import React__default, { useContext as useContext12 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.mjs
-import { useContext as useContext11, useId as useId2, useEffect as useEffect16 } from "react";
+import { useContext as useContext11, useId as useId2, useEffect as useEffect17 } from "react";
 function usePresence() {
   const context = useContext11(PresenceContext);
   if (context === null)
     return [true, null];
   const { isPresent, onExitComplete, register } = context;
   const id3 = useId2();
-  useEffect16(() => register(id3), []);
+  useEffect17(() => register(id3), []);
   const safeToRemove = () => onExitComplete && onExitComplete(id3);
   return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
 }
@@ -28014,7 +28018,7 @@ function ChatBot({ editor }) {
       }
     }
   });
-  useEffect17(() => {
+  useEffect18(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
@@ -28379,7 +28383,7 @@ function Editor2({
     },
     autofocus: false
   });
-  useEffect18(() => {
+  useEffect19(() => {
     if (collaboration) {
       provider.on("status", (event) => {
         setStatus(event.status);
@@ -28403,7 +28407,7 @@ function Editor2({
     }
   });
   const prev = useRef11("");
-  useEffect18(() => {
+  useEffect19(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
     editor == null ? void 0 : editor.commands.insertContent(diff3);
@@ -28411,7 +28415,7 @@ function Editor2({
       setLoadingOutside(false);
     }
   }, [isLoading, editor, completion]);
-  useEffect18(() => {
+  useEffect19(() => {
     if (!editor || hydrated || disableLocalStorage !== false)
       return;
     const value = disableLocalStorage ? defaultValue : content;
@@ -28420,7 +28424,7 @@ function Editor2({
       setHydrated(true);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-  useEffect18(() => {
+  useEffect19(() => {
     if (!editor || isEmpty(defaultValue) || disableLocalStorage !== true)
       return;
     editor.commands.setContent(defaultValue);
@@ -28449,7 +28453,7 @@ function Editor2({
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
             /* @__PURE__ */ jsx19(EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-            editor && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-[4.5rem] novel-right-3", children: /* @__PURE__ */ jsx19(
+            editor && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-[7.25rem] novel-right-3", children: /* @__PURE__ */ jsx19(
               "button",
               {
                 className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",

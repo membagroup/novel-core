@@ -778,8 +778,8 @@ video {
 .novel-bottom-3 {
   bottom: 0.75rem;
 }
-.novel-bottom-\\[4\\.5rem\\] {
-  bottom: 4.5rem;
+.novel-bottom-\\[7\\.25rem\\] {
+  bottom: 7.25rem;
 }
 .novel-left-1\\/2 {
   left: 50%;
@@ -6143,7 +6143,6 @@ var EditorBubbleMenu = (props) => {
         return true;
       }
       if ((props == null ? void 0 : props.panelOpen) !== void 0) {
-        setIsAISelectorOpen(props == null ? void 0 : props.panelOpen);
         return props == null ? void 0 : props.panelOpen;
       }
       return true;
@@ -6169,6 +6168,11 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react27.useState)(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react27.useState)(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react27.useState)(false);
+  (0, import_react27.useEffect)(() => {
+    if ((props == null ? void 0 : props.panelOpen) !== void 0) {
+      setIsAISelectorOpen(props.panelOpen);
+    }
+  }, [props == null ? void 0 : props.panelOpen]);
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
     import_react26.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
@@ -28382,7 +28386,7 @@ function Editor2({
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
             /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react56.EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
-            editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-[4.5rem] novel-right-3", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+            editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-[7.25rem] novel-right-3", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
               "button",
               {
                 className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",

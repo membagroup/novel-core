@@ -1,5 +1,5 @@
 import { BubbleMenu, BubbleMenuProps, isNodeSelection } from "@tiptap/react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -75,7 +75,6 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         return true;
       }
       if (props?.panelOpen !== undefined) {
-        setIsAISelectorOpen(props?.panelOpen);
         return props?.panelOpen;
       }
       return true;
@@ -102,6 +101,12 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = useState(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = useState(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState(false);
+
+  useEffect(() => {
+    if (props?.panelOpen !== undefined) {
+      setIsAISelectorOpen(props.panelOpen);
+    }       
+  }, [props?.panelOpen]);
 
   return (
     <BubbleMenu

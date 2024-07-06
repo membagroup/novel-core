@@ -277,7 +277,7 @@ export default function Editor({
           </div>
         )}
         {editor &&
-          <div className="novel-fixed novel-bottom-[4.5rem] novel-right-3">
+          <div className="novel-fixed novel-bottom-[7.25rem] novel-right-3">
             <button
               className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
               onClick={togglePanel}>
