@@ -201,7 +201,7 @@ export default function Editor({
         editor?.chain().focus().updateUser(user).run();
       });
     }
-    if(additionalData?.getEditor && editor) {
+    if (additionalData?.getEditor && editor) {
       additionalData.getEditor(editor);
     }
   }, [editor]);
@@ -275,7 +275,7 @@ export default function Editor({
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
         {isLoadingOutside && isLoading && (
-          <div className="novel-fixed novel-bottom-3 novel-right-16">
+          <div className="novel-fixed novel-bottom-3 novel-mx-auto">
             <AIGeneratingLoading stop={stop} />
           </div>
         )}
@@ -288,7 +288,7 @@ export default function Editor({
             </button>
           </div>
         } */}
-        {bot && editor && <ChatBot editor={editor} />}
+        {bot && editor && <ChatBot editor={editor} history={additionalData?.chatHistory || []} />}
       </div>
     </NovelContext.Provider>
   );

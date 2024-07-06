@@ -787,9 +787,6 @@ video {
 .novel-right-0 {
   right: 0px;
 }
-.novel-right-16 {
-  right: 4rem;
-}
 .novel-right-3 {
   right: 0.75rem;
 }
@@ -819,6 +816,10 @@ video {
 }
 .novel-float-right {
   float: right;
+}
+.novel-mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 .novel-my-1 {
   margin-top: 0.25rem;
@@ -27917,7 +27918,8 @@ var motion = /* @__PURE__ */ createMotionProxy((Component2, config) => createDom
 var import_react_markdown3 = __toESM(require("react-markdown"));
 var import_sonner5 = require("sonner");
 var import_jsx_runtime17 = require("react/jsx-runtime");
-function ChatBot({ editor }) {
+function ChatBot(props) {
+  const { editor, history } = props;
   const [isOpen, setIsOpen] = (0, import_react52.useState)(false);
   const inputRef = (0, import_react52.useRef)(null);
   const { completionApi, additionalData: { body, headers } } = (0, import_react52.useContext)(NovelContext);
@@ -27941,15 +27943,18 @@ function ChatBot({ editor }) {
     headers: __spreadValues({}, headers || {}),
     initialMessages: [initialMessage],
     onError: (err) => {
-      if (err.message !== "Failed to fetch" && err.message !== "network error") {
-        import_sonner5.toast.error(err.message);
-      }
+      import_sonner5.toast.error(err.message);
     }
   });
   (0, import_react52.useEffect)(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
+  (0, import_react52.useEffect)(() => {
+    if (history == null ? void 0 : history.length) {
+      setMessages([initialMessage, ...history]);
+    }
+  }, [history == null ? void 0 : history.length]);
   const handleChat = () => {
     var _a;
     if (isLoading) {
@@ -28378,8 +28383,8 @@ function Editor2({
             editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
             /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react56.EditorContent, { editor }),
-            isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-right-16", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor })
+            isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
+            bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
           ]
         }
       )

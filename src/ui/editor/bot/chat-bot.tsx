@@ -1,7 +1,7 @@
 import { Editor } from "@tiptap/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { NovelContext } from "../provider";
-import { useChat } from "ai/react";
+import { Message, useChat } from "ai/react";
 import {
   Baby,
   Bot,
@@ -19,7 +19,13 @@ import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 
-export function ChatBot({ editor, }: { editor: Editor, }) {
+interface Props {
+  editor: Editor;
+  history: Message[];
+}
+
+export function ChatBot(props: Props) {
+  const { editor, history } = props;
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -46,18 +52,24 @@ export function ChatBot({ editor, }: { editor: Editor, }) {
     headers: { ...(headers || {}), },
     initialMessages: [initialMessage],
     onError: (err) => {
-      if (
-        err.message !== "Failed to fetch" &&
-        err.message !== "network error"
-      ) {
-        toast.error(err.message);
-      }
+      // if (
+      //   err.message !== "Failed to fetch" &&
+      //   err.message !== "network error"
+      // ) {
+      toast.error(err.message);
+      // }
     },
   });
 
   useEffect(() => {
     inputRef.current && inputRef.current?.focus();
   });
+
+  useEffect(() => {
+    if (history?.length) {
+      setMessages([initialMessage, ...history]);
+    }
+  }, [history?.length]);
 
   const handleChat = () => {
     if (isLoading) {
