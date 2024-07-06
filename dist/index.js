@@ -787,6 +787,9 @@ video {
 .novel-right-0 {
   right: 0px;
 }
+.novel-right-16 {
+  right: 4rem;
+}
 .novel-right-3 {
   right: 0.75rem;
 }
@@ -28246,7 +28249,7 @@ function Editor2({
     collaboration: false,
     id: "",
     userDetails: {},
-    lastTextKey: "++"
+    lastTextKey: "??"
   }
 }) {
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
@@ -28280,11 +28283,6 @@ function Editor2({
     ],
     editorProps: __spreadValues(__spreadValues({}, defaultEditorProps), editorProps),
     editable,
-    onCreate: (e) => {
-      if (additionalData == null ? void 0 : additionalData.getEditor) {
-        additionalData.getEditor(e.editor);
-      }
-    },
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastTwo = getPrevText(e.editor, {
@@ -28314,6 +28312,9 @@ function Editor2({
         setStatus(event.status);
         editor == null ? void 0 : editor.chain().focus().updateUser(user).run();
       });
+    }
+    if ((additionalData == null ? void 0 : additionalData.getEditor) && editor) {
+      additionalData.getEditor(editor);
     }
   }, [editor]);
   const { complete, completion, isLoading, stop: stop2 } = (0, import_react57.useCompletion)({
@@ -28377,7 +28378,7 @@ function Editor2({
             editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
             /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react56.EditorContent, { editor }),
-            isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
+            isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-right-16", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
             bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor })
           ]
         }

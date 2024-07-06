@@ -47,7 +47,7 @@ export default function Editor({
     collaboration: false,
     id: "",
     userDetails: {},
-    lastTextKey: '++',
+    lastTextKey: '??',
   }
 }: {
   /**
@@ -168,11 +168,6 @@ export default function Editor({
       ...editorProps,
     },
     editable: editable,
-    onCreate: (e) => {
-      if(additionalData?.getEditor) {
-        additionalData.getEditor(e.editor);
-      }
-    },
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastTwo = getPrevText(e.editor, {
@@ -205,6 +200,9 @@ export default function Editor({
         setStatus(event.status);
         editor?.chain().focus().updateUser(user).run();
       });
+    }
+    if(additionalData?.getEditor && editor) {
+      additionalData.getEditor(editor);
     }
   }, [editor]);
 
@@ -277,7 +275,7 @@ export default function Editor({
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
         {isLoadingOutside && isLoading && (
-          <div className="novel-fixed novel-bottom-3 novel-right-3">
+          <div className="novel-fixed novel-bottom-3 novel-right-16">
             <AIGeneratingLoading stop={stop} />
           </div>
         )}
