@@ -137,7 +137,7 @@ export const AISelector: FC<AISelectorProps> = ({
 
   return (
     <div className="novel-relative novel-h-full">
-      <div className="novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200">
+      <div className={`novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-purple-500 hover:novel-bg-stone-100 active:novel-bg-stone-200`}>
         <button
           className="novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2"
           onClick={() => {

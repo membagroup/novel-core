@@ -86,7 +86,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
 
   return (
     <div className="novel-relative novel-h-full">
-      <div className="novel-flex novel-h-full novel-items-center novel-text-sm novel-text-purple-500 novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200">
+      <div className={`novel-flex novel-h-full novel-items-center novel-text-sm  novel-text-stone-600 novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : ''}`}>
         {isLoading ? (
           <button className="p-2">
             <PauseCircle
@@ -98,7 +98,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
           <button className="p-2">
             <Languages
               onClick={() => setIsOpen(!isOpen)}
-              className="novel-h-5 novel-text-stone-600 novel-w-4"
+              className="novel-h-5 novel-w-4"
             />
           </button>
         )}
