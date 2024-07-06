@@ -1705,7 +1705,7 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-import { useEffect as useEffect19, useRef as useRef11, useState as useState12 } from "react";
+import { useEffect as useEffect19, useRef as useRef12, useState as useState12 } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
 // src/ui/editor/plugins/upload-images.tsx
@@ -2945,7 +2945,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useEffect as useEffect11, useState as useState8 } from "react";
+import { useRef as useRef7, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -6155,6 +6155,8 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 import { Fragment as Fragment4, jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
+  const openRef = useRef7();
+  openRef.current = props == null ? void 0 : props.panelOpen;
   const items = [
     {
       name: "bold",
@@ -6198,10 +6200,7 @@ var EditorBubbleMenu = (props) => {
       if (!empty) {
         return true;
       }
-      if ((props == null ? void 0 : props.panelOpen) !== void 0) {
-        return props == null ? void 0 : props.panelOpen;
-      }
-      return true;
+      return openRef.current || true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6224,11 +6223,6 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = useState8(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = useState8(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState8(false);
-  useEffect11(() => {
-    if ((props == null ? void 0 : props.panelOpen) !== void 0) {
-      setIsAISelectorOpen(props.panelOpen);
-    }
-  }, [props == null ? void 0 : props.panelOpen]);
   return /* @__PURE__ */ jsx10(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
@@ -9433,7 +9427,7 @@ function styled(css3) {
 var styled_esm_default = styled;
 
 // ../../node_modules/.pnpm/react-css-styled@1.1.9/node_modules/react-css-styled/dist/styled.esm.js
-import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef7, useImperativeHandle, useEffect as useEffect12 } from "react";
+import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef8, useImperativeHandle, useEffect as useEffect12 } from "react";
 var __assign6 = function() {
   __assign6 = Object.assign || function __assign8(t2) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9463,7 +9457,7 @@ function styled2(Tag, css3) {
   var cssId = injector.className;
   return forwardRef4(function(props, ref2) {
     var _a = props.className, className = _a === void 0 ? "" : _a, cspNonce = props.cspNonce, attributes = __rest2(props, ["className", "cspNonce"]);
-    var targetRef = useRef7();
+    var targetRef = useRef8();
     useImperativeHandle(ref2, function() {
       return targetRef.current;
     }, []);
@@ -21199,7 +21193,7 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext13, useEffect as useEffect18, useRef as useRef10, useState as useState11 } from "react";
+import { useContext as useContext13, useEffect as useEffect18, useRef as useRef11, useState as useState11 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
@@ -21257,7 +21251,7 @@ import { createContext as createContext4 } from "react";
 var MotionContext = createContext4({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-import { useContext as useContext7, useRef as useRef8, useInsertionEffect, useEffect as useEffect16 } from "react";
+import { useContext as useContext7, useRef as useRef9, useInsertionEffect, useEffect as useEffect16 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
 import { createContext as createContext5 } from "react";
@@ -21282,7 +21276,7 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
   const lazyContext = useContext7(LazyContext);
   const presenceContext = useContext7(PresenceContext);
   const reducedMotionConfig = useContext7(MotionConfigContext).reducedMotion;
-  const visualElementRef = useRef8();
+  const visualElementRef = useRef9();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
     visualElementRef.current = createVisualElement(Component2, {
@@ -22125,9 +22119,9 @@ function resolveVariantFromProps(props, definition, custom, currentValues2 = {},
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-constant.mjs
-import { useRef as useRef9 } from "react";
+import { useRef as useRef10 } from "react";
 function useConstant(init) {
-  const ref2 = useRef9(null);
+  const ref2 = useRef10(null);
   if (ref2.current === null) {
     ref2.current = init();
   }
@@ -27991,7 +27985,7 @@ import { toast as toast5 } from "sonner";
 import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
 function ChatBot({ editor }) {
   const [isOpen, setIsOpen] = useState11(false);
-  const inputRef = useRef10(null);
+  const inputRef = useRef11(null);
   const { completionApi, additionalData: { body, headers } } = useContext13(NovelContext);
   const initialMessage = {
     id: "start",
@@ -28328,7 +28322,7 @@ function Editor2({
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
-  const [panelOpen, setPanelOpen] = useState12(false);
+  const [panelOpen, setPanelOpen] = useState12(true);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28406,7 +28400,7 @@ function Editor2({
       toast6.error(err.message);
     }
   });
-  const prev = useRef11("");
+  const prev = useRef12("");
   useEffect19(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;

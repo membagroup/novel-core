@@ -121,7 +121,7 @@ export default function Editor({
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(true);
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 

@@ -1,5 +1,5 @@
 import { BubbleMenu, BubbleMenuProps, isNodeSelection } from "@tiptap/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -25,6 +25,9 @@ export interface BubbleMenuItem {
 type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children"> & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
+  // https://github.com/ueberdosis/tiptap/issues/2305
+  const openRef = useRef<boolean>();
+  openRef.current = props?.panelOpen;
   const items: BubbleMenuItem[] = [
     {
       name: "bold",
@@ -73,11 +76,8 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       }
       if(!empty) {
         return true;
-      }
-      if (props?.panelOpen !== undefined) {
-        return props?.panelOpen;
-      }
-      return true;
+      }     
+      return openRef.current || true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -101,12 +101,6 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = useState(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = useState(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState(false);
-
-  useEffect(() => {
-    if (props?.panelOpen !== undefined) {
-      setIsAISelectorOpen(props.panelOpen);
-    }       
-  }, [props?.panelOpen]);
 
   return (
     <BubbleMenu

@@ -6099,6 +6099,8 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 var import_jsx_runtime10 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
+  const openRef = (0, import_react27.useRef)();
+  openRef.current = props == null ? void 0 : props.panelOpen;
   const items = [
     {
       name: "bold",
@@ -6142,10 +6144,7 @@ var EditorBubbleMenu = (props) => {
       if (!empty) {
         return true;
       }
-      if ((props == null ? void 0 : props.panelOpen) !== void 0) {
-        return props == null ? void 0 : props.panelOpen;
-      }
-      return true;
+      return openRef.current || true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6168,11 +6167,6 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react27.useState)(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react27.useState)(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react27.useState)(false);
-  (0, import_react27.useEffect)(() => {
-    if ((props == null ? void 0 : props.panelOpen) !== void 0) {
-      setIsAISelectorOpen(props.panelOpen);
-    }
-  }, [props == null ? void 0 : props.panelOpen]);
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
     import_react26.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
@@ -28261,7 +28255,7 @@ function Editor2({
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react55.useState)(false);
-  const [panelOpen, setPanelOpen] = (0, import_react55.useState)(false);
+  const [panelOpen, setPanelOpen] = (0, import_react55.useState)(true);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react55.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
