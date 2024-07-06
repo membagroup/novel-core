@@ -770,6 +770,9 @@ video {
 .novel-bottom-3 {
   bottom: 0.75rem;
 }
+.novel-bottom-\\[4\\.5rem\\] {
+  bottom: 4.5rem;
+}
 .novel-left-1\\/2 {
   left: 50%;
 }
@@ -28333,9 +28336,6 @@ function Editor2({
     }
   }), debounceDuration);
   const togglePanel = () => {
-    if (!editor)
-      return;
-    editor.chain().blur().run();
     setPanelOpen(!panelOpen);
   };
   const [status, setStatus] = useState12("connecting");
@@ -28449,14 +28449,14 @@ function Editor2({
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
             /* @__PURE__ */ jsx19(EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-            editor && /* @__PURE__ */ jsx19(
+            editor && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-[4.5rem] novel-right-3", children: /* @__PURE__ */ jsx19(
               "button",
               {
                 className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
                 onClick: togglePanel,
                 children: /* @__PURE__ */ jsx19(Bot3, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
               }
-            ),
+            ) }),
             bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor })
           ]
         }

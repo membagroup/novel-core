@@ -139,8 +139,8 @@ export default function Editor({
   }, debounceDuration);
 
   const togglePanel = () => {
-    if (!editor) return;
-    editor.chain().blur().run();
+    // if (!editor) return;
+    // editor.chain().blur().run();
     setPanelOpen(!panelOpen);
   };
 
@@ -277,11 +277,13 @@ export default function Editor({
           </div>
         )}
         {editor &&
-          <button
-            className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
-            onClick={togglePanel}>
-            <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
-          </button>
+          <div className="novel-fixed novel-bottom-[4.5rem] novel-right-3">
+            <button
+              className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
+              onClick={togglePanel}>
+              <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
+            </button>
+          </div>
         }
         {bot && editor && <ChatBot editor={editor} />}
       </div>
