@@ -8,7 +8,7 @@ import useLocalStorage from "@/lib/hooks/use-local-storage";
 import { useDebouncedCallback } from "use-debounce";
 import { useCompletion } from "ai/react";
 import { toast } from "sonner";
-import va from "@vercel/analytics";
+// import va from "@vercel/analytics";
 import { defaultEditorContent } from "./default-content";
 import { EditorBubbleMenu } from "./bubble-menu";
 import { getPrevText } from "@/lib/editor";
@@ -27,7 +27,8 @@ import {
   generateRandomColorCode,
   useCollaborationExt,
 } from "./extensions/collaboration";
-import { Users } from "lucide-react";
+import { Users, Bot } from "lucide-react";
+import isEmpty from 'lodash/isEmpty';
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -35,17 +36,19 @@ export default function Editor({
   defaultValue = defaultEditorContent,
   extensions = [],
   editorProps = {},
-  onUpdate = () => {},
-  onDebouncedUpdate = () => {},
+  onUpdate = () => { },
+  onDebouncedUpdate = () => { },
   debounceDuration = 750,
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  plan = "5",
-  bot = false,
-  collaboration = false,
-  id = "",
-  userName = "unkown",
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userDetails: {},
+    autoCompleteShortKey: '??',
+  }
 }: {
   /**
    * The API route to use for the OpenAI completion API.
@@ -109,33 +112,17 @@ export default function Editor({
    * Defaults to true.
    */
   editable?: boolean;
-  /**
-   * User plan.
-   * Defaults to "5".
-   */
-  plan?: string;
-  /**
-   * Bot: chat with note.
-   * Defaults to false.
-   */
-  bot?: boolean;
-  /**
-   * Id: collaboration room id.
-   */
-  id?: string;
-  /**
-   * Collaboration: enable collaboration space.
-   * Defaults to false.
-   */
-  collaboration?: boolean;
-  /**
-   * userName: collaboration userName.
-   */
-  userName?: string;
+  /** 
+   * Additional Data
+  */
+  additionalData?: Record<string, any>;
 }) {
+  const { bot, collaboration, id, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
+  // const [panelOpen, setPanelOpen] = useState(true);
+  const [lastInput, setLastInput] = useState('');
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -152,16 +139,23 @@ export default function Editor({
     }
   }, debounceDuration);
 
+  // const togglePanel = () => {
+  //   // if (!editor) return;
+  //   // editor.chain().blur().run();
+  //   setPanelOpen(!panelOpen);
+  // };
+
   const [status, setStatus] = useState("connecting");
   const user = {
-    name: userName,
-    color: generateRandomColorCode(),
+    ...userDetails,
+    color: userDetails?.color || generateRandomColorCode(),
   };
 
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id,
-    user
+    user,
+    customProvider
   );
 
   const editor = useEditor({
@@ -177,21 +171,15 @@ export default function Editor({
     editable: editable,
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2,
-      });
-      if (lastTwo === "??" && !isLoading) {
+      const lastTwo = getPrevText(e.editor, { chars: 2, });
+      if (lastTwo === autoCompleteShortKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
           to: selection.from,
         });
-        complete(
-          getPrevText(e.editor, {
-            chars: 5000,
-          })
-        );
-        va.track("Autocomplete Shortcut Used");
+        complete(getPrevText(e.editor, { chars: 5000, }));
+        // va.track("Autocomplete Shortcut Used");
       } else {
         onUpdate(e.editor);
         debouncedUpdates(e);
@@ -208,12 +196,16 @@ export default function Editor({
         editor?.chain().focus().updateUser(user).run();
       });
     }
+    if (additionalData?.getEditor && editor) {
+      additionalData.getEditor(editor);
+    }
   }, [editor]);
 
   const { complete, completion, isLoading, stop } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: { ...(body || {}) },
+    headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -240,7 +232,7 @@ export default function Editor({
   // Default: Hydrate the editor with the content from localStorage.
   // If disableLocalStorage is true, hydrate the editor with the defaultValue.
   useEffect(() => {
-    if (!editor || hydrated) return;
+    if (!editor || hydrated || disableLocalStorage !== false) return;
 
     const value = disableLocalStorage ? defaultValue : content;
 
@@ -250,16 +242,15 @@ export default function Editor({
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
+  useEffect(() => {
+    if (!editor || isEmpty(defaultValue) || disableLocalStorage !== true) return;
+    editor.commands.setContent(defaultValue)
+  }, [defaultValue]);
+
   return (
-    <NovelContext.Provider
-      value={{
-        completionApi,
-        plan,
-      }}>
+    <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, }}>
       <div
-        onClick={() => {
-          editor?.chain().focus().run();
-        }}
+        onClick={() => { editor?.chain().focus().run(); }}
         className={className}>
         {editor && (
           <>
@@ -274,12 +265,22 @@ export default function Editor({
 
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {isLoadingOutside && isLoading && (
-          <div className="novel-fixed novel-bottom-3 novel-right-3">
-            <AIGeneratingLoading stop={stop} />
+        {(additionalData?.showGenLoader || (isLoadingOutside && isLoading)) &&
+          (
+            <div className="novel-fixed novel-bottom-3 novel-mx-auto">
+              <AIGeneratingLoading stop={stop} />
+            </div>
+          )}
+        {/* {editor &&
+          <div className="novel-fixed novel-bottom-[7.25rem] novel-right-3">
+            <button
+              className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
+              onClick={togglePanel}>
+              <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
+            </button>
           </div>
-        )}
-        {bot && editor && <ChatBot editor={editor} />}
+        } */}
+        {bot && editor && <ChatBot editor={editor} history={additionalData?.chatHistory || []} />}
       </div>
     </NovelContext.Provider>
   );

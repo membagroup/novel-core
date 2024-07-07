@@ -16,16 +16,16 @@ export interface User {
 export function useCollaborationExt(
   active: boolean,
   id: string,
-  user: User
+  user: User,
+  customProvider?: HocuspocusProvider,
 ): any {
   const collaborationData = useMemo(() => {
     if (!active) return {};
 
-    const name = `inke-${id}`;
-    const provider = new HocuspocusProvider({
+    const provider = customProvider || new HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
-      name,
+      name: `inke-${id}`
     });
 
     // const ydoc = new Y.Doc();
@@ -57,25 +57,24 @@ export function CollaborationInfo({
   status: string;
   editor: Editor;
 }) {
+
+  const usersList = (editor.storage?.collaborationCursor?.users as User[])?.filter(u => u?.name !== undefined);
+
   return (
-    <div className="novel-fixed novel-z-[9999] novel-bottom-3 novel-right-3">
+    <div className="novel-fixed novel-z-[999] novel-bottom-3 novel-right-3">
       {status === "connected" ? (
         <div className="novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center">
-          <Users className="novel-h-4 novel-text-cyan-500 novel-w-4" />
+          <Users className="novel-h-4 novel-text-purple-500 novel-w-4" />
           <span className="novel-text-xs novel-text-slate-500">
-            {editor.storage?.collaborationCursor?.users?.length}
+            {usersList?.length}
           </span>
           <div className="novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block">
             <p className="novel-gap-2 novel-mb-1 novel-items-center novel-flex novel-text-xs novel-text-slate-600 novel-pb-1 novel-border-b novel-border-slate-100">
-              <Users className="novel-h-4 novel-text-cyan-500 novel-w-4" />
-              {editor.storage.collaborationCursor.users.length} user
-              {editor.storage.collaborationCursor.users.length === 1
-                ? ""
-                : "s"}{" "}
-              online
+              <Users className="novel-h-4 novel-text-purple-500 novel-w-4" />
+              {usersList.length} user{usersList.length === 1 ? "" : "s"}{" "}online
             </p>
 
-            {editor.storage?.collaborationCursor?.users?.map((i: User) => (
+            {usersList?.map((i: User) => (
               <div
                 key={i.clientId}
                 className="novel-truncate novel-flex novel-items-center novel-gap-2 novel-cursor-pointer hover:novel-opacity-80 novel-font-mono novel-pt-1 novel-text-xs novel-text-slate-500">
@@ -89,7 +88,7 @@ export function CollaborationInfo({
                     transition: "all 0.5s",
                   }}
                 />
-                <span>{i.name}</span>
+                <span>{`${i?.name} ${localStorage?.getItem('userId') === i.clientId ? '(you)' : ''}`}</span>
               </div>
             ))}
           </div>

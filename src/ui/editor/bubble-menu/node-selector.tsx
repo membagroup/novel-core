@@ -15,8 +15,9 @@ import {
   AlignLeft,
 } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
-import { Dispatch, FC, SetStateAction } from "react";
-import { BubbleMenuItem } from ".";
+import { Dispatch, FC, SetStateAction, useRef } from "react";
+import { BubbleMenuItem } from "../interfaces";
+import { useClickOutside } from "../hooks";
 
 interface NodeSelectorProps {
   editor: Editor;
@@ -119,11 +120,17 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
     name: "Multiple",
   };
 
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
+    if (!isOpen) return;
+    setIsOpen(false);
+  });
+
   return (
     <Popover.Root open={isOpen}>
-      <div className="novel-relative novel-h-full">
+      <div className="novel-relative novel-h-full" ref={ref}>
         <Popover.Trigger
-          className="novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200"
+          className={`novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}
           onClick={() => setIsOpen(!isOpen)}>
           <span>{activeItem?.name}</span>
           <ChevronDown className="h-4 w-4" />

@@ -1,5 +1,5 @@
 import { BubbleMenu, BubbleMenuProps, isNodeSelection } from "@tiptap/react";
-import { FC, useState } from "react";
+import { FC, ReactElement, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -14,17 +14,22 @@ import { cn } from "@/lib/utils";
 import { TableSelector } from "./table-selector";
 import { AISelector } from "./ai-selectors/edit/ai-edit-selector";
 import { TranslateSelector } from "./ai-selectors/translate/ai-translate-selector";
+import { NovelContext } from "../provider";
+import { add } from "lodash";
+import React from "react";
+import { AIMenuItem, BubbleMenuItem } from "../interfaces";
 
-export interface BubbleMenuItem {
-  name: string;
-  isActive: () => boolean;
-  command: () => void;
-  icon: typeof BoldIcon;
-}
-
-type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">;
+type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
+// & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
+  const { additionalData } = useContext(NovelContext);
+  const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
+  const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
+  const CustomMenuItems = (additionalData?.customMenuItems || []) as {
+    component: (props: any) => JSX.Element, isOpen: boolean, setIsOpen: (value: React.SetStateAction<boolean>) => void
+  }[];
+
   const items: BubbleMenuItem[] = [
     {
       name: "bold",
@@ -56,6 +61,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       command: () => props.editor!.chain().focus().toggleCode().run(),
       icon: CodeIcon,
     },
+    ...bubbleMenuItems,
   ];
 
   const bubbleMenuProps: EditorBubbleMenuProps = {
@@ -63,17 +69,23 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     shouldShow: ({ state, editor }) => {
       const { selection } = state;
       const { empty } = selection;
-
+      setHasSection(!empty);
       // don't show bubble menu if:
       // - the selected node is an image
       // - the selection is empty
       // - the selection is a node selection (for drag handles)
-      if (editor.isActive("image") || empty || isNodeSelection(selection)) {
+      if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
+      if (!empty) {
+        return true;
+      }
+      // https://github.com/ueberdosis/tiptap/issues/2305
       return true;
     },
     tippyOptions: {
+      // https://atomiks.github.io/tippyjs/v6/all-props/#placement
+      placement: 'bottom',
       moveTransition: "transform 0.15s ease-out",
       onHidden: () => {
         setIsNodeSelectorOpen(false);
@@ -86,6 +98,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     },
   };
 
+  const [hasSelection, setHasSection] = useState(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
   const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState(false);
@@ -96,12 +109,14 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   return (
     <BubbleMenu
       {...bubbleMenuProps}
-      className="novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl">
+      className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
       {props.editor && (
         <>
           <AISelector
             editor={props.editor}
             isOpen={isAISelectorOpen}
+            hasSelection={hasSelection}
+            subMenuItems={aiMenuItems}
             setIsOpen={() => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -158,7 +173,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
                 type="button">
                 <item.icon
                   className={cn("novel-h-4 novel-w-4", {
-                    "novel-text-blue-500": item.isActive(),
+                    "novel-text-purple-500": item.isActive(),
                   })}
                 />
               </button>
@@ -178,7 +193,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
           />
           <TranslateSelector
             editor={props.editor}
-            isOpen={isTranslateSelectorOpen}
+            isOpen={hasSelection && isTranslateSelectorOpen}
             setIsOpen={() => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -188,6 +203,25 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               setIsLinkSelectorOpen(false);
             }}
           />
+          {CustomMenuItems.length ?
+            CustomMenuItems.map((item, index) => (
+              //  React.cloneElement(item, { key: index })
+              <item.component
+                key={index}
+                editor={props.editor}
+                isOpen={item?.isOpen}
+                setIsOpen={() => {
+                  item.setIsOpen(!item.isOpen);
+                  setIsTranslateSelectorOpen(false);
+                  setIsAISelectorOpen(false);
+                  setIsNodeSelectorOpen(false);
+                  setIsColorSelectorOpen(false);
+                  setIsTableSelectorOpen(false);
+                  setIsLinkSelectorOpen(false);
+                }}
+              />
+            )) : null
+          }
         </>
       )}
     </BubbleMenu>

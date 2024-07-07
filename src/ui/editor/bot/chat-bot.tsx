@@ -1,7 +1,7 @@
 import { Editor } from "@tiptap/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { NovelContext } from "../provider";
-import { useChat } from "ai/react";
+import { Message, useChat } from "ai/react";
 import {
   Baby,
   Bot,
@@ -12,17 +12,31 @@ import {
   Send,
   Trash,
   Trash2,
+  MessageCircle,
 } from "lucide-react";
 import Magic1 from "@/ui/icons/magic-1";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { useClickOutside } from "../hooks";
 
-export function ChatBot({ editor }: { editor: Editor }) {
+interface Props {
+  editor: Editor;
+  history: Message[];
+}
+
+export function ChatBot(props: Props) {
+  const { editor, history } = props;
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
+
+  const initialMessage = {
+    id: "start",
+    role: 'system' as 'system',
+    content: "Here, how can I help you?",
+  };
 
   const {
     messages,
@@ -35,27 +49,28 @@ export function ChatBot({ editor }: { editor: Editor }) {
   } = useChat({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { plan, system: editor.getText() },
-    initialMessages: [
-      {
-        id: "start",
-        role: "system",
-        content: "Here, ask me about your note :)",
-      },
-    ],
+    body: { ...(body || {}), system: editor.getText() },
+    headers: { ...(headers || {}), },
+    initialMessages: [initialMessage],
     onError: (err) => {
-      if (
-        err.message !== "Failed to fetch" &&
-        err.message !== "network error"
-      ) {
-        toast.error(err.message);
-      }
+      // if (
+      //   err.message !== "Failed to fetch" &&
+      //   err.message !== "network error"
+      // ) {
+      toast.error(err.message);
+      // }
     },
   });
 
   useEffect(() => {
     inputRef.current && inputRef.current?.focus();
   });
+
+  useEffect(() => {
+    if (history?.length) {
+      setMessages([initialMessage, ...history]);
+    }
+  }, [history?.length]);
 
   const handleChat = () => {
     if (isLoading) {
@@ -76,8 +91,15 @@ export function ChatBot({ editor }: { editor: Editor }) {
     setIsOpen(!isOpen);
   };
 
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
+    if (!isOpen) return;
+    setIsOpen(false);
+  });
+
   return (
     <div
+      ref={ref}
       className={
         `${isOpen ? "novel-bottom-3" : "novel-bottom-16"}` +
         " novel-fixed novel-z-[1009] novel-right-3 novel-animate-in novel-fade-in novel-slide-in-from-bottom-1"
@@ -85,17 +107,21 @@ export function ChatBot({ editor }: { editor: Editor }) {
       <motion.div
         className="novel-rounded-full"
         initial={{ borderRadius: "50%", x: 0 }}
-        animate={{ borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 }}
-        transition={{ duration: 0.2 }}>
+        animate={{
+          borderRadius: isOpen ? "0%" : "50%", x: 0
+          // x: isOpen ? 0 : 35
+        }}
+      // transition={{ duration: 0.2 }}
+      >
         {isOpen ? (
-          <div className="chat novel-border novel-relative novel-w-[350px] novel-border-slate-100  novel-bg-white novel-shadow-lg novel-rounded-lg">
+          <div className="novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg">
             <div className="msgs novel-p-2">
               <div className="flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center">
-                <Magic1 className="novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" />
-                <span className="novel-font-semibold">Chat with note</span>
+                <Magic1 className="novel-h-6 novel-w-6 translate-y-1 novel-text-purple-400" />
+                <span className="novel-font-semibold">Chat</span>
                 <div className="novel-flex novel-items-center novel-gap-3">
                   <Trash
-                    onClick={() => setMessages([])}
+                    onClick={() => setMessages([initialMessage])}
                     className="novel-float-right novel-rounded-md novel-cursor-pointer novel-w-4 novel-h-4 hover:novel-text-red-300 novel-text-slate-600"
                   />
                   <Minus
@@ -134,7 +160,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                         {m.content}
                       </ReactMarkdown>
                       <span className="novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full">
-                        <Baby className="novel-w-5 novel-h-5 novel-text-blue-400" />
+                        <Baby className="novel-w-5 novel-h-5 novel-text-purple-400" />
                       </span>
                     </motion.div>
                   ) : (
@@ -145,7 +171,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                       transition={{ duration: 0.3 }}
                       key={index}>
                       <span className="novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full">
-                        <Bot className="novel-w-5 novel-h-5 novel-text-cyan-400" />
+                        <Bot className="novel-w-5 novel-h-5 novel-text-purple-400" />
                       </span>
                       <ReactMarkdown className="novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md">
                         {m.content}
@@ -176,7 +202,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
             <div className="novel-flex novel-p-2 novel-items-end novel-justify-center">
               <Bot
                 onClick={toggleOpen}
-                className="novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-cyan-500"
+                className="novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-purple-500"
               />
               <textarea
                 ref={inputRef}
@@ -184,7 +210,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                 style={{ maxHeight: "150px", minHeight: "40px" }}
                 rows={1}
                 className="novel-flex-grow novel-text-sm novel-border-l novel-border-y novel-border-gray-100 novel-shadow-inner novel-rounded-l-lg novel-px-4 novel-py-2 focus:novel-outline-none"
-                placeholder="Ask note..."
+                placeholder="Ask..."
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
@@ -195,7 +221,7 @@ export function ChatBot({ editor }: { editor: Editor }) {
                   type="submit"
                   className="novel-px-3 novel-py-3 novel-bg-slate-100 novel-text-white novel-rounded-r-lg hover:novel-bg-slate-300">
                   {!isLoading ? (
-                    <Send className="novel-h-4 novel-w-4 novel-text-blue-400" />
+                    <Send className="novel-h-4 novel-w-4 novel-text-purple-400" />
                   ) : (
                     <PauseCircle className="novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" />
                   )}
@@ -226,9 +252,9 @@ export function ChatBot({ editor }: { editor: Editor }) {
           </div>
         ) : (
           <button
-            className="novel-p-3.5 hover:-novel-translate-x-6 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
+            className="novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full"
             onClick={toggleOpen}>
-            <Bot className="novel-h-5 novel-w-5 translate-y-1 novel-text-cyan-500" />
+            <MessageCircle className="novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" />
           </button>
         )}
       </motion.div>

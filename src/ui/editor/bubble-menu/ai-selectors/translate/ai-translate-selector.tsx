@@ -1,9 +1,10 @@
 import { Editor } from "@tiptap/core";
 import { Globe2, Languages, PauseCircle } from "lucide-react";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useRef } from "react";
 import { Command } from "cmdk";
 import { useCompletion } from "ai/react";
 import { NovelContext } from "../../../provider";
+import { useClickOutside } from "@/ui/editor/hooks";
 
 interface TranslateSelectorProps {
   editor: Editor;
@@ -19,43 +20,43 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
   const items = [
     {
       name: "English",
-      detail: "Translate into English",
+      command: "Translate into English",
     },
     {
       name: "Chinese",
-      detail: "Translate into Chinese",
+      command: "Translate into Chinese",
     },
     {
       name: "Spanish",
-      detail: "Translate into Spanish",
+      command: "Translate into Spanish",
     },
     {
       name: "French",
-      detail: "Translate into French",
+      command: "Translate into French",
     },
     {
       name: "German",
-      detail: "Translate into German",
+      command: "Translate into German",
     },
     {
       name: "Japanese",
-      detail: "Translate into Japanese",
+      command: "Translate into Japanese",
     },
     {
       name: "Russian",
-      detail: "Translate into Russian",
+      command: "Translate into Russian",
     },
     {
       name: "Korean",
-      detail: "Translate into Korean",
+      command: "Translate into Korean",
     },
     {
       name: "Arabic",
-      detail: "Translate into Arabic",
+      command: "Translate into Arabic",
     },
     {
       name: "Portuguese",
-      detail: "Translate into Portuguese",
+      command: "Translate into Portuguese",
     },
   ];
 
@@ -75,17 +76,24 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
     };
   }, [isOpen]);
 
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
 
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan },
+    body: { ...(body || {}) },
+    headers: { ...(headers || {}), },
+  });
+
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
+    if (!isOpen) return;
+    setIsOpen(false);
   });
 
   return (
-    <div className="novel-relative novel-h-full">
-      <div className="novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200">
+    <div className="novel-relative novel-h-full" ref={ref}>
+      <div className={`novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}>
         {isLoading ? (
           <button className="p-2">
             <PauseCircle
@@ -97,7 +105,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
           <button className="p-2">
             <Languages
               onClick={() => setIsOpen(!isOpen)}
-              className="novel-h-5 novel-text-stone-600 novel-w-4"
+              className="novel-h-5 novel-w-4"
             />
           </button>
         )}
@@ -113,7 +121,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
                   if (!isLoading) {
                     const { from, to } = editor.state.selection;
                     const text = editor.state.doc.textBetween(from, to, " ");
-                    complete(`${item.detail}:\n ${text}`);
+                    complete(`${item.command}:\n ${text}`);
                     setIsOpen(false);
                   }
                 }}

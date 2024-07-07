@@ -778,6 +778,9 @@ video {
 .novel-bottom-3 {
   bottom: 0.75rem;
 }
+.novel-bottom-\\[7\\.25rem\\] {
+  bottom: 7.25rem;
+}
 .novel-left-1\\/2 {
   left: 50%;
 }
@@ -808,11 +811,15 @@ video {
 .novel-z-\\[99999\\] {
   z-index: 99999;
 }
-.novel-z-\\[9999\\] {
-  z-index: 9999;
+.novel-z-\\[999\\] {
+  z-index: 999;
 }
 .novel-float-right {
   float: right;
+}
+.novel-mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 .novel-my-1 {
   margin-top: 0.25rem;
@@ -1284,25 +1291,13 @@ video {
 .novel-leading-normal {
   line-height: 1.5;
 }
-.novel-text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
-}
-.novel-text-blue-500 {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
-}
-.novel-text-cyan-400 {
-  --tw-text-opacity: 1;
-  color: rgb(34 211 238 / var(--tw-text-opacity));
-}
-.novel-text-cyan-500 {
-  --tw-text-opacity: 1;
-  color: rgb(6 182 212 / var(--tw-text-opacity));
-}
 .novel-text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+.novel-text-purple-400 {
+  --tw-text-opacity: 1;
+  color: rgb(192 132 252 / var(--tw-text-opacity));
 }
 .novel-text-purple-500 {
   --tw-text-opacity: 1;
@@ -1475,10 +1470,6 @@ video {
   --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);
   --tw-prose-th-borders: var(--tw-prose-invert-th-borders);
   --tw-prose-td-borders: var(--tw-prose-invert-td-borders);
-}
-.hover\\:-novel-translate-x-6:hover {
-  --tw-translate-x: -1.5rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .hover\\:novel-bg-red-100:hover {
   --tw-bg-opacity: 1;
@@ -1726,8 +1717,8 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-var import_react55 = require("react");
-var import_react56 = require("@tiptap/react");
+var import_react59 = require("react");
+var import_react60 = require("@tiptap/react");
 
 // src/ui/editor/plugins/upload-images.tsx
 var import_sonner = require("sonner");
@@ -1998,7 +1989,6 @@ function Magic({ className }) {
 
 // src/ui/editor/extensions/slash-command.tsx
 var import_sonner2 = require("sonner");
-var import_analytics = __toESM(require("@vercel/analytics"));
 
 // src/lib/editor.ts
 var getPrevText = (editor, {
@@ -2016,7 +2006,10 @@ var getPrevText = (editor, {
 var import_react = require("react");
 var NovelContext = (0, import_react.createContext)({
   completionApi: "/api/generate",
-  plan: "5"
+  additionalData: {},
+  lastInput: "",
+  setLastInput: (text) => {
+  }
 });
 
 // src/ui/editor/extensions/slash-command.tsx
@@ -2081,10 +2074,7 @@ var Command = import_core.Extension.create({
     ];
   }
 });
-var getSuggestionItems = ({
-  query,
-  plan
-}) => {
+var getSuggestionItems = ({ query }) => {
   return [
     {
       title: "Continue writing",
@@ -2256,15 +2246,15 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = (0, import_react2.useState)(0);
-  const { completionApi, plan } = (0, import_react2.useContext)(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = (0, import_react2.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react4.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onResponse: (response) => {
       if (response.status === 429) {
         import_sonner2.toast.error("You have reached your request limit for the day.");
-        import_analytics.default.track("Rate Limit Reached");
         return;
       }
       editor.chain().focus().deleteRange(range).run();
@@ -2282,9 +2272,6 @@ var CommandList = ({
   const selectItem = (0, import_react2.useCallback)(
     (index2) => {
       const item = items[index2];
-      import_analytics.default.track("Slash Command Used", {
-        command: item.title
-      });
       if (item) {
         if (item.title === "Continue writing") {
           if (isLoading)
@@ -2859,7 +2846,7 @@ var defaultExtensions = (collaboration) => [
       if (node.type.name === "heading") {
         return `Heading ${node.attrs.level}`;
       }
-      return "Press '/' for commands, or '??' for AI autocomplete...";
+      return "Press '++' for AI autocomplete...";
     },
     includeChildren: true
   }),
@@ -2902,7 +2889,7 @@ var defaultExtensions = (collaboration) => [
     allowTableNodeSelection: true
   }),
   import_extension_youtube.default.configure({
-    origin: "inke.app",
+    origin: "grantwriteai.com",
     controls: true,
     inline: false
   }),
@@ -2935,9 +2922,8 @@ var use_local_storage_default = useLocalStorage;
 
 // src/ui/editor/index.tsx
 var import_use_debounce = require("use-debounce");
-var import_react57 = require("ai/react");
+var import_react61 = require("ai/react");
 var import_sonner6 = require("sonner");
-var import_analytics2 = __toESM(require("@vercel/analytics"));
 
 // src/ui/editor/default-content.tsx
 var defaultEditorContent = {
@@ -2952,13 +2938,33 @@ var defaultEditorContent = {
 };
 
 // src/ui/editor/bubble-menu/index.tsx
-var import_react26 = require("@tiptap/react");
-var import_react27 = require("react");
+var import_react30 = require("@tiptap/react");
+var import_react31 = require("react");
 var import_lucide_react9 = require("lucide-react");
 
 // src/ui/editor/bubble-menu/node-selector.tsx
 var import_lucide_react3 = require("lucide-react");
 var Popover = __toESM(require("@radix-ui/react-popover"));
+var import_react7 = require("react");
+
+// src/ui/editor/hooks.ts
+var import_react6 = require("react");
+var useClickOutside = (ref2, handler) => {
+  (0, import_react6.useEffect)(() => {
+    const listener = (event) => {
+      if (!ref2.current || ref2.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+    document.addEventListener("mousedown", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+    };
+  }, [ref2, handler]);
+};
+
+// src/ui/editor/bubble-menu/node-selector.tsx
 var import_jsx_runtime4 = require("react/jsx-runtime");
 var NodeSelector = ({
   editor,
@@ -3044,11 +3050,17 @@ var NodeSelector = ({
   const activeItem = (_a = items.filter((item) => item.isActive()).pop()) != null ? _a : {
     name: "Multiple"
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Popover.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = (0, import_react7.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Popover.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
       Popover.Trigger,
       {
-        className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: activeItem == null ? void 0 : activeItem.name }),
@@ -3090,6 +3102,7 @@ var NodeSelector = ({
 
 // src/ui/editor/bubble-menu/color-selector.tsx
 var import_lucide_react4 = require("lucide-react");
+var import_react8 = require("react");
 var Popover2 = __toESM(require("@radix-ui/react-popover"));
 var import_jsx_runtime5 = require("react/jsx-runtime");
 var TEXT_COLORS = [
@@ -3208,11 +3221,17 @@ var ColorSelector = ({
   const activeFontItem = TEXT_FONT.find(
     ({ font }) => editor.isActive("textStyle", { font })
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = (0, import_react8.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
       Popover2.Trigger,
       {
-        className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
@@ -3332,24 +3351,26 @@ var ColorSelector = ({
 
 // src/ui/editor/bubble-menu/link-selector.tsx
 var import_lucide_react5 = require("lucide-react");
-var import_react6 = require("react");
+var import_react9 = require("react");
 var import_jsx_runtime6 = require("react/jsx-runtime");
-var LinkSelector = ({
-  editor,
-  isOpen,
-  setIsOpen
-}) => {
-  const inputRef = (0, import_react6.useRef)(null);
-  (0, import_react6.useEffect)(() => {
+var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
+  const inputRef = (0, import_react9.useRef)(null);
+  (0, import_react9.useEffect)(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-relative", children: [
+  const ref2 = (0, import_react9.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-relative", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
       "button",
       {
         type: "button",
-        className: "novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => {
           setIsOpen(!isOpen);
         },
@@ -3361,7 +3382,7 @@ var LinkSelector = ({
               className: cn(
                 "novel-underline novel-decoration-stone-400 novel-underline-offset-4",
                 {
-                  "novel-text-blue-500": editor.isActive("link")
+                  "novel-text-purple-500": editor.isActive("link")
                 }
               ),
               children: "Link"
@@ -3388,7 +3409,7 @@ var LinkSelector = ({
               ref: inputRef,
               type: "text",
               placeholder: "Paste a link",
-              className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none",
+              className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
               defaultValue: editor.getAttributes("link").href || ""
             }
           ),
@@ -3412,6 +3433,7 @@ var LinkSelector = ({
 
 // src/ui/editor/bubble-menu/table-selector.tsx
 var import_lucide_react6 = require("lucide-react");
+var import_react10 = require("react");
 var Popover3 = __toESM(require("@radix-ui/react-popover"));
 var import_jsx_runtime7 = require("react/jsx-runtime");
 var TABLE_COLUMN_CMDS = (editor) => {
@@ -3476,11 +3498,17 @@ var TableSelector = ({
   isOpen,
   setIsOpen
 }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = (0, import_react10.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
       Popover3.Trigger,
       {
-        className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "novel-rounded-sm novel-px-1", children: "Table" }),
@@ -3544,7 +3572,7 @@ var TableSelector = ({
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 var import_lucide_react7 = require("lucide-react");
-var import_react22 = require("react");
+var import_react26 = require("react");
 
 // ../../node_modules/.pnpm/@babel+runtime@7.24.7/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
@@ -3559,7 +3587,7 @@ function _extends() {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-dialog@1.0.0_@types+react@18.0.28_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-dialog/dist/index.module.js
-var import_react21 = require("react");
+var import_react25 = require("react");
 
 // ../../node_modules/.pnpm/@radix-ui+primitive@1.0.0/node_modules/@radix-ui/primitive/dist/index.module.js
 function $e42e1063c40fb3ef$export$b9ecd428b558ff10(originalEventHandler, ourEventHandler, { checkForDefaultPrevented = true } = {}) {
@@ -3571,7 +3599,7 @@ function $e42e1063c40fb3ef$export$b9ecd428b558ff10(originalEventHandler, ourEven
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-compose-refs@1.0.0_react@18.2.0/node_modules/@radix-ui/react-compose-refs/dist/index.module.js
-var import_react7 = require("react");
+var import_react11 = require("react");
 function $6ed0406888f73fc4$var$setRef(ref2, value) {
   if (typeof ref2 === "function")
     ref2(value);
@@ -3584,25 +3612,25 @@ function $6ed0406888f73fc4$export$43e446d32b3d21af(...refs2) {
   );
 }
 function $6ed0406888f73fc4$export$c7b2cbe3552a0d05(...refs2) {
-  return (0, import_react7.useCallback)($6ed0406888f73fc4$export$43e446d32b3d21af(...refs2), refs2);
+  return (0, import_react11.useCallback)($6ed0406888f73fc4$export$43e446d32b3d21af(...refs2), refs2);
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-context@1.0.0_react@18.2.0/node_modules/@radix-ui/react-context/dist/index.module.js
-var import_react8 = require("react");
+var import_react12 = require("react");
 function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultContext) {
-  const Context = /* @__PURE__ */ (0, import_react8.createContext)(defaultContext);
+  const Context = /* @__PURE__ */ (0, import_react12.createContext)(defaultContext);
   function Provider(props) {
     const _a = props, { children } = _a, context = __objRest(_a, ["children"]);
-    const value = (0, import_react8.useMemo)(
+    const value = (0, import_react12.useMemo)(
       () => context,
       Object.values(context)
     );
-    return /* @__PURE__ */ (0, import_react8.createElement)(Context.Provider, {
+    return /* @__PURE__ */ (0, import_react12.createElement)(Context.Provider, {
       value
     }, children);
   }
-  function useContext14(consumerName) {
-    const context = (0, import_react8.useContext)(Context);
+  function useContext16(consumerName) {
+    const context = (0, import_react12.useContext)(Context);
     if (context)
       return context;
     if (defaultContext !== void 0)
@@ -3612,13 +3640,13 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
   Provider.displayName = rootComponentName + "Provider";
   return [
     Provider,
-    useContext14
+    useContext16
   ];
 }
 function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeDeps = []) {
   let defaultContexts = [];
   function $c512c27ab02ef895$export$fd42f52fd3ae11092(rootComponentName, defaultContext) {
-    const BaseContext = /* @__PURE__ */ (0, import_react8.createContext)(defaultContext);
+    const BaseContext = /* @__PURE__ */ (0, import_react12.createContext)(defaultContext);
     const index2 = defaultContexts.length;
     defaultContexts = [
       ...defaultContexts,
@@ -3627,17 +3655,17 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     function Provider(props) {
       const _a = props, { scope, children } = _a, context = __objRest(_a, ["scope", "children"]);
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
-      const value = (0, import_react8.useMemo)(
+      const value = (0, import_react12.useMemo)(
         () => context,
         Object.values(context)
       );
-      return /* @__PURE__ */ (0, import_react8.createElement)(Context.Provider, {
+      return /* @__PURE__ */ (0, import_react12.createElement)(Context.Provider, {
         value
       }, children);
     }
-    function useContext14(consumerName, scope) {
+    function useContext16(consumerName, scope) {
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
-      const context = (0, import_react8.useContext)(Context);
+      const context = (0, import_react12.useContext)(Context);
       if (context)
         return context;
       if (defaultContext !== void 0)
@@ -3647,16 +3675,16 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     Provider.displayName = rootComponentName + "Provider";
     return [
       Provider,
-      useContext14
+      useContext16
     ];
   }
   const createScope = () => {
     const scopeContexts = defaultContexts.map((defaultContext) => {
-      return /* @__PURE__ */ (0, import_react8.createContext)(defaultContext);
+      return /* @__PURE__ */ (0, import_react12.createContext)(defaultContext);
     });
     return function useScope(scope) {
       const contexts = (scope === null || scope === void 0 ? void 0 : scope[scopeName]) || scopeContexts;
-      return (0, import_react8.useMemo)(
+      return (0, import_react12.useMemo)(
         () => ({
           [`__scope${scopeName}`]: __spreadProps(__spreadValues({}, scope), {
             [scopeName]: contexts
@@ -3692,7 +3720,7 @@ function $c512c27ab02ef895$var$composeContextScopes(...scopes) {
         const currentScope = scopeProps[`__scope${scopeName}`];
         return __spreadValues(__spreadValues({}, nextScopes), currentScope);
       }, {});
-      return (0, import_react8.useMemo)(
+      return (0, import_react12.useMemo)(
         () => ({
           [`__scope${baseScope.scopeName}`]: nextScopes1
         }),
@@ -3710,8 +3738,8 @@ function $c512c27ab02ef895$var$composeContextScopes(...scopes) {
 var $2AODx$react = __toESM(require("react"));
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-layout-effect@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-layout-effect/dist/index.module.js
-var import_react9 = require("react");
-var $9f79659886946c16$export$e5c5a5f917a5871c = Boolean(globalThis === null || globalThis === void 0 ? void 0 : globalThis.document) ? import_react9.useLayoutEffect : () => {
+var import_react13 = require("react");
+var $9f79659886946c16$export$e5c5a5f917a5871c = Boolean(globalThis === null || globalThis === void 0 ? void 0 : globalThis.document) ? import_react13.useLayoutEffect : () => {
 };
 
 // ../../node_modules/.pnpm/@radix-ui+react-id@1.0.0_react@18.2.0/node_modules/@radix-ui/react-id/dist/index.module.js
@@ -3731,16 +3759,16 @@ function $1746a345f3d73bb7$export$f680877a34711e37(deterministicId) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-controllable-state@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-controllable-state/dist/index.module.js
-var import_react11 = require("react");
+var import_react15 = require("react");
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-callback-ref@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-callback-ref/dist/index.module.js
-var import_react10 = require("react");
+var import_react14 = require("react");
 function $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(callback) {
-  const callbackRef = (0, import_react10.useRef)(callback);
-  (0, import_react10.useEffect)(() => {
+  const callbackRef = (0, import_react14.useRef)(callback);
+  (0, import_react14.useEffect)(() => {
     callbackRef.current = callback;
   });
-  return (0, import_react10.useMemo)(
+  return (0, import_react14.useMemo)(
     () => (...args) => {
       var _callbackRef$current;
       return (_callbackRef$current = callbackRef.current) === null || _callbackRef$current === void 0 ? void 0 : _callbackRef$current.call(callbackRef, ...args);
@@ -3759,7 +3787,7 @@ function $71cd76cc60e0454e$export$6f32135080cb4c3({ prop, defaultProp, onChange 
   const isControlled = prop !== void 0;
   const value1 = isControlled ? prop : uncontrolledProp;
   const handleChange = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onChange);
-  const setValue = (0, import_react11.useCallback)((nextValue) => {
+  const setValue = (0, import_react15.useCallback)((nextValue) => {
     if (isControlled) {
       const setter = nextValue;
       const value = typeof nextValue === "function" ? setter(prop) : nextValue;
@@ -3779,11 +3807,11 @@ function $71cd76cc60e0454e$export$6f32135080cb4c3({ prop, defaultProp, onChange 
   ];
 }
 function $71cd76cc60e0454e$var$useUncontrolledState({ defaultProp, onChange }) {
-  const uncontrolledState = (0, import_react11.useState)(defaultProp);
+  const uncontrolledState = (0, import_react15.useState)(defaultProp);
   const [value] = uncontrolledState;
-  const prevValueRef = (0, import_react11.useRef)(value);
+  const prevValueRef = (0, import_react15.useRef)(value);
   const handleChange = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onChange);
-  (0, import_react11.useEffect)(() => {
+  (0, import_react15.useEffect)(() => {
     if (prevValueRef.current !== value) {
       handleChange(value);
       prevValueRef.current = value;
@@ -3797,51 +3825,51 @@ function $71cd76cc60e0454e$var$useUncontrolledState({ defaultProp, onChange }) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-dismissable-layer@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-dismissable-layer/dist/index.module.js
-var import_react15 = require("react");
+var import_react19 = require("react");
 
 // ../../node_modules/.pnpm/@radix-ui+react-primitive@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-primitive/dist/index.module.js
-var import_react13 = require("react");
+var import_react17 = require("react");
 var import_react_dom = require("react-dom");
 
 // ../../node_modules/.pnpm/@radix-ui+react-slot@1.0.0_react@18.2.0/node_modules/@radix-ui/react-slot/dist/index.module.js
-var import_react12 = require("react");
-var $5e63c961fc1ce211$export$8c6ed5c666ac1360 = /* @__PURE__ */ (0, import_react12.forwardRef)((props, forwardedRef) => {
+var import_react16 = require("react");
+var $5e63c961fc1ce211$export$8c6ed5c666ac1360 = /* @__PURE__ */ (0, import_react16.forwardRef)((props, forwardedRef) => {
   const _a = props, { children } = _a, slotProps = __objRest(_a, ["children"]);
-  const childrenArray = import_react12.Children.toArray(children);
+  const childrenArray = import_react16.Children.toArray(children);
   const slottable = childrenArray.find($5e63c961fc1ce211$var$isSlottable);
   if (slottable) {
     const newElement = slottable.props.children;
     const newChildren = childrenArray.map((child) => {
       if (child === slottable) {
-        if (import_react12.Children.count(newElement) > 1)
-          return import_react12.Children.only(null);
-        return /* @__PURE__ */ (0, import_react12.isValidElement)(newElement) ? newElement.props.children : null;
+        if (import_react16.Children.count(newElement) > 1)
+          return import_react16.Children.only(null);
+        return /* @__PURE__ */ (0, import_react16.isValidElement)(newElement) ? newElement.props.children : null;
       } else
         return child;
     });
-    return /* @__PURE__ */ (0, import_react12.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
+    return /* @__PURE__ */ (0, import_react16.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
       ref: forwardedRef
-    }), /* @__PURE__ */ (0, import_react12.isValidElement)(newElement) ? /* @__PURE__ */ (0, import_react12.cloneElement)(newElement, void 0, newChildren) : null);
+    }), /* @__PURE__ */ (0, import_react16.isValidElement)(newElement) ? /* @__PURE__ */ (0, import_react16.cloneElement)(newElement, void 0, newChildren) : null);
   }
-  return /* @__PURE__ */ (0, import_react12.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
+  return /* @__PURE__ */ (0, import_react16.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
     ref: forwardedRef
   }), children);
 });
 $5e63c961fc1ce211$export$8c6ed5c666ac1360.displayName = "Slot";
-var $5e63c961fc1ce211$var$SlotClone = /* @__PURE__ */ (0, import_react12.forwardRef)((props, forwardedRef) => {
+var $5e63c961fc1ce211$var$SlotClone = /* @__PURE__ */ (0, import_react16.forwardRef)((props, forwardedRef) => {
   const _a = props, { children } = _a, slotProps = __objRest(_a, ["children"]);
-  if (/* @__PURE__ */ (0, import_react12.isValidElement)(children))
-    return /* @__PURE__ */ (0, import_react12.cloneElement)(children, __spreadProps(__spreadValues({}, $5e63c961fc1ce211$var$mergeProps(slotProps, children.props)), {
+  if (/* @__PURE__ */ (0, import_react16.isValidElement)(children))
+    return /* @__PURE__ */ (0, import_react16.cloneElement)(children, __spreadProps(__spreadValues({}, $5e63c961fc1ce211$var$mergeProps(slotProps, children.props)), {
       ref: $6ed0406888f73fc4$export$43e446d32b3d21af(forwardedRef, children.ref)
     }));
-  return import_react12.Children.count(children) > 1 ? import_react12.Children.only(null) : null;
+  return import_react16.Children.count(children) > 1 ? import_react16.Children.only(null) : null;
 });
 $5e63c961fc1ce211$var$SlotClone.displayName = "SlotClone";
 var $5e63c961fc1ce211$export$d9f1ccf0bdb05d45 = ({ children }) => {
-  return /* @__PURE__ */ (0, import_react12.createElement)(import_react12.Fragment, null, children);
+  return /* @__PURE__ */ (0, import_react16.createElement)(import_react16.Fragment, null, children);
 };
 function $5e63c961fc1ce211$var$isSlottable(child) {
-  return /* @__PURE__ */ (0, import_react12.isValidElement)(child) && child.type === $5e63c961fc1ce211$export$d9f1ccf0bdb05d45;
+  return /* @__PURE__ */ (0, import_react16.isValidElement)(child) && child.type === $5e63c961fc1ce211$export$d9f1ccf0bdb05d45;
 }
 function $5e63c961fc1ce211$var$mergeProps(slotProps, childProps) {
   const overrideProps = __spreadValues({}, childProps);
@@ -3882,13 +3910,13 @@ var $8927f6f2acc4f386$var$NODES = [
   "ul"
 ];
 var $8927f6f2acc4f386$export$250ffa63cdc0d034 = $8927f6f2acc4f386$var$NODES.reduce((primitive, node) => {
-  const Node = /* @__PURE__ */ (0, import_react13.forwardRef)((props, forwardedRef) => {
+  const Node = /* @__PURE__ */ (0, import_react17.forwardRef)((props, forwardedRef) => {
     const _a = props, { asChild } = _a, primitiveProps = __objRest(_a, ["asChild"]);
     const Comp = asChild ? $5e63c961fc1ce211$export$8c6ed5c666ac1360 : node;
-    (0, import_react13.useEffect)(() => {
+    (0, import_react17.useEffect)(() => {
       window[Symbol.for("radix-ui")] = true;
     }, []);
-    return /* @__PURE__ */ (0, import_react13.createElement)(Comp, _extends({}, primitiveProps, {
+    return /* @__PURE__ */ (0, import_react17.createElement)(Comp, _extends({}, primitiveProps, {
       ref: forwardedRef
     }));
   });
@@ -3905,10 +3933,10 @@ function $8927f6f2acc4f386$export$6d1a0317bde7de7f(target, event) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-escape-keydown@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-escape-keydown/dist/index.module.js
-var import_react14 = require("react");
+var import_react18 = require("react");
 function $addc16e1bbe58fd0$export$3a72a57244d6e765(onEscapeKeyDownProp) {
   const onEscapeKeyDown = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onEscapeKeyDownProp);
-  (0, import_react14.useEffect)(() => {
+  (0, import_react18.useEffect)(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape")
         onEscapeKeyDown(event);
@@ -3925,16 +3953,16 @@ var $5cb92bef7577960e$var$CONTEXT_UPDATE = "dismissableLayer.update";
 var $5cb92bef7577960e$var$POINTER_DOWN_OUTSIDE = "dismissableLayer.pointerDownOutside";
 var $5cb92bef7577960e$var$FOCUS_OUTSIDE = "dismissableLayer.focusOutside";
 var $5cb92bef7577960e$var$originalBodyPointerEvents;
-var $5cb92bef7577960e$var$DismissableLayerContext = /* @__PURE__ */ (0, import_react15.createContext)({
+var $5cb92bef7577960e$var$DismissableLayerContext = /* @__PURE__ */ (0, import_react19.createContext)({
   layers: /* @__PURE__ */ new Set(),
   layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
   branches: /* @__PURE__ */ new Set()
 });
-var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react15.forwardRef)((props, forwardedRef) => {
+var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react19.forwardRef)((props, forwardedRef) => {
   const _a = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a, layerProps = __objRest(_a, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
-  const context = (0, import_react15.useContext)($5cb92bef7577960e$var$DismissableLayerContext);
-  const [node1, setNode] = (0, import_react15.useState)(null);
-  const [, force] = (0, import_react15.useState)({});
+  const context = (0, import_react19.useContext)($5cb92bef7577960e$var$DismissableLayerContext);
+  const [node1, setNode] = (0, import_react19.useState)(null);
+  const [, force] = (0, import_react19.useState)({});
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
     forwardedRef,
     (node) => setNode(node)
@@ -3985,7 +4013,7 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
       onDismiss();
     }
   });
-  (0, import_react15.useEffect)(() => {
+  (0, import_react19.useEffect)(() => {
     if (!node1)
       return;
     if (disableOutsidePointerEvents) {
@@ -4006,7 +4034,7 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
     disableOutsidePointerEvents,
     context
   ]);
-  (0, import_react15.useEffect)(() => {
+  (0, import_react19.useEffect)(() => {
     return () => {
       if (!node1)
         return;
@@ -4018,12 +4046,12 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
     node1,
     context
   ]);
-  (0, import_react15.useEffect)(() => {
+  (0, import_react19.useEffect)(() => {
     const handleUpdate = () => force({});
     document.addEventListener($5cb92bef7577960e$var$CONTEXT_UPDATE, handleUpdate);
     return () => document.removeEventListener($5cb92bef7577960e$var$CONTEXT_UPDATE, handleUpdate);
   }, []);
-  return /* @__PURE__ */ (0, import_react15.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, layerProps, {
+  return /* @__PURE__ */ (0, import_react19.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, layerProps, {
     ref: composedRefs,
     style: __spreadValues({
       pointerEvents: isBodyPointerEventsDisabled ? isPointerEventsEnabled ? "auto" : "none" : void 0
@@ -4035,10 +4063,10 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
 });
 function $5cb92bef7577960e$var$usePointerDownOutside(onPointerDownOutside) {
   const handlePointerDownOutside = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onPointerDownOutside);
-  const isPointerInsideReactTreeRef = (0, import_react15.useRef)(false);
-  const handleClickRef = (0, import_react15.useRef)(() => {
+  const isPointerInsideReactTreeRef = (0, import_react19.useRef)(false);
+  const handleClickRef = (0, import_react19.useRef)(() => {
   });
-  (0, import_react15.useEffect)(() => {
+  (0, import_react19.useEffect)(() => {
     const handlePointerDown = (event) => {
       if (event.target && !isPointerInsideReactTreeRef.current) {
         let handleAndDispatchPointerDownOutsideEvent2 = function() {
@@ -4079,8 +4107,8 @@ function $5cb92bef7577960e$var$usePointerDownOutside(onPointerDownOutside) {
 }
 function $5cb92bef7577960e$var$useFocusOutside(onFocusOutside) {
   const handleFocusOutside = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onFocusOutside);
-  const isFocusInsideReactTreeRef = (0, import_react15.useRef)(false);
-  (0, import_react15.useEffect)(() => {
+  const isFocusInsideReactTreeRef = (0, import_react19.useRef)(false);
+  (0, import_react19.useEffect)(() => {
     const handleFocus = (event) => {
       if (event.target && !isFocusInsideReactTreeRef.current) {
         const eventDetail = {
@@ -4123,24 +4151,24 @@ function $5cb92bef7577960e$var$handleAndDispatchCustomEvent(name, handler, detai
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-focus-scope@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-focus-scope/dist/index.module.js
-var import_react16 = require("react");
+var import_react20 = require("react");
 var $d3863c46a17e8a28$var$AUTOFOCUS_ON_MOUNT = "focusScope.autoFocusOnMount";
 var $d3863c46a17e8a28$var$AUTOFOCUS_ON_UNMOUNT = "focusScope.autoFocusOnUnmount";
 var $d3863c46a17e8a28$var$EVENT_OPTIONS = {
   bubbles: false,
   cancelable: true
 };
-var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react16.forwardRef)((props, forwardedRef) => {
+var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react20.forwardRef)((props, forwardedRef) => {
   const _a = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a, scopeProps = __objRest(_a, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
-  const [container1, setContainer] = (0, import_react16.useState)(null);
+  const [container1, setContainer] = (0, import_react20.useState)(null);
   const onMountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onMountAutoFocusProp);
   const onUnmountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onUnmountAutoFocusProp);
-  const lastFocusedElementRef = (0, import_react16.useRef)(null);
+  const lastFocusedElementRef = (0, import_react20.useRef)(null);
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
     forwardedRef,
     (node) => setContainer(node)
   );
-  const focusScope = (0, import_react16.useRef)({
+  const focusScope = (0, import_react20.useRef)({
     paused: false,
     pause() {
       this.paused = true;
@@ -4149,7 +4177,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
       this.paused = false;
     }
   }).current;
-  (0, import_react16.useEffect)(() => {
+  (0, import_react20.useEffect)(() => {
     if (trapped) {
       let handleFocusIn2 = function(event) {
         if (focusScope.paused || !container1)
@@ -4182,7 +4210,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
     container1,
     focusScope.paused
   ]);
-  (0, import_react16.useEffect)(() => {
+  (0, import_react20.useEffect)(() => {
     if (container1) {
       $d3863c46a17e8a28$var$focusScopesStack.add(focusScope);
       const previouslyFocusedElement = document.activeElement;
@@ -4220,7 +4248,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
     onUnmountAutoFocus,
     focusScope
   ]);
-  const handleKeyDown = (0, import_react16.useCallback)((event) => {
+  const handleKeyDown = (0, import_react20.useCallback)((event) => {
     if (!loop && !trapped)
       return;
     if (focusScope.paused)
@@ -4255,7 +4283,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
     trapped,
     focusScope.paused
   ]);
-  return /* @__PURE__ */ (0, import_react16.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
+  return /* @__PURE__ */ (0, import_react20.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
     tabIndex: -1
   }, scopeProps, {
     ref: composedRefs,
@@ -4362,21 +4390,21 @@ function $d3863c46a17e8a28$var$removeLinks(items) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-portal@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-portal/dist/index.module.js
-var import_react17 = require("react");
+var import_react21 = require("react");
 var import_react_dom2 = __toESM(require("react-dom"));
-var $f1701beae083dbae$export$602eac185826482c = /* @__PURE__ */ (0, import_react17.forwardRef)((props, forwardedRef) => {
+var $f1701beae083dbae$export$602eac185826482c = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
   var _globalThis$document;
   const _a = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a, portalProps = __objRest(_a, ["container"]);
-  return container ? /* @__PURE__ */ import_react_dom2.default.createPortal(/* @__PURE__ */ (0, import_react17.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, portalProps, {
+  return container ? /* @__PURE__ */ import_react_dom2.default.createPortal(/* @__PURE__ */ (0, import_react21.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, portalProps, {
     ref: forwardedRef
   })), container) : null;
 });
 
 // ../../node_modules/.pnpm/@radix-ui+react-presence@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-presence/dist/index.module.js
-var import_react18 = require("react");
+var import_react22 = require("react");
 var import_react_dom3 = require("react-dom");
 function $fe963b355347cc68$export$3e6543de14f8614f(initialState, machine) {
-  return (0, import_react18.useReducer)((state, event) => {
+  return (0, import_react22.useReducer)((state, event) => {
     const nextState = machine[state][event];
     return nextState !== null && nextState !== void 0 ? nextState : state;
   }, initialState);
@@ -4386,19 +4414,19 @@ var $921a889cee6df7e8$export$99c2b779aa4e8b8b = (props) => {
   const presence = $921a889cee6df7e8$var$usePresence(present);
   const child = typeof children === "function" ? children({
     present: presence.isPresent
-  }) : import_react18.Children.only(children);
+  }) : import_react22.Children.only(children);
   const ref2 = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(presence.ref, child.ref);
   const forceMount = typeof children === "function";
-  return forceMount || presence.isPresent ? /* @__PURE__ */ (0, import_react18.cloneElement)(child, {
+  return forceMount || presence.isPresent ? /* @__PURE__ */ (0, import_react22.cloneElement)(child, {
     ref: ref2
   }) : null;
 };
 $921a889cee6df7e8$export$99c2b779aa4e8b8b.displayName = "Presence";
 function $921a889cee6df7e8$var$usePresence(present) {
-  const [node1, setNode] = (0, import_react18.useState)();
-  const stylesRef = (0, import_react18.useRef)({});
-  const prevPresentRef = (0, import_react18.useRef)(present);
-  const prevAnimationNameRef = (0, import_react18.useRef)("none");
+  const [node1, setNode] = (0, import_react22.useState)();
+  const stylesRef = (0, import_react22.useRef)({});
+  const prevPresentRef = (0, import_react22.useRef)(present);
+  const prevAnimationNameRef = (0, import_react22.useRef)("none");
   const initialState = present ? "mounted" : "unmounted";
   const [state, send] = $fe963b355347cc68$export$3e6543de14f8614f(initialState, {
     mounted: {
@@ -4413,7 +4441,7 @@ function $921a889cee6df7e8$var$usePresence(present) {
       MOUNT: "mounted"
     }
   });
-  (0, import_react18.useEffect)(() => {
+  (0, import_react22.useEffect)(() => {
     const currentAnimationName = $921a889cee6df7e8$var$getAnimationName(stylesRef.current);
     prevAnimationNameRef.current = state === "mounted" ? currentAnimationName : "none";
   }, [
@@ -4476,7 +4504,7 @@ function $921a889cee6df7e8$var$usePresence(present) {
       "mounted",
       "unmountSuspended"
     ].includes(state),
-    ref: (0, import_react18.useCallback)((node) => {
+    ref: (0, import_react22.useCallback)((node) => {
       if (node)
         stylesRef.current = getComputedStyle(node);
       setNode(node);
@@ -4488,10 +4516,10 @@ function $921a889cee6df7e8$var$getAnimationName(styles) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-focus-guards@1.0.0_react@18.2.0/node_modules/@radix-ui/react-focus-guards/dist/index.module.js
-var import_react19 = require("react");
+var import_react23 = require("react");
 var $3db38b7d1fb3fe6a$var$count = 0;
 function $3db38b7d1fb3fe6a$export$b7ece24a22aeda8c() {
-  (0, import_react19.useEffect)(() => {
+  (0, import_react23.useEffect)(() => {
     var _edgeGuards$, _edgeGuards$2;
     const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
     document.body.insertAdjacentElement("afterbegin", (_edgeGuards$ = edgeGuards[0]) !== null && _edgeGuards$ !== void 0 ? _edgeGuards$ : $3db38b7d1fb3fe6a$var$createFocusGuard());
@@ -4574,9 +4602,9 @@ function assignRef(ref2, value) {
 }
 
 // ../../node_modules/.pnpm/use-callback-ref@1.3.2_@types+react@18.0.28_react@18.2.0/node_modules/use-callback-ref/dist/es2015/useRef.js
-var import_react20 = require("react");
+var import_react24 = require("react");
 function useCallbackRef(initialValue, callback) {
-  var ref2 = (0, import_react20.useState)(function() {
+  var ref2 = (0, import_react24.useState)(function() {
     return {
       // value
       value: initialValue,
@@ -5332,14 +5360,14 @@ var [$5d3850c4d0b4e6c7$var$createDialogContext, $5d3850c4d0b4e6c7$export$cc70277
 var [$5d3850c4d0b4e6c7$var$DialogProvider, $5d3850c4d0b4e6c7$var$useDialogContext] = $5d3850c4d0b4e6c7$var$createDialogContext($5d3850c4d0b4e6c7$var$DIALOG_NAME);
 var $5d3850c4d0b4e6c7$export$3ddf2d174ce01153 = (props) => {
   const { __scopeDialog, children, open: openProp, defaultOpen, onOpenChange, modal = true } = props;
-  const triggerRef = (0, import_react21.useRef)(null);
-  const contentRef = (0, import_react21.useRef)(null);
+  const triggerRef = (0, import_react25.useRef)(null);
+  const contentRef = (0, import_react25.useRef)(null);
   const [open = false, setOpen] = $71cd76cc60e0454e$export$6f32135080cb4c3({
     prop: openProp,
     defaultProp: defaultOpen,
     onChange: onOpenChange
   });
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogProvider, {
+  return /* @__PURE__ */ (0, import_react25.createElement)($5d3850c4d0b4e6c7$var$DialogProvider, {
     scope: __scopeDialog,
     triggerRef,
     contentRef,
@@ -5348,7 +5376,7 @@ var $5d3850c4d0b4e6c7$export$3ddf2d174ce01153 = (props) => {
     descriptionId: $1746a345f3d73bb7$export$f680877a34711e37(),
     open,
     onOpenChange: setOpen,
-    onOpenToggle: (0, import_react21.useCallback)(
+    onOpenToggle: (0, import_react25.useCallback)(
       () => setOpen(
         (prevOpen) => !prevOpen
       ),
@@ -5366,43 +5394,43 @@ var [$5d3850c4d0b4e6c7$var$PortalProvider, $5d3850c4d0b4e6c7$var$usePortalContex
 var $5d3850c4d0b4e6c7$export$dad7c95542bacce0 = (props) => {
   const { __scopeDialog, forceMount, children, container } = props;
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$PORTAL_NAME, __scopeDialog);
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$PortalProvider, {
+  return /* @__PURE__ */ (0, import_react25.createElement)($5d3850c4d0b4e6c7$var$PortalProvider, {
     scope: __scopeDialog,
     forceMount
-  }, import_react21.Children.map(
+  }, import_react25.Children.map(
     children,
-    (child) => /* @__PURE__ */ (0, import_react21.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
+    (child) => /* @__PURE__ */ (0, import_react25.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
       present: forceMount || context.open
-    }, /* @__PURE__ */ (0, import_react21.createElement)($f1701beae083dbae$export$602eac185826482c, {
+    }, /* @__PURE__ */ (0, import_react25.createElement)($f1701beae083dbae$export$602eac185826482c, {
       asChild: true,
       container
     }, child))
   ));
 };
 var $5d3850c4d0b4e6c7$var$OVERLAY_NAME = "DialogOverlay";
-var $5d3850c4d0b4e6c7$export$bd1d06c79be19e17 = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$export$bd1d06c79be19e17 = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
   const portalContext = $5d3850c4d0b4e6c7$var$usePortalContext($5d3850c4d0b4e6c7$var$OVERLAY_NAME, props.__scopeDialog);
   const _a = props, { forceMount = portalContext.forceMount } = _a, overlayProps = __objRest(_a, ["forceMount"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$OVERLAY_NAME, props.__scopeDialog);
-  return context.modal ? /* @__PURE__ */ (0, import_react21.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
+  return context.modal ? /* @__PURE__ */ (0, import_react25.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
     present: forceMount || context.open
-  }, /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogOverlayImpl, _extends({}, overlayProps, {
+  }, /* @__PURE__ */ (0, import_react25.createElement)($5d3850c4d0b4e6c7$var$DialogOverlayImpl, _extends({}, overlayProps, {
     ref: forwardedRef
   }))) : null;
 });
-var $5d3850c4d0b4e6c7$var$DialogOverlayImpl = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogOverlayImpl = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
   const _a = props, { __scopeDialog } = _a, overlayProps = __objRest(_a, ["__scopeDialog"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$OVERLAY_NAME, __scopeDialog);
   return (
     // Make sure `Content` is scrollable even when it doesn't live inside `RemoveScroll`
     // ie. when `Overlay` and `Content` are siblings
-    /* @__PURE__ */ (0, import_react21.createElement)(Combination_default, {
+    /* @__PURE__ */ (0, import_react25.createElement)(Combination_default, {
       as: $5e63c961fc1ce211$export$8c6ed5c666ac1360,
       allowPinchZoom: true,
       shards: [
         context.contentRef
       ]
-    }, /* @__PURE__ */ (0, import_react21.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
+    }, /* @__PURE__ */ (0, import_react25.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
       "data-state": $5d3850c4d0b4e6c7$var$getState(context.open)
     }, overlayProps, {
       ref: forwardedRef,
@@ -5413,28 +5441,28 @@ var $5d3850c4d0b4e6c7$var$DialogOverlayImpl = /* @__PURE__ */ (0, import_react21
   );
 });
 var $5d3850c4d0b4e6c7$var$CONTENT_NAME = "DialogContent";
-var $5d3850c4d0b4e6c7$export$b6d9565de1e068cf = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$export$b6d9565de1e068cf = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
   const portalContext = $5d3850c4d0b4e6c7$var$usePortalContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
   const _a = props, { forceMount = portalContext.forceMount } = _a, contentProps = __objRest(_a, ["forceMount"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
-  return /* @__PURE__ */ (0, import_react21.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
+  return /* @__PURE__ */ (0, import_react25.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
     present: forceMount || context.open
-  }, context.modal ? /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentModal, _extends({}, contentProps, {
+  }, context.modal ? /* @__PURE__ */ (0, import_react25.createElement)($5d3850c4d0b4e6c7$var$DialogContentModal, _extends({}, contentProps, {
     ref: forwardedRef
-  })) : /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentNonModal, _extends({}, contentProps, {
+  })) : /* @__PURE__ */ (0, import_react25.createElement)($5d3850c4d0b4e6c7$var$DialogContentNonModal, _extends({}, contentProps, {
     ref: forwardedRef
   })));
 });
-var $5d3850c4d0b4e6c7$var$DialogContentModal = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogContentModal = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
-  const contentRef = (0, import_react21.useRef)(null);
+  const contentRef = (0, import_react25.useRef)(null);
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, context.contentRef, contentRef);
-  (0, import_react21.useEffect)(() => {
+  (0, import_react25.useEffect)(() => {
     const content = contentRef.current;
     if (content)
       return hideOthers(content);
   }, []);
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
+  return /* @__PURE__ */ (0, import_react25.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
     ref: composedRefs,
     trapFocus: context.open,
     disableOutsidePointerEvents: true,
@@ -5456,10 +5484,10 @@ var $5d3850c4d0b4e6c7$var$DialogContentModal = /* @__PURE__ */ (0, import_react2
     )
   }));
 });
-var $5d3850c4d0b4e6c7$var$DialogContentNonModal = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogContentNonModal = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
-  const hasInteractedOutsideRef = (0, import_react21.useRef)(false);
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
+  const hasInteractedOutsideRef = (0, import_react25.useRef)(false);
+  return /* @__PURE__ */ (0, import_react25.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
     ref: forwardedRef,
     trapFocus: false,
     disableOutsidePointerEvents: false,
@@ -5486,19 +5514,19 @@ var $5d3850c4d0b4e6c7$var$DialogContentNonModal = /* @__PURE__ */ (0, import_rea
     }
   }));
 });
-var $5d3850c4d0b4e6c7$var$DialogContentImpl = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogContentImpl = /* @__PURE__ */ (0, import_react25.forwardRef)((props, forwardedRef) => {
   const _a = props, { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus } = _a, contentProps = __objRest(_a, ["__scopeDialog", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, __scopeDialog);
-  const contentRef = (0, import_react21.useRef)(null);
+  const contentRef = (0, import_react25.useRef)(null);
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, contentRef);
   $3db38b7d1fb3fe6a$export$b7ece24a22aeda8c();
-  return /* @__PURE__ */ (0, import_react21.createElement)(import_react21.Fragment, null, /* @__PURE__ */ (0, import_react21.createElement)($d3863c46a17e8a28$export$20e40289641fbbb6, {
+  return /* @__PURE__ */ (0, import_react25.createElement)(import_react25.Fragment, null, /* @__PURE__ */ (0, import_react25.createElement)($d3863c46a17e8a28$export$20e40289641fbbb6, {
     asChild: true,
     loop: true,
     trapped: trapFocus,
     onMountAutoFocus: onOpenAutoFocus,
     onUnmountAutoFocus: onCloseAutoFocus
-  }, /* @__PURE__ */ (0, import_react21.createElement)($5cb92bef7577960e$export$177fb62ff3ec1f22, _extends({
+  }, /* @__PURE__ */ (0, import_react25.createElement)($5cb92bef7577960e$export$177fb62ff3ec1f22, _extends({
     role: "dialog",
     id: context.contentId,
     "aria-describedby": context.descriptionId,
@@ -5837,65 +5865,84 @@ var ye = () => {
 var xe = { position: "absolute", width: "1px", height: "1px", padding: "0", margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", borderWidth: "0" };
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
-var import_react23 = require("ai/react");
+var import_react27 = require("ai/react");
 var import_jsx_runtime8 = require("react/jsx-runtime");
-var AISelector = ({
-  editor,
-  isOpen,
-  setIsOpen
-}) => {
+var AISelector = (props) => {
+  const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
+  const context = (0, import_react26.useContext)(NovelContext);
   const items = [
     {
       name: "Improve writing",
-      detail: "Improve writing",
+      command: "Improve writing",
       icon: import_lucide_react7.Wand
     },
     {
       name: "Fix spelling & grammar",
-      detail: "Please correct spelling and grammar errors in the following text",
+      command: "Please correct spelling and grammar errors in the following text",
       icon: import_lucide_react7.CheckCheck
     },
     {
       name: "Make shorter",
-      detail: "Make shorter",
+      command: "Make shorter",
       icon: import_lucide_react7.ListMinus
     },
     {
       name: "Make longer",
-      detail: "Make longer",
+      command: "Make longer",
       icon: import_lucide_react7.ListPlus
     },
     {
       name: "Writing suggestions",
-      detail: "Provide suggestions and improvements for the writing",
+      command: "Provide suggestions and improvements for the writing",
       icon: import_lucide_react7.Beef
     },
     {
       name: "Enhance vocabulary",
-      detail: "Suggest synonyms and expand vocabulary usage",
+      command: "Suggest synonyms and expand vocabulary usage",
       icon: import_lucide_react7.Book
     },
     {
       name: "Generate titles",
-      detail: "Automatically generate compelling titles for the content",
+      command: "Automatically generate compelling titles for the content",
       icon: import_lucide_react7.Heading1
     },
     {
       name: "Templates & structure",
-      detail: "Offer templates and structure suggestions to improve the writing organization",
+      command: "Offer templates and structure suggestions to improve the writing organization",
       icon: import_lucide_react7.LayoutPanelTop
     },
     {
       name: "Fix repetitive",
-      detail: "Identify and fix repetitive words or phrases in the content",
+      command: "Identify and fix repetitive words or phrases in the content",
       icon: import_lucide_react7.Scissors
-    }
+    },
+    ...subMenuItems || []
   ];
-  const inputRef = (0, import_react22.useRef)(null);
-  (0, import_react22.useEffect)(() => {
+  const inputRef = (0, import_react26.useRef)(null);
+  const handleSubmit = (input) => {
+    if (!input.value)
+      return;
+    const { from, to } = editor.state.selection;
+    const text = editor.state.doc.textBetween(from, to, " ");
+    complete(`${input.value}:
+ ${text}`);
+    setIsOpen(false);
+  };
+  (0, import_react26.useEffect)(() => {
+    if (isOpen && context.lastInput && (inputRef == null ? void 0 : inputRef.current)) {
+      inputRef.current.value = context.lastInput;
+    }
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
+        if (e.key === "Enter" && (inputRef == null ? void 0 : inputRef.current)) {
+          handleSubmit(inputRef.current);
+        }
+      } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
+        stop2();
+        if (e.key === "Escape") {
+          setIsOpen(false);
+        }
       }
     };
     if (isOpen) {
@@ -5907,18 +5954,29 @@ var AISelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  (0, import_react22.useEffect)(() => {
-    var _a;
-    inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
+  const ref2 = (0, import_react26.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    if (inputRef.current) {
+      context.setLastInput(inputRef.current.value || "");
+    }
+    setIsOpen(false);
   });
-  const { completionApi, plan } = (0, import_react22.useContext)(NovelContext);
-  const { complete, isLoading, stop: stop2 } = (0, import_react23.useCompletion)({
+  (0, import_react26.useEffect)(() => {
+    var _a;
+    if (!hasSelection)
+      inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
+  });
+  const { completionApi, additionalData: { body, headers } } = (0, import_react26.useContext)(NovelContext);
+  const { complete, isLoading, stop: stop2 } = (0, import_react27.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan }
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-cyan-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -5930,7 +5988,7 @@ var AISelector = ({
           editor.chain().blur().run();
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.SprayCan, { className: "novel-h-5 novel-w-5" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Bot, { className: "novel-h-5 novel-w-5" }),
           isLoading ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             import_lucide_react7.PauseCircle,
             {
@@ -5948,13 +6006,7 @@ var AISelector = ({
           onSubmit: (e) => {
             e.preventDefault();
             const input = e.currentTarget[0];
-            if (!input.value)
-              return;
-            const { from, to } = editor.state.selection;
-            const text = editor.state.doc.textBetween(from, to, " ");
-            complete(`${input.value}:
- ${text}`);
-            setIsOpen(false);
+            handleSubmit(input);
           },
           className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
           children: [
@@ -5963,43 +6015,43 @@ var AISelector = ({
               {
                 ref: inputRef,
                 type: "text",
-                placeholder: "Make this para funnier...",
-                className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none",
+                placeholder: "Enter a prompt or question...",
+                className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
                 defaultValue: editor.getAttributes("link").href || ""
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }) })
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      hasSelection ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
         Le.Item,
         {
           onSelect: () => {
             if (!isLoading) {
               const { from, to } = editor.state.selection;
               const text = editor.state.doc.textBetween(from, to, " ");
-              complete(`${item.detail}:
+              complete(`${item.command}:
  ${text}`);
               setIsOpen(false);
             }
           },
           className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
           children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: item.name })
           ] })
         },
         index2
-      )) }) })
+      )) }) }) : null
     ] })
   ] });
 };
 
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-selector.tsx
 var import_lucide_react8 = require("lucide-react");
-var import_react24 = require("react");
-var import_react25 = require("ai/react");
+var import_react28 = require("react");
+var import_react29 = require("ai/react");
 var import_jsx_runtime9 = require("react/jsx-runtime");
 var TranslateSelector = ({
   editor,
@@ -6009,46 +6061,46 @@ var TranslateSelector = ({
   const items = [
     {
       name: "English",
-      detail: "Translate into English"
+      command: "Translate into English"
     },
     {
       name: "Chinese",
-      detail: "Translate into Chinese"
+      command: "Translate into Chinese"
     },
     {
       name: "Spanish",
-      detail: "Translate into Spanish"
+      command: "Translate into Spanish"
     },
     {
       name: "French",
-      detail: "Translate into French"
+      command: "Translate into French"
     },
     {
       name: "German",
-      detail: "Translate into German"
+      command: "Translate into German"
     },
     {
       name: "Japanese",
-      detail: "Translate into Japanese"
+      command: "Translate into Japanese"
     },
     {
       name: "Russian",
-      detail: "Translate into Russian"
+      command: "Translate into Russian"
     },
     {
       name: "Korean",
-      detail: "Translate into Korean"
+      command: "Translate into Korean"
     },
     {
       name: "Arabic",
-      detail: "Translate into Arabic"
+      command: "Translate into Arabic"
     },
     {
       name: "Portuguese",
-      detail: "Translate into Portuguese"
+      command: "Translate into Portuguese"
     }
   ];
-  (0, import_react24.useEffect)(() => {
+  (0, import_react28.useEffect)(() => {
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
@@ -6063,14 +6115,21 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi, plan } = (0, import_react24.useContext)(NovelContext);
-  const { complete, isLoading, stop: stop2 } = (0, import_react25.useCompletion)({
+  const { completionApi, additionalData: { body, headers } } = (0, import_react28.useContext)(NovelContext);
+  const { complete, isLoading, stop: stop2 } = (0, import_react29.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan }
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+  const ref2 = (0, import_react28.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
       import_lucide_react8.PauseCircle,
       {
         onClick: stop2,
@@ -6080,7 +6139,7 @@ var TranslateSelector = ({
       import_lucide_react8.Languages,
       {
         onClick: () => setIsOpen(!isOpen),
-        className: "novel-h-5 novel-text-stone-600 novel-w-4"
+        className: "novel-h-5 novel-w-4"
       }
     ) }) }),
     isOpen && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
@@ -6090,7 +6149,7 @@ var TranslateSelector = ({
           if (!isLoading) {
             const { from, to } = editor.state.selection;
             const text = editor.state.doc.textBetween(from, to, " ");
-            complete(`${item.detail}:
+            complete(`${item.command}:
  ${text}`);
             setIsOpen(false);
           }
@@ -6106,6 +6165,10 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 var import_jsx_runtime10 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
+  const { additionalData } = (0, import_react31.useContext)(NovelContext);
+  const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
+  const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
+  const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
   const items = [
     {
       name: "bold",
@@ -6136,18 +6199,25 @@ var EditorBubbleMenu = (props) => {
       isActive: () => props.editor.isActive("code"),
       command: () => props.editor.chain().focus().toggleCode().run(),
       icon: import_lucide_react9.CodeIcon
-    }
+    },
+    ...bubbleMenuItems
   ];
   const bubbleMenuProps = __spreadProps(__spreadValues({}, props), {
     shouldShow: ({ state, editor }) => {
       const { selection } = state;
       const { empty } = selection;
-      if (editor.isActive("image") || empty || (0, import_react26.isNodeSelection)(selection)) {
+      setHasSection(!empty);
+      if (editor.isActive("image") || (0, import_react30.isNodeSelection)(selection)) {
         return false;
+      }
+      if (!empty) {
+        return true;
       }
       return true;
     },
     tippyOptions: {
+      // https://atomiks.github.io/tippyjs/v6/all-props/#placement
+      placement: "bottom",
       moveTransition: "transform 0.15s ease-out",
       onHidden: () => {
         setIsNodeSelectorOpen(false);
@@ -6159,22 +6229,25 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
-  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = (0, import_react27.useState)(false);
-  const [isColorSelectorOpen, setIsColorSelectorOpen] = (0, import_react27.useState)(false);
-  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = (0, import_react27.useState)(false);
-  const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react27.useState)(false);
-  const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react27.useState)(false);
-  const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react27.useState)(false);
+  const [hasSelection, setHasSection] = (0, import_react31.useState)(false);
+  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = (0, import_react31.useState)(false);
+  const [isColorSelectorOpen, setIsColorSelectorOpen] = (0, import_react31.useState)(false);
+  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = (0, import_react31.useState)(false);
+  const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react31.useState)(false);
+  const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react31.useState)(false);
+  const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react31.useState)(false);
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-    import_react26.BubbleMenu,
+    import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
-      className: "novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl",
+      className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           AISelector,
           {
             editor: props.editor,
             isOpen: isAISelectorOpen,
+            hasSelection,
+            subMenuItems: aiMenuItems,
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -6240,7 +6313,7 @@ var EditorBubbleMenu = (props) => {
               item.icon,
               {
                 className: cn("novel-h-4 novel-w-4", {
-                  "novel-text-blue-500": item.isActive()
+                  "novel-text-purple-500": item.isActive()
                 })
               }
             )
@@ -6266,7 +6339,7 @@ var EditorBubbleMenu = (props) => {
           TranslateSelector,
           {
             editor: props.editor,
-            isOpen: isTranslateSelectorOpen,
+            isOpen: hasSelection && isTranslateSelectorOpen,
             setIsOpen: () => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -6276,7 +6349,27 @@ var EditorBubbleMenu = (props) => {
               setIsLinkSelectorOpen(false);
             }
           }
-        )
+        ),
+        CustomMenuItems.length ? CustomMenuItems.map((item, index2) => (
+          //  React.cloneElement(item, { key: index })
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            item.component,
+            {
+              editor: props.editor,
+              isOpen: item == null ? void 0 : item.isOpen,
+              setIsOpen: () => {
+                item.setIsOpen(!item.isOpen);
+                setIsTranslateSelectorOpen(false);
+                setIsAISelectorOpen(false);
+                setIsNodeSelectorOpen(false);
+                setIsColorSelectorOpen(false);
+                setIsTableSelectorOpen(false);
+                setIsLinkSelectorOpen(false);
+              }
+            },
+            index2
+          )
+        )) : null
       ] })
     })
   );
@@ -8583,8 +8676,8 @@ function getOverlapSize(points1, points2) {
 }
 
 // ../../node_modules/.pnpm/react-moveable@0.54.1/node_modules/react-moveable/dist/moveable.esm.js
-var React9 = __toESM(require("react"));
-var import_react29 = require("react");
+var React10 = __toESM(require("react"));
+var import_react33 = require("react");
 
 // ../../node_modules/.pnpm/gesto@1.19.4/node_modules/gesto/dist/gesto.esm.js
 var extendStatics3 = function(d, b) {
@@ -9368,7 +9461,7 @@ function styled(css3) {
 var styled_esm_default = styled;
 
 // ../../node_modules/.pnpm/react-css-styled@1.1.9/node_modules/react-css-styled/dist/styled.esm.js
-var import_react28 = require("react");
+var import_react32 = require("react");
 var __assign6 = function() {
   __assign6 = Object.assign || function __assign8(t2) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9396,13 +9489,13 @@ function __rest2(s, e) {
 function styled2(Tag, css3) {
   var injector = styled_esm_default(css3);
   var cssId = injector.className;
-  return (0, import_react28.forwardRef)(function(props, ref2) {
+  return (0, import_react32.forwardRef)(function(props, ref2) {
     var _a = props.className, className = _a === void 0 ? "" : _a, cspNonce = props.cspNonce, attributes = __rest2(props, ["className", "cspNonce"]);
-    var targetRef = (0, import_react28.useRef)();
-    (0, import_react28.useImperativeHandle)(ref2, function() {
+    var targetRef = (0, import_react32.useRef)();
+    (0, import_react32.useImperativeHandle)(ref2, function() {
       return targetRef.current;
     }, []);
-    (0, import_react28.useEffect)(function() {
+    (0, import_react32.useEffect)(function() {
       var injectResult = injector.inject(targetRef.current, {
         nonce: props.cspNonce
       });
@@ -9410,7 +9503,7 @@ function styled2(Tag, css3) {
         injectResult.destroy();
       };
     }, []);
-    return (0, import_react28.createElement)(Tag, __assign6({
+    return (0, import_react32.createElement)(Tag, __assign6({
       "ref": targetRef,
       "data-styled-id": cssId,
       "className": "".concat(className, " ").concat(cssId)
@@ -10492,7 +10585,7 @@ function startChildDist(moveable, child, parentDatas, childEvent) {
   childEvent.datas.originalY = originalY;
   return childEvent;
 }
-function renderDirectionControlsByInfos(moveable, ableName, renderDirections, React11) {
+function renderDirectionControlsByInfos(moveable, ableName, renderDirections, React12) {
   var _a = moveable.getState(), renderPoses = _a.renderPoses, rotationRad = _a.rotation, direction = _a.direction;
   var zoom = getProps(moveable.props, ableName).zoom;
   var degRotation = absDegree(rotationRad / Math.PI * 180);
@@ -10519,60 +10612,60 @@ function renderDirectionControlsByInfos(moveable, ableName, renderDirections, Re
     getKeys(data).forEach(function(name) {
       dataAttrs["data-".concat(name)] = data[name];
     });
-    return React11.createElement("div", __assign7({ className: prefix.apply(void 0, __spreadArray2(["control", "direction", dir, ableName], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir }, dataAttrs, { key: "direction-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
+    return React12.createElement("div", __assign7({ className: prefix.apply(void 0, __spreadArray2(["control", "direction", dir, ableName], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir }, dataAttrs, { key: "direction-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
       return renderPoses[index2];
     })), false)) }));
   });
 }
-function renderDirectionControls(moveable, defaultDirections, ableName, React11) {
+function renderDirectionControls(moveable, defaultDirections, ableName, React12) {
   var _a = getProps(moveable.props, ableName), _b = _a.renderDirections, directions = _b === void 0 ? defaultDirections : _b, displayAroundControls = _a.displayAroundControls;
   if (!directions) {
     return [];
   }
   var renderDirections = directions === true ? DIRECTIONS : directions;
-  return __spreadArray2(__spreadArray2([], __read(displayAroundControls ? renderAroundControls(moveable, React11, ableName, renderDirections) : []), false), __read(renderDirectionControlsByInfos(moveable, ableName, renderDirections.map(function(dir) {
+  return __spreadArray2(__spreadArray2([], __read(displayAroundControls ? renderAroundControls(moveable, React12, ableName, renderDirections) : []), false), __read(renderDirectionControlsByInfos(moveable, ableName, renderDirections.map(function(dir) {
     return {
       data: {},
       classNames: [],
       dir
     };
-  }), React11)), false);
+  }), React12)), false);
 }
-function renderLine(React11, direction, pos1, pos2, zoom, key) {
+function renderLine(React12, direction, pos1, pos2, zoom, key) {
   var classNames = [];
   for (var _i = 6; _i < arguments.length; _i++) {
     classNames[_i - 6] = arguments[_i];
   }
   var rad = getRad(pos1, pos2);
   var rotation = direction ? throttle(rad / Math.PI * 180, 15) % 180 : -1;
-  return React11.createElement("div", { key: "line-".concat(key), className: prefix.apply(void 0, __spreadArray2(["line", "direction", direction ? "edge" : "", direction], __read(classNames), false)), "data-rotation": rotation, "data-line-key": key, "data-direction": direction, style: getLineStyle(pos1, pos2, zoom, rad) });
+  return React12.createElement("div", { key: "line-".concat(key), className: prefix.apply(void 0, __spreadArray2(["line", "direction", direction ? "edge" : "", direction], __read(classNames), false)), "data-rotation": rotation, "data-line-key": key, "data-direction": direction, style: getLineStyle(pos1, pos2, zoom, rad) });
 }
-function renderEdgeLines(React11, ableName, edge, poses, zoom) {
+function renderEdgeLines(React12, ableName, edge, poses, zoom) {
   var directions = edge === true ? DIRECTIONS4 : edge;
   return directions.map(function(direction, i) {
     var _a = __read(DIRECTION_INDEXES[direction], 2), index1 = _a[0], index2 = _a[1];
     if (index2 == null) {
       return;
     }
-    return renderLine(React11, direction, poses[index1], poses[index2], zoom, "".concat(ableName, "Edge").concat(i), ableName);
+    return renderLine(React12, direction, poses[index1], poses[index2], zoom, "".concat(ableName, "Edge").concat(i), ableName);
   }).filter(Boolean);
 }
 function getRenderDirections(ableName) {
-  return function(moveable, React11) {
+  return function(moveable, React12) {
     var edge = getProps(moveable.props, ableName).edge;
     if (edge && (edge === true || edge.length)) {
-      return __spreadArray2(__spreadArray2([], __read(renderEdgeLines(React11, ableName, edge, moveable.getState().renderPoses, moveable.props.zoom)), false), __read(renderDiagonalDirections(moveable, ableName, React11)), false);
+      return __spreadArray2(__spreadArray2([], __read(renderEdgeLines(React12, ableName, edge, moveable.getState().renderPoses, moveable.props.zoom)), false), __read(renderDiagonalDirections(moveable, ableName, React12)), false);
     }
-    return renderAllDirections(moveable, ableName, React11);
+    return renderAllDirections(moveable, ableName, React12);
   };
 }
-function renderAllDirections(moveable, ableName, React11) {
-  return renderDirectionControls(moveable, DIRECTIONS, ableName, React11);
+function renderAllDirections(moveable, ableName, React12) {
+  return renderDirectionControls(moveable, DIRECTIONS, ableName, React12);
 }
-function renderDiagonalDirections(moveable, ableName, React11) {
-  return renderDirectionControls(moveable, ["nw", "ne", "sw", "se"], ableName, React11);
+function renderDiagonalDirections(moveable, ableName, React12) {
+  return renderDirectionControls(moveable, ["nw", "ne", "sw", "se"], ableName, React12);
 }
-function renderAroundControls(moveable, React11, ableName, renderDirections) {
+function renderAroundControls(moveable, React12, ableName, renderDirections) {
   var renderState = moveable.renderState;
   if (!renderState.renderDirectionMap) {
     renderState.renderDirectionMap = {};
@@ -10592,7 +10685,7 @@ function renderAroundControls(moveable, React11, ableName, renderDirections) {
     if (ableName) {
       classNames.push("direction", ableName);
     }
-    return React11.createElement("div", { className: prefix.apply(void 0, __spreadArray2([], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir, key: "direction-around-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
+    return React12.createElement("div", { className: prefix.apply(void 0, __spreadArray2([], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir, key: "direction-around-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
       return renderPoses[index2];
     })), false)) });
   });
@@ -12110,7 +12203,7 @@ var Draggable = {
   requestChildStyle: function() {
     return ["left", "top", "right", "bottom"];
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, hideThrottleDragRotateLine = _a.hideThrottleDragRotateLine, throttleDragRotate = _a.throttleDragRotate, zoom = _a.zoom;
     var _b = moveable.getState(), dragInfo = _b.dragInfo, beforeOrigin = _b.beforeOrigin;
     if (hideThrottleDragRotateLine || !throttleDragRotate || !dragInfo) {
@@ -12122,7 +12215,7 @@ var Draggable = {
     }
     var width = getDistSize(dist);
     var rad = getRad(dist, [0, 0]);
-    return [React11.createElement("div", { className: prefix("line", "horizontal", "dragline", "dashed"), key: "dragRotateGuideline", style: {
+    return [React12.createElement("div", { className: prefix("line", "horizontal", "dragline", "dashed"), key: "dragRotateGuideline", style: {
       width: "".concat(width, "px"),
       transform: "translate(".concat(beforeOrigin[0], "px, ").concat(beforeOrigin[1], "px) rotate(").concat(rad, "rad) scaleY(").concat(zoom, ")")
     } })];
@@ -13073,7 +13166,7 @@ var Rotatable = {
     }
     return prefix("view-rotation-dragging");
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = getProps(moveable.props, "rotatable"), rotatable = _a.rotatable, rotationPosition = _a.rotationPosition, zoom = _a.zoom, renderDirections = _a.renderDirections, rotateAroundControls = _a.rotateAroundControls, resolveAblesWithRotatable = _a.resolveAblesWithRotatable;
     var _b = moveable.getState(), renderPoses = _b.renderPoses, direction = _b.direction;
     if (!rotatable) {
@@ -13083,16 +13176,16 @@ var Rotatable = {
     var jsxs18 = [];
     positions.forEach(function(_a2, i) {
       var _b2 = __read(_a2, 2), pos = _b2[0], rad = _b2[1];
-      jsxs18.push(React11.createElement(
+      jsxs18.push(React12.createElement(
         "div",
         { key: "rotation".concat(i), className: prefix("rotation"), style: {
           // tslint:disable-next-line: max-line-length
           transform: "translate(-50%) translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rad, "rad)")
         } },
-        React11.createElement("div", { className: prefix("line rotation-line"), style: {
+        React12.createElement("div", { className: prefix("line rotation-line"), style: {
           transform: "scaleX(".concat(zoom, ")")
         } }),
-        React11.createElement("div", { className: prefix("control rotation-control"), style: {
+        React12.createElement("div", { className: prefix("control rotation-control"), style: {
           transform: "translate(0.5px) scale(".concat(zoom, ")")
         } })
       ));
@@ -13116,10 +13209,10 @@ var Rotatable = {
           };
         });
       }
-      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderDirectionControlsByInfos(moveable, "rotatable", directionControlInfos, React11)), false));
+      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderDirectionControlsByInfos(moveable, "rotatable", directionControlInfos, React12)), false));
     }
     if (rotateAroundControls) {
-      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderAroundControls(moveable, React11)), false));
+      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderAroundControls(moveable, React12)), false));
     }
     return jsxs18;
   },
@@ -13456,27 +13549,27 @@ var Rotatable = {
     };
   }
 };
-function renderGuideline(info, React11) {
+function renderGuideline(info, React12) {
   var _a;
   var direction = info.direction, classNames = info.classNames, size = info.size, pos = info.pos, zoom = info.zoom, key = info.key;
   var isHorizontal = direction === "horizontal";
   var scaleType = isHorizontal ? "Y" : "X";
-  return React11.createElement("div", {
+  return React12.createElement("div", {
     key,
     className: classNames.join(" "),
     style: (_a = {}, _a[isHorizontal ? "width" : "height"] = "".concat(size), _a.transform = "translate(".concat(pos[0], ", ").concat(pos[1], ") translate").concat(scaleType, "(-50%) scale").concat(scaleType, "(").concat(zoom, ")"), _a)
   });
 }
-function renderInnerGuideline(info, React11) {
+function renderInnerGuideline(info, React12) {
   return renderGuideline(__assign7(__assign7({}, info), { classNames: __spreadArray2([
     prefix("line", "guideline", info.direction)
   ], __read(info.classNames), false).filter(function(className) {
     return className;
   }), size: info.size || "".concat(info.sizeValue, "px"), pos: info.pos || info.posValue.map(function(v) {
     return "".concat(throttle(v, 0.1), "px");
-  }) }), React11);
+  }) }), React12);
 }
-function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size, index2, React11) {
+function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size, index2, React12) {
   var zoom = moveable.props.zoom;
   return snapPoses.map(function(_a, i) {
     var type = _a.type, pos = _a.pos;
@@ -13490,10 +13583,10 @@ function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size
       sizeValue: size,
       zoom,
       direction
-    }, React11);
+    }, React12);
   });
 }
-function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, React11) {
+function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, React12) {
   var _a = moveable.props, zoom = _a.zoom, isDisplayInnerSnapDigit = _a.isDisplayInnerSnapDigit;
   var mainNames = type === "horizontal" ? VERTICAL_NAMES_MAP : HORIZONTAL_NAMES_MAP;
   var targetStart = targetRect[mainNames.start];
@@ -13523,10 +13616,10 @@ function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, Rea
       posValue: renderPos,
       sizeValue: size,
       zoom
-    }, React11);
+    }, React12);
   });
 }
-function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, className, React11) {
+function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, className, React12) {
   var _a;
   var _b = moveable.props, _c = _b.snapDigit, snapDigit = _c === void 0 ? 0 : _c, _d = _b.isDisplaySnapDigit, isDisplaySnapDigit = _d === void 0 ? true : _d, _e = _b.snapDistFormat, snapDistFormat = _e === void 0 ? function(v, type2) {
     if (type2 === "vertical") {
@@ -13538,7 +13631,7 @@ function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, class
   var sizeName = type === "vertical" ? "height" : "width";
   var absGap = Math.abs(gap);
   var snapSize = isDisplaySnapDigit ? parseFloat(absGap.toFixed(snapDigit)) : 0;
-  return React11.createElement(
+  return React12.createElement(
     "div",
     { key: "".concat(type, "-").concat(lineType, "-guideline-").concat(index2), className: prefix("guideline-group", type), style: (_a = {
       left: "".concat(renderPos[0], "px"),
@@ -13551,8 +13644,8 @@ function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, class
       posValue: [0, 0],
       sizeValue: absGap,
       zoom
-    }, React11),
-    React11.createElement("div", { className: prefix("size-value", "gap"), style: {
+    }, React12),
+    React12.createElement("div", { className: prefix("size-value", "gap"), style: {
       transform: "translate".concat(scaleType, "(-50%) scale(").concat(zoom, ")")
     } }, snapSize > 0 ? snapDistFormat(snapSize, type) : "")
   );
@@ -13619,7 +13712,7 @@ function groupByElementGuidelines(type, guidelines, targetRect, isDisplayInnerSn
     };
   });
 }
-function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, React11) {
+function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, React12) {
   var isDisplayInnerSnapDigit = moveable.props.isDisplayInnerSnapDigit;
   var rendered = [];
   ["vertical", "horizontal"].forEach(function(type) {
@@ -13644,7 +13737,7 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
           var renderPos = [0, 0];
           renderPos[index2] = targetPos[index2] + prevRect[mainNames.start] - targetStart - size;
           renderPos[otherIndex] = sidePos;
-          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React11));
+          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React12));
         }
         prevRect = nextRect;
       });
@@ -13656,7 +13749,7 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
           var renderPos = [0, 0];
           renderPos[index2] = targetPos[index2] + prevRect[mainNames.end] - targetStart;
           renderPos[otherIndex] = sidePos;
-          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React11));
+          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React12));
         }
         prevRect = nextRect;
       });
@@ -13670,14 +13763,14 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
         renderPos1[otherIndex] = sidePos;
         renderPos2[index2] = targetPos[index2] + targetEnd - targetStart;
         renderPos2[otherIndex] = sidePos;
-        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size1, renderPos1, guideline.className, React11));
-        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size2, renderPos2, guideline.className, React11));
+        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size1, renderPos1, guideline.className, React12));
+        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size2, renderPos2, guideline.className, React12));
       });
     });
   });
   return rendered;
 }
-function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React11) {
+function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React12) {
   var rendered = [];
   ["horizontal", "vertical"].forEach(function(type) {
     var nextGuidelines = guidelines.filter(function(guideline) {
@@ -13716,7 +13809,7 @@ function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React1
           return;
         }
         renderPos[otherIndex] += sideCenterPos - targetSideStart;
-        rendered.push(renderDigitLine(moveable, index2 ? "vertical" : "horizontal", "gap", rendered.length, gap, renderPos, className, React11));
+        rendered.push(renderDigitLine(moveable, index2 ? "vertical" : "horizontal", "gap", rendered.length, gap, renderPos, className, React12));
       });
     });
   });
@@ -14423,7 +14516,7 @@ var Snappable = {
   css: [
     ":host {\n--bounds-color: #d66;\n}\n.guideline {\npointer-events: none;\nz-index: 2;\n}\n.guideline.bounds {\nbackground: #d66;\nbackground: var(--bounds-color);\n}\n.guideline-group {\nposition: absolute;\ntop: 0;\nleft: 0;\n}\n.guideline-group .size-value {\nposition: absolute;\ncolor: #f55;\nfont-size: 12px;\nfont-size: calc(12px * var(--zoom));\nfont-weight: bold;\n}\n.guideline-group.horizontal .size-value {\ntransform-origin: 50% 100%;\ntransform: translateX(-50%);\nleft: 50%;\nbottom: 5px;\nbottom: calc(2px + 3px * var(--zoom));\n}\n.guideline-group.vertical .size-value {\ntransform-origin: 0% 50%;\ntop: 50%;\ntransform: translateY(-50%);\nleft: 5px;\nleft: calc(2px + 3px * var(--zoom));\n}\n.guideline.gap {\nbackground: #f55;\n}\n.size-value.gap {\ncolor: #f55;\n}\n"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var state = moveable.state;
     var targetTop = state.top, targetLeft = state.left, pos1 = state.pos1, pos2 = state.pos2, pos3 = state.pos3, pos4 = state.pos4, snapRenderInfo = state.snapRenderInfo;
     var _a = moveable.props.snapRenderThreshold, snapRenderThreshold = _a === void 0 ? 1 : _a;
@@ -14532,7 +14625,7 @@ var Snappable = {
         innerBounds: innerBoundMap
       }, true);
     }
-    return __spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2([], __read(renderDashedGuidelines(moveable, elementGuidelines, [minLeft, minTop], targetRect, React11)), false), __read(renderGapGuidelines(moveable, gapGuidelines, [minLeft, minTop], targetRect, React11)), false), __read(renderGuidelines(moveable, "horizontal", horizontalGuidelines, [targetLeft, targetTop], targetRect, React11)), false), __read(renderGuidelines(moveable, "vertical", verticalGuidelines, [targetLeft, targetTop], targetRect, React11)), false), __read(renderSnapPoses(moveable, "horizontal", horizontalSnapPoses, minLeft, targetTop, width, 0, React11)), false), __read(renderSnapPoses(moveable, "vertical", verticalSnapPoses, minTop, targetLeft, height, 1, React11)), false);
+    return __spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2([], __read(renderDashedGuidelines(moveable, elementGuidelines, [minLeft, minTop], targetRect, React12)), false), __read(renderGapGuidelines(moveable, gapGuidelines, [minLeft, minTop], targetRect, React12)), false), __read(renderGuidelines(moveable, "horizontal", horizontalGuidelines, [targetLeft, targetTop], targetRect, React12)), false), __read(renderGuidelines(moveable, "vertical", verticalGuidelines, [targetLeft, targetTop], targetRect, React12)), false), __read(renderSnapPoses(moveable, "horizontal", horizontalSnapPoses, minLeft, targetTop, width, 0, React12)), false), __read(renderSnapPoses(moveable, "vertical", verticalSnapPoses, minTop, targetLeft, height, 1, React12)), false);
   },
   dragStart: function(moveable, e) {
     moveable.state.snapRenderInfo = {
@@ -16363,7 +16456,7 @@ var Warpable = {
     "warpEnd"
   ],
   viewClassName: getDirectionViewClassName("warpable"),
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, resizable = _a.resizable, scalable = _a.scalable, warpable = _a.warpable, zoom = _a.zoom;
     if (resizable || scalable || !warpable) {
       return [];
@@ -16378,11 +16471,11 @@ var Warpable = {
     var linePosTo3 = getMiddleLinePos(pos2, pos4);
     var linePosTo4 = getMiddleLinePos(pos4, pos2);
     return __spreadArray2([
-      React11.createElement("div", { className: prefix("line"), key: "middeLine1", style: getLineStyle(linePosFrom1, linePosTo1, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine2", style: getLineStyle(linePosFrom2, linePosTo2, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine3", style: getLineStyle(linePosFrom3, linePosTo3, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine4", style: getLineStyle(linePosFrom4, linePosTo4, zoom) })
-    ], __read(renderAllDirections(moveable, "warpable", React11)), false);
+      React12.createElement("div", { className: prefix("line"), key: "middeLine1", style: getLineStyle(linePosFrom1, linePosTo1, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine2", style: getLineStyle(linePosFrom2, linePosTo2, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine3", style: getLineStyle(linePosFrom3, linePosTo3, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine4", style: getLineStyle(linePosFrom4, linePosTo4, zoom) })
+    ], __read(renderAllDirections(moveable, "warpable", React12)), false);
   },
   dragControlCondition: function(moveable, e) {
     if (e.isRequest) {
@@ -16521,14 +16614,14 @@ function restoreStyle(moveable) {
   removeClass(el, AVOID);
   el.style.cssText += "left: 0px; top: 0px; width: ".concat(width, "px; height: ").concat(height, "px");
 }
-function renderPieces(React11) {
-  return React11.createElement(
+function renderPieces(React12) {
+  return React12.createElement(
     "div",
     { key: "area_pieces", className: AREA_PIECES },
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE })
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE })
   );
 }
 var DragArea = {
@@ -16541,14 +16634,14 @@ var DragArea = {
     "click",
     "clickGroup"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, target = _a.target, dragArea = _a.dragArea, groupable = _a.groupable, passDragArea = _a.passDragArea;
     var _b = moveable.getState(), width = _b.width, height = _b.height, renderPoses = _b.renderPoses;
     var className = passDragArea ? prefix("area", "pass") : prefix("area");
     if (groupable) {
       return [
-        React11.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className }),
-        renderPieces(React11)
+        React12.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className }),
+        renderPieces(React12)
       ];
     }
     if (!target || !dragArea) {
@@ -16557,7 +16650,7 @@ var DragArea = {
     var h = createWarpMatrix([0, 0], [width, 0], [0, height], [width, height], renderPoses[0], renderPoses[1], renderPoses[2], renderPoses[3]);
     var transform = h.length ? makeMatrixCSS(h, true) : "none";
     return [
-      React11.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className, style: {
+      React12.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className, style: {
         top: "0px",
         left: "0px",
         width: "".concat(width, "px"),
@@ -16565,7 +16658,7 @@ var DragArea = {
         transformOrigin: "0 0",
         transform
       } }),
-      renderPieces(React11)
+      renderPieces(React12)
     ];
   },
   dragStart: function(moveable, _a) {
@@ -16642,7 +16735,7 @@ var DragArea = {
 };
 var Origin = makeAble("origin", {
   props: ["origin", "svgOrigin"],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, zoom = _a.zoom, svgOrigin = _a.svgOrigin, groupable = _a.groupable;
     var _b = moveable.getState(), beforeOrigin = _b.beforeOrigin, rotation = _b.rotation, svg = _b.svg, allMatrix = _b.allMatrix, is3d = _b.is3d, left = _b.left, top = _b.top, offsetWidth = _b.offsetWidth, offsetHeight = _b.offsetHeight;
     var originStyle;
@@ -16655,7 +16748,7 @@ var Origin = makeAble("origin", {
       originStyle = getControlTransform(rotation, zoom, beforeOrigin);
     }
     return [
-      React11.createElement("div", { className: prefix("control", "origin"), style: originStyle, key: "beforeOrigin" })
+      React12.createElement("div", { className: prefix("control", "origin"), style: originStyle, key: "beforeOrigin" })
     ];
   }
 });
@@ -16807,7 +16900,7 @@ var Default = {
 };
 var Padding = makeAble("padding", {
   props: ["padding"],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var props = moveable.props;
     if (props.dragArea) {
       return [];
@@ -16838,7 +16931,7 @@ var Padding = makeAble("padding", {
       if (!h.length) {
         return void 0;
       }
-      return React11.createElement("div", { key: "padding".concat(i), className: prefix("padding"), style: {
+      return React12.createElement("div", { key: "padding".concat(i), className: prefix("padding"), style: {
         transform: makeMatrixCSS(h, true)
       } });
     });
@@ -17504,7 +17597,7 @@ var Clippable = {
     ".guideline {\npointer-events: none;\nz-index: 2;\n}",
     ".line.guideline.bounds {\nbackground: #d66;\nbackground: var(--bounds-color);\n}"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, customClipPath = _a.customClipPath, defaultClipPath = _a.defaultClipPath, clipArea = _a.clipArea, zoom = _a.zoom, groupable = _a.groupable;
     var _b = moveable.getState(), target = _b.target, width = _b.width, height = _b.height, allMatrix = _b.allMatrix, is3d = _b.is3d, left = _b.left, top = _b.top, pos1 = _b.pos1, pos2 = _b.pos2, pos3 = _b.pos3, pos4 = _b.pos4, clipPathState = _b.clipPathState, snapBoundInfos = _b.snapBoundInfos, rotationRad = _b.rotation;
     if (!target || groupable) {
@@ -17535,20 +17628,20 @@ var Clippable = {
         var from = i2 === 0 ? linePoses_1[linePoses_1.length - 1] : linePoses_1[i2 - 1];
         var rad2 = getRad(from, to);
         var dist = getDiagonalSize(from, to);
-        return React11.createElement("div", { key: "clipLine".concat(i2), className: prefix("line", "clip-line", "snap-control"), "data-clip-index": i2, style: {
+        return React12.createElement("div", { key: "clipLine".concat(i2), className: prefix("line", "clip-line", "snap-control"), "data-clip-index": i2, style: {
           width: "".concat(dist, "px"),
           transform: "translate(".concat(from[0], "px, ").concat(from[1], "px) rotate(").concat(rad2, "rad) scaleY(").concat(zoom, ")")
         } });
       });
     }
     controls = poses.map(function(pos, i2) {
-      return React11.createElement("div", { key: "clipControl".concat(i2), className: prefix("control", "clip-control", "snap-control"), "data-clip-index": i2, style: {
+      return React12.createElement("div", { key: "clipControl".concat(i2), className: prefix("control", "clip-control", "snap-control"), "data-clip-index": i2, style: {
         transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rotationRad, "rad) scale(").concat(zoom, ")")
       } });
     });
     if (isInset) {
       controls.push.apply(controls, __spreadArray2([], __read(poses.slice(8).map(function(pos, i2) {
-        return React11.createElement("div", { key: "clipRadiusControl".concat(i2), className: prefix("control", "clip-control", "clip-radius", "snap-control"), "data-clip-index": 8 + i2, style: {
+        return React12.createElement("div", { key: "clipRadiusControl".concat(i2), className: prefix("control", "clip-control", "clip-radius", "snap-control"), "data-clip-index": 8 + i2, style: {
           transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rotationRad, "rad) scale(").concat(zoom, ")")
         } });
       })), false));
@@ -17577,7 +17670,7 @@ var Clippable = {
           return "".concat(pos[0], "px ").concat(pos[1], "px");
         }).join(", "), ")");
       }
-      controls.push(React11.createElement("div", { key: "clipEllipse", className: prefix("clip-ellipse", "snap-control"), style: {
+      controls.push(React12.createElement("div", { key: "clipEllipse", className: prefix("clip-ellipse", "snap-control"), style: {
         width: "".concat(radiusX * 2, "px"),
         height: "".concat(radiusY * 2, "px"),
         clipPath: ellipseClipPath,
@@ -17588,7 +17681,7 @@ var Clippable = {
       var _d = getRect(__spreadArray2([pos1, pos2, pos3, pos4], __read(poses), false)), allWidth = _d.width, allHeight = _d.height, allLeft_1 = _d.left, allTop_1 = _d.top;
       if (isPolygon || isRect || isInset) {
         var areaPoses = isInset ? poses.slice(0, 8) : poses;
-        controls.push(React11.createElement("div", { key: "clipArea", className: prefix("clip-area", "snap-control"), style: {
+        controls.push(React12.createElement("div", { key: "clipArea", className: prefix("clip-area", "snap-control"), style: {
           width: "".concat(allWidth, "px"),
           height: "".concat(allHeight, "px"),
           transform: "translate(".concat(allLeft_1, "px, ").concat(allTop_1, "px)"),
@@ -17607,7 +17700,7 @@ var Clippable = {
             var pos = _a2.pos;
             var snapPos1 = minus(calculatePosition(allMatrix, isHorizontal ? [0, pos] : [pos, 0], n), [left, top]);
             var snapPos2 = minus(calculatePosition(allMatrix, isHorizontal ? [width, pos] : [pos, height], n), [left, top]);
-            return renderLine(React11, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "snap").concat(i2), "guideline");
+            return renderLine(React12, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "snap").concat(i2), "guideline");
           })), false));
         }
         if (info.isBound) {
@@ -17615,7 +17708,7 @@ var Clippable = {
             var pos = _a2.pos;
             var snapPos1 = minus(calculatePosition(allMatrix, isHorizontal ? [0, pos] : [pos, 0], n), [left, top]);
             var snapPos2 = minus(calculatePosition(allMatrix, isHorizontal ? [width, pos] : [pos, height], n), [left, top]);
-            return renderLine(React11, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "bounds").concat(i2), "guideline", "bounds", "bold");
+            return renderLine(React12, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "bounds").concat(i2), "guideline", "bounds", "bold");
           })), false));
         }
       });
@@ -18245,7 +18338,7 @@ var Roundable = {
   requestChildStyle: function() {
     return ["borderRadius"];
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.getState(), target = _a.target, width = _a.width, height = _a.height, allMatrix = _a.allMatrix, is3d = _a.is3d, left = _a.left, top = _a.top, borderRadiusState = _a.borderRadiusState;
     var _b = moveable.props, _c = _b.minRoundControls, minRoundControls = _c === void 0 ? [0, 0] : _c, _d = _b.maxRoundControls, maxRoundControls = _d === void 0 ? [4, 4] : _d, zoom = _b.zoom, _e = _b.roundPadding, roundPadding = _e === void 0 ? 0 : _e, isDisplayShadowRoundControls = _b.isDisplayShadowRoundControls, groupable = _b.groupable;
     if (!target) {
@@ -18281,7 +18374,7 @@ var Roundable = {
       }
       var pos = minus(calculatePosition(allMatrix, originalPos, n), basePos);
       var isDisplay = v.vertical ? verticalCount <= maxRoundControls[1] && (isDisplayShadowRoundControls || !v.virtual) : horizontalCount <= maxRoundControls[0] && (isDisplayShadowRoundControls || !v.virtual);
-      return React11.createElement("div", { key: "borderRadiusControl".concat(i), className: prefix("control", "border-radius", v.vertical ? "vertical" : "", v.virtual ? "virtual" : ""), "data-radius-index": i, style: {
+      return React12.createElement("div", { key: "borderRadiusControl".concat(i), className: prefix("control", "border-radius", v.vertical ? "vertical" : "", v.virtual ? "virtual" : ""), "data-radius-index": i, style: {
         display: isDisplay ? "block" : "none",
         transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) scale(").concat(zoom, ")")
       } });
@@ -19233,7 +19326,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     if (controlPadding) {
       style["--moveable-control-padding"] = controlPadding;
     }
-    return React9.createElement(
+    return React10.createElement(
       ControlBoxElement,
       __assign7({ cspNonce, ref: ref(this, "controlBox"), className: "".concat(prefix("control-box", direction === -1 ? "reverse" : "", isDragging ? "dragging" : ""), " ").concat(ableClassName, " ").concat(className) }, ableAttributes, { onClick: this._onPreventClick, style }),
       this.renderAbles(),
@@ -19663,7 +19756,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     var props = this.props;
     var triggerAblesSimultaneously = props.triggerAblesSimultaneously;
     var Renderer = {
-      createElement: import_react29.createElement
+      createElement: import_react33.createElement
     };
     this.renderState = {};
     return groupByMap(flat(filterAbles(this.getEnabledAbles(), ["render"], triggerAblesSimultaneously).map(function(_a) {
@@ -19731,7 +19824,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     }
     var renderPoses = this.getState().renderPoses;
     var Renderer = {
-      createElement: import_react29.createElement
+      createElement: import_react33.createElement
     };
     return [
       [0, 1],
@@ -19957,7 +20050,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     useAccuratePosition: false
   };
   return MoveableManager2;
-}(React9.PureComponent);
+}(React10.PureComponent);
 var Groupable = {
   name: "groupable",
   props: [
@@ -19970,7 +20063,7 @@ var Groupable = {
     "hideChildMoveableDefaultLines"
   ],
   events: [],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a;
     var props = moveable.props;
     var targets = props.targets || [];
@@ -19993,7 +20086,7 @@ var Groupable = {
     });
     moveable.moveables = moveable.moveables.slice(0, targets.length);
     return __spreadArray2(__spreadArray2([], __read(targets.map(function(target, i) {
-      return React11.createElement(MoveableManager, { key: "moveable" + i, ref: refs(moveable, "moveables", i), target, origin: false, requestStyles, cssStyled: props.cssStyled, customStyledMap: props.customStyledMap, useResizeObserver: props.useResizeObserver, useMutationObserver: props.useMutationObserver, hideChildMoveableDefaultLines: props.hideChildMoveableDefaultLines, parentMoveable: moveable, parentPosition: [left, top], persistData: persistDatChildren[i], zoom });
+      return React12.createElement(MoveableManager, { key: "moveable" + i, ref: refs(moveable, "moveables", i), target, origin: false, requestStyles, cssStyled: props.cssStyled, customStyledMap: props.customStyledMap, useResizeObserver: props.useResizeObserver, useMutationObserver: props.useMutationObserver, hideChildMoveableDefaultLines: props.hideChildMoveableDefaultLines, parentMoveable: moveable, parentPosition: [left, top], persistData: persistDatChildren[i], zoom });
     })), false), __read(flat(renderGroupRects.map(function(_a2, i) {
       var pos1 = _a2.pos1, pos2 = _a2.pos2, pos3 = _a2.pos3, pos4 = _a2.pos4;
       var poses = [pos1, pos2, pos3, pos4];
@@ -20004,7 +20097,7 @@ var Groupable = {
         [2, 0]
       ].map(function(_a3, j) {
         var _b2 = __read(_a3, 2), from = _b2[0], to = _b2[1];
-        return renderLine(React11, "", minus(poses[from], parentPosition), minus(poses[to], parentPosition), zoom, "group-rect-".concat(i, "-").concat(j));
+        return renderLine(React12, "", minus(poses[from], parentPosition), minus(poses[to], parentPosition), zoom, "group-rect-".concat(i, "-").concat(j));
       });
     }))), false);
   }
@@ -20092,13 +20185,13 @@ var edgeDraggable = makeAble("edgeDraggable", {
   css: [
     ".edge.edgeDraggable.line {\ncursor: move;\n}"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var props = moveable.props;
     var edge = props.edgeDraggable;
     if (!edge) {
       return [];
     }
-    return renderEdgeLines(React11, "edgeDraggable", edge, moveable.getState().renderPoses, props.zoom);
+    return renderEdgeLines(React12, "edgeDraggable", edge, moveable.getState().renderPoses, props.zoom);
   },
   dragCondition: function(moveable, e) {
     var _a;
@@ -20566,10 +20659,10 @@ var MoveableIndividualGroup = /* @__PURE__ */ function(_super) {
     } else if (!canPersist) {
       persistDatChildren = [];
     }
-    return React9.createElement(ControlBoxElement, { cspNonce, ref: ref(this, "controlBox"), className: prefix("control-box") }, targets.map(function(target, i) {
+    return React10.createElement(ControlBoxElement, { cspNonce, ref: ref(this, "controlBox"), className: prefix("control-box") }, targets.map(function(target, i) {
       var _a2, _b;
       var individualProps = (_b = (_a2 = props.individualGroupableProps) === null || _a2 === void 0 ? void 0 : _a2.call(props, target, i)) !== null && _b !== void 0 ? _b : {};
-      return React9.createElement(MoveableManager, __assign7({ key: "moveable" + i, ref: refs(_this, "moveables", i) }, props, individualProps, { target, wrapperMoveable: _this, isWrapperMounted: _this.isMoveableMounted, persistData: persistDatChildren[i] }));
+      return React10.createElement(MoveableManager, __assign7({ key: "moveable" + i, ref: refs(_this, "moveables", i) }, props, individualProps, { target, wrapperMoveable: _this, isWrapperMounted: _this.isMoveableMounted, persistData: persistDatChildren[i] }));
     }));
   };
   MoveableIndividualGroup2.prototype.componentDidMount = function() {
@@ -20769,7 +20862,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
       isGroup = true;
     }
     if (props.individualGroupable) {
-      return React9.createElement(MoveableIndividualGroup, __assign7({ key: "individual-group", ref: ref(this, "moveable") }, nextProps, { target: null, targets: elementTargets }));
+      return React10.createElement(MoveableIndividualGroup, __assign7({ key: "individual-group", ref: ref(this, "moveable") }, nextProps, { target: null, targets: elementTargets }));
     }
     if (isGroup) {
       var targetGroups = getTargetGroups(refTargets, nextSelectorMap);
@@ -20779,7 +20872,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
           firstRenderState = __assign7({}, prevMoveable.state);
         }
       }
-      return React9.createElement(MoveableGroup, __assign7({ key: "group", ref: ref(this, "moveable") }, nextProps, (_a = props.groupableProps) !== null && _a !== void 0 ? _a : {}, { target: null, targets: elementTargets, targetGroups, firstRenderState }));
+      return React10.createElement(MoveableGroup, __assign7({ key: "group", ref: ref(this, "moveable") }, nextProps, (_a = props.groupableProps) !== null && _a !== void 0 ? _a : {}, { target: null, targets: elementTargets, targetGroups, firstRenderState }));
     } else {
       var target_1 = elementTargets[0];
       if (prevMoveable && (prevMoveable.props.groupable || prevMoveable.props.individualGroupable)) {
@@ -20791,7 +20884,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
           firstRenderState = __assign7({}, prevTargetMoveable.state);
         }
       }
-      return React9.createElement(MoveableManager, __assign7({ key: "single", ref: ref(this, "moveable") }, nextProps, { target: target_1, firstRenderState }));
+      return React10.createElement(MoveableManager, __assign7({ key: "single", ref: ref(this, "moveable") }, nextProps, { target: target_1, firstRenderState }));
     }
   };
   InitialMoveable2.prototype.componentDidMount = function() {
@@ -20890,7 +20983,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
     withMethods(MOVEABLE_METHODS)
   ], InitialMoveable2.prototype, "moveable", void 0);
   return InitialMoveable2;
-}(React9.PureComponent);
+}(React10.PureComponent);
 var Moveable = /* @__PURE__ */ function(_super) {
   __extends4(Moveable2, _super);
   function Moveable2() {
@@ -20975,24 +21068,25 @@ var LoadingDots = ({ color: color2 = "#000" }) => {
 var loading_dots_default = LoadingDots;
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
-var import_react30 = require("ai/react");
+var import_react34 = require("ai/react");
 var import_lucide_react10 = require("lucide-react");
-var import_react31 = require("react");
+var import_react35 = require("react");
 var import_sonner3 = require("sonner");
 var import_react_markdown = __toESM(require("react-markdown"));
 var import_jsx_runtime13 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
-  const [isShow, setIsShow] = (0, import_react31.useState)(false);
-  const { completionApi, plan } = (0, import_react31.useContext)(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react30.useCompletion)({
+  const [isShow, setIsShow] = (0, import_react35.useState)(false);
+  const { completionApi, additionalData: { body, headers } } = (0, import_react35.useContext)(NovelContext);
+  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react34.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       import_sonner3.toast.error(err.message);
     }
   });
-  (0, import_react31.useEffect)(() => {
+  (0, import_react35.useEffect)(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21010,7 +21104,7 @@ var AIEditorBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
@@ -21048,7 +21142,7 @@ var ai_edit_bubble_default = AIEditorBubble;
 var import_lucide_react11 = require("lucide-react");
 var import_jsx_runtime14 = require("react/jsx-runtime");
 function AIGeneratingLoading({ stop: stop2 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center justify-start novel-bg-white shadow-lg rounded-full px-3 py-2 w-16 h-10", children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
     /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
     /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
     /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
@@ -21062,24 +21156,25 @@ function AIGeneratingLoading({ stop: stop2 }) {
 }
 
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-bubble.tsx
-var import_react32 = require("ai/react");
+var import_react36 = require("ai/react");
 var import_lucide_react12 = require("lucide-react");
-var import_react33 = require("react");
+var import_react37 = require("react");
 var import_sonner4 = require("sonner");
 var import_react_markdown2 = __toESM(require("react-markdown"));
 var import_jsx_runtime15 = require("react/jsx-runtime");
 var AITranslateBubble = ({ editor }) => {
-  const [isShow, setIsShow] = (0, import_react33.useState)(false);
-  const { completionApi, plan } = (0, import_react33.useContext)(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react32.useCompletion)({
+  const [isShow, setIsShow] = (0, import_react37.useState)(false);
+  const { completionApi, additionalData: { body, headers } } = (0, import_react37.useContext)(NovelContext);
+  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react36.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       import_sonner4.toast.error(err.message);
     }
   });
-  (0, import_react33.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21097,7 +21192,7 @@ var AITranslateBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
@@ -21132,8 +21227,8 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-var import_react52 = require("react");
-var import_react53 = require("ai/react");
+var import_react56 = require("react");
+var import_react57 = require("ai/react");
 var import_lucide_react13 = require("lucide-react");
 
 // src/ui/icons/magic-1.tsx
@@ -21163,48 +21258,48 @@ function Magic1({ className }) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/index.mjs
-var React10 = __toESM(require("react"), 1);
-var import_react44 = require("react");
+var React11 = __toESM(require("react"), 1);
+var import_react48 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionConfigContext.mjs
-var import_react34 = require("react");
-var MotionConfigContext = (0, import_react34.createContext)({
+var import_react38 = require("react");
+var MotionConfigContext = (0, import_react38.createContext)({
   transformPagePoint: (p) => p,
   isStatic: false,
   reducedMotion: "never"
 });
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/index.mjs
-var import_react35 = require("react");
-var MotionContext = (0, import_react35.createContext)({});
+var import_react39 = require("react");
+var MotionContext = (0, import_react39.createContext)({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-var import_react39 = require("react");
+var import_react43 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
-var import_react36 = require("react");
-var PresenceContext = (0, import_react36.createContext)(null);
+var import_react40 = require("react");
+var PresenceContext = (0, import_react40.createContext)(null);
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-var import_react37 = require("react");
+var import_react41 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/is-browser.mjs
 var isBrowser = typeof document !== "undefined";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-var useIsomorphicLayoutEffect2 = isBrowser ? import_react37.useLayoutEffect : import_react37.useEffect;
+var useIsomorphicLayoutEffect2 = isBrowser ? import_react41.useLayoutEffect : import_react41.useEffect;
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/LazyContext.mjs
-var import_react38 = require("react");
-var LazyContext = (0, import_react38.createContext)({ strict: false });
+var import_react42 = require("react");
+var LazyContext = (0, import_react42.createContext)({ strict: false });
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
 function useVisualElement(Component2, visualState, props, createVisualElement) {
-  const { visualElement: parent } = (0, import_react39.useContext)(MotionContext);
-  const lazyContext = (0, import_react39.useContext)(LazyContext);
-  const presenceContext = (0, import_react39.useContext)(PresenceContext);
-  const reducedMotionConfig = (0, import_react39.useContext)(MotionConfigContext).reducedMotion;
-  const visualElementRef = (0, import_react39.useRef)();
+  const { visualElement: parent } = (0, import_react43.useContext)(MotionContext);
+  const lazyContext = (0, import_react43.useContext)(LazyContext);
+  const presenceContext = (0, import_react43.useContext)(PresenceContext);
+  const reducedMotionConfig = (0, import_react43.useContext)(MotionConfigContext).reducedMotion;
+  const visualElementRef = (0, import_react43.useRef)();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
     visualElementRef.current = createVisualElement(Component2, {
@@ -21217,16 +21312,16 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
     });
   }
   const visualElement = visualElementRef.current;
-  (0, import_react39.useInsertionEffect)(() => {
+  (0, import_react43.useInsertionEffect)(() => {
     visualElement && visualElement.update(props, presenceContext);
   });
   useIsomorphicLayoutEffect2(() => {
     visualElement && visualElement.render();
   });
-  (0, import_react39.useEffect)(() => {
+  (0, import_react43.useEffect)(() => {
     visualElement && visualElement.updateFeatures();
   });
-  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : import_react39.useEffect;
+  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : import_react43.useEffect;
   useAnimateChangesEffect(() => {
     if (visualElement && visualElement.animationState) {
       visualElement.animationState.animateChanges();
@@ -21236,7 +21331,7 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-motion-ref.mjs
-var import_react40 = require("react");
+var import_react44 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/is-ref-object.mjs
 function isRefObject(ref2) {
@@ -21245,7 +21340,7 @@ function isRefObject(ref2) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-motion-ref.mjs
 function useMotionRef(visualState, visualElement, externalRef) {
-  return (0, import_react40.useCallback)(
+  return (0, import_react44.useCallback)(
     (instance) => {
       instance && visualState.mount && visualState.mount(instance);
       if (visualElement) {
@@ -21269,7 +21364,7 @@ function useMotionRef(visualState, visualElement, externalRef) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
-var import_react41 = require("react");
+var import_react45 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/is-variant-label.mjs
 function isVariantLabel(v) {
@@ -21315,8 +21410,8 @@ function getCurrentTreeVariants(props, context) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
 function useCreateMotionContext(props) {
-  const { initial, animate } = getCurrentTreeVariants(props, (0, import_react41.useContext)(MotionContext));
-  return (0, import_react41.useMemo)(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
+  const { initial, animate } = getCurrentTreeVariants(props, (0, import_react45.useContext)(MotionContext));
+  return (0, import_react45.useMemo)(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
 }
 function variantLabelsAsDependency(prop) {
   return Array.isArray(prop) ? prop.join(" ") : prop;
@@ -21358,12 +21453,12 @@ function loadFeatures(features) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/LayoutGroupContext.mjs
-var import_react42 = require("react");
-var LayoutGroupContext = (0, import_react42.createContext)({});
+var import_react46 = require("react");
+var LayoutGroupContext = (0, import_react46.createContext)({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/SwitchLayoutGroupContext.mjs
-var import_react43 = require("react");
-var SwitchLayoutGroupContext = (0, import_react43.createContext)({});
+var import_react47 = require("react");
+var SwitchLayoutGroupContext = (0, import_react47.createContext)({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/symbol.mjs
 var motionComponentSymbol = Symbol.for("motionComponentSymbol");
@@ -21373,7 +21468,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   preloadedFeatures2 && loadFeatures(preloadedFeatures2);
   function MotionComponent(props, externalRef) {
     let MeasureLayout2;
-    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, (0, import_react44.useContext)(MotionConfigContext)), props), {
+    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, (0, import_react48.useContext)(MotionConfigContext)), props), {
       layoutId: useLayoutId(props)
     });
     const { isStatic } = configAndProps;
@@ -21381,8 +21476,8 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
     const visualState = useVisualState(props, isStatic);
     if (!isStatic && isBrowser) {
       context.visualElement = useVisualElement(Component2, visualState, configAndProps, createVisualElement);
-      const initialLayoutGroupConfig = (0, import_react44.useContext)(SwitchLayoutGroupContext);
-      const isStrict = (0, import_react44.useContext)(LazyContext).strict;
+      const initialLayoutGroupConfig = (0, import_react48.useContext)(SwitchLayoutGroupContext);
+      const isStrict = (0, import_react48.useContext)(LazyContext).strict;
       if (context.visualElement) {
         MeasureLayout2 = context.visualElement.loadFeatures(
           // Note: Pass the full new combined props to correctly re-render dynamic feature components.
@@ -21393,19 +21488,19 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
         );
       }
     }
-    return React10.createElement(
+    return React11.createElement(
       MotionContext.Provider,
       { value: context },
-      MeasureLayout2 && context.visualElement ? React10.createElement(MeasureLayout2, __spreadValues({ visualElement: context.visualElement }, configAndProps)) : null,
+      MeasureLayout2 && context.visualElement ? React11.createElement(MeasureLayout2, __spreadValues({ visualElement: context.visualElement }, configAndProps)) : null,
       useRender(Component2, props, useMotionRef(visualState, context.visualElement, externalRef), visualState, isStatic, context.visualElement)
     );
   }
-  const ForwardRefComponent = (0, import_react44.forwardRef)(MotionComponent);
+  const ForwardRefComponent = (0, import_react48.forwardRef)(MotionComponent);
   ForwardRefComponent[motionComponentSymbol] = Component2;
   return ForwardRefComponent;
 }
 function useLayoutId({ layoutId }) {
-  const layoutGroupId = (0, import_react44.useContext)(LayoutGroupContext).id;
+  const layoutGroupId = (0, import_react48.useContext)(LayoutGroupContext).id;
   return layoutGroupId && layoutId !== void 0 ? layoutGroupId + "-" + layoutId : layoutId;
 }
 
@@ -21490,10 +21585,10 @@ function isSVGComponent(Component2) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/dom/use-render.mjs
-var import_react47 = require("react");
+var import_react51 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/html/use-props.mjs
-var import_react45 = require("react");
+var import_react49 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/projection/styles/scale-correction.mjs
 var scaleCorrectors = {};
@@ -21743,7 +21838,7 @@ function copyRawValuesOnly(target, source, props) {
   }
 }
 function useInitialMotionValues({ transformTemplate }, visualState, isStatic) {
-  return (0, import_react45.useMemo)(() => {
+  return (0, import_react49.useMemo)(() => {
     const state = createHtmlRenderState();
     buildHTMLStyles(state, visualState, { enableHardwareAcceleration: !isStatic }, transformTemplate);
     return Object.assign({}, state.vars, state.style);
@@ -21836,7 +21931,7 @@ function filterProps(props, isDom, forwardMotionProps) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/svg/use-props.mjs
-var import_react46 = require("react");
+var import_react50 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/svg/utils/transform-origin.mjs
 function calcOrigin(origin, offset, size) {
@@ -21926,7 +22021,7 @@ var isSVGTag = (tag) => typeof tag === "string" && tag.toLowerCase() === "svg";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/svg/use-props.mjs
 function useSVGProps(props, visualState, _isStatic, Component2) {
-  const visualProps = (0, import_react46.useMemo)(() => {
+  const visualProps = (0, import_react50.useMemo)(() => {
     const state = createSvgRenderState();
     buildSVGAttrs(state, visualState, { enableHardwareAcceleration: false }, isSVGTag(Component2), props.transformTemplate);
     return __spreadProps(__spreadValues({}, state.attrs), {
@@ -21951,8 +22046,8 @@ function createUseRender(forwardMotionProps = false) {
       ref: ref2
     });
     const { children } = props;
-    const renderedChildren = (0, import_react47.useMemo)(() => isMotionValue(children) ? children.get() : children, [children]);
-    return (0, import_react47.createElement)(Component2, __spreadProps(__spreadValues({}, elementProps), {
+    const renderedChildren = (0, import_react51.useMemo)(() => isMotionValue(children) ? children.get() : children, [children]);
+    return (0, import_react51.createElement)(Component2, __spreadProps(__spreadValues({}, elementProps), {
       children: renderedChildren
     }));
   };
@@ -22030,7 +22125,7 @@ function scrapeMotionValuesFromProps2(props, prevProps) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-state.mjs
-var import_react49 = require("react");
+var import_react53 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/resolve-variants.mjs
 function resolveVariantFromProps(props, definition, custom, currentValues2 = {}, currentVelocity = {}) {
@@ -22047,9 +22142,9 @@ function resolveVariantFromProps(props, definition, custom, currentValues2 = {},
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-constant.mjs
-var import_react48 = require("react");
+var import_react52 = require("react");
 function useConstant(init) {
-  const ref2 = (0, import_react48.useRef)(null);
+  const ref2 = (0, import_react52.useRef)(null);
   if (ref2.current === null) {
     ref2.current = init();
   }
@@ -22087,8 +22182,8 @@ function makeState({ scrapeMotionValuesFromProps: scrapeMotionValuesFromProps3, 
   return state;
 }
 var makeUseVisualState = (config) => (props, isStatic) => {
-  const context = (0, import_react49.useContext)(MotionContext);
-  const presenceContext = (0, import_react49.useContext)(PresenceContext);
+  const context = (0, import_react53.useContext)(MotionContext);
+  const presenceContext = (0, import_react53.useContext)(PresenceContext);
   const make = () => makeState(config, props, context, presenceContext);
   return isStatic ? make() : useConstant(make);
 };
@@ -25613,17 +25708,17 @@ var PanGesture = class extends Feature {
 };
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs
-var import_react51 = __toESM(require("react"), 1);
+var import_react55 = __toESM(require("react"), 1);
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.mjs
-var import_react50 = require("react");
+var import_react54 = require("react");
 function usePresence() {
-  const context = (0, import_react50.useContext)(PresenceContext);
+  const context = (0, import_react54.useContext)(PresenceContext);
   if (context === null)
     return [true, null];
   const { isPresent, onExitComplete, register } = context;
-  const id3 = (0, import_react50.useId)();
-  (0, import_react50.useEffect)(() => register(id3), []);
+  const id3 = (0, import_react54.useId)();
+  (0, import_react54.useEffect)(() => register(id3), []);
   const safeToRemove = () => onExitComplete && onExitComplete(id3);
   return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
 }
@@ -25688,7 +25783,7 @@ var correctBoxShadow = {
 };
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs
-var MeasureLayoutWithContext = class extends import_react51.default.Component {
+var MeasureLayoutWithContext = class extends import_react55.default.Component {
   /**
    * This only mounts projection nodes for components that
    * need measuring, we might want to do it for all components
@@ -25771,8 +25866,8 @@ var MeasureLayoutWithContext = class extends import_react51.default.Component {
 };
 function MeasureLayout(props) {
   const [isPresent, safeToRemove] = usePresence();
-  const layoutGroup = (0, import_react51.useContext)(LayoutGroupContext);
-  return import_react51.default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: (0, import_react51.useContext)(SwitchLayoutGroupContext), isPresent, safeToRemove }));
+  const layoutGroup = (0, import_react55.useContext)(LayoutGroupContext);
+  return import_react55.default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: (0, import_react55.useContext)(SwitchLayoutGroupContext), isPresent, safeToRemove }));
 }
 var defaultScaleCorrectors = {
   borderRadius: __spreadProps(__spreadValues({}, correctBorderRadius), {
@@ -27911,10 +28006,16 @@ var motion = /* @__PURE__ */ createMotionProxy((Component2, config) => createDom
 var import_react_markdown3 = __toESM(require("react-markdown"));
 var import_sonner5 = require("sonner");
 var import_jsx_runtime17 = require("react/jsx-runtime");
-function ChatBot({ editor }) {
-  const [isOpen, setIsOpen] = (0, import_react52.useState)(false);
-  const inputRef = (0, import_react52.useRef)(null);
-  const { completionApi, plan } = (0, import_react52.useContext)(NovelContext);
+function ChatBot(props) {
+  const { editor, history } = props;
+  const [isOpen, setIsOpen] = (0, import_react56.useState)(false);
+  const inputRef = (0, import_react56.useRef)(null);
+  const { completionApi, additionalData: { body, headers } } = (0, import_react56.useContext)(NovelContext);
+  const initialMessage = {
+    id: "start",
+    role: "system",
+    content: "Here, how can I help you?"
+  };
   const {
     messages,
     setMessages,
@@ -27923,27 +28024,25 @@ function ChatBot({ editor }) {
     reload,
     handleInputChange,
     handleSubmit
-  } = (0, import_react53.useChat)({
+  } = (0, import_react57.useChat)({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { plan, system: editor.getText() },
-    initialMessages: [
-      {
-        id: "start",
-        role: "system",
-        content: "Here, ask me about your note :)"
-      }
-    ],
+    body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
+    headers: __spreadValues({}, headers || {}),
+    initialMessages: [initialMessage],
     onError: (err) => {
-      if (err.message !== "Failed to fetch" && err.message !== "network error") {
-        import_sonner5.toast.error(err.message);
-      }
+      import_sonner5.toast.error(err.message);
     }
   });
-  (0, import_react52.useEffect)(() => {
+  (0, import_react56.useEffect)(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
+  (0, import_react56.useEffect)(() => {
+    if (history == null ? void 0 : history.length) {
+      setMessages([initialMessage, ...history]);
+    }
+  }, [history == null ? void 0 : history.length]);
   const handleChat = () => {
     var _a;
     if (isLoading) {
@@ -27962,27 +28061,37 @@ function ChatBot({ editor }) {
     editor.chain().blur();
     setIsOpen(!isOpen);
   };
+  const ref2 = (0, import_react56.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
   return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
     "div",
     {
+      ref: ref2,
       className: `${isOpen ? "novel-bottom-3" : "novel-bottom-16"} novel-fixed novel-z-[1009] novel-right-3 novel-animate-in novel-fade-in novel-slide-in-from-bottom-1`,
       children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
         motion.div,
         {
           className: "novel-rounded-full",
           initial: { borderRadius: "50%", x: 0 },
-          animate: { borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 },
-          transition: { duration: 0.2 },
-          children: isOpen ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "chat novel-border novel-relative novel-w-[350px] novel-border-slate-100  novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
+          animate: {
+            borderRadius: isOpen ? "0%" : "50%",
+            x: 0
+            // x: isOpen ? 0 : 35
+          },
+          children: isOpen ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" }),
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-font-semibold", children: "Chat with note" }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-purple-400" }),
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-font-semibold", children: "Chat" }),
                 /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-flex novel-items-center novel-gap-3", children: [
                   /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                     import_lucide_react13.Trash,
                     {
-                      onClick: () => setMessages([]),
+                      onClick: () => setMessages([initialMessage]),
                       className: "novel-float-right novel-rounded-md novel-cursor-pointer novel-w-4 novel-h-4 hover:novel-text-red-300 novel-text-slate-600"
                     }
                   ),
@@ -28026,7 +28135,7 @@ function ChatBot({ editor }) {
                         )
                       ] }),
                       /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_react_markdown3.default, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Baby, { className: "novel-w-5 novel-h-5 novel-text-blue-400" }) })
+                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Baby, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) })
                     ]
                   },
                   index2
@@ -28038,7 +28147,7 @@ function ChatBot({ editor }) {
                     animate: { opacity: 1 },
                     transition: { duration: 0.3 },
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Bot, { className: "novel-w-5 novel-h-5 novel-text-cyan-400" }) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Bot, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) }),
                       /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_react_markdown3.default, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
                       /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "novel-hidden novel-h-full novel-mt-auto group-hover:novel-block", children: [
                         /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
@@ -28072,7 +28181,7 @@ function ChatBot({ editor }) {
                 import_lucide_react13.Bot,
                 {
                   onClick: toggleOpen,
-                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-cyan-500"
+                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-purple-500"
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
@@ -28083,7 +28192,7 @@ function ChatBot({ editor }) {
                   style: { maxHeight: "150px", minHeight: "40px" },
                   rows: 1,
                   className: "novel-flex-grow novel-text-sm novel-border-l novel-border-y novel-border-gray-100 novel-shadow-inner novel-rounded-l-lg novel-px-4 novel-py-2 focus:novel-outline-none",
-                  placeholder: "Ask note...",
+                  placeholder: "Ask...",
                   value: input,
                   onChange: handleInputChange,
                   onKeyDown: handleKeyPress
@@ -28095,7 +28204,7 @@ function ChatBot({ editor }) {
                   onClick: handleChat,
                   type: "submit",
                   className: "novel-px-3 novel-py-3 novel-bg-slate-100 novel-text-white novel-rounded-r-lg hover:novel-bg-slate-300",
-                  children: !isLoading ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Send, { className: "novel-h-4 novel-w-4 novel-text-blue-400" }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.PauseCircle, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
+                  children: !isLoading ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-400" }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.PauseCircle, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
                 }
               ) })
             ] }),
@@ -28124,9 +28233,9 @@ function ChatBot({ editor }) {
           ] }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
             "button",
             {
-              className: "novel-p-3.5 hover:-novel-translate-x-6 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
+              className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
               onClick: toggleOpen,
-              children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.Bot, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-cyan-500" })
+              children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_lucide_react13.MessageCircle, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
             }
           )
         }
@@ -28138,19 +28247,18 @@ function ChatBot({ editor }) {
 // src/ui/editor/extensions/collaboration.tsx
 var import_extension_collaboration = __toESM(require("@tiptap/extension-collaboration"));
 var import_extension_collaboration_cursor = __toESM(require("@tiptap/extension-collaboration-cursor"));
-var import_provider7 = require("@hocuspocus/provider");
-var import_react54 = require("react");
+var import_provider8 = require("@hocuspocus/provider");
+var import_react58 = require("react");
 var import_lucide_react14 = require("lucide-react");
 var import_jsx_runtime18 = require("react/jsx-runtime");
-function useCollaborationExt(active, id3, user) {
-  const collaborationData = (0, import_react54.useMemo)(() => {
+function useCollaborationExt(active, id3, user, customProvider) {
+  const collaborationData = (0, import_react58.useMemo)(() => {
     if (!active)
       return {};
-    const name = `inke-${id3}`;
-    const provider = new import_provider7.HocuspocusProvider({
+    const provider = customProvider || new import_provider8.HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
-      name
+      name: `inke-${id3}`
     });
     return {
       collaborates: [
@@ -28170,20 +28278,21 @@ function CollaborationInfo({
   status,
   editor
 }) {
-  var _a, _b, _c, _d, _e, _f;
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[9999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
-    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-xs novel-text-slate-500", children: (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.length }),
+  var _a, _b, _c;
+  const usersList = (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.filter((u) => (u == null ? void 0 : u.name) !== void 0);
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-xs novel-text-slate-500", children: usersList == null ? void 0 : usersList.length }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block", children: [
       /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("p", { className: "novel-gap-2 novel-mb-1 novel-items-center novel-flex novel-text-xs novel-text-slate-600 novel-pb-1 novel-border-b novel-border-slate-100", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
-        editor.storage.collaborationCursor.users.length,
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
+        usersList.length,
         " user",
-        editor.storage.collaborationCursor.users.length === 1 ? "" : "s",
+        usersList.length === 1 ? "" : "s",
         " ",
         "online"
       ] }),
-      (_f = (_e = (_d = editor.storage) == null ? void 0 : _d.collaborationCursor) == null ? void 0 : _e.users) == null ? void 0 : _f.map((i) => /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
+      usersList == null ? void 0 : usersList.map((i) => /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
         "div",
         {
           className: "novel-truncate novel-flex novel-items-center novel-gap-2 novel-cursor-pointer hover:novel-opacity-80 novel-font-mono novel-pt-1 novel-text-xs novel-text-slate-500",
@@ -28201,7 +28310,7 @@ function CollaborationInfo({
                 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: i.name })
+            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: `${i == null ? void 0 : i.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === i.clientId ? "(you)" : ""}` })
           ]
         },
         i.clientId
@@ -28219,6 +28328,7 @@ function generateRandomColorCode() {
 }
 
 // src/ui/editor/index.tsx
+var import_isEmpty = __toESM(require("lodash/isEmpty"));
 var import_jsx_runtime19 = require("react/jsx-runtime");
 function Editor2({
   completionApi = "/api/generate",
@@ -28234,15 +28344,19 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  plan = "5",
-  bot = false,
-  collaboration = false,
-  id: id3 = "",
-  userName = "unkown"
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userDetails: {},
+    autoCompleteShortKey: "??"
+  }
 }) {
+  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
-  const [hydrated, setHydrated] = (0, import_react55.useState)(false);
-  const [isLoadingOutside, setLoadingOutside] = (0, import_react55.useState)(false);
+  const [hydrated, setHydrated] = (0, import_react59.useState)(false);
+  const [lastInput, setLastInput] = (0, import_react59.useState)("");
+  const [isLoadingOutside, setLoadingOutside] = (0, import_react59.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
     const text = editor2.getText();
@@ -28252,17 +28366,17 @@ function Editor2({
       setContent(json);
     }
   }), debounceDuration);
-  const [status, setStatus] = (0, import_react55.useState)("connecting");
-  const user = {
-    name: userName,
-    color: generateRandomColorCode()
-  };
+  const [status, setStatus] = (0, import_react59.useState)("connecting");
+  const user = __spreadProps(__spreadValues({}, userDetails), {
+    color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
+  });
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id3,
-    user
+    user,
+    customProvider
   );
-  const editor = (0, import_react56.useEditor)({
+  const editor = (0, import_react60.useEditor)({
     extensions: [
       ...defaultExtensions(collaboration),
       ...extensions,
@@ -28272,21 +28386,14 @@ function Editor2({
     editable,
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2
-      });
-      if (lastTwo === "??" && !isLoading) {
+      const lastTwo = getPrevText(e.editor, { chars: 2 });
+      if (lastTwo === autoCompleteShortKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
           to: selection.from
         });
-        complete(
-          getPrevText(e.editor, {
-            chars: 5e3
-          })
-        );
-        import_analytics2.default.track("Autocomplete Shortcut Used");
+        complete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
         onUpdate(e.editor);
         debouncedUpdates(e);
@@ -28294,18 +28401,22 @@ function Editor2({
     },
     autofocus: false
   });
-  (0, import_react55.useEffect)(() => {
+  (0, import_react59.useEffect)(() => {
     if (collaboration) {
       provider.on("status", (event) => {
         setStatus(event.status);
         editor == null ? void 0 : editor.chain().focus().updateUser(user).run();
       });
     }
+    if ((additionalData == null ? void 0 : additionalData.getEditor) && editor) {
+      additionalData.getEditor(editor);
+    }
   }, [editor]);
-  const { complete, completion, isLoading, stop: stop2 } = (0, import_react57.useCompletion)({
+  const { complete, completion, isLoading, stop: stop2 } = (0, import_react61.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion2) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion2.length,
@@ -28316,8 +28427,8 @@ function Editor2({
       import_sonner6.toast.error(err.message);
     }
   });
-  const prev = (0, import_react55.useRef)("");
-  (0, import_react55.useEffect)(() => {
+  const prev = (0, import_react59.useRef)("");
+  (0, import_react59.useEffect)(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
     editor == null ? void 0 : editor.commands.insertContent(diff3);
@@ -28325,8 +28436,8 @@ function Editor2({
       setLoadingOutside(false);
     }
   }, [isLoading, editor, completion]);
-  (0, import_react55.useEffect)(() => {
-    if (!editor || hydrated)
+  (0, import_react59.useEffect)(() => {
+    if (!editor || hydrated || disableLocalStorage !== false)
       return;
     const value = disableLocalStorage ? defaultValue : content;
     if (value) {
@@ -28334,36 +28445,32 @@ function Editor2({
       setHydrated(true);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-    NovelContext.Provider,
+  (0, import_react59.useEffect)(() => {
+    if (!editor || (0, import_isEmpty.default)(defaultValue) || disableLocalStorage !== true)
+      return;
+    editor.commands.setContent(defaultValue);
+  }, [defaultValue]);
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+    "div",
     {
-      value: {
-        completionApi,
-        plan
+      onClick: () => {
+        editor == null ? void 0 : editor.chain().focus().run();
       },
-      children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
-        "div",
-        {
-          onClick: () => {
-            editor == null ? void 0 : editor.chain().focus().run();
-          },
-          className,
-          children: [
-            editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { editor }),
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_edit_bubble_default, { editor }),
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_translate_bubble_default, { editor })
-            ] }),
-            editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
-            (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react56.EditorContent, { editor }),
-            isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor })
-          ]
-        }
-      )
+      className,
+      children: [
+        editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { editor }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_edit_bubble_default, { editor }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_translate_bubble_default, { editor })
+        ] }),
+        editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
+        (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react60.EditorContent, { editor }),
+        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
+        bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
+      ]
     }
-  );
+  ) });
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

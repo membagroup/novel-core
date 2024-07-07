@@ -1,7 +1,9 @@
 import { cn, getUrlFromString } from "@/lib/utils";
 import { Editor } from "@tiptap/core";
 import { Check, Trash } from "lucide-react";
-import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, FC, SetStateAction, useContext, useEffect, useRef } from "react";
+import { useClickOutside } from "../hooks";
+import { NovelContext } from "../provider";
 
 interface LinkSelectorProps {
   editor: Editor;
@@ -9,11 +11,8 @@ interface LinkSelectorProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const LinkSelector: FC<LinkSelectorProps> = ({
-  editor,
-  isOpen,
-  setIsOpen,
-}) => {
+export const LinkSelector: FC<LinkSelectorProps> = ({ editor, isOpen, setIsOpen, }) => {
+  // const context = useContext(NovelContext);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Autofocus on input by default
@@ -21,11 +20,20 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
     inputRef.current && inputRef.current?.focus();
   });
 
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
+    if (!isOpen) return;
+    // if (inputRef.current && inputRef.current.value) {
+    //   context.setLastText(inputRef.current.value);
+    // }
+    setIsOpen(false);
+  });
+
   return (
-    <div className="novel-relative">
+    <div className="novel-relative" ref={ref}>
       <button
         type="button"
-        className="novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200"
+        className={`novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}
         onClick={() => {
           setIsOpen(!isOpen);
         }}>
@@ -34,7 +42,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
           className={cn(
             "novel-underline novel-decoration-stone-400 novel-underline-offset-4",
             {
-              "novel-text-blue-500": editor.isActive("link"),
+              "novel-text-purple-500": editor.isActive("link"),
             }
           )}>
           Link
@@ -54,7 +62,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
             ref={inputRef}
             type="text"
             placeholder="Paste a link"
-            className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none"
+            className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500"
             defaultValue={editor.getAttributes("link").href || ""}
           />
           {editor.getAttributes("link").href ? (

@@ -770,6 +770,9 @@ video {
 .novel-bottom-3 {
   bottom: 0.75rem;
 }
+.novel-bottom-\\[7\\.25rem\\] {
+  bottom: 7.25rem;
+}
 .novel-left-1\\/2 {
   left: 50%;
 }
@@ -800,11 +803,15 @@ video {
 .novel-z-\\[99999\\] {
   z-index: 99999;
 }
-.novel-z-\\[9999\\] {
-  z-index: 9999;
+.novel-z-\\[999\\] {
+  z-index: 999;
 }
 .novel-float-right {
   float: right;
+}
+.novel-mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 .novel-my-1 {
   margin-top: 0.25rem;
@@ -1276,25 +1283,13 @@ video {
 .novel-leading-normal {
   line-height: 1.5;
 }
-.novel-text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
-}
-.novel-text-blue-500 {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
-}
-.novel-text-cyan-400 {
-  --tw-text-opacity: 1;
-  color: rgb(34 211 238 / var(--tw-text-opacity));
-}
-.novel-text-cyan-500 {
-  --tw-text-opacity: 1;
-  color: rgb(6 182 212 / var(--tw-text-opacity));
-}
 .novel-text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+.novel-text-purple-400 {
+  --tw-text-opacity: 1;
+  color: rgb(192 132 252 / var(--tw-text-opacity));
 }
 .novel-text-purple-500 {
   --tw-text-opacity: 1;
@@ -1467,10 +1462,6 @@ video {
   --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);
   --tw-prose-th-borders: var(--tw-prose-invert-th-borders);
   --tw-prose-td-borders: var(--tw-prose-invert-td-borders);
-}
-.hover\\:-novel-translate-x-6:hover {
-  --tw-translate-x: -1.5rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .hover\\:novel-bg-red-100:hover {
   --tw-bg-opacity: 1;
@@ -1718,7 +1709,7 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-import { useEffect as useEffect18, useRef as useRef11, useState as useState12 } from "react";
+import { useEffect as useEffect20, useRef as useRef16, useState as useState12 } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
 // src/ui/editor/plugins/upload-images.tsx
@@ -2011,7 +2002,6 @@ function Magic({ className }) {
 
 // src/ui/editor/extensions/slash-command.tsx
 import { toast as toast2 } from "sonner";
-import va from "@vercel/analytics";
 
 // src/lib/editor.ts
 var getPrevText = (editor, {
@@ -2029,7 +2019,10 @@ var getPrevText = (editor, {
 import { createContext } from "react";
 var NovelContext = createContext({
   completionApi: "/api/generate",
-  plan: "5"
+  additionalData: {},
+  lastInput: "",
+  setLastInput: (text) => {
+  }
 });
 
 // src/ui/editor/extensions/slash-command.tsx
@@ -2094,10 +2087,7 @@ var Command = Extension.create({
     ];
   }
 });
-var getSuggestionItems = ({
-  query,
-  plan
-}) => {
+var getSuggestionItems = ({ query }) => {
   return [
     {
       title: "Continue writing",
@@ -2269,15 +2259,15 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { completionApi, plan } = useContext(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onResponse: (response) => {
       if (response.status === 429) {
         toast2.error("You have reached your request limit for the day.");
-        va.track("Rate Limit Reached");
         return;
       }
       editor.chain().focus().deleteRange(range).run();
@@ -2295,9 +2285,6 @@ var CommandList = ({
   const selectItem = useCallback(
     (index2) => {
       const item = items[index2];
-      va.track("Slash Command Used", {
-        command: item.title
-      });
       if (item) {
         if (item.title === "Continue writing") {
           if (isLoading)
@@ -2872,7 +2859,7 @@ var defaultExtensions = (collaboration) => [
       if (node.type.name === "heading") {
         return `Heading ${node.attrs.level}`;
       }
-      return "Press '/' for commands, or '??' for AI autocomplete...";
+      return "Press '++' for AI autocomplete...";
     },
     includeChildren: true
   }),
@@ -2915,7 +2902,7 @@ var defaultExtensions = (collaboration) => [
     allowTableNodeSelection: true
   }),
   Youtube2.configure({
-    origin: "inke.app",
+    origin: "grantwriteai.com",
     controls: true,
     inline: false
   }),
@@ -2950,7 +2937,6 @@ var use_local_storage_default = useLocalStorage;
 import { useDebouncedCallback } from "use-debounce";
 import { useCompletion as useCompletion6 } from "ai/react";
 import { toast as toast6 } from "sonner";
-import va2 from "@vercel/analytics";
 
 // src/ui/editor/default-content.tsx
 var defaultEditorContent = {
@@ -2966,7 +2952,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useState as useState8 } from "react";
+import { useContext as useContext6, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -2992,6 +2978,26 @@ import {
   AlignLeft
 } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
+import { useRef as useRef2 } from "react";
+
+// src/ui/editor/hooks.ts
+import { useEffect as useEffect3 } from "react";
+var useClickOutside = (ref2, handler) => {
+  useEffect3(() => {
+    const listener = (event) => {
+      if (!ref2.current || ref2.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+    document.addEventListener("mousedown", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+    };
+  }, [ref2, handler]);
+};
+
+// src/ui/editor/bubble-menu/node-selector.tsx
 import { jsx as jsx4, jsxs as jsxs4 } from "react/jsx-runtime";
 var NodeSelector = ({
   editor,
@@ -3077,11 +3083,17 @@ var NodeSelector = ({
   const activeItem = (_a = items.filter((item) => item.isActive()).pop()) != null ? _a : {
     name: "Multiple"
   };
-  return /* @__PURE__ */ jsx4(Popover.Root, { open: isOpen, children: /* @__PURE__ */ jsxs4("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = useRef2(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsx4(Popover.Root, { open: isOpen, children: /* @__PURE__ */ jsxs4("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsxs4(
       Popover.Trigger,
       {
-        className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-whitespace-nowrap novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ jsx4("span", { children: activeItem == null ? void 0 : activeItem.name }),
@@ -3123,6 +3135,7 @@ var NodeSelector = ({
 
 // src/ui/editor/bubble-menu/color-selector.tsx
 import { Check as Check2, ChevronDown as ChevronDown2 } from "lucide-react";
+import { useRef as useRef3 } from "react";
 import * as Popover2 from "@radix-ui/react-popover";
 import { jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
 var TEXT_COLORS = [
@@ -3241,11 +3254,17 @@ var ColorSelector = ({
   const activeFontItem = TEXT_FONT.find(
     ({ font }) => editor.isActive("textStyle", { font })
   );
-  return /* @__PURE__ */ jsx5(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ jsxs5("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = useRef3(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsx5(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ jsxs5("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsxs5(
       Popover2.Trigger,
       {
-        className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ jsx5(
@@ -3365,24 +3384,26 @@ var ColorSelector = ({
 
 // src/ui/editor/bubble-menu/link-selector.tsx
 import { Check as Check3, Trash } from "lucide-react";
-import { useEffect as useEffect3, useRef as useRef2 } from "react";
+import { useEffect as useEffect4, useRef as useRef4 } from "react";
 import { jsx as jsx6, jsxs as jsxs6 } from "react/jsx-runtime";
-var LinkSelector = ({
-  editor,
-  isOpen,
-  setIsOpen
-}) => {
-  const inputRef = useRef2(null);
-  useEffect3(() => {
+var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
+  const inputRef = useRef4(null);
+  useEffect4(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  return /* @__PURE__ */ jsxs6("div", { className: "novel-relative", children: [
+  const ref2 = useRef4(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsxs6("div", { className: "novel-relative", ref: ref2, children: [
     /* @__PURE__ */ jsxs6(
       "button",
       {
         type: "button",
-        className: "novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => {
           setIsOpen(!isOpen);
         },
@@ -3394,7 +3415,7 @@ var LinkSelector = ({
               className: cn(
                 "novel-underline novel-decoration-stone-400 novel-underline-offset-4",
                 {
-                  "novel-text-blue-500": editor.isActive("link")
+                  "novel-text-purple-500": editor.isActive("link")
                 }
               ),
               children: "Link"
@@ -3421,7 +3442,7 @@ var LinkSelector = ({
               ref: inputRef,
               type: "text",
               placeholder: "Paste a link",
-              className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none",
+              className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
               defaultValue: editor.getAttributes("link").href || ""
             }
           ),
@@ -3454,6 +3475,7 @@ import {
   SplitSquareHorizontal,
   Heading1 as Heading13
 } from "lucide-react";
+import { useRef as useRef5 } from "react";
 import * as Popover3 from "@radix-ui/react-popover";
 import { jsx as jsx7, jsxs as jsxs7 } from "react/jsx-runtime";
 var TABLE_COLUMN_CMDS = (editor) => {
@@ -3518,11 +3540,17 @@ var TableSelector = ({
   isOpen,
   setIsOpen
 }) => {
-  return /* @__PURE__ */ jsx7(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ jsxs7("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = useRef5(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsx7(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ jsxs7("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsxs7(
       Popover3.Trigger,
       {
-        className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
+        className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-p-2 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`,
         onClick: () => setIsOpen(!isOpen),
         children: [
           /* @__PURE__ */ jsx7("span", { className: "novel-rounded-sm novel-px-1", children: "Table" }),
@@ -3597,10 +3625,10 @@ import {
   PauseCircle as PauseCircle2,
   Scissors,
   Send,
-  SprayCan,
+  Bot,
   Wand
 } from "lucide-react";
-import { useContext as useContext3, useEffect as useEffect9, useRef as useRef6 } from "react";
+import { useContext as useContext4, useEffect as useEffect10, useRef as useRef9 } from "react";
 
 // ../../node_modules/.pnpm/@babel+runtime@7.24.7/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
@@ -3657,7 +3685,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
       value
     }, children);
   }
-  function useContext14(consumerName) {
+  function useContext16(consumerName) {
     const context = $3bkAK$useContext(Context);
     if (context)
       return context;
@@ -3668,7 +3696,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
   Provider.displayName = rootComponentName + "Provider";
   return [
     Provider,
-    useContext14
+    useContext16
   ];
 }
 function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeDeps = []) {
@@ -3691,7 +3719,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
         value
       }, children);
     }
-    function useContext14(consumerName, scope) {
+    function useContext16(consumerName, scope) {
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
       const context = $3bkAK$useContext(Context);
       if (context)
@@ -3703,7 +3731,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     Provider.displayName = rootComponentName + "Provider";
     return [
       Provider,
-      useContext14
+      useContext16
     ];
   }
   const createScope = () => {
@@ -5895,63 +5923,82 @@ var xe = { position: "absolute", width: "1px", height: "1px", padding: "0", marg
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 import { useCompletion as useCompletion2 } from "ai/react";
 import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
-var AISelector = ({
-  editor,
-  isOpen,
-  setIsOpen
-}) => {
+var AISelector = (props) => {
+  const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
+  const context = useContext4(NovelContext);
   const items = [
     {
       name: "Improve writing",
-      detail: "Improve writing",
+      command: "Improve writing",
       icon: Wand
     },
     {
       name: "Fix spelling & grammar",
-      detail: "Please correct spelling and grammar errors in the following text",
+      command: "Please correct spelling and grammar errors in the following text",
       icon: CheckCheck
     },
     {
       name: "Make shorter",
-      detail: "Make shorter",
+      command: "Make shorter",
       icon: ListMinus
     },
     {
       name: "Make longer",
-      detail: "Make longer",
+      command: "Make longer",
       icon: ListPlus
     },
     {
       name: "Writing suggestions",
-      detail: "Provide suggestions and improvements for the writing",
+      command: "Provide suggestions and improvements for the writing",
       icon: Beef
     },
     {
       name: "Enhance vocabulary",
-      detail: "Suggest synonyms and expand vocabulary usage",
+      command: "Suggest synonyms and expand vocabulary usage",
       icon: Book
     },
     {
       name: "Generate titles",
-      detail: "Automatically generate compelling titles for the content",
+      command: "Automatically generate compelling titles for the content",
       icon: Heading14
     },
     {
       name: "Templates & structure",
-      detail: "Offer templates and structure suggestions to improve the writing organization",
+      command: "Offer templates and structure suggestions to improve the writing organization",
       icon: LayoutPanelTop
     },
     {
       name: "Fix repetitive",
-      detail: "Identify and fix repetitive words or phrases in the content",
+      command: "Identify and fix repetitive words or phrases in the content",
       icon: Scissors
-    }
+    },
+    ...subMenuItems || []
   ];
-  const inputRef = useRef6(null);
-  useEffect9(() => {
+  const inputRef = useRef9(null);
+  const handleSubmit = (input) => {
+    if (!input.value)
+      return;
+    const { from, to } = editor.state.selection;
+    const text = editor.state.doc.textBetween(from, to, " ");
+    complete(`${input.value}:
+ ${text}`);
+    setIsOpen(false);
+  };
+  useEffect10(() => {
+    if (isOpen && context.lastInput && (inputRef == null ? void 0 : inputRef.current)) {
+      inputRef.current.value = context.lastInput;
+    }
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
+        if (e.key === "Enter" && (inputRef == null ? void 0 : inputRef.current)) {
+          handleSubmit(inputRef.current);
+        }
+      } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
+        stop2();
+        if (e.key === "Escape") {
+          setIsOpen(false);
+        }
       }
     };
     if (isOpen) {
@@ -5963,18 +6010,29 @@ var AISelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  useEffect9(() => {
-    var _a;
-    inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
+  const ref2 = useRef9(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    if (inputRef.current) {
+      context.setLastInput(inputRef.current.value || "");
+    }
+    setIsOpen(false);
   });
-  const { completionApi, plan } = useContext3(NovelContext);
+  useEffect10(() => {
+    var _a;
+    if (!hasSelection)
+      inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
+  });
+  const { completionApi, additionalData: { body, headers } } = useContext4(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion2({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan }
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ jsx8("div", { className: "novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium novel-text-cyan-500 hover:novel-bg-stone-100 active:novel-bg-stone-200", children: /* @__PURE__ */ jsxs8(
+  return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+    /* @__PURE__ */ jsx8("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ jsxs8(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -5986,7 +6044,7 @@ var AISelector = ({
           editor.chain().blur().run();
         },
         children: [
-          /* @__PURE__ */ jsx8(SprayCan, { className: "novel-h-5 novel-w-5" }),
+          /* @__PURE__ */ jsx8(Bot, { className: "novel-h-5 novel-w-5" }),
           isLoading ? /* @__PURE__ */ jsx8(
             PauseCircle2,
             {
@@ -6004,13 +6062,7 @@ var AISelector = ({
           onSubmit: (e) => {
             e.preventDefault();
             const input = e.currentTarget[0];
-            if (!input.value)
-              return;
-            const { from, to } = editor.state.selection;
-            const text = editor.state.doc.textBetween(from, to, " ");
-            complete(`${input.value}:
- ${text}`);
-            setIsOpen(false);
+            handleSubmit(input);
           },
           className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
           children: [
@@ -6019,42 +6071,42 @@ var AISelector = ({
               {
                 ref: inputRef,
                 type: "text",
-                placeholder: "Make this para funnier...",
-                className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none",
+                placeholder: "Enter a prompt or question...",
+                className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
                 defaultValue: editor.getAttributes("link").href || ""
               }
             ),
-            /* @__PURE__ */ jsx8("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx8(Send, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }) })
+            /* @__PURE__ */ jsx8("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx8(Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
         }
       ),
-      /* @__PURE__ */ jsx8(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx8(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx8(
+      hasSelection ? /* @__PURE__ */ jsx8(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx8(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx8(
         Le.Item,
         {
           onSelect: () => {
             if (!isLoading) {
               const { from, to } = editor.state.selection;
               const text = editor.state.doc.textBetween(from, to, " ");
-              complete(`${item.detail}:
+              complete(`${item.command}:
  ${text}`);
               setIsOpen(false);
             }
           },
           className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
           children: /* @__PURE__ */ jsxs8("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
-            /* @__PURE__ */ jsx8(item.icon, { className: "novel-h-4 novel-w-4 novel-text-cyan-500" }),
+            /* @__PURE__ */ jsx8(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
             /* @__PURE__ */ jsx8("span", { children: item.name })
           ] })
         },
         index2
-      )) }) })
+      )) }) }) : null
     ] })
   ] });
 };
 
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-selector.tsx
 import { Languages, PauseCircle as PauseCircle3 } from "lucide-react";
-import { useContext as useContext4, useEffect as useEffect10 } from "react";
+import { useContext as useContext5, useEffect as useEffect11, useRef as useRef10 } from "react";
 import { useCompletion as useCompletion3 } from "ai/react";
 import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
 var TranslateSelector = ({
@@ -6065,46 +6117,46 @@ var TranslateSelector = ({
   const items = [
     {
       name: "English",
-      detail: "Translate into English"
+      command: "Translate into English"
     },
     {
       name: "Chinese",
-      detail: "Translate into Chinese"
+      command: "Translate into Chinese"
     },
     {
       name: "Spanish",
-      detail: "Translate into Spanish"
+      command: "Translate into Spanish"
     },
     {
       name: "French",
-      detail: "Translate into French"
+      command: "Translate into French"
     },
     {
       name: "German",
-      detail: "Translate into German"
+      command: "Translate into German"
     },
     {
       name: "Japanese",
-      detail: "Translate into Japanese"
+      command: "Translate into Japanese"
     },
     {
       name: "Russian",
-      detail: "Translate into Russian"
+      command: "Translate into Russian"
     },
     {
       name: "Korean",
-      detail: "Translate into Korean"
+      command: "Translate into Korean"
     },
     {
       name: "Arabic",
-      detail: "Translate into Arabic"
+      command: "Translate into Arabic"
     },
     {
       name: "Portuguese",
-      detail: "Translate into Portuguese"
+      command: "Translate into Portuguese"
     }
   ];
-  useEffect10(() => {
+  useEffect11(() => {
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
@@ -6119,14 +6171,21 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi, plan } = useContext4(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext5(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion3({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan }
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", children: [
-    /* @__PURE__ */ jsx9("div", { className: "novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200", children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
+  const ref2 = useRef10(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+    /* @__PURE__ */ jsx9("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
       PauseCircle3,
       {
         onClick: stop2,
@@ -6136,7 +6195,7 @@ var TranslateSelector = ({
       Languages,
       {
         onClick: () => setIsOpen(!isOpen),
-        className: "novel-h-5 novel-text-stone-600 novel-w-4"
+        className: "novel-h-5 novel-w-4"
       }
     ) }) }),
     isOpen && /* @__PURE__ */ jsx9(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx9(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx9(
@@ -6146,7 +6205,7 @@ var TranslateSelector = ({
           if (!isLoading) {
             const { from, to } = editor.state.selection;
             const text = editor.state.doc.textBetween(from, to, " ");
-            complete(`${item.detail}:
+            complete(`${item.command}:
  ${text}`);
             setIsOpen(false);
           }
@@ -6162,6 +6221,10 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 import { Fragment as Fragment4, jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
+  const { additionalData } = useContext6(NovelContext);
+  const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
+  const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
+  const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
   const items = [
     {
       name: "bold",
@@ -6192,18 +6255,25 @@ var EditorBubbleMenu = (props) => {
       isActive: () => props.editor.isActive("code"),
       command: () => props.editor.chain().focus().toggleCode().run(),
       icon: CodeIcon
-    }
+    },
+    ...bubbleMenuItems
   ];
   const bubbleMenuProps = __spreadProps(__spreadValues({}, props), {
     shouldShow: ({ state, editor }) => {
       const { selection } = state;
       const { empty } = selection;
-      if (editor.isActive("image") || empty || isNodeSelection(selection)) {
+      setHasSection(!empty);
+      if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
+      }
+      if (!empty) {
+        return true;
       }
       return true;
     },
     tippyOptions: {
+      // https://atomiks.github.io/tippyjs/v6/all-props/#placement
+      placement: "bottom",
       moveTransition: "transform 0.15s ease-out",
       onHidden: () => {
         setIsNodeSelectorOpen(false);
@@ -6215,6 +6285,7 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
+  const [hasSelection, setHasSection] = useState8(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState8(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState8(false);
   const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState8(false);
@@ -6224,13 +6295,15 @@ var EditorBubbleMenu = (props) => {
   return /* @__PURE__ */ jsx10(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
-      className: "novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl",
+      className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && /* @__PURE__ */ jsxs10(Fragment4, { children: [
         /* @__PURE__ */ jsx10(
           AISelector,
           {
             editor: props.editor,
             isOpen: isAISelectorOpen,
+            hasSelection,
+            subMenuItems: aiMenuItems,
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -6296,7 +6369,7 @@ var EditorBubbleMenu = (props) => {
               item.icon,
               {
                 className: cn("novel-h-4 novel-w-4", {
-                  "novel-text-blue-500": item.isActive()
+                  "novel-text-purple-500": item.isActive()
                 })
               }
             )
@@ -6322,7 +6395,7 @@ var EditorBubbleMenu = (props) => {
           TranslateSelector,
           {
             editor: props.editor,
-            isOpen: isTranslateSelectorOpen,
+            isOpen: hasSelection && isTranslateSelectorOpen,
             setIsOpen: () => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -6332,7 +6405,27 @@ var EditorBubbleMenu = (props) => {
               setIsLinkSelectorOpen(false);
             }
           }
-        )
+        ),
+        CustomMenuItems.length ? CustomMenuItems.map((item, index2) => (
+          //  React.cloneElement(item, { key: index })
+          /* @__PURE__ */ jsx10(
+            item.component,
+            {
+              editor: props.editor,
+              isOpen: item == null ? void 0 : item.isOpen,
+              setIsOpen: () => {
+                item.setIsOpen(!item.isOpen);
+                setIsTranslateSelectorOpen(false);
+                setIsAISelectorOpen(false);
+                setIsNodeSelectorOpen(false);
+                setIsColorSelectorOpen(false);
+                setIsTableSelectorOpen(false);
+                setIsLinkSelectorOpen(false);
+              }
+            },
+            index2
+          )
+        )) : null
       ] })
     })
   );
@@ -8639,7 +8732,7 @@ function getOverlapSize(points1, points2) {
 }
 
 // ../../node_modules/.pnpm/react-moveable@0.54.1/node_modules/react-moveable/dist/moveable.esm.js
-import * as React9 from "react";
+import * as React10 from "react";
 import { createElement as createElement9 } from "react";
 
 // ../../node_modules/.pnpm/gesto@1.19.4/node_modules/gesto/dist/gesto.esm.js
@@ -9424,7 +9517,7 @@ function styled(css3) {
 var styled_esm_default = styled;
 
 // ../../node_modules/.pnpm/react-css-styled@1.1.9/node_modules/react-css-styled/dist/styled.esm.js
-import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef7, useImperativeHandle, useEffect as useEffect11 } from "react";
+import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef12, useImperativeHandle, useEffect as useEffect13 } from "react";
 var __assign6 = function() {
   __assign6 = Object.assign || function __assign8(t2) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9454,11 +9547,11 @@ function styled2(Tag, css3) {
   var cssId = injector.className;
   return forwardRef4(function(props, ref2) {
     var _a = props.className, className = _a === void 0 ? "" : _a, cspNonce = props.cspNonce, attributes = __rest2(props, ["className", "cspNonce"]);
-    var targetRef = useRef7();
+    var targetRef = useRef12();
     useImperativeHandle(ref2, function() {
       return targetRef.current;
     }, []);
-    useEffect11(function() {
+    useEffect13(function() {
       var injectResult = injector.inject(targetRef.current, {
         nonce: props.cspNonce
       });
@@ -10548,7 +10641,7 @@ function startChildDist(moveable, child, parentDatas, childEvent) {
   childEvent.datas.originalY = originalY;
   return childEvent;
 }
-function renderDirectionControlsByInfos(moveable, ableName, renderDirections, React11) {
+function renderDirectionControlsByInfos(moveable, ableName, renderDirections, React12) {
   var _a = moveable.getState(), renderPoses = _a.renderPoses, rotationRad = _a.rotation, direction = _a.direction;
   var zoom = getProps(moveable.props, ableName).zoom;
   var degRotation = absDegree(rotationRad / Math.PI * 180);
@@ -10575,60 +10668,60 @@ function renderDirectionControlsByInfos(moveable, ableName, renderDirections, Re
     getKeys(data).forEach(function(name) {
       dataAttrs["data-".concat(name)] = data[name];
     });
-    return React11.createElement("div", __assign7({ className: prefix.apply(void 0, __spreadArray2(["control", "direction", dir, ableName], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir }, dataAttrs, { key: "direction-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
+    return React12.createElement("div", __assign7({ className: prefix.apply(void 0, __spreadArray2(["control", "direction", dir, ableName], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir }, dataAttrs, { key: "direction-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
       return renderPoses[index2];
     })), false)) }));
   });
 }
-function renderDirectionControls(moveable, defaultDirections, ableName, React11) {
+function renderDirectionControls(moveable, defaultDirections, ableName, React12) {
   var _a = getProps(moveable.props, ableName), _b = _a.renderDirections, directions = _b === void 0 ? defaultDirections : _b, displayAroundControls = _a.displayAroundControls;
   if (!directions) {
     return [];
   }
   var renderDirections = directions === true ? DIRECTIONS : directions;
-  return __spreadArray2(__spreadArray2([], __read(displayAroundControls ? renderAroundControls(moveable, React11, ableName, renderDirections) : []), false), __read(renderDirectionControlsByInfos(moveable, ableName, renderDirections.map(function(dir) {
+  return __spreadArray2(__spreadArray2([], __read(displayAroundControls ? renderAroundControls(moveable, React12, ableName, renderDirections) : []), false), __read(renderDirectionControlsByInfos(moveable, ableName, renderDirections.map(function(dir) {
     return {
       data: {},
       classNames: [],
       dir
     };
-  }), React11)), false);
+  }), React12)), false);
 }
-function renderLine(React11, direction, pos1, pos2, zoom, key) {
+function renderLine(React12, direction, pos1, pos2, zoom, key) {
   var classNames = [];
   for (var _i = 6; _i < arguments.length; _i++) {
     classNames[_i - 6] = arguments[_i];
   }
   var rad = getRad(pos1, pos2);
   var rotation = direction ? throttle(rad / Math.PI * 180, 15) % 180 : -1;
-  return React11.createElement("div", { key: "line-".concat(key), className: prefix.apply(void 0, __spreadArray2(["line", "direction", direction ? "edge" : "", direction], __read(classNames), false)), "data-rotation": rotation, "data-line-key": key, "data-direction": direction, style: getLineStyle(pos1, pos2, zoom, rad) });
+  return React12.createElement("div", { key: "line-".concat(key), className: prefix.apply(void 0, __spreadArray2(["line", "direction", direction ? "edge" : "", direction], __read(classNames), false)), "data-rotation": rotation, "data-line-key": key, "data-direction": direction, style: getLineStyle(pos1, pos2, zoom, rad) });
 }
-function renderEdgeLines(React11, ableName, edge, poses, zoom) {
+function renderEdgeLines(React12, ableName, edge, poses, zoom) {
   var directions = edge === true ? DIRECTIONS4 : edge;
   return directions.map(function(direction, i) {
     var _a = __read(DIRECTION_INDEXES[direction], 2), index1 = _a[0], index2 = _a[1];
     if (index2 == null) {
       return;
     }
-    return renderLine(React11, direction, poses[index1], poses[index2], zoom, "".concat(ableName, "Edge").concat(i), ableName);
+    return renderLine(React12, direction, poses[index1], poses[index2], zoom, "".concat(ableName, "Edge").concat(i), ableName);
   }).filter(Boolean);
 }
 function getRenderDirections(ableName) {
-  return function(moveable, React11) {
+  return function(moveable, React12) {
     var edge = getProps(moveable.props, ableName).edge;
     if (edge && (edge === true || edge.length)) {
-      return __spreadArray2(__spreadArray2([], __read(renderEdgeLines(React11, ableName, edge, moveable.getState().renderPoses, moveable.props.zoom)), false), __read(renderDiagonalDirections(moveable, ableName, React11)), false);
+      return __spreadArray2(__spreadArray2([], __read(renderEdgeLines(React12, ableName, edge, moveable.getState().renderPoses, moveable.props.zoom)), false), __read(renderDiagonalDirections(moveable, ableName, React12)), false);
     }
-    return renderAllDirections(moveable, ableName, React11);
+    return renderAllDirections(moveable, ableName, React12);
   };
 }
-function renderAllDirections(moveable, ableName, React11) {
-  return renderDirectionControls(moveable, DIRECTIONS, ableName, React11);
+function renderAllDirections(moveable, ableName, React12) {
+  return renderDirectionControls(moveable, DIRECTIONS, ableName, React12);
 }
-function renderDiagonalDirections(moveable, ableName, React11) {
-  return renderDirectionControls(moveable, ["nw", "ne", "sw", "se"], ableName, React11);
+function renderDiagonalDirections(moveable, ableName, React12) {
+  return renderDirectionControls(moveable, ["nw", "ne", "sw", "se"], ableName, React12);
 }
-function renderAroundControls(moveable, React11, ableName, renderDirections) {
+function renderAroundControls(moveable, React12, ableName, renderDirections) {
   var renderState = moveable.renderState;
   if (!renderState.renderDirectionMap) {
     renderState.renderDirectionMap = {};
@@ -10648,7 +10741,7 @@ function renderAroundControls(moveable, React11, ableName, renderDirections) {
     if (ableName) {
       classNames.push("direction", ableName);
     }
-    return React11.createElement("div", { className: prefix.apply(void 0, __spreadArray2([], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir, key: "direction-around-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
+    return React12.createElement("div", { className: prefix.apply(void 0, __spreadArray2([], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir, key: "direction-around-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
       return renderPoses[index2];
     })), false)) });
   });
@@ -12166,7 +12259,7 @@ var Draggable = {
   requestChildStyle: function() {
     return ["left", "top", "right", "bottom"];
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, hideThrottleDragRotateLine = _a.hideThrottleDragRotateLine, throttleDragRotate = _a.throttleDragRotate, zoom = _a.zoom;
     var _b = moveable.getState(), dragInfo = _b.dragInfo, beforeOrigin = _b.beforeOrigin;
     if (hideThrottleDragRotateLine || !throttleDragRotate || !dragInfo) {
@@ -12178,7 +12271,7 @@ var Draggable = {
     }
     var width = getDistSize(dist);
     var rad = getRad(dist, [0, 0]);
-    return [React11.createElement("div", { className: prefix("line", "horizontal", "dragline", "dashed"), key: "dragRotateGuideline", style: {
+    return [React12.createElement("div", { className: prefix("line", "horizontal", "dragline", "dashed"), key: "dragRotateGuideline", style: {
       width: "".concat(width, "px"),
       transform: "translate(".concat(beforeOrigin[0], "px, ").concat(beforeOrigin[1], "px) rotate(").concat(rad, "rad) scaleY(").concat(zoom, ")")
     } })];
@@ -13129,7 +13222,7 @@ var Rotatable = {
     }
     return prefix("view-rotation-dragging");
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = getProps(moveable.props, "rotatable"), rotatable = _a.rotatable, rotationPosition = _a.rotationPosition, zoom = _a.zoom, renderDirections = _a.renderDirections, rotateAroundControls = _a.rotateAroundControls, resolveAblesWithRotatable = _a.resolveAblesWithRotatable;
     var _b = moveable.getState(), renderPoses = _b.renderPoses, direction = _b.direction;
     if (!rotatable) {
@@ -13139,16 +13232,16 @@ var Rotatable = {
     var jsxs18 = [];
     positions.forEach(function(_a2, i) {
       var _b2 = __read(_a2, 2), pos = _b2[0], rad = _b2[1];
-      jsxs18.push(React11.createElement(
+      jsxs18.push(React12.createElement(
         "div",
         { key: "rotation".concat(i), className: prefix("rotation"), style: {
           // tslint:disable-next-line: max-line-length
           transform: "translate(-50%) translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rad, "rad)")
         } },
-        React11.createElement("div", { className: prefix("line rotation-line"), style: {
+        React12.createElement("div", { className: prefix("line rotation-line"), style: {
           transform: "scaleX(".concat(zoom, ")")
         } }),
-        React11.createElement("div", { className: prefix("control rotation-control"), style: {
+        React12.createElement("div", { className: prefix("control rotation-control"), style: {
           transform: "translate(0.5px) scale(".concat(zoom, ")")
         } })
       ));
@@ -13172,10 +13265,10 @@ var Rotatable = {
           };
         });
       }
-      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderDirectionControlsByInfos(moveable, "rotatable", directionControlInfos, React11)), false));
+      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderDirectionControlsByInfos(moveable, "rotatable", directionControlInfos, React12)), false));
     }
     if (rotateAroundControls) {
-      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderAroundControls(moveable, React11)), false));
+      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderAroundControls(moveable, React12)), false));
     }
     return jsxs18;
   },
@@ -13512,27 +13605,27 @@ var Rotatable = {
     };
   }
 };
-function renderGuideline(info, React11) {
+function renderGuideline(info, React12) {
   var _a;
   var direction = info.direction, classNames = info.classNames, size = info.size, pos = info.pos, zoom = info.zoom, key = info.key;
   var isHorizontal = direction === "horizontal";
   var scaleType = isHorizontal ? "Y" : "X";
-  return React11.createElement("div", {
+  return React12.createElement("div", {
     key,
     className: classNames.join(" "),
     style: (_a = {}, _a[isHorizontal ? "width" : "height"] = "".concat(size), _a.transform = "translate(".concat(pos[0], ", ").concat(pos[1], ") translate").concat(scaleType, "(-50%) scale").concat(scaleType, "(").concat(zoom, ")"), _a)
   });
 }
-function renderInnerGuideline(info, React11) {
+function renderInnerGuideline(info, React12) {
   return renderGuideline(__assign7(__assign7({}, info), { classNames: __spreadArray2([
     prefix("line", "guideline", info.direction)
   ], __read(info.classNames), false).filter(function(className) {
     return className;
   }), size: info.size || "".concat(info.sizeValue, "px"), pos: info.pos || info.posValue.map(function(v) {
     return "".concat(throttle(v, 0.1), "px");
-  }) }), React11);
+  }) }), React12);
 }
-function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size, index2, React11) {
+function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size, index2, React12) {
   var zoom = moveable.props.zoom;
   return snapPoses.map(function(_a, i) {
     var type = _a.type, pos = _a.pos;
@@ -13546,10 +13639,10 @@ function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size
       sizeValue: size,
       zoom,
       direction
-    }, React11);
+    }, React12);
   });
 }
-function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, React11) {
+function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, React12) {
   var _a = moveable.props, zoom = _a.zoom, isDisplayInnerSnapDigit = _a.isDisplayInnerSnapDigit;
   var mainNames = type === "horizontal" ? VERTICAL_NAMES_MAP : HORIZONTAL_NAMES_MAP;
   var targetStart = targetRect[mainNames.start];
@@ -13579,10 +13672,10 @@ function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, Rea
       posValue: renderPos,
       sizeValue: size,
       zoom
-    }, React11);
+    }, React12);
   });
 }
-function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, className, React11) {
+function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, className, React12) {
   var _a;
   var _b = moveable.props, _c = _b.snapDigit, snapDigit = _c === void 0 ? 0 : _c, _d = _b.isDisplaySnapDigit, isDisplaySnapDigit = _d === void 0 ? true : _d, _e = _b.snapDistFormat, snapDistFormat = _e === void 0 ? function(v, type2) {
     if (type2 === "vertical") {
@@ -13594,7 +13687,7 @@ function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, class
   var sizeName = type === "vertical" ? "height" : "width";
   var absGap = Math.abs(gap);
   var snapSize = isDisplaySnapDigit ? parseFloat(absGap.toFixed(snapDigit)) : 0;
-  return React11.createElement(
+  return React12.createElement(
     "div",
     { key: "".concat(type, "-").concat(lineType, "-guideline-").concat(index2), className: prefix("guideline-group", type), style: (_a = {
       left: "".concat(renderPos[0], "px"),
@@ -13607,8 +13700,8 @@ function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, class
       posValue: [0, 0],
       sizeValue: absGap,
       zoom
-    }, React11),
-    React11.createElement("div", { className: prefix("size-value", "gap"), style: {
+    }, React12),
+    React12.createElement("div", { className: prefix("size-value", "gap"), style: {
       transform: "translate".concat(scaleType, "(-50%) scale(").concat(zoom, ")")
     } }, snapSize > 0 ? snapDistFormat(snapSize, type) : "")
   );
@@ -13675,7 +13768,7 @@ function groupByElementGuidelines(type, guidelines, targetRect, isDisplayInnerSn
     };
   });
 }
-function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, React11) {
+function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, React12) {
   var isDisplayInnerSnapDigit = moveable.props.isDisplayInnerSnapDigit;
   var rendered = [];
   ["vertical", "horizontal"].forEach(function(type) {
@@ -13700,7 +13793,7 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
           var renderPos = [0, 0];
           renderPos[index2] = targetPos[index2] + prevRect[mainNames.start] - targetStart - size;
           renderPos[otherIndex] = sidePos;
-          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React11));
+          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React12));
         }
         prevRect = nextRect;
       });
@@ -13712,7 +13805,7 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
           var renderPos = [0, 0];
           renderPos[index2] = targetPos[index2] + prevRect[mainNames.end] - targetStart;
           renderPos[otherIndex] = sidePos;
-          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React11));
+          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React12));
         }
         prevRect = nextRect;
       });
@@ -13726,14 +13819,14 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
         renderPos1[otherIndex] = sidePos;
         renderPos2[index2] = targetPos[index2] + targetEnd - targetStart;
         renderPos2[otherIndex] = sidePos;
-        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size1, renderPos1, guideline.className, React11));
-        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size2, renderPos2, guideline.className, React11));
+        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size1, renderPos1, guideline.className, React12));
+        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size2, renderPos2, guideline.className, React12));
       });
     });
   });
   return rendered;
 }
-function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React11) {
+function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React12) {
   var rendered = [];
   ["horizontal", "vertical"].forEach(function(type) {
     var nextGuidelines = guidelines.filter(function(guideline) {
@@ -13772,7 +13865,7 @@ function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React1
           return;
         }
         renderPos[otherIndex] += sideCenterPos - targetSideStart;
-        rendered.push(renderDigitLine(moveable, index2 ? "vertical" : "horizontal", "gap", rendered.length, gap, renderPos, className, React11));
+        rendered.push(renderDigitLine(moveable, index2 ? "vertical" : "horizontal", "gap", rendered.length, gap, renderPos, className, React12));
       });
     });
   });
@@ -14479,7 +14572,7 @@ var Snappable = {
   css: [
     ":host {\n--bounds-color: #d66;\n}\n.guideline {\npointer-events: none;\nz-index: 2;\n}\n.guideline.bounds {\nbackground: #d66;\nbackground: var(--bounds-color);\n}\n.guideline-group {\nposition: absolute;\ntop: 0;\nleft: 0;\n}\n.guideline-group .size-value {\nposition: absolute;\ncolor: #f55;\nfont-size: 12px;\nfont-size: calc(12px * var(--zoom));\nfont-weight: bold;\n}\n.guideline-group.horizontal .size-value {\ntransform-origin: 50% 100%;\ntransform: translateX(-50%);\nleft: 50%;\nbottom: 5px;\nbottom: calc(2px + 3px * var(--zoom));\n}\n.guideline-group.vertical .size-value {\ntransform-origin: 0% 50%;\ntop: 50%;\ntransform: translateY(-50%);\nleft: 5px;\nleft: calc(2px + 3px * var(--zoom));\n}\n.guideline.gap {\nbackground: #f55;\n}\n.size-value.gap {\ncolor: #f55;\n}\n"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var state = moveable.state;
     var targetTop = state.top, targetLeft = state.left, pos1 = state.pos1, pos2 = state.pos2, pos3 = state.pos3, pos4 = state.pos4, snapRenderInfo = state.snapRenderInfo;
     var _a = moveable.props.snapRenderThreshold, snapRenderThreshold = _a === void 0 ? 1 : _a;
@@ -14588,7 +14681,7 @@ var Snappable = {
         innerBounds: innerBoundMap
       }, true);
     }
-    return __spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2([], __read(renderDashedGuidelines(moveable, elementGuidelines, [minLeft, minTop], targetRect, React11)), false), __read(renderGapGuidelines(moveable, gapGuidelines, [minLeft, minTop], targetRect, React11)), false), __read(renderGuidelines(moveable, "horizontal", horizontalGuidelines, [targetLeft, targetTop], targetRect, React11)), false), __read(renderGuidelines(moveable, "vertical", verticalGuidelines, [targetLeft, targetTop], targetRect, React11)), false), __read(renderSnapPoses(moveable, "horizontal", horizontalSnapPoses, minLeft, targetTop, width, 0, React11)), false), __read(renderSnapPoses(moveable, "vertical", verticalSnapPoses, minTop, targetLeft, height, 1, React11)), false);
+    return __spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2([], __read(renderDashedGuidelines(moveable, elementGuidelines, [minLeft, minTop], targetRect, React12)), false), __read(renderGapGuidelines(moveable, gapGuidelines, [minLeft, minTop], targetRect, React12)), false), __read(renderGuidelines(moveable, "horizontal", horizontalGuidelines, [targetLeft, targetTop], targetRect, React12)), false), __read(renderGuidelines(moveable, "vertical", verticalGuidelines, [targetLeft, targetTop], targetRect, React12)), false), __read(renderSnapPoses(moveable, "horizontal", horizontalSnapPoses, minLeft, targetTop, width, 0, React12)), false), __read(renderSnapPoses(moveable, "vertical", verticalSnapPoses, minTop, targetLeft, height, 1, React12)), false);
   },
   dragStart: function(moveable, e) {
     moveable.state.snapRenderInfo = {
@@ -16419,7 +16512,7 @@ var Warpable = {
     "warpEnd"
   ],
   viewClassName: getDirectionViewClassName("warpable"),
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, resizable = _a.resizable, scalable = _a.scalable, warpable = _a.warpable, zoom = _a.zoom;
     if (resizable || scalable || !warpable) {
       return [];
@@ -16434,11 +16527,11 @@ var Warpable = {
     var linePosTo3 = getMiddleLinePos(pos2, pos4);
     var linePosTo4 = getMiddleLinePos(pos4, pos2);
     return __spreadArray2([
-      React11.createElement("div", { className: prefix("line"), key: "middeLine1", style: getLineStyle(linePosFrom1, linePosTo1, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine2", style: getLineStyle(linePosFrom2, linePosTo2, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine3", style: getLineStyle(linePosFrom3, linePosTo3, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine4", style: getLineStyle(linePosFrom4, linePosTo4, zoom) })
-    ], __read(renderAllDirections(moveable, "warpable", React11)), false);
+      React12.createElement("div", { className: prefix("line"), key: "middeLine1", style: getLineStyle(linePosFrom1, linePosTo1, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine2", style: getLineStyle(linePosFrom2, linePosTo2, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine3", style: getLineStyle(linePosFrom3, linePosTo3, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine4", style: getLineStyle(linePosFrom4, linePosTo4, zoom) })
+    ], __read(renderAllDirections(moveable, "warpable", React12)), false);
   },
   dragControlCondition: function(moveable, e) {
     if (e.isRequest) {
@@ -16577,14 +16670,14 @@ function restoreStyle(moveable) {
   removeClass(el, AVOID);
   el.style.cssText += "left: 0px; top: 0px; width: ".concat(width, "px; height: ").concat(height, "px");
 }
-function renderPieces(React11) {
-  return React11.createElement(
+function renderPieces(React12) {
+  return React12.createElement(
     "div",
     { key: "area_pieces", className: AREA_PIECES },
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE })
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE })
   );
 }
 var DragArea = {
@@ -16597,14 +16690,14 @@ var DragArea = {
     "click",
     "clickGroup"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, target = _a.target, dragArea = _a.dragArea, groupable = _a.groupable, passDragArea = _a.passDragArea;
     var _b = moveable.getState(), width = _b.width, height = _b.height, renderPoses = _b.renderPoses;
     var className = passDragArea ? prefix("area", "pass") : prefix("area");
     if (groupable) {
       return [
-        React11.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className }),
-        renderPieces(React11)
+        React12.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className }),
+        renderPieces(React12)
       ];
     }
     if (!target || !dragArea) {
@@ -16613,7 +16706,7 @@ var DragArea = {
     var h = createWarpMatrix([0, 0], [width, 0], [0, height], [width, height], renderPoses[0], renderPoses[1], renderPoses[2], renderPoses[3]);
     var transform = h.length ? makeMatrixCSS(h, true) : "none";
     return [
-      React11.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className, style: {
+      React12.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className, style: {
         top: "0px",
         left: "0px",
         width: "".concat(width, "px"),
@@ -16621,7 +16714,7 @@ var DragArea = {
         transformOrigin: "0 0",
         transform
       } }),
-      renderPieces(React11)
+      renderPieces(React12)
     ];
   },
   dragStart: function(moveable, _a) {
@@ -16698,7 +16791,7 @@ var DragArea = {
 };
 var Origin = makeAble("origin", {
   props: ["origin", "svgOrigin"],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, zoom = _a.zoom, svgOrigin = _a.svgOrigin, groupable = _a.groupable;
     var _b = moveable.getState(), beforeOrigin = _b.beforeOrigin, rotation = _b.rotation, svg = _b.svg, allMatrix = _b.allMatrix, is3d = _b.is3d, left = _b.left, top = _b.top, offsetWidth = _b.offsetWidth, offsetHeight = _b.offsetHeight;
     var originStyle;
@@ -16711,7 +16804,7 @@ var Origin = makeAble("origin", {
       originStyle = getControlTransform(rotation, zoom, beforeOrigin);
     }
     return [
-      React11.createElement("div", { className: prefix("control", "origin"), style: originStyle, key: "beforeOrigin" })
+      React12.createElement("div", { className: prefix("control", "origin"), style: originStyle, key: "beforeOrigin" })
     ];
   }
 });
@@ -16863,7 +16956,7 @@ var Default = {
 };
 var Padding = makeAble("padding", {
   props: ["padding"],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var props = moveable.props;
     if (props.dragArea) {
       return [];
@@ -16894,7 +16987,7 @@ var Padding = makeAble("padding", {
       if (!h.length) {
         return void 0;
       }
-      return React11.createElement("div", { key: "padding".concat(i), className: prefix("padding"), style: {
+      return React12.createElement("div", { key: "padding".concat(i), className: prefix("padding"), style: {
         transform: makeMatrixCSS(h, true)
       } });
     });
@@ -17560,7 +17653,7 @@ var Clippable = {
     ".guideline {\npointer-events: none;\nz-index: 2;\n}",
     ".line.guideline.bounds {\nbackground: #d66;\nbackground: var(--bounds-color);\n}"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, customClipPath = _a.customClipPath, defaultClipPath = _a.defaultClipPath, clipArea = _a.clipArea, zoom = _a.zoom, groupable = _a.groupable;
     var _b = moveable.getState(), target = _b.target, width = _b.width, height = _b.height, allMatrix = _b.allMatrix, is3d = _b.is3d, left = _b.left, top = _b.top, pos1 = _b.pos1, pos2 = _b.pos2, pos3 = _b.pos3, pos4 = _b.pos4, clipPathState = _b.clipPathState, snapBoundInfos = _b.snapBoundInfos, rotationRad = _b.rotation;
     if (!target || groupable) {
@@ -17591,20 +17684,20 @@ var Clippable = {
         var from = i2 === 0 ? linePoses_1[linePoses_1.length - 1] : linePoses_1[i2 - 1];
         var rad2 = getRad(from, to);
         var dist = getDiagonalSize(from, to);
-        return React11.createElement("div", { key: "clipLine".concat(i2), className: prefix("line", "clip-line", "snap-control"), "data-clip-index": i2, style: {
+        return React12.createElement("div", { key: "clipLine".concat(i2), className: prefix("line", "clip-line", "snap-control"), "data-clip-index": i2, style: {
           width: "".concat(dist, "px"),
           transform: "translate(".concat(from[0], "px, ").concat(from[1], "px) rotate(").concat(rad2, "rad) scaleY(").concat(zoom, ")")
         } });
       });
     }
     controls = poses.map(function(pos, i2) {
-      return React11.createElement("div", { key: "clipControl".concat(i2), className: prefix("control", "clip-control", "snap-control"), "data-clip-index": i2, style: {
+      return React12.createElement("div", { key: "clipControl".concat(i2), className: prefix("control", "clip-control", "snap-control"), "data-clip-index": i2, style: {
         transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rotationRad, "rad) scale(").concat(zoom, ")")
       } });
     });
     if (isInset) {
       controls.push.apply(controls, __spreadArray2([], __read(poses.slice(8).map(function(pos, i2) {
-        return React11.createElement("div", { key: "clipRadiusControl".concat(i2), className: prefix("control", "clip-control", "clip-radius", "snap-control"), "data-clip-index": 8 + i2, style: {
+        return React12.createElement("div", { key: "clipRadiusControl".concat(i2), className: prefix("control", "clip-control", "clip-radius", "snap-control"), "data-clip-index": 8 + i2, style: {
           transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rotationRad, "rad) scale(").concat(zoom, ")")
         } });
       })), false));
@@ -17633,7 +17726,7 @@ var Clippable = {
           return "".concat(pos[0], "px ").concat(pos[1], "px");
         }).join(", "), ")");
       }
-      controls.push(React11.createElement("div", { key: "clipEllipse", className: prefix("clip-ellipse", "snap-control"), style: {
+      controls.push(React12.createElement("div", { key: "clipEllipse", className: prefix("clip-ellipse", "snap-control"), style: {
         width: "".concat(radiusX * 2, "px"),
         height: "".concat(radiusY * 2, "px"),
         clipPath: ellipseClipPath,
@@ -17644,7 +17737,7 @@ var Clippable = {
       var _d = getRect(__spreadArray2([pos1, pos2, pos3, pos4], __read(poses), false)), allWidth = _d.width, allHeight = _d.height, allLeft_1 = _d.left, allTop_1 = _d.top;
       if (isPolygon || isRect || isInset) {
         var areaPoses = isInset ? poses.slice(0, 8) : poses;
-        controls.push(React11.createElement("div", { key: "clipArea", className: prefix("clip-area", "snap-control"), style: {
+        controls.push(React12.createElement("div", { key: "clipArea", className: prefix("clip-area", "snap-control"), style: {
           width: "".concat(allWidth, "px"),
           height: "".concat(allHeight, "px"),
           transform: "translate(".concat(allLeft_1, "px, ").concat(allTop_1, "px)"),
@@ -17663,7 +17756,7 @@ var Clippable = {
             var pos = _a2.pos;
             var snapPos1 = minus(calculatePosition(allMatrix, isHorizontal ? [0, pos] : [pos, 0], n), [left, top]);
             var snapPos2 = minus(calculatePosition(allMatrix, isHorizontal ? [width, pos] : [pos, height], n), [left, top]);
-            return renderLine(React11, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "snap").concat(i2), "guideline");
+            return renderLine(React12, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "snap").concat(i2), "guideline");
           })), false));
         }
         if (info.isBound) {
@@ -17671,7 +17764,7 @@ var Clippable = {
             var pos = _a2.pos;
             var snapPos1 = minus(calculatePosition(allMatrix, isHorizontal ? [0, pos] : [pos, 0], n), [left, top]);
             var snapPos2 = minus(calculatePosition(allMatrix, isHorizontal ? [width, pos] : [pos, height], n), [left, top]);
-            return renderLine(React11, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "bounds").concat(i2), "guideline", "bounds", "bold");
+            return renderLine(React12, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "bounds").concat(i2), "guideline", "bounds", "bold");
           })), false));
         }
       });
@@ -18301,7 +18394,7 @@ var Roundable = {
   requestChildStyle: function() {
     return ["borderRadius"];
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.getState(), target = _a.target, width = _a.width, height = _a.height, allMatrix = _a.allMatrix, is3d = _a.is3d, left = _a.left, top = _a.top, borderRadiusState = _a.borderRadiusState;
     var _b = moveable.props, _c = _b.minRoundControls, minRoundControls = _c === void 0 ? [0, 0] : _c, _d = _b.maxRoundControls, maxRoundControls = _d === void 0 ? [4, 4] : _d, zoom = _b.zoom, _e = _b.roundPadding, roundPadding = _e === void 0 ? 0 : _e, isDisplayShadowRoundControls = _b.isDisplayShadowRoundControls, groupable = _b.groupable;
     if (!target) {
@@ -18337,7 +18430,7 @@ var Roundable = {
       }
       var pos = minus(calculatePosition(allMatrix, originalPos, n), basePos);
       var isDisplay = v.vertical ? verticalCount <= maxRoundControls[1] && (isDisplayShadowRoundControls || !v.virtual) : horizontalCount <= maxRoundControls[0] && (isDisplayShadowRoundControls || !v.virtual);
-      return React11.createElement("div", { key: "borderRadiusControl".concat(i), className: prefix("control", "border-radius", v.vertical ? "vertical" : "", v.virtual ? "virtual" : ""), "data-radius-index": i, style: {
+      return React12.createElement("div", { key: "borderRadiusControl".concat(i), className: prefix("control", "border-radius", v.vertical ? "vertical" : "", v.virtual ? "virtual" : ""), "data-radius-index": i, style: {
         display: isDisplay ? "block" : "none",
         transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) scale(").concat(zoom, ")")
       } });
@@ -19289,7 +19382,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     if (controlPadding) {
       style["--moveable-control-padding"] = controlPadding;
     }
-    return React9.createElement(
+    return React10.createElement(
       ControlBoxElement,
       __assign7({ cspNonce, ref: ref(this, "controlBox"), className: "".concat(prefix("control-box", direction === -1 ? "reverse" : "", isDragging ? "dragging" : ""), " ").concat(ableClassName, " ").concat(className) }, ableAttributes, { onClick: this._onPreventClick, style }),
       this.renderAbles(),
@@ -20013,7 +20106,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     useAccuratePosition: false
   };
   return MoveableManager2;
-}(React9.PureComponent);
+}(React10.PureComponent);
 var Groupable = {
   name: "groupable",
   props: [
@@ -20026,7 +20119,7 @@ var Groupable = {
     "hideChildMoveableDefaultLines"
   ],
   events: [],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a;
     var props = moveable.props;
     var targets = props.targets || [];
@@ -20049,7 +20142,7 @@ var Groupable = {
     });
     moveable.moveables = moveable.moveables.slice(0, targets.length);
     return __spreadArray2(__spreadArray2([], __read(targets.map(function(target, i) {
-      return React11.createElement(MoveableManager, { key: "moveable" + i, ref: refs(moveable, "moveables", i), target, origin: false, requestStyles, cssStyled: props.cssStyled, customStyledMap: props.customStyledMap, useResizeObserver: props.useResizeObserver, useMutationObserver: props.useMutationObserver, hideChildMoveableDefaultLines: props.hideChildMoveableDefaultLines, parentMoveable: moveable, parentPosition: [left, top], persistData: persistDatChildren[i], zoom });
+      return React12.createElement(MoveableManager, { key: "moveable" + i, ref: refs(moveable, "moveables", i), target, origin: false, requestStyles, cssStyled: props.cssStyled, customStyledMap: props.customStyledMap, useResizeObserver: props.useResizeObserver, useMutationObserver: props.useMutationObserver, hideChildMoveableDefaultLines: props.hideChildMoveableDefaultLines, parentMoveable: moveable, parentPosition: [left, top], persistData: persistDatChildren[i], zoom });
     })), false), __read(flat(renderGroupRects.map(function(_a2, i) {
       var pos1 = _a2.pos1, pos2 = _a2.pos2, pos3 = _a2.pos3, pos4 = _a2.pos4;
       var poses = [pos1, pos2, pos3, pos4];
@@ -20060,7 +20153,7 @@ var Groupable = {
         [2, 0]
       ].map(function(_a3, j) {
         var _b2 = __read(_a3, 2), from = _b2[0], to = _b2[1];
-        return renderLine(React11, "", minus(poses[from], parentPosition), minus(poses[to], parentPosition), zoom, "group-rect-".concat(i, "-").concat(j));
+        return renderLine(React12, "", minus(poses[from], parentPosition), minus(poses[to], parentPosition), zoom, "group-rect-".concat(i, "-").concat(j));
       });
     }))), false);
   }
@@ -20148,13 +20241,13 @@ var edgeDraggable = makeAble("edgeDraggable", {
   css: [
     ".edge.edgeDraggable.line {\ncursor: move;\n}"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var props = moveable.props;
     var edge = props.edgeDraggable;
     if (!edge) {
       return [];
     }
-    return renderEdgeLines(React11, "edgeDraggable", edge, moveable.getState().renderPoses, props.zoom);
+    return renderEdgeLines(React12, "edgeDraggable", edge, moveable.getState().renderPoses, props.zoom);
   },
   dragCondition: function(moveable, e) {
     var _a;
@@ -20622,10 +20715,10 @@ var MoveableIndividualGroup = /* @__PURE__ */ function(_super) {
     } else if (!canPersist) {
       persistDatChildren = [];
     }
-    return React9.createElement(ControlBoxElement, { cspNonce, ref: ref(this, "controlBox"), className: prefix("control-box") }, targets.map(function(target, i) {
+    return React10.createElement(ControlBoxElement, { cspNonce, ref: ref(this, "controlBox"), className: prefix("control-box") }, targets.map(function(target, i) {
       var _a2, _b;
       var individualProps = (_b = (_a2 = props.individualGroupableProps) === null || _a2 === void 0 ? void 0 : _a2.call(props, target, i)) !== null && _b !== void 0 ? _b : {};
-      return React9.createElement(MoveableManager, __assign7({ key: "moveable" + i, ref: refs(_this, "moveables", i) }, props, individualProps, { target, wrapperMoveable: _this, isWrapperMounted: _this.isMoveableMounted, persistData: persistDatChildren[i] }));
+      return React10.createElement(MoveableManager, __assign7({ key: "moveable" + i, ref: refs(_this, "moveables", i) }, props, individualProps, { target, wrapperMoveable: _this, isWrapperMounted: _this.isMoveableMounted, persistData: persistDatChildren[i] }));
     }));
   };
   MoveableIndividualGroup2.prototype.componentDidMount = function() {
@@ -20825,7 +20918,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
       isGroup = true;
     }
     if (props.individualGroupable) {
-      return React9.createElement(MoveableIndividualGroup, __assign7({ key: "individual-group", ref: ref(this, "moveable") }, nextProps, { target: null, targets: elementTargets }));
+      return React10.createElement(MoveableIndividualGroup, __assign7({ key: "individual-group", ref: ref(this, "moveable") }, nextProps, { target: null, targets: elementTargets }));
     }
     if (isGroup) {
       var targetGroups = getTargetGroups(refTargets, nextSelectorMap);
@@ -20835,7 +20928,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
           firstRenderState = __assign7({}, prevMoveable.state);
         }
       }
-      return React9.createElement(MoveableGroup, __assign7({ key: "group", ref: ref(this, "moveable") }, nextProps, (_a = props.groupableProps) !== null && _a !== void 0 ? _a : {}, { target: null, targets: elementTargets, targetGroups, firstRenderState }));
+      return React10.createElement(MoveableGroup, __assign7({ key: "group", ref: ref(this, "moveable") }, nextProps, (_a = props.groupableProps) !== null && _a !== void 0 ? _a : {}, { target: null, targets: elementTargets, targetGroups, firstRenderState }));
     } else {
       var target_1 = elementTargets[0];
       if (prevMoveable && (prevMoveable.props.groupable || prevMoveable.props.individualGroupable)) {
@@ -20847,7 +20940,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
           firstRenderState = __assign7({}, prevTargetMoveable.state);
         }
       }
-      return React9.createElement(MoveableManager, __assign7({ key: "single", ref: ref(this, "moveable") }, nextProps, { target: target_1, firstRenderState }));
+      return React10.createElement(MoveableManager, __assign7({ key: "single", ref: ref(this, "moveable") }, nextProps, { target: target_1, firstRenderState }));
     }
   };
   InitialMoveable2.prototype.componentDidMount = function() {
@@ -20946,7 +21039,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
     withMethods(MOVEABLE_METHODS)
   ], InitialMoveable2.prototype, "moveable", void 0);
   return InitialMoveable2;
-}(React9.PureComponent);
+}(React10.PureComponent);
 var Moveable = /* @__PURE__ */ function(_super) {
   __extends4(Moveable2, _super);
   function Moveable2() {
@@ -21033,22 +21126,23 @@ var loading_dots_default = LoadingDots;
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
 import { useCompletion as useCompletion4 } from "ai/react";
 import { X, Clipboard, Replace } from "lucide-react";
-import { useContext as useContext5, useEffect as useEffect12, useState as useState9 } from "react";
+import { useContext as useContext7, useEffect as useEffect14, useState as useState9 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState9(false);
-  const { completionApi, plan } = useContext5(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/edit`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       toast3.error(err.message);
     }
   });
-  useEffect12(() => {
+  useEffect14(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21066,7 +21160,7 @@ var AIEditorBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ jsx13("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs12("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ jsx13(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ jsx13(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ jsx13("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx13(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ jsxs12("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ jsx13("button", { children: /* @__PURE__ */ jsx13(
@@ -21104,7 +21198,7 @@ var ai_edit_bubble_default = AIEditorBubble;
 import { PauseCircle as PauseCircle4 } from "lucide-react";
 import { jsx as jsx14, jsxs as jsxs13 } from "react/jsx-runtime";
 function AIGeneratingLoading({ stop: stop2 }) {
-  return /* @__PURE__ */ jsxs13("div", { className: "flex items-center justify-start novel-bg-white shadow-lg rounded-full px-3 py-2 w-16 h-10", children: [
+  return /* @__PURE__ */ jsxs13("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
     /* @__PURE__ */ jsx14(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
     /* @__PURE__ */ jsx14("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
     /* @__PURE__ */ jsx14(
@@ -21120,22 +21214,23 @@ function AIGeneratingLoading({ stop: stop2 }) {
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-bubble.tsx
 import { useCompletion as useCompletion5 } from "ai/react";
 import { X as X2, Clipboard as Clipboard2, Replace as Replace2 } from "lucide-react";
-import { useContext as useContext6, useEffect as useEffect13, useState as useState10 } from "react";
+import { useContext as useContext8, useEffect as useEffect15, useState as useState10 } from "react";
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
-  const { completionApi, plan } = useContext6(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext8(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion5({
     id: "ai-translate",
     api: `${completionApi}/translate`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       toast4.error(err.message);
     }
   });
-  useEffect13(() => {
+  useEffect15(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21153,7 +21248,7 @@ var AITranslateBubble = ({ editor }) => {
   };
   return isShow || isLoading ? /* @__PURE__ */ jsx15("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs14("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs14("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ jsx15(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-cyan-500" }),
+      /* @__PURE__ */ jsx15(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ jsx15("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx15(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ jsxs14("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ jsx15("button", { children: /* @__PURE__ */ jsx15(
@@ -21188,18 +21283,19 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext13, useEffect as useEffect17, useRef as useRef10, useState as useState11 } from "react";
+import { useContext as useContext15, useEffect as useEffect19, useRef as useRef15, useState as useState11 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
-  Bot,
+  Bot as Bot2,
   Clipboard as Clipboard3,
   Minus,
   PauseCircle as PauseCircle5,
   RefreshCcw,
   Send as Send2,
   Trash as Trash4,
-  Trash2 as Trash22
+  Trash2 as Trash22,
+  MessageCircle
 } from "lucide-react";
 
 // src/ui/icons/magic-1.tsx
@@ -21229,8 +21325,8 @@ function Magic1({ className }) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/index.mjs
-import * as React10 from "react";
-import { forwardRef as forwardRef5, useContext as useContext9 } from "react";
+import * as React11 from "react";
+import { forwardRef as forwardRef5, useContext as useContext11 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionConfigContext.mjs
 import { createContext as createContext3 } from "react";
@@ -21245,20 +21341,20 @@ import { createContext as createContext4 } from "react";
 var MotionContext = createContext4({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-import { useContext as useContext7, useRef as useRef8, useInsertionEffect, useEffect as useEffect15 } from "react";
+import { useContext as useContext9, useRef as useRef13, useInsertionEffect, useEffect as useEffect17 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
 import { createContext as createContext5 } from "react";
 var PresenceContext = createContext5(null);
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-import { useLayoutEffect as useLayoutEffect4, useEffect as useEffect14 } from "react";
+import { useLayoutEffect as useLayoutEffect4, useEffect as useEffect16 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/is-browser.mjs
 var isBrowser = typeof document !== "undefined";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-var useIsomorphicLayoutEffect2 = isBrowser ? useLayoutEffect4 : useEffect14;
+var useIsomorphicLayoutEffect2 = isBrowser ? useLayoutEffect4 : useEffect16;
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/LazyContext.mjs
 import { createContext as createContext6 } from "react";
@@ -21266,11 +21362,11 @@ var LazyContext = createContext6({ strict: false });
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
 function useVisualElement(Component2, visualState, props, createVisualElement) {
-  const { visualElement: parent } = useContext7(MotionContext);
-  const lazyContext = useContext7(LazyContext);
-  const presenceContext = useContext7(PresenceContext);
-  const reducedMotionConfig = useContext7(MotionConfigContext).reducedMotion;
-  const visualElementRef = useRef8();
+  const { visualElement: parent } = useContext9(MotionContext);
+  const lazyContext = useContext9(LazyContext);
+  const presenceContext = useContext9(PresenceContext);
+  const reducedMotionConfig = useContext9(MotionConfigContext).reducedMotion;
+  const visualElementRef = useRef13();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
     visualElementRef.current = createVisualElement(Component2, {
@@ -21289,10 +21385,10 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
   useIsomorphicLayoutEffect2(() => {
     visualElement && visualElement.render();
   });
-  useEffect15(() => {
+  useEffect17(() => {
     visualElement && visualElement.updateFeatures();
   });
-  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : useEffect15;
+  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : useEffect17;
   useAnimateChangesEffect(() => {
     if (visualElement && visualElement.animationState) {
       visualElement.animationState.animateChanges();
@@ -21335,7 +21431,7 @@ function useMotionRef(visualState, visualElement, externalRef) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
-import { useContext as useContext8, useMemo as useMemo3 } from "react";
+import { useContext as useContext10, useMemo as useMemo3 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/is-variant-label.mjs
 function isVariantLabel(v) {
@@ -21381,7 +21477,7 @@ function getCurrentTreeVariants(props, context) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
 function useCreateMotionContext(props) {
-  const { initial, animate } = getCurrentTreeVariants(props, useContext8(MotionContext));
+  const { initial, animate } = getCurrentTreeVariants(props, useContext10(MotionContext));
   return useMemo3(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
 }
 function variantLabelsAsDependency(prop) {
@@ -21439,7 +21535,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   preloadedFeatures2 && loadFeatures(preloadedFeatures2);
   function MotionComponent(props, externalRef) {
     let MeasureLayout2;
-    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, useContext9(MotionConfigContext)), props), {
+    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, useContext11(MotionConfigContext)), props), {
       layoutId: useLayoutId(props)
     });
     const { isStatic } = configAndProps;
@@ -21447,8 +21543,8 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
     const visualState = useVisualState(props, isStatic);
     if (!isStatic && isBrowser) {
       context.visualElement = useVisualElement(Component2, visualState, configAndProps, createVisualElement);
-      const initialLayoutGroupConfig = useContext9(SwitchLayoutGroupContext);
-      const isStrict = useContext9(LazyContext).strict;
+      const initialLayoutGroupConfig = useContext11(SwitchLayoutGroupContext);
+      const isStrict = useContext11(LazyContext).strict;
       if (context.visualElement) {
         MeasureLayout2 = context.visualElement.loadFeatures(
           // Note: Pass the full new combined props to correctly re-render dynamic feature components.
@@ -21459,10 +21555,10 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
         );
       }
     }
-    return React10.createElement(
+    return React11.createElement(
       MotionContext.Provider,
       { value: context },
-      MeasureLayout2 && context.visualElement ? React10.createElement(MeasureLayout2, __spreadValues({ visualElement: context.visualElement }, configAndProps)) : null,
+      MeasureLayout2 && context.visualElement ? React11.createElement(MeasureLayout2, __spreadValues({ visualElement: context.visualElement }, configAndProps)) : null,
       useRender(Component2, props, useMotionRef(visualState, context.visualElement, externalRef), visualState, isStatic, context.visualElement)
     );
   }
@@ -21471,7 +21567,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   return ForwardRefComponent;
 }
 function useLayoutId({ layoutId }) {
-  const layoutGroupId = useContext9(LayoutGroupContext).id;
+  const layoutGroupId = useContext11(LayoutGroupContext).id;
   return layoutGroupId && layoutId !== void 0 ? layoutGroupId + "-" + layoutId : layoutId;
 }
 
@@ -22096,7 +22192,7 @@ function scrapeMotionValuesFromProps2(props, prevProps) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-state.mjs
-import { useContext as useContext10 } from "react";
+import { useContext as useContext12 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/resolve-variants.mjs
 function resolveVariantFromProps(props, definition, custom, currentValues2 = {}, currentVelocity = {}) {
@@ -22113,9 +22209,9 @@ function resolveVariantFromProps(props, definition, custom, currentValues2 = {},
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-constant.mjs
-import { useRef as useRef9 } from "react";
+import { useRef as useRef14 } from "react";
 function useConstant(init) {
-  const ref2 = useRef9(null);
+  const ref2 = useRef14(null);
   if (ref2.current === null) {
     ref2.current = init();
   }
@@ -22153,8 +22249,8 @@ function makeState({ scrapeMotionValuesFromProps: scrapeMotionValuesFromProps3, 
   return state;
 }
 var makeUseVisualState = (config) => (props, isStatic) => {
-  const context = useContext10(MotionContext);
-  const presenceContext = useContext10(PresenceContext);
+  const context = useContext12(MotionContext);
+  const presenceContext = useContext12(PresenceContext);
   const make = () => makeState(config, props, context, presenceContext);
   return isStatic ? make() : useConstant(make);
 };
@@ -25679,17 +25775,17 @@ var PanGesture = class extends Feature {
 };
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs
-import React__default, { useContext as useContext12 } from "react";
+import React__default, { useContext as useContext14 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.mjs
-import { useContext as useContext11, useId as useId2, useEffect as useEffect16 } from "react";
+import { useContext as useContext13, useId as useId2, useEffect as useEffect18 } from "react";
 function usePresence() {
-  const context = useContext11(PresenceContext);
+  const context = useContext13(PresenceContext);
   if (context === null)
     return [true, null];
   const { isPresent, onExitComplete, register } = context;
   const id3 = useId2();
-  useEffect16(() => register(id3), []);
+  useEffect18(() => register(id3), []);
   const safeToRemove = () => onExitComplete && onExitComplete(id3);
   return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
 }
@@ -25837,8 +25933,8 @@ var MeasureLayoutWithContext = class extends React__default.Component {
 };
 function MeasureLayout(props) {
   const [isPresent, safeToRemove] = usePresence();
-  const layoutGroup = useContext12(LayoutGroupContext);
-  return React__default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: useContext12(SwitchLayoutGroupContext), isPresent, safeToRemove }));
+  const layoutGroup = useContext14(LayoutGroupContext);
+  return React__default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: useContext14(SwitchLayoutGroupContext), isPresent, safeToRemove }));
 }
 var defaultScaleCorrectors = {
   borderRadius: __spreadProps(__spreadValues({}, correctBorderRadius), {
@@ -27977,10 +28073,16 @@ var motion = /* @__PURE__ */ createMotionProxy((Component2, config) => createDom
 import ReactMarkdown3 from "react-markdown";
 import { toast as toast5 } from "sonner";
 import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
-function ChatBot({ editor }) {
+function ChatBot(props) {
+  const { editor, history } = props;
   const [isOpen, setIsOpen] = useState11(false);
-  const inputRef = useRef10(null);
-  const { completionApi, plan } = useContext13(NovelContext);
+  const inputRef = useRef15(null);
+  const { completionApi, additionalData: { body, headers } } = useContext15(NovelContext);
+  const initialMessage = {
+    id: "start",
+    role: "system",
+    content: "Here, how can I help you?"
+  };
   const {
     messages,
     setMessages,
@@ -27992,24 +28094,22 @@ function ChatBot({ editor }) {
   } = useChat({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { plan, system: editor.getText() },
-    initialMessages: [
-      {
-        id: "start",
-        role: "system",
-        content: "Here, ask me about your note :)"
-      }
-    ],
+    body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
+    headers: __spreadValues({}, headers || {}),
+    initialMessages: [initialMessage],
     onError: (err) => {
-      if (err.message !== "Failed to fetch" && err.message !== "network error") {
-        toast5.error(err.message);
-      }
+      toast5.error(err.message);
     }
   });
-  useEffect17(() => {
+  useEffect19(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
+  useEffect19(() => {
+    if (history == null ? void 0 : history.length) {
+      setMessages([initialMessage, ...history]);
+    }
+  }, [history == null ? void 0 : history.length]);
   const handleChat = () => {
     var _a;
     if (isLoading) {
@@ -28028,27 +28128,37 @@ function ChatBot({ editor }) {
     editor.chain().blur();
     setIsOpen(!isOpen);
   };
+  const ref2 = useRef15(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
   return /* @__PURE__ */ jsx17(
     "div",
     {
+      ref: ref2,
       className: `${isOpen ? "novel-bottom-3" : "novel-bottom-16"} novel-fixed novel-z-[1009] novel-right-3 novel-animate-in novel-fade-in novel-slide-in-from-bottom-1`,
       children: /* @__PURE__ */ jsx17(
         motion.div,
         {
           className: "novel-rounded-full",
           initial: { borderRadius: "50%", x: 0 },
-          animate: { borderRadius: isOpen ? "0%" : "50%", x: isOpen ? 0 : 35 },
-          transition: { duration: 0.2 },
-          children: isOpen ? /* @__PURE__ */ jsxs15("div", { className: "chat novel-border novel-relative novel-w-[350px] novel-border-slate-100  novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
+          animate: {
+            borderRadius: isOpen ? "0%" : "50%",
+            x: 0
+            // x: isOpen ? 0 : 35
+          },
+          children: isOpen ? /* @__PURE__ */ jsxs15("div", { className: "novel-border novel-relative novel-w-[350px] novel-border-slate-100 novel-bg-white novel-shadow-lg novel-rounded-lg", children: [
             /* @__PURE__ */ jsxs15("div", { className: "msgs novel-p-2", children: [
               /* @__PURE__ */ jsxs15("div", { className: "flex novel-mb-2 novel-pb-2 novel-border-slate-100 novel-border-b novel-justify-between novel-items-center", children: [
-                /* @__PURE__ */ jsx17(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-cyan-400" }),
-                /* @__PURE__ */ jsx17("span", { className: "novel-font-semibold", children: "Chat with note" }),
+                /* @__PURE__ */ jsx17(Magic1, { className: "novel-h-6 novel-w-6 translate-y-1 novel-text-purple-400" }),
+                /* @__PURE__ */ jsx17("span", { className: "novel-font-semibold", children: "Chat" }),
                 /* @__PURE__ */ jsxs15("div", { className: "novel-flex novel-items-center novel-gap-3", children: [
                   /* @__PURE__ */ jsx17(
                     Trash4,
                     {
-                      onClick: () => setMessages([]),
+                      onClick: () => setMessages([initialMessage]),
                       className: "novel-float-right novel-rounded-md novel-cursor-pointer novel-w-4 novel-h-4 hover:novel-text-red-300 novel-text-slate-600"
                     }
                   ),
@@ -28092,7 +28202,7 @@ function ChatBot({ editor }) {
                         )
                       ] }),
                       /* @__PURE__ */ jsx17(ReactMarkdown3, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
-                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Baby, { className: "novel-w-5 novel-h-5 novel-text-blue-400" }) })
+                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Baby, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) })
                     ]
                   },
                   index2
@@ -28104,7 +28214,7 @@ function ChatBot({ editor }) {
                     animate: { opacity: 1 },
                     transition: { duration: 0.3 },
                     children: [
-                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Bot, { className: "novel-w-5 novel-h-5 novel-text-cyan-400" }) }),
+                      /* @__PURE__ */ jsx17("span", { className: "novel-py-1 novel-px-2 novel-font-semibold novel-bg-slate-100 novel-rounded-full", children: /* @__PURE__ */ jsx17(Bot2, { className: "novel-w-5 novel-h-5 novel-text-purple-400" }) }),
                       /* @__PURE__ */ jsx17(ReactMarkdown3, { className: "novel-py-1 novel-text-slate-700 novel-max-w-[260px] novel-px-2 novel-bg-slate-200 novel-rounded-md", children: m.content }),
                       /* @__PURE__ */ jsxs15("div", { className: "novel-hidden novel-h-full novel-mt-auto group-hover:novel-block", children: [
                         /* @__PURE__ */ jsx17(
@@ -28135,10 +28245,10 @@ function ChatBot({ editor }) {
             ] }),
             /* @__PURE__ */ jsxs15("div", { className: "novel-flex novel-p-2 novel-items-end novel-justify-center", children: [
               /* @__PURE__ */ jsx17(
-                Bot,
+                Bot2,
                 {
                   onClick: toggleOpen,
-                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-cyan-500"
+                  className: "novel-h-5 novel-cursor-pointer novel-mr-2 novel-mb-2.5 novel-w-5 translate-y-1 novel-text-purple-500"
                 }
               ),
               /* @__PURE__ */ jsx17(
@@ -28149,7 +28259,7 @@ function ChatBot({ editor }) {
                   style: { maxHeight: "150px", minHeight: "40px" },
                   rows: 1,
                   className: "novel-flex-grow novel-text-sm novel-border-l novel-border-y novel-border-gray-100 novel-shadow-inner novel-rounded-l-lg novel-px-4 novel-py-2 focus:novel-outline-none",
-                  placeholder: "Ask note...",
+                  placeholder: "Ask...",
                   value: input,
                   onChange: handleInputChange,
                   onKeyDown: handleKeyPress
@@ -28161,7 +28271,7 @@ function ChatBot({ editor }) {
                   onClick: handleChat,
                   type: "submit",
                   className: "novel-px-3 novel-py-3 novel-bg-slate-100 novel-text-white novel-rounded-r-lg hover:novel-bg-slate-300",
-                  children: !isLoading ? /* @__PURE__ */ jsx17(Send2, { className: "novel-h-4 novel-w-4 novel-text-blue-400" }) : /* @__PURE__ */ jsx17(PauseCircle5, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
+                  children: !isLoading ? /* @__PURE__ */ jsx17(Send2, { className: "novel-h-4 novel-w-4 novel-text-purple-400" }) : /* @__PURE__ */ jsx17(PauseCircle5, { className: "novel-h-4 novel-animate-pulse novel-w-4 novel-text-slate-600" })
                 }
               ) })
             ] }),
@@ -28190,9 +28300,9 @@ function ChatBot({ editor }) {
           ] }) : /* @__PURE__ */ jsx17(
             "button",
             {
-              className: "novel-p-3.5 hover:-novel-translate-x-6 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
+              className: "novel-p-3.5 novel-border novel-border-slate-100 novel-transition-all novel-bg-white novel-shadow novel-shadow-purple-100 novel-opacity-75 hover:novel-opacity-100 novel-rounded-full",
               onClick: toggleOpen,
-              children: /* @__PURE__ */ jsx17(Bot, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-cyan-500" })
+              children: /* @__PURE__ */ jsx17(MessageCircle, { className: "novel-h-5 novel-w-5 translate-y-1 novel-text-purple-500" })
             }
           )
         }
@@ -28208,15 +28318,14 @@ import { HocuspocusProvider } from "@hocuspocus/provider";
 import { useMemo as useMemo7 } from "react";
 import { Users } from "lucide-react";
 import { jsx as jsx18, jsxs as jsxs16 } from "react/jsx-runtime";
-function useCollaborationExt(active, id3, user) {
+function useCollaborationExt(active, id3, user, customProvider) {
   const collaborationData = useMemo7(() => {
     if (!active)
       return {};
-    const name = `inke-${id3}`;
-    const provider = new HocuspocusProvider({
+    const provider = customProvider || new HocuspocusProvider({
       // ws://107.172.87.158:1234 wss://ws.inke.app ws://127.0.0.1:1234
       url: "wss://ws.inke.app",
-      name
+      name: `inke-${id3}`
     });
     return {
       collaborates: [
@@ -28236,20 +28345,21 @@ function CollaborationInfo({
   status,
   editor
 }) {
-  var _a, _b, _c, _d, _e, _f;
-  return /* @__PURE__ */ jsx18("div", { className: "novel-fixed novel-z-[9999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ jsxs16("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
-    /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
-    /* @__PURE__ */ jsx18("span", { className: "novel-text-xs novel-text-slate-500", children: (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.length }),
+  var _a, _b, _c;
+  const usersList = (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.filter((u) => (u == null ? void 0 : u.name) !== void 0);
+  return /* @__PURE__ */ jsx18("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ jsxs16("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
+    /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
+    /* @__PURE__ */ jsx18("span", { className: "novel-text-xs novel-text-slate-500", children: usersList == null ? void 0 : usersList.length }),
     /* @__PURE__ */ jsxs16("div", { className: "novel-hidden novel-z-[10000] novel-bg-slate-50/90 novel-max-h-64 novel-overflow-y-auto novel-p-2 novel-w-44 novel-border-slate-100 novel-rounded-md novel-shadow-md novel-absolute novel-bottom-0 novel-right-0 group-hover:novel-block", children: [
       /* @__PURE__ */ jsxs16("p", { className: "novel-gap-2 novel-mb-1 novel-items-center novel-flex novel-text-xs novel-text-slate-600 novel-pb-1 novel-border-b novel-border-slate-100", children: [
-        /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-cyan-500 novel-w-4" }),
-        editor.storage.collaborationCursor.users.length,
+        /* @__PURE__ */ jsx18(Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
+        usersList.length,
         " user",
-        editor.storage.collaborationCursor.users.length === 1 ? "" : "s",
+        usersList.length === 1 ? "" : "s",
         " ",
         "online"
       ] }),
-      (_f = (_e = (_d = editor.storage) == null ? void 0 : _d.collaborationCursor) == null ? void 0 : _e.users) == null ? void 0 : _f.map((i) => /* @__PURE__ */ jsxs16(
+      usersList == null ? void 0 : usersList.map((i) => /* @__PURE__ */ jsxs16(
         "div",
         {
           className: "novel-truncate novel-flex novel-items-center novel-gap-2 novel-cursor-pointer hover:novel-opacity-80 novel-font-mono novel-pt-1 novel-text-xs novel-text-slate-500",
@@ -28267,7 +28377,7 @@ function CollaborationInfo({
                 }
               }
             ),
-            /* @__PURE__ */ jsx18("span", { children: i.name })
+            /* @__PURE__ */ jsx18("span", { children: `${i == null ? void 0 : i.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === i.clientId ? "(you)" : ""}` })
           ]
         },
         i.clientId
@@ -28285,6 +28395,7 @@ function generateRandomColorCode() {
 }
 
 // src/ui/editor/index.tsx
+import isEmpty from "lodash/isEmpty";
 import { Fragment as Fragment6, jsx as jsx19, jsxs as jsxs17 } from "react/jsx-runtime";
 function Editor2({
   completionApi = "/api/generate",
@@ -28300,14 +28411,18 @@ function Editor2({
   storageKey = "novel__content",
   disableLocalStorage = false,
   editable = true,
-  plan = "5",
-  bot = false,
-  collaboration = false,
-  id: id3 = "",
-  userName = "unkown"
+  additionalData = {
+    bot: false,
+    collaboration: false,
+    id: "",
+    userDetails: {},
+    autoCompleteShortKey: "??"
+  }
 }) {
+  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
+  const [lastInput, setLastInput] = useState12("");
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28319,14 +28434,14 @@ function Editor2({
     }
   }), debounceDuration);
   const [status, setStatus] = useState12("connecting");
-  const user = {
-    name: userName,
-    color: generateRandomColorCode()
-  };
+  const user = __spreadProps(__spreadValues({}, userDetails), {
+    color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
+  });
   const { collaborates, provider } = useCollaborationExt(
     collaboration,
     id3,
-    user
+    user,
+    customProvider
   );
   const editor = useEditor({
     extensions: [
@@ -28338,21 +28453,14 @@ function Editor2({
     editable,
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2
-      });
-      if (lastTwo === "??" && !isLoading) {
+      const lastTwo = getPrevText(e.editor, { chars: 2 });
+      if (lastTwo === autoCompleteShortKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
           to: selection.from
         });
-        complete(
-          getPrevText(e.editor, {
-            chars: 5e3
-          })
-        );
-        va2.track("Autocomplete Shortcut Used");
+        complete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
         onUpdate(e.editor);
         debouncedUpdates(e);
@@ -28360,18 +28468,22 @@ function Editor2({
     },
     autofocus: false
   });
-  useEffect18(() => {
+  useEffect20(() => {
     if (collaboration) {
       provider.on("status", (event) => {
         setStatus(event.status);
         editor == null ? void 0 : editor.chain().focus().updateUser(user).run();
       });
     }
+    if ((additionalData == null ? void 0 : additionalData.getEditor) && editor) {
+      additionalData.getEditor(editor);
+    }
   }, [editor]);
   const { complete, completion, isLoading, stop: stop2 } = useCompletion6({
     id: "ai-continue",
     api: `${completionApi}/continue`,
-    body: { plan },
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion2) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion2.length,
@@ -28382,8 +28494,8 @@ function Editor2({
       toast6.error(err.message);
     }
   });
-  const prev = useRef11("");
-  useEffect18(() => {
+  const prev = useRef16("");
+  useEffect20(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
     editor == null ? void 0 : editor.commands.insertContent(diff3);
@@ -28391,8 +28503,8 @@ function Editor2({
       setLoadingOutside(false);
     }
   }, [isLoading, editor, completion]);
-  useEffect18(() => {
-    if (!editor || hydrated)
+  useEffect20(() => {
+    if (!editor || hydrated || disableLocalStorage !== false)
       return;
     const value = disableLocalStorage ? defaultValue : content;
     if (value) {
@@ -28400,36 +28512,32 @@ function Editor2({
       setHydrated(true);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-  return /* @__PURE__ */ jsx19(
-    NovelContext.Provider,
+  useEffect20(() => {
+    if (!editor || isEmpty(defaultValue) || disableLocalStorage !== true)
+      return;
+    editor.commands.setContent(defaultValue);
+  }, [defaultValue]);
+  return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput }, children: /* @__PURE__ */ jsxs17(
+    "div",
     {
-      value: {
-        completionApi,
-        plan
+      onClick: () => {
+        editor == null ? void 0 : editor.chain().focus().run();
       },
-      children: /* @__PURE__ */ jsxs17(
-        "div",
-        {
-          onClick: () => {
-            editor == null ? void 0 : editor.chain().focus().run();
-          },
-          className,
-          children: [
-            editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
-              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
-              /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
-              /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
-            ] }),
-            editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
-            (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
-            /* @__PURE__ */ jsx19(EditorContent, { editor }),
-            isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-right-3", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor })
-          ]
-        }
-      )
+      className,
+      children: [
+        editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
+          /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
+          /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
+          /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
+        ] }),
+        editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
+        (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
+        /* @__PURE__ */ jsx19(EditorContent, { editor }),
+        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
+        bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
+      ]
     }
-  );
+  ) });
 }
 export {
   Editor2 as Editor

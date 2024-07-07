@@ -4,8 +4,12 @@ import { createContext } from "react";
 
 export const NovelContext = createContext<{
   completionApi: string;
-  plan: string;
+  additionalData: Record<string, any>;
+  lastInput: string;
+  setLastInput: (text: string) => void; // https://stackoverflow.com/a/64517088
 }>({
   completionApi: "/api/generate",
-  plan: "5",
+  additionalData: {},
+  lastInput: '',
+  setLastInput: (text) => { },
 });
