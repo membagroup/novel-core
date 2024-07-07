@@ -24,8 +24,7 @@ import Magic from "@/ui/icons/magic";
 import { useCompletion } from "ai/react";
 import { NovelContext } from "../../../provider";
 import { toast } from "sonner";
-
-export interface AIMenuItem { name: string; command: string, icon: LucideIcon };
+import { AIMenuItem } from "@/ui/editor/interfaces";
 
 interface AISelectorProps {
   editor: Editor;

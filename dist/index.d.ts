@@ -1,6 +1,19 @@
+import { LucideIcon } from 'lucide-react';
 import { JSONContent } from '@tiptap/react';
 import { EditorProps } from '@tiptap/pm/view';
 import { Extensions, Editor as Editor$1 } from '@tiptap/core';
+
+interface AIMenuItem {
+    name: string;
+    command: string;
+    icon: LucideIcon;
+}
+interface BubbleMenuItem {
+    name: string;
+    isActive: () => boolean;
+    command: () => void;
+    icon: LucideIcon;
+}
 
 declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, editable, additionalData }: {
     /**
@@ -64,4 +77,4 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
     additionalData?: Record<string, any>;
 }): JSX.Element;
 
-export { Editor };
+export { AIMenuItem, BubbleMenuItem, Editor };

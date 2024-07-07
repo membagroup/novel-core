@@ -12,18 +12,12 @@ import { ColorSelector } from "./color-selector";
 import { LinkSelector } from "./link-selector";
 import { cn } from "@/lib/utils";
 import { TableSelector } from "./table-selector";
-import { AIMenuItem, AISelector } from "./ai-selectors/edit/ai-edit-selector";
+import { AISelector } from "./ai-selectors/edit/ai-edit-selector";
 import { TranslateSelector } from "./ai-selectors/translate/ai-translate-selector";
 import { NovelContext } from "../provider";
 import { add } from "lodash";
 import React from "react";
-
-export interface BubbleMenuItem {
-  name: string;
-  isActive: () => boolean;
-  command: () => void;
-  icon: typeof BoldIcon;
-}
+import { AIMenuItem, BubbleMenuItem } from "../interfaces";
 
 type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 // & { panelOpen?: boolean };
