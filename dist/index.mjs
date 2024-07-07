@@ -3085,6 +3085,8 @@ var NodeSelector = ({
   };
   const ref2 = useRef2(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ jsx4(Popover.Root, { open: isOpen, children: /* @__PURE__ */ jsxs4("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -3254,6 +3256,8 @@ var ColorSelector = ({
   );
   const ref2 = useRef3(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ jsx5(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ jsxs5("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -3389,6 +3393,8 @@ var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
   useClickOutside(inputRef, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ jsxs6("div", { className: "novel-relative", children: [
@@ -3535,6 +3541,8 @@ var TableSelector = ({
 }) => {
   const ref2 = useRef5(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ jsx7(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ jsxs7("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -6002,6 +6010,8 @@ var AISelector = (props) => {
     };
   }, [isOpen]);
   useClickOutside(inputRef, () => {
+    if (!isOpen)
+      return;
     if (inputRef.current) {
       context.setLastInput(inputRef.current.value || "");
     }
@@ -6167,6 +6177,8 @@ var TranslateSelector = ({
   });
   const ref2 = useRef10(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -28113,9 +28125,16 @@ function ChatBot(props) {
     editor.chain().blur();
     setIsOpen(!isOpen);
   };
+  const ref2 = useRef15(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
   return /* @__PURE__ */ jsx17(
     "div",
     {
+      ref: ref2,
       className: `${isOpen ? "novel-bottom-3" : "novel-bottom-16"} novel-fixed novel-z-[1009] novel-right-3 novel-animate-in novel-fade-in novel-slide-in-from-bottom-1`,
       children: /* @__PURE__ */ jsx17(
         motion.div,

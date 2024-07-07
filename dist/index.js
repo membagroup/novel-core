@@ -3052,6 +3052,8 @@ var NodeSelector = ({
   };
   const ref2 = (0, import_react7.useRef)(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Popover.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -3221,6 +3223,8 @@ var ColorSelector = ({
   );
   const ref2 = (0, import_react8.useRef)(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -3356,6 +3360,8 @@ var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
   useClickOutside(inputRef, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-relative", children: [
@@ -3493,6 +3499,8 @@ var TableSelector = ({
 }) => {
   const ref2 = (0, import_react10.useRef)(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -5946,6 +5954,8 @@ var AISelector = (props) => {
     };
   }, [isOpen]);
   useClickOutside(inputRef, () => {
+    if (!isOpen)
+      return;
     if (inputRef.current) {
       context.setLastInput(inputRef.current.value || "");
     }
@@ -6111,6 +6121,8 @@ var TranslateSelector = ({
   });
   const ref2 = (0, import_react28.useRef)(null);
   useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
     setIsOpen(false);
   });
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
@@ -28046,9 +28058,16 @@ function ChatBot(props) {
     editor.chain().blur();
     setIsOpen(!isOpen);
   };
+  const ref2 = (0, import_react56.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isOpen)
+      return;
+    setIsOpen(false);
+  });
   return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
     "div",
     {
+      ref: ref2,
       className: `${isOpen ? "novel-bottom-3" : "novel-bottom-16"} novel-fixed novel-z-[1009] novel-right-3 novel-animate-in novel-fade-in novel-slide-in-from-bottom-1`,
       children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
         motion.div,

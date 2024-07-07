@@ -86,7 +86,10 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
   });
 
   const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, () => { setIsOpen(false); });
+  useClickOutside(ref, () => {
+    if (!isOpen) return;
+    setIsOpen(false);
+  });
 
   return (
     <div className="novel-relative novel-h-full" ref={ref}>

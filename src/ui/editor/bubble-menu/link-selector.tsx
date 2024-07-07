@@ -21,6 +21,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({ editor, isOpen, setIsOpen,
   });
 
   useClickOutside(inputRef, () => {
+    if (!isOpen) return;
     // if (inputRef.current && inputRef.current.value) {
     //   context.setLastText(inputRef.current.value);
     // }

@@ -131,6 +131,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   }, [isOpen]);
 
   useClickOutside(inputRef, () => {
+    if (!isOpen) return;
     if (inputRef.current) {
       context.setLastInput(inputRef.current.value || '');
     }

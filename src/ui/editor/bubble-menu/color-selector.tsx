@@ -143,7 +143,10 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
   );
 
   const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, () => { setIsOpen(false); });
+  useClickOutside(ref, () => {
+    if (!isOpen) return;
+    setIsOpen(false);
+  });
 
   return (
     <Popover.Root open={isOpen}>

@@ -18,6 +18,7 @@ import Magic1 from "@/ui/icons/magic-1";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { useClickOutside } from "../hooks";
 
 interface Props {
   editor: Editor;
@@ -90,8 +91,15 @@ export function ChatBot(props: Props) {
     setIsOpen(!isOpen);
   };
 
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
+    if (!isOpen) return;
+    setIsOpen(false);
+  });
+
   return (
     <div
+      ref={ref}
       className={
         `${isOpen ? "novel-bottom-3" : "novel-bottom-16"}` +
         " novel-fixed novel-z-[1009] novel-right-3 novel-animate-in novel-fade-in novel-slide-in-from-bottom-1"
