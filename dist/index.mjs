@@ -1709,7 +1709,7 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-import { useEffect as useEffect20, useRef as useRef12, useState as useState12 } from "react";
+import { useEffect as useEffect20, useRef as useRef16, useState as useState12 } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
 // src/ui/editor/plugins/upload-images.tsx
@@ -2978,6 +2978,26 @@ import {
   AlignLeft
 } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
+import { useRef as useRef2 } from "react";
+
+// src/ui/editor/hooks.ts
+import { useEffect as useEffect3 } from "react";
+var useClickOutside = (ref2, handler) => {
+  useEffect3(() => {
+    const listener = (event) => {
+      if (!ref2.current || ref2.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+    document.addEventListener("mousedown", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+    };
+  }, [ref2, handler]);
+};
+
+// src/ui/editor/bubble-menu/node-selector.tsx
 import { jsx as jsx4, jsxs as jsxs4 } from "react/jsx-runtime";
 var NodeSelector = ({
   editor,
@@ -3063,7 +3083,11 @@ var NodeSelector = ({
   const activeItem = (_a = items.filter((item) => item.isActive()).pop()) != null ? _a : {
     name: "Multiple"
   };
-  return /* @__PURE__ */ jsx4(Popover.Root, { open: isOpen, children: /* @__PURE__ */ jsxs4("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = useRef2(null);
+  useClickOutside(ref2, () => {
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsx4(Popover.Root, { open: isOpen, children: /* @__PURE__ */ jsxs4("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsxs4(
       Popover.Trigger,
       {
@@ -3109,6 +3133,7 @@ var NodeSelector = ({
 
 // src/ui/editor/bubble-menu/color-selector.tsx
 import { Check as Check2, ChevronDown as ChevronDown2 } from "lucide-react";
+import { useRef as useRef3 } from "react";
 import * as Popover2 from "@radix-ui/react-popover";
 import { jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
 var TEXT_COLORS = [
@@ -3227,7 +3252,11 @@ var ColorSelector = ({
   const activeFontItem = TEXT_FONT.find(
     ({ font }) => editor.isActive("textStyle", { font })
   );
-  return /* @__PURE__ */ jsx5(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ jsxs5("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = useRef3(null);
+  useClickOutside(ref2, () => {
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsx5(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ jsxs5("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsxs5(
       Popover2.Trigger,
       {
@@ -3351,29 +3380,10 @@ var ColorSelector = ({
 
 // src/ui/editor/bubble-menu/link-selector.tsx
 import { Check as Check3, Trash } from "lucide-react";
-import { useEffect as useEffect4, useRef as useRef2 } from "react";
-
-// src/ui/editor/hooks.ts
-import { useEffect as useEffect3 } from "react";
-var useClickOutside = (ref2, handler) => {
-  useEffect3(() => {
-    const listener = (event) => {
-      if (!ref2.current || ref2.current.contains(event.target)) {
-        return;
-      }
-      handler(event);
-    };
-    document.addEventListener("mousedown", listener);
-    return () => {
-      document.removeEventListener("mousedown", listener);
-    };
-  }, [ref2, handler]);
-};
-
-// src/ui/editor/bubble-menu/link-selector.tsx
+import { useEffect as useEffect4, useRef as useRef4 } from "react";
 import { jsx as jsx6, jsxs as jsxs6 } from "react/jsx-runtime";
 var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
-  const inputRef = useRef2(null);
+  const inputRef = useRef4(null);
   useEffect4(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
@@ -3458,6 +3468,7 @@ import {
   SplitSquareHorizontal,
   Heading1 as Heading13
 } from "lucide-react";
+import { useRef as useRef5 } from "react";
 import * as Popover3 from "@radix-ui/react-popover";
 import { jsx as jsx7, jsxs as jsxs7 } from "react/jsx-runtime";
 var TABLE_COLUMN_CMDS = (editor) => {
@@ -3522,7 +3533,11 @@ var TableSelector = ({
   isOpen,
   setIsOpen
 }) => {
-  return /* @__PURE__ */ jsx7(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ jsxs7("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = useRef5(null);
+  useClickOutside(ref2, () => {
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsx7(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ jsxs7("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsxs7(
       Popover3.Trigger,
       {
@@ -3604,7 +3619,7 @@ import {
   Bot,
   Wand
 } from "lucide-react";
-import { useContext as useContext4, useEffect as useEffect10, useRef as useRef6 } from "react";
+import { useContext as useContext4, useEffect as useEffect10, useRef as useRef9 } from "react";
 
 // ../../node_modules/.pnpm/@babel+runtime@7.24.7/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
@@ -5950,7 +5965,7 @@ var AISelector = (props) => {
     },
     ...subMenuItems || []
   ];
-  const inputRef = useRef6(null);
+  const inputRef = useRef9(null);
   const handleSubmit = (input) => {
     if (!input.value)
       return;
@@ -6078,7 +6093,7 @@ var AISelector = (props) => {
 
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-selector.tsx
 import { Languages, PauseCircle as PauseCircle3 } from "lucide-react";
-import { useContext as useContext5, useEffect as useEffect11 } from "react";
+import { useContext as useContext5, useEffect as useEffect11, useRef as useRef10 } from "react";
 import { useCompletion as useCompletion3 } from "ai/react";
 import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
 var TranslateSelector = ({
@@ -6150,7 +6165,11 @@ var TranslateSelector = ({
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", children: [
+  const ref2 = useRef10(null);
+  useClickOutside(ref2, () => {
+    setIsOpen(false);
+  });
+  return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsx9("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
       PauseCircle3,
       {
@@ -9483,7 +9502,7 @@ function styled(css3) {
 var styled_esm_default = styled;
 
 // ../../node_modules/.pnpm/react-css-styled@1.1.9/node_modules/react-css-styled/dist/styled.esm.js
-import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef8, useImperativeHandle, useEffect as useEffect13 } from "react";
+import { version, createElement as createElement7, Component, forwardRef as forwardRef4, useRef as useRef12, useImperativeHandle, useEffect as useEffect13 } from "react";
 var __assign6 = function() {
   __assign6 = Object.assign || function __assign8(t2) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9513,7 +9532,7 @@ function styled2(Tag, css3) {
   var cssId = injector.className;
   return forwardRef4(function(props, ref2) {
     var _a = props.className, className = _a === void 0 ? "" : _a, cspNonce = props.cspNonce, attributes = __rest2(props, ["className", "cspNonce"]);
-    var targetRef = useRef8();
+    var targetRef = useRef12();
     useImperativeHandle(ref2, function() {
       return targetRef.current;
     }, []);
@@ -21249,7 +21268,7 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext15, useEffect as useEffect19, useRef as useRef11, useState as useState11 } from "react";
+import { useContext as useContext15, useEffect as useEffect19, useRef as useRef15, useState as useState11 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
@@ -21307,7 +21326,7 @@ import { createContext as createContext4 } from "react";
 var MotionContext = createContext4({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-import { useContext as useContext9, useRef as useRef9, useInsertionEffect, useEffect as useEffect17 } from "react";
+import { useContext as useContext9, useRef as useRef13, useInsertionEffect, useEffect as useEffect17 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
 import { createContext as createContext5 } from "react";
@@ -21332,7 +21351,7 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
   const lazyContext = useContext9(LazyContext);
   const presenceContext = useContext9(PresenceContext);
   const reducedMotionConfig = useContext9(MotionConfigContext).reducedMotion;
-  const visualElementRef = useRef9();
+  const visualElementRef = useRef13();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
     visualElementRef.current = createVisualElement(Component2, {
@@ -22175,9 +22194,9 @@ function resolveVariantFromProps(props, definition, custom, currentValues2 = {},
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-constant.mjs
-import { useRef as useRef10 } from "react";
+import { useRef as useRef14 } from "react";
 function useConstant(init) {
-  const ref2 = useRef10(null);
+  const ref2 = useRef14(null);
   if (ref2.current === null) {
     ref2.current = init();
   }
@@ -28042,7 +28061,7 @@ import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
 function ChatBot(props) {
   const { editor, history } = props;
   const [isOpen, setIsOpen] = useState11(false);
-  const inputRef = useRef11(null);
+  const inputRef = useRef15(null);
   const { completionApi, additionalData: { body, headers } } = useContext15(NovelContext);
   const initialMessage = {
     id: "start",
@@ -28375,10 +28394,10 @@ function Editor2({
     collaboration: false,
     id: "",
     userDetails: {},
-    lastInputKey: "??"
+    autoCompleteShortKey: "??"
   }
 }) {
-  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastInputKey } = additionalData;
+  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
   const [lastInput, setLastInput] = useState12("");
@@ -28412,20 +28431,14 @@ function Editor2({
     editable,
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2
-      });
-      if (lastTwo === lastInputKey && !isLoading) {
+      const lastTwo = getPrevText(e.editor, { chars: 2 });
+      if (lastTwo === autoCompleteShortKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
           to: selection.from
         });
-        complete(
-          getPrevText(e.editor, {
-            chars: 5e3
-          })
-        );
+        complete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
         onUpdate(e.editor);
         debouncedUpdates(e);
@@ -28459,7 +28472,7 @@ function Editor2({
       toast6.error(err.message);
     }
   });
-  const prev = useRef12("");
+  const prev = useRef16("");
   useEffect20(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;

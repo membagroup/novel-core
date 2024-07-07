@@ -1,9 +1,10 @@
 import { Editor } from "@tiptap/core";
 import { Globe2, Languages, PauseCircle } from "lucide-react";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useRef } from "react";
 import { Command } from "cmdk";
 import { useCompletion } from "ai/react";
 import { NovelContext } from "../../../provider";
+import { useClickOutside } from "@/ui/editor/hooks";
 
 interface TranslateSelectorProps {
   editor: Editor;
@@ -84,8 +85,11 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
     headers: { ...(headers || {}), },
   });
 
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => { setIsOpen(false); });
+
   return (
-    <div className="novel-relative novel-h-full">
+    <div className="novel-relative novel-h-full" ref={ref}>
       <div className={`novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}>
         {isLoading ? (
           <button className="p-2">

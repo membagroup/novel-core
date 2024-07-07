@@ -47,7 +47,7 @@ export default function Editor({
     collaboration: false,
     id: "",
     userDetails: {},
-    lastInputKey: '??',
+    autoCompleteShortKey: '??',
   }
 }: {
   /**
@@ -117,7 +117,7 @@ export default function Editor({
   */
   additionalData?: Record<string, any>;
 }) {
-  const { bot, collaboration, id, userDetails, body, headers, customProvider, lastInputKey } = additionalData;
+  const { bot, collaboration, id, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
@@ -171,20 +171,14 @@ export default function Editor({
     editable: editable,
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
-      const lastTwo = getPrevText(e.editor, {
-        chars: 2,
-      });
-      if (lastTwo === lastInputKey && !isLoading) {
+      const lastTwo = getPrevText(e.editor, { chars: 2, });
+      if (lastTwo === autoCompleteShortKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
           to: selection.from,
         });
-        complete(
-          getPrevText(e.editor, {
-            chars: 5000,
-          })
-        );
+        complete(getPrevText(e.editor, { chars: 5000, }));
         // va.track("Autocomplete Shortcut Used");
       } else {
         onUpdate(e.editor);

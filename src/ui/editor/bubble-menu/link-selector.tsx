@@ -13,7 +13,6 @@ interface LinkSelectorProps {
 
 export const LinkSelector: FC<LinkSelectorProps> = ({ editor, isOpen, setIsOpen, }) => {
   // const context = useContext(NovelContext);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Autofocus on input by default
