@@ -5827,47 +5827,47 @@ var AISelector = (props) => {
   const items = [
     {
       name: "Improve writing",
-      detail: "Improve writing",
+      command: "Improve writing",
       icon: import_lucide_react7.Wand
     },
     {
       name: "Fix spelling & grammar",
-      detail: "Please correct spelling and grammar errors in the following text",
+      command: "Please correct spelling and grammar errors in the following text",
       icon: import_lucide_react7.CheckCheck
     },
     {
       name: "Make shorter",
-      detail: "Make shorter",
+      command: "Make shorter",
       icon: import_lucide_react7.ListMinus
     },
     {
       name: "Make longer",
-      detail: "Make longer",
+      command: "Make longer",
       icon: import_lucide_react7.ListPlus
     },
     {
       name: "Writing suggestions",
-      detail: "Provide suggestions and improvements for the writing",
+      command: "Provide suggestions and improvements for the writing",
       icon: import_lucide_react7.Beef
     },
     {
       name: "Enhance vocabulary",
-      detail: "Suggest synonyms and expand vocabulary usage",
+      command: "Suggest synonyms and expand vocabulary usage",
       icon: import_lucide_react7.Book
     },
     {
       name: "Generate titles",
-      detail: "Automatically generate compelling titles for the content",
+      command: "Automatically generate compelling titles for the content",
       icon: import_lucide_react7.Heading1
     },
     {
       name: "Templates & structure",
-      detail: "Offer templates and structure suggestions to improve the writing organization",
+      command: "Offer templates and structure suggestions to improve the writing organization",
       icon: import_lucide_react7.LayoutPanelTop
     },
     {
       name: "Fix repetitive",
-      detail: "Identify and fix repetitive words or phrases in the content",
+      command: "Identify and fix repetitive words or phrases in the content",
       icon: import_lucide_react7.Scissors
     },
     ...subMenuItems || []
@@ -5972,7 +5972,7 @@ var AISelector = (props) => {
             if (!isLoading) {
               const { from, to } = editor.state.selection;
               const text = editor.state.doc.textBetween(from, to, " ");
-              complete(`${item.detail}:
+              complete(`${item.command}:
  ${text}`);
               setIsOpen(false);
             }
@@ -6002,43 +6002,43 @@ var TranslateSelector = ({
   const items = [
     {
       name: "English",
-      detail: "Translate into English"
+      command: "Translate into English"
     },
     {
       name: "Chinese",
-      detail: "Translate into Chinese"
+      command: "Translate into Chinese"
     },
     {
       name: "Spanish",
-      detail: "Translate into Spanish"
+      command: "Translate into Spanish"
     },
     {
       name: "French",
-      detail: "Translate into French"
+      command: "Translate into French"
     },
     {
       name: "German",
-      detail: "Translate into German"
+      command: "Translate into German"
     },
     {
       name: "Japanese",
-      detail: "Translate into Japanese"
+      command: "Translate into Japanese"
     },
     {
       name: "Russian",
-      detail: "Translate into Russian"
+      command: "Translate into Russian"
     },
     {
       name: "Korean",
-      detail: "Translate into Korean"
+      command: "Translate into Korean"
     },
     {
       name: "Arabic",
-      detail: "Translate into Arabic"
+      command: "Translate into Arabic"
     },
     {
       name: "Portuguese",
-      detail: "Translate into Portuguese"
+      command: "Translate into Portuguese"
     }
   ];
   (0, import_react24.useEffect)(() => {
@@ -6084,7 +6084,7 @@ var TranslateSelector = ({
           if (!isLoading) {
             const { from, to } = editor.state.selection;
             const text = editor.state.doc.textBetween(from, to, " ");
-            complete(`${item.detail}:
+            complete(`${item.command}:
  ${text}`);
             setIsOpen(false);
           }

@@ -25,7 +25,7 @@ import { useCompletion } from "ai/react";
 import { NovelContext } from "../../../provider";
 import { toast } from "sonner";
 
-export interface AIMenuItem { name: string; detail: string, icon: LucideIcon };
+export interface AIMenuItem { name: string; command: string, icon: LucideIcon };
 
 interface AISelectorProps {
   editor: Editor;
@@ -41,49 +41,49 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   const items = [
     {
       name: "Improve writing",
-      detail: "Improve writing",
+      command: "Improve writing",
       icon: Wand,
     },
     {
       name: "Fix spelling & grammar",
-      detail:
+      command:
         "Please correct spelling and grammar errors in the following text",
       icon: CheckCheck,
     },
     {
       name: "Make shorter",
-      detail: "Make shorter",
+      command: "Make shorter",
       icon: ListMinus,
     },
     {
       name: "Make longer",
-      detail: "Make longer",
+      command: "Make longer",
       icon: ListPlus,
     },
     {
       name: "Writing suggestions",
-      detail: "Provide suggestions and improvements for the writing",
+      command: "Provide suggestions and improvements for the writing",
       icon: Beef,
     },
     {
       name: "Enhance vocabulary",
-      detail: "Suggest synonyms and expand vocabulary usage",
+      command: "Suggest synonyms and expand vocabulary usage",
       icon: Book,
     },
     {
       name: "Generate titles",
-      detail: "Automatically generate compelling titles for the content",
+      command: "Automatically generate compelling titles for the content",
       icon: Heading1,
     },
     {
       name: "Templates & structure",
-      detail:
+      command:
         "Offer templates and structure suggestions to improve the writing organization",
       icon: LayoutPanelTop,
     },
     {
       name: "Fix repetitive",
-      detail: "Identify and fix repetitive words or phrases in the content",
+      command: "Identify and fix repetitive words or phrases in the content",
       icon: Scissors,
     },
     ...(subMenuItems || []),
@@ -191,7 +191,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
                       if (!isLoading) {
                         const { from, to } = editor.state.selection;
                         const text = editor.state.doc.textBetween(from, to, " ");
-                        complete(`${item.detail}:\n ${text}`);
+                        complete(`${item.command}:\n ${text}`);
                         setIsOpen(false);
                       }
                     }}

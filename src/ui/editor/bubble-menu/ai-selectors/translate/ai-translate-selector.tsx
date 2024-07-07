@@ -19,43 +19,43 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
   const items = [
     {
       name: "English",
-      detail: "Translate into English",
+      command: "Translate into English",
     },
     {
       name: "Chinese",
-      detail: "Translate into Chinese",
+      command: "Translate into Chinese",
     },
     {
       name: "Spanish",
-      detail: "Translate into Spanish",
+      command: "Translate into Spanish",
     },
     {
       name: "French",
-      detail: "Translate into French",
+      command: "Translate into French",
     },
     {
       name: "German",
-      detail: "Translate into German",
+      command: "Translate into German",
     },
     {
       name: "Japanese",
-      detail: "Translate into Japanese",
+      command: "Translate into Japanese",
     },
     {
       name: "Russian",
-      detail: "Translate into Russian",
+      command: "Translate into Russian",
     },
     {
       name: "Korean",
-      detail: "Translate into Korean",
+      command: "Translate into Korean",
     },
     {
       name: "Arabic",
-      detail: "Translate into Arabic",
+      command: "Translate into Arabic",
     },
     {
       name: "Portuguese",
-      detail: "Translate into Portuguese",
+      command: "Translate into Portuguese",
     },
   ];
 
@@ -114,7 +114,7 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
                   if (!isLoading) {
                     const { from, to } = editor.state.selection;
                     const text = editor.state.doc.textBetween(from, to, " ");
-                    complete(`${item.detail}:\n ${text}`);
+                    complete(`${item.command}:\n ${text}`);
                     setIsOpen(false);
                   }
                 }}
