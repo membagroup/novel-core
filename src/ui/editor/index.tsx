@@ -265,9 +265,9 @@ export default function Editor({
 
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {(additionalData?.showGenLoader) || (isLoadingOutside && isLoading) &&
+        {(additionalData?.showGenLoader || (isLoadingOutside && isLoading)) &&
           (
-            <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
+            <div className="novel-fixed novel-bottom-3 novel-mx-auto">
               <AIGeneratingLoading stop={stop} />
             </div>
           )}
