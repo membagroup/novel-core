@@ -31,12 +31,12 @@ interface AISelectorProps {
   editor: Editor;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  showSubmenu?: boolean;
+  hasSelection?: boolean;
   subMenuItems?: AIMenuItem[]
 }
 
 export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
-  const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
+  const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
   const context = useContext(NovelContext);
 
   const items = [
@@ -130,7 +130,8 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
     };
   }, [isOpen]);
 
-  useClickOutside(inputRef, () => {
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
     if (!isOpen) return;
     if (inputRef.current) {
       context.setLastInput(inputRef.current.value || '');
@@ -139,7 +140,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   });
 
   useEffect(() => {
-    inputRef.current && inputRef.current?.focus();
+    if (!hasSelection) inputRef.current && inputRef.current?.focus();
   });
 
   const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
@@ -152,7 +153,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   });
 
   return (
-    <div className="novel-relative novel-h-full">
+    <div className="novel-relative novel-h-full" ref={ref}>
       <div className={`novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}>
         <button
           className="novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2"
@@ -195,7 +196,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
               <Send className="novel-h-4 novel-w-4 novel-text-purple-500" />
             </button>
           </form>
-          {showSubmenu ?
+          {hasSelection ?
             <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
               <Command.List>
                 {items.map((item, index) => (

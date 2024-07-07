@@ -3392,12 +3392,13 @@ var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  useClickOutside(inputRef, () => {
+  const ref2 = useRef4(null);
+  useClickOutside(ref2, () => {
     if (!isOpen)
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ jsxs6("div", { className: "novel-relative", children: [
+  return /* @__PURE__ */ jsxs6("div", { className: "novel-relative", ref: ref2, children: [
     /* @__PURE__ */ jsxs6(
       "button",
       {
@@ -5923,7 +5924,7 @@ var xe = { position: "absolute", width: "1px", height: "1px", padding: "0", marg
 import { useCompletion as useCompletion2 } from "ai/react";
 import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
 var AISelector = (props) => {
-  const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
+  const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
   const context = useContext4(NovelContext);
   const items = [
     {
@@ -6009,7 +6010,8 @@ var AISelector = (props) => {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  useClickOutside(inputRef, () => {
+  const ref2 = useRef9(null);
+  useClickOutside(ref2, () => {
     if (!isOpen)
       return;
     if (inputRef.current) {
@@ -6019,7 +6021,8 @@ var AISelector = (props) => {
   });
   useEffect10(() => {
     var _a;
-    inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
+    if (!hasSelection)
+      inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
   const { completionApi, additionalData: { body, headers } } = useContext4(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion2({
@@ -6028,7 +6031,7 @@ var AISelector = (props) => {
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", children: [
+  return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
     /* @__PURE__ */ jsx8("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ jsxs8(
       "button",
       {
@@ -6077,7 +6080,7 @@ var AISelector = (props) => {
           ]
         }
       ),
-      showSubmenu ? /* @__PURE__ */ jsx8(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx8(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx8(
+      hasSelection ? /* @__PURE__ */ jsx8(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx8(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx8(
         Le.Item,
         {
           onSelect: () => {
@@ -6299,7 +6302,7 @@ var EditorBubbleMenu = (props) => {
           {
             editor: props.editor,
             isOpen: isAISelectorOpen,
-            showSubmenu: hasSelection,
+            hasSelection,
             subMenuItems: aiMenuItems,
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);

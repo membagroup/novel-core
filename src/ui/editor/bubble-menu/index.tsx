@@ -115,7 +115,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
           <AISelector
             editor={props.editor}
             isOpen={isAISelectorOpen}
-            showSubmenu={hasSelection}
+            hasSelection={hasSelection}
             subMenuItems={aiMenuItems}
             setIsOpen={() => {
               setIsAISelectorOpen(!isAISelectorOpen);

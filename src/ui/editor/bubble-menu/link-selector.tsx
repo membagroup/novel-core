@@ -20,7 +20,8 @@ export const LinkSelector: FC<LinkSelectorProps> = ({ editor, isOpen, setIsOpen,
     inputRef.current && inputRef.current?.focus();
   });
 
-  useClickOutside(inputRef, () => {
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
     if (!isOpen) return;
     // if (inputRef.current && inputRef.current.value) {
     //   context.setLastText(inputRef.current.value);
@@ -29,7 +30,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({ editor, isOpen, setIsOpen,
   });
 
   return (
-    <div className="novel-relative">
+    <div className="novel-relative" ref={ref}>
       <button
         type="button"
         className={`novel-flex novel-h-full novel-items-center novel-space-x-2 novel-px-3 novel-py-1.5 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}
