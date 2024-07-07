@@ -920,6 +920,9 @@ video {
 .novel-w-10 {
   width: 2.5rem;
 }
+.novel-w-16 {
+  width: 4rem;
+}
 .novel-w-28 {
   width: 7rem;
 }
@@ -21198,14 +21201,14 @@ var ai_edit_bubble_default = AIEditorBubble;
 import { PauseCircle as PauseCircle4 } from "lucide-react";
 import { jsx as jsx14, jsxs as jsxs13 } from "react/jsx-runtime";
 function AIGeneratingLoading({ stop: stop2 }) {
-  return /* @__PURE__ */ jsxs13("div", { className: "flex items-center justify-start novel-bg-white shadow-lg rounded-full px-3 py-2 w-16 h-10", children: [
+  return /* @__PURE__ */ jsxs13("div", { className: "novel-flex novel-items-center novel-justify-start novel-bg-white novel-shadow-lg novel-rounded-full novel-px-3 novel-py-2 novel-w-16 novel-h-10", children: [
     /* @__PURE__ */ jsx14(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
-    /* @__PURE__ */ jsx14("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
+    /* @__PURE__ */ jsx14("span", { className: "novel-text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
     /* @__PURE__ */ jsx14(
       PauseCircle4,
       {
         onClick: stop2,
-        className: "novel-h-5 hover:novel-text-stone-500 cursor-pointer novel-ml-6 novel-w-5 novel-text-stone-300"
+        className: "novel-h-5 hover:novel-text-stone-500 novel-cursor-pointer novel-ml-6 novel-w-5 novel-text-stone-300"
       }
     )
   ] });
@@ -28533,7 +28536,7 @@ function Editor2({
         editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
         /* @__PURE__ */ jsx19(EditorContent, { editor }),
-        isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
+        (additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
         bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
       ]
     }

@@ -265,11 +265,12 @@ export default function Editor({
 
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {isLoadingOutside && isLoading && (
-          <div className="novel-fixed novel-bottom-3 novel-mx-auto">
-            <AIGeneratingLoading stop={stop} />
-          </div>
-        )}
+        {(additionalData?.showGenLoader) || (isLoadingOutside && isLoading) &&
+          (
+            <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
+              <AIGeneratingLoading stop={stop} />
+            </div>
+          )}
         {/* {editor &&
           <div className="novel-fixed novel-bottom-[7.25rem] novel-right-3">
             <button
