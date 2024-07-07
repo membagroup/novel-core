@@ -1,5 +1,5 @@
 import { BubbleMenu, BubbleMenuProps, isNodeSelection } from "@tiptap/react";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, ReactElement, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -12,8 +12,11 @@ import { ColorSelector } from "./color-selector";
 import { LinkSelector } from "./link-selector";
 import { cn } from "@/lib/utils";
 import { TableSelector } from "./table-selector";
-import { AISelector } from "./ai-selectors/edit/ai-edit-selector";
+import { AIMenuItem, AISelector } from "./ai-selectors/edit/ai-edit-selector";
 import { TranslateSelector } from "./ai-selectors/translate/ai-translate-selector";
+import { NovelContext } from "../provider";
+import { add } from "lodash";
+import React from "react";
 
 export interface BubbleMenuItem {
   name: string;
@@ -22,9 +25,17 @@ export interface BubbleMenuItem {
   icon: typeof BoldIcon;
 }
 
-type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children"> & { panelOpen?: boolean };
+type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
+// & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
+  const { additionalData } = useContext(NovelContext);
+  const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
+  const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
+  const CustomMenuItems = (additionalData?.customMenuItems || []) as {
+    component: (props: any) => JSX.Element, isOpen: boolean, setIsOpen: (value: React.SetStateAction<boolean>) => void
+  }[];
+
   const items: BubbleMenuItem[] = [
     {
       name: "bold",
@@ -56,6 +67,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       command: () => props.editor!.chain().focus().toggleCode().run(),
       icon: CodeIcon,
     },
+    ...bubbleMenuItems,
   ];
 
   const bubbleMenuProps: EditorBubbleMenuProps = {
@@ -71,7 +83,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
-      if(!empty) {
+      if (!empty) {
         return true;
       }
       // https://github.com/ueberdosis/tiptap/issues/2305
@@ -110,6 +122,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
             editor={props.editor}
             isOpen={isAISelectorOpen}
             showSubmenu={hasSelection}
+            subMenuItems={aiMenuItems}
             setIsOpen={() => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -196,6 +209,25 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               setIsLinkSelectorOpen(false);
             }}
           />
+          {CustomMenuItems.length ?
+            CustomMenuItems.map((item, index) => (
+              //  React.cloneElement(item, { key: index })
+              <item.component
+                key={index}
+                editor={props.editor}
+                isOpen={item?.isOpen}
+                setIsOpen={() => {
+                  item.setIsOpen(!item.isOpen);
+                  setIsTranslateSelectorOpen(false);
+                  setIsAISelectorOpen(false);
+                  setIsNodeSelectorOpen(false);
+                  setIsColorSelectorOpen(false);
+                  setIsTableSelectorOpen(false);
+                  setIsLinkSelectorOpen(false);
+                }}
+              />
+            )) : null
+          }
         </>
       )}
     </BubbleMenu>

@@ -2949,7 +2949,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useState as useState8 } from "react";
+import { useContext as useContext5, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -3640,7 +3640,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
       value
     }, children);
   }
-  function useContext14(consumerName) {
+  function useContext15(consumerName) {
     const context = $3bkAK$useContext(Context);
     if (context)
       return context;
@@ -3651,7 +3651,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
   Provider.displayName = rootComponentName + "Provider";
   return [
     Provider,
-    useContext14
+    useContext15
   ];
 }
 function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeDeps = []) {
@@ -3674,7 +3674,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
         value
       }, children);
     }
-    function useContext14(consumerName, scope) {
+    function useContext15(consumerName, scope) {
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
       const context = $3bkAK$useContext(Context);
       if (context)
@@ -3686,7 +3686,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     Provider.displayName = rootComponentName + "Provider";
     return [
       Provider,
-      useContext14
+      useContext15
     ];
   }
   const createScope = () => {
@@ -5878,12 +5878,8 @@ var xe = { position: "absolute", width: "1px", height: "1px", padding: "0", marg
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 import { useCompletion as useCompletion2 } from "ai/react";
 import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
-var AISelector = ({
-  editor,
-  isOpen,
-  setIsOpen,
-  showSubmenu
-}) => {
+var AISelector = (props) => {
+  const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
   const items = [
     {
       name: "Improve writing",
@@ -5929,7 +5925,8 @@ var AISelector = ({
       name: "Fix repetitive",
       detail: "Identify and fix repetitive words or phrases in the content",
       icon: Scissors
-    }
+    },
+    ...subMenuItems || []
   ];
   const inputRef = useRef6(null);
   const handleSubmit = (input) => {
@@ -6159,6 +6156,10 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 import { Fragment as Fragment4, jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
+  const { additionalData } = useContext5(NovelContext);
+  const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
+  const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
+  const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
   const items = [
     {
       name: "bold",
@@ -6189,7 +6190,8 @@ var EditorBubbleMenu = (props) => {
       isActive: () => props.editor.isActive("code"),
       command: () => props.editor.chain().focus().toggleCode().run(),
       icon: CodeIcon
-    }
+    },
+    ...bubbleMenuItems
   ];
   const bubbleMenuProps = __spreadProps(__spreadValues({}, props), {
     shouldShow: ({ state, editor }) => {
@@ -6236,6 +6238,7 @@ var EditorBubbleMenu = (props) => {
             editor: props.editor,
             isOpen: isAISelectorOpen,
             showSubmenu: hasSelection,
+            subMenuItems: aiMenuItems,
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -6337,7 +6340,27 @@ var EditorBubbleMenu = (props) => {
               setIsLinkSelectorOpen(false);
             }
           }
-        )
+        ),
+        CustomMenuItems.length ? CustomMenuItems.map((item, index2) => (
+          //  React.cloneElement(item, { key: index })
+          /* @__PURE__ */ jsx10(
+            item.component,
+            {
+              editor: props.editor,
+              isOpen: item == null ? void 0 : item.isOpen,
+              setIsOpen: () => {
+                item.setIsOpen(!item.isOpen);
+                setIsTranslateSelectorOpen(false);
+                setIsAISelectorOpen(false);
+                setIsNodeSelectorOpen(false);
+                setIsColorSelectorOpen(false);
+                setIsTableSelectorOpen(false);
+                setIsLinkSelectorOpen(false);
+              }
+            },
+            index2
+          )
+        )) : null
       ] })
     })
   );
@@ -8644,7 +8667,7 @@ function getOverlapSize(points1, points2) {
 }
 
 // ../../node_modules/.pnpm/react-moveable@0.54.1/node_modules/react-moveable/dist/moveable.esm.js
-import * as React9 from "react";
+import * as React10 from "react";
 import { createElement as createElement9 } from "react";
 
 // ../../node_modules/.pnpm/gesto@1.19.4/node_modules/gesto/dist/gesto.esm.js
@@ -10553,7 +10576,7 @@ function startChildDist(moveable, child, parentDatas, childEvent) {
   childEvent.datas.originalY = originalY;
   return childEvent;
 }
-function renderDirectionControlsByInfos(moveable, ableName, renderDirections, React11) {
+function renderDirectionControlsByInfos(moveable, ableName, renderDirections, React12) {
   var _a = moveable.getState(), renderPoses = _a.renderPoses, rotationRad = _a.rotation, direction = _a.direction;
   var zoom = getProps(moveable.props, ableName).zoom;
   var degRotation = absDegree(rotationRad / Math.PI * 180);
@@ -10580,60 +10603,60 @@ function renderDirectionControlsByInfos(moveable, ableName, renderDirections, Re
     getKeys(data).forEach(function(name) {
       dataAttrs["data-".concat(name)] = data[name];
     });
-    return React11.createElement("div", __assign7({ className: prefix.apply(void 0, __spreadArray2(["control", "direction", dir, ableName], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir }, dataAttrs, { key: "direction-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
+    return React12.createElement("div", __assign7({ className: prefix.apply(void 0, __spreadArray2(["control", "direction", dir, ableName], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir }, dataAttrs, { key: "direction-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
       return renderPoses[index2];
     })), false)) }));
   });
 }
-function renderDirectionControls(moveable, defaultDirections, ableName, React11) {
+function renderDirectionControls(moveable, defaultDirections, ableName, React12) {
   var _a = getProps(moveable.props, ableName), _b = _a.renderDirections, directions = _b === void 0 ? defaultDirections : _b, displayAroundControls = _a.displayAroundControls;
   if (!directions) {
     return [];
   }
   var renderDirections = directions === true ? DIRECTIONS : directions;
-  return __spreadArray2(__spreadArray2([], __read(displayAroundControls ? renderAroundControls(moveable, React11, ableName, renderDirections) : []), false), __read(renderDirectionControlsByInfos(moveable, ableName, renderDirections.map(function(dir) {
+  return __spreadArray2(__spreadArray2([], __read(displayAroundControls ? renderAroundControls(moveable, React12, ableName, renderDirections) : []), false), __read(renderDirectionControlsByInfos(moveable, ableName, renderDirections.map(function(dir) {
     return {
       data: {},
       classNames: [],
       dir
     };
-  }), React11)), false);
+  }), React12)), false);
 }
-function renderLine(React11, direction, pos1, pos2, zoom, key) {
+function renderLine(React12, direction, pos1, pos2, zoom, key) {
   var classNames = [];
   for (var _i = 6; _i < arguments.length; _i++) {
     classNames[_i - 6] = arguments[_i];
   }
   var rad = getRad(pos1, pos2);
   var rotation = direction ? throttle(rad / Math.PI * 180, 15) % 180 : -1;
-  return React11.createElement("div", { key: "line-".concat(key), className: prefix.apply(void 0, __spreadArray2(["line", "direction", direction ? "edge" : "", direction], __read(classNames), false)), "data-rotation": rotation, "data-line-key": key, "data-direction": direction, style: getLineStyle(pos1, pos2, zoom, rad) });
+  return React12.createElement("div", { key: "line-".concat(key), className: prefix.apply(void 0, __spreadArray2(["line", "direction", direction ? "edge" : "", direction], __read(classNames), false)), "data-rotation": rotation, "data-line-key": key, "data-direction": direction, style: getLineStyle(pos1, pos2, zoom, rad) });
 }
-function renderEdgeLines(React11, ableName, edge, poses, zoom) {
+function renderEdgeLines(React12, ableName, edge, poses, zoom) {
   var directions = edge === true ? DIRECTIONS4 : edge;
   return directions.map(function(direction, i) {
     var _a = __read(DIRECTION_INDEXES[direction], 2), index1 = _a[0], index2 = _a[1];
     if (index2 == null) {
       return;
     }
-    return renderLine(React11, direction, poses[index1], poses[index2], zoom, "".concat(ableName, "Edge").concat(i), ableName);
+    return renderLine(React12, direction, poses[index1], poses[index2], zoom, "".concat(ableName, "Edge").concat(i), ableName);
   }).filter(Boolean);
 }
 function getRenderDirections(ableName) {
-  return function(moveable, React11) {
+  return function(moveable, React12) {
     var edge = getProps(moveable.props, ableName).edge;
     if (edge && (edge === true || edge.length)) {
-      return __spreadArray2(__spreadArray2([], __read(renderEdgeLines(React11, ableName, edge, moveable.getState().renderPoses, moveable.props.zoom)), false), __read(renderDiagonalDirections(moveable, ableName, React11)), false);
+      return __spreadArray2(__spreadArray2([], __read(renderEdgeLines(React12, ableName, edge, moveable.getState().renderPoses, moveable.props.zoom)), false), __read(renderDiagonalDirections(moveable, ableName, React12)), false);
     }
-    return renderAllDirections(moveable, ableName, React11);
+    return renderAllDirections(moveable, ableName, React12);
   };
 }
-function renderAllDirections(moveable, ableName, React11) {
-  return renderDirectionControls(moveable, DIRECTIONS, ableName, React11);
+function renderAllDirections(moveable, ableName, React12) {
+  return renderDirectionControls(moveable, DIRECTIONS, ableName, React12);
 }
-function renderDiagonalDirections(moveable, ableName, React11) {
-  return renderDirectionControls(moveable, ["nw", "ne", "sw", "se"], ableName, React11);
+function renderDiagonalDirections(moveable, ableName, React12) {
+  return renderDirectionControls(moveable, ["nw", "ne", "sw", "se"], ableName, React12);
 }
-function renderAroundControls(moveable, React11, ableName, renderDirections) {
+function renderAroundControls(moveable, React12, ableName, renderDirections) {
   var renderState = moveable.renderState;
   if (!renderState.renderDirectionMap) {
     renderState.renderDirectionMap = {};
@@ -10653,7 +10676,7 @@ function renderAroundControls(moveable, React11, ableName, renderDirections) {
     if (ableName) {
       classNames.push("direction", ableName);
     }
-    return React11.createElement("div", { className: prefix.apply(void 0, __spreadArray2([], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir, key: "direction-around-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
+    return React12.createElement("div", { className: prefix.apply(void 0, __spreadArray2([], __read(classNames), false)), "data-rotation": directionRotation, "data-direction": dir, key: "direction-around-".concat(dir), style: getControlTransform.apply(void 0, __spreadArray2([rotationRad, zoom], __read(indexes.map(function(index2) {
       return renderPoses[index2];
     })), false)) });
   });
@@ -12171,7 +12194,7 @@ var Draggable = {
   requestChildStyle: function() {
     return ["left", "top", "right", "bottom"];
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, hideThrottleDragRotateLine = _a.hideThrottleDragRotateLine, throttleDragRotate = _a.throttleDragRotate, zoom = _a.zoom;
     var _b = moveable.getState(), dragInfo = _b.dragInfo, beforeOrigin = _b.beforeOrigin;
     if (hideThrottleDragRotateLine || !throttleDragRotate || !dragInfo) {
@@ -12183,7 +12206,7 @@ var Draggable = {
     }
     var width = getDistSize(dist);
     var rad = getRad(dist, [0, 0]);
-    return [React11.createElement("div", { className: prefix("line", "horizontal", "dragline", "dashed"), key: "dragRotateGuideline", style: {
+    return [React12.createElement("div", { className: prefix("line", "horizontal", "dragline", "dashed"), key: "dragRotateGuideline", style: {
       width: "".concat(width, "px"),
       transform: "translate(".concat(beforeOrigin[0], "px, ").concat(beforeOrigin[1], "px) rotate(").concat(rad, "rad) scaleY(").concat(zoom, ")")
     } })];
@@ -13134,7 +13157,7 @@ var Rotatable = {
     }
     return prefix("view-rotation-dragging");
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = getProps(moveable.props, "rotatable"), rotatable = _a.rotatable, rotationPosition = _a.rotationPosition, zoom = _a.zoom, renderDirections = _a.renderDirections, rotateAroundControls = _a.rotateAroundControls, resolveAblesWithRotatable = _a.resolveAblesWithRotatable;
     var _b = moveable.getState(), renderPoses = _b.renderPoses, direction = _b.direction;
     if (!rotatable) {
@@ -13144,16 +13167,16 @@ var Rotatable = {
     var jsxs18 = [];
     positions.forEach(function(_a2, i) {
       var _b2 = __read(_a2, 2), pos = _b2[0], rad = _b2[1];
-      jsxs18.push(React11.createElement(
+      jsxs18.push(React12.createElement(
         "div",
         { key: "rotation".concat(i), className: prefix("rotation"), style: {
           // tslint:disable-next-line: max-line-length
           transform: "translate(-50%) translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rad, "rad)")
         } },
-        React11.createElement("div", { className: prefix("line rotation-line"), style: {
+        React12.createElement("div", { className: prefix("line rotation-line"), style: {
           transform: "scaleX(".concat(zoom, ")")
         } }),
-        React11.createElement("div", { className: prefix("control rotation-control"), style: {
+        React12.createElement("div", { className: prefix("control rotation-control"), style: {
           transform: "translate(0.5px) scale(".concat(zoom, ")")
         } })
       ));
@@ -13177,10 +13200,10 @@ var Rotatable = {
           };
         });
       }
-      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderDirectionControlsByInfos(moveable, "rotatable", directionControlInfos, React11)), false));
+      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderDirectionControlsByInfos(moveable, "rotatable", directionControlInfos, React12)), false));
     }
     if (rotateAroundControls) {
-      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderAroundControls(moveable, React11)), false));
+      jsxs18.push.apply(jsxs18, __spreadArray2([], __read(renderAroundControls(moveable, React12)), false));
     }
     return jsxs18;
   },
@@ -13517,27 +13540,27 @@ var Rotatable = {
     };
   }
 };
-function renderGuideline(info, React11) {
+function renderGuideline(info, React12) {
   var _a;
   var direction = info.direction, classNames = info.classNames, size = info.size, pos = info.pos, zoom = info.zoom, key = info.key;
   var isHorizontal = direction === "horizontal";
   var scaleType = isHorizontal ? "Y" : "X";
-  return React11.createElement("div", {
+  return React12.createElement("div", {
     key,
     className: classNames.join(" "),
     style: (_a = {}, _a[isHorizontal ? "width" : "height"] = "".concat(size), _a.transform = "translate(".concat(pos[0], ", ").concat(pos[1], ") translate").concat(scaleType, "(-50%) scale").concat(scaleType, "(").concat(zoom, ")"), _a)
   });
 }
-function renderInnerGuideline(info, React11) {
+function renderInnerGuideline(info, React12) {
   return renderGuideline(__assign7(__assign7({}, info), { classNames: __spreadArray2([
     prefix("line", "guideline", info.direction)
   ], __read(info.classNames), false).filter(function(className) {
     return className;
   }), size: info.size || "".concat(info.sizeValue, "px"), pos: info.pos || info.posValue.map(function(v) {
     return "".concat(throttle(v, 0.1), "px");
-  }) }), React11);
+  }) }), React12);
 }
-function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size, index2, React11) {
+function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size, index2, React12) {
   var zoom = moveable.props.zoom;
   return snapPoses.map(function(_a, i) {
     var type = _a.type, pos = _a.pos;
@@ -13551,10 +13574,10 @@ function renderSnapPoses(moveable, direction, snapPoses, minPos, targetPos, size
       sizeValue: size,
       zoom,
       direction
-    }, React11);
+    }, React12);
   });
 }
-function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, React11) {
+function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, React12) {
   var _a = moveable.props, zoom = _a.zoom, isDisplayInnerSnapDigit = _a.isDisplayInnerSnapDigit;
   var mainNames = type === "horizontal" ? VERTICAL_NAMES_MAP : HORIZONTAL_NAMES_MAP;
   var targetStart = targetRect[mainNames.start];
@@ -13584,10 +13607,10 @@ function renderGuidelines(moveable, type, guidelines, targetPos, targetRect, Rea
       posValue: renderPos,
       sizeValue: size,
       zoom
-    }, React11);
+    }, React12);
   });
 }
-function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, className, React11) {
+function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, className, React12) {
   var _a;
   var _b = moveable.props, _c = _b.snapDigit, snapDigit = _c === void 0 ? 0 : _c, _d = _b.isDisplaySnapDigit, isDisplaySnapDigit = _d === void 0 ? true : _d, _e = _b.snapDistFormat, snapDistFormat = _e === void 0 ? function(v, type2) {
     if (type2 === "vertical") {
@@ -13599,7 +13622,7 @@ function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, class
   var sizeName = type === "vertical" ? "height" : "width";
   var absGap = Math.abs(gap);
   var snapSize = isDisplaySnapDigit ? parseFloat(absGap.toFixed(snapDigit)) : 0;
-  return React11.createElement(
+  return React12.createElement(
     "div",
     { key: "".concat(type, "-").concat(lineType, "-guideline-").concat(index2), className: prefix("guideline-group", type), style: (_a = {
       left: "".concat(renderPos[0], "px"),
@@ -13612,8 +13635,8 @@ function renderDigitLine(moveable, type, lineType, index2, gap, renderPos, class
       posValue: [0, 0],
       sizeValue: absGap,
       zoom
-    }, React11),
-    React11.createElement("div", { className: prefix("size-value", "gap"), style: {
+    }, React12),
+    React12.createElement("div", { className: prefix("size-value", "gap"), style: {
       transform: "translate".concat(scaleType, "(-50%) scale(").concat(zoom, ")")
     } }, snapSize > 0 ? snapDistFormat(snapSize, type) : "")
   );
@@ -13680,7 +13703,7 @@ function groupByElementGuidelines(type, guidelines, targetRect, isDisplayInnerSn
     };
   });
 }
-function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, React11) {
+function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, React12) {
   var isDisplayInnerSnapDigit = moveable.props.isDisplayInnerSnapDigit;
   var rendered = [];
   ["vertical", "horizontal"].forEach(function(type) {
@@ -13705,7 +13728,7 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
           var renderPos = [0, 0];
           renderPos[index2] = targetPos[index2] + prevRect[mainNames.start] - targetStart - size;
           renderPos[otherIndex] = sidePos;
-          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React11));
+          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React12));
         }
         prevRect = nextRect;
       });
@@ -13717,7 +13740,7 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
           var renderPos = [0, 0];
           renderPos[index2] = targetPos[index2] + prevRect[mainNames.end] - targetStart;
           renderPos[otherIndex] = sidePos;
-          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React11));
+          rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size, renderPos, guideline.className, React12));
         }
         prevRect = nextRect;
       });
@@ -13731,14 +13754,14 @@ function renderDashedGuidelines(moveable, guidelines, targetPos, targetRect, Rea
         renderPos1[otherIndex] = sidePos;
         renderPos2[index2] = targetPos[index2] + targetEnd - targetStart;
         renderPos2[otherIndex] = sidePos;
-        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size1, renderPos1, guideline.className, React11));
-        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size2, renderPos2, guideline.className, React11));
+        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size1, renderPos1, guideline.className, React12));
+        rendered.push(renderDigitLine(moveable, type, "dashed", rendered.length, size2, renderPos2, guideline.className, React12));
       });
     });
   });
   return rendered;
 }
-function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React11) {
+function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React12) {
   var rendered = [];
   ["horizontal", "vertical"].forEach(function(type) {
     var nextGuidelines = guidelines.filter(function(guideline) {
@@ -13777,7 +13800,7 @@ function renderGapGuidelines(moveable, guidelines, targetPos, targetRect, React1
           return;
         }
         renderPos[otherIndex] += sideCenterPos - targetSideStart;
-        rendered.push(renderDigitLine(moveable, index2 ? "vertical" : "horizontal", "gap", rendered.length, gap, renderPos, className, React11));
+        rendered.push(renderDigitLine(moveable, index2 ? "vertical" : "horizontal", "gap", rendered.length, gap, renderPos, className, React12));
       });
     });
   });
@@ -14484,7 +14507,7 @@ var Snappable = {
   css: [
     ":host {\n--bounds-color: #d66;\n}\n.guideline {\npointer-events: none;\nz-index: 2;\n}\n.guideline.bounds {\nbackground: #d66;\nbackground: var(--bounds-color);\n}\n.guideline-group {\nposition: absolute;\ntop: 0;\nleft: 0;\n}\n.guideline-group .size-value {\nposition: absolute;\ncolor: #f55;\nfont-size: 12px;\nfont-size: calc(12px * var(--zoom));\nfont-weight: bold;\n}\n.guideline-group.horizontal .size-value {\ntransform-origin: 50% 100%;\ntransform: translateX(-50%);\nleft: 50%;\nbottom: 5px;\nbottom: calc(2px + 3px * var(--zoom));\n}\n.guideline-group.vertical .size-value {\ntransform-origin: 0% 50%;\ntop: 50%;\ntransform: translateY(-50%);\nleft: 5px;\nleft: calc(2px + 3px * var(--zoom));\n}\n.guideline.gap {\nbackground: #f55;\n}\n.size-value.gap {\ncolor: #f55;\n}\n"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var state = moveable.state;
     var targetTop = state.top, targetLeft = state.left, pos1 = state.pos1, pos2 = state.pos2, pos3 = state.pos3, pos4 = state.pos4, snapRenderInfo = state.snapRenderInfo;
     var _a = moveable.props.snapRenderThreshold, snapRenderThreshold = _a === void 0 ? 1 : _a;
@@ -14593,7 +14616,7 @@ var Snappable = {
         innerBounds: innerBoundMap
       }, true);
     }
-    return __spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2([], __read(renderDashedGuidelines(moveable, elementGuidelines, [minLeft, minTop], targetRect, React11)), false), __read(renderGapGuidelines(moveable, gapGuidelines, [minLeft, minTop], targetRect, React11)), false), __read(renderGuidelines(moveable, "horizontal", horizontalGuidelines, [targetLeft, targetTop], targetRect, React11)), false), __read(renderGuidelines(moveable, "vertical", verticalGuidelines, [targetLeft, targetTop], targetRect, React11)), false), __read(renderSnapPoses(moveable, "horizontal", horizontalSnapPoses, minLeft, targetTop, width, 0, React11)), false), __read(renderSnapPoses(moveable, "vertical", verticalSnapPoses, minTop, targetLeft, height, 1, React11)), false);
+    return __spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2(__spreadArray2([], __read(renderDashedGuidelines(moveable, elementGuidelines, [minLeft, minTop], targetRect, React12)), false), __read(renderGapGuidelines(moveable, gapGuidelines, [minLeft, minTop], targetRect, React12)), false), __read(renderGuidelines(moveable, "horizontal", horizontalGuidelines, [targetLeft, targetTop], targetRect, React12)), false), __read(renderGuidelines(moveable, "vertical", verticalGuidelines, [targetLeft, targetTop], targetRect, React12)), false), __read(renderSnapPoses(moveable, "horizontal", horizontalSnapPoses, minLeft, targetTop, width, 0, React12)), false), __read(renderSnapPoses(moveable, "vertical", verticalSnapPoses, minTop, targetLeft, height, 1, React12)), false);
   },
   dragStart: function(moveable, e) {
     moveable.state.snapRenderInfo = {
@@ -16424,7 +16447,7 @@ var Warpable = {
     "warpEnd"
   ],
   viewClassName: getDirectionViewClassName("warpable"),
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, resizable = _a.resizable, scalable = _a.scalable, warpable = _a.warpable, zoom = _a.zoom;
     if (resizable || scalable || !warpable) {
       return [];
@@ -16439,11 +16462,11 @@ var Warpable = {
     var linePosTo3 = getMiddleLinePos(pos2, pos4);
     var linePosTo4 = getMiddleLinePos(pos4, pos2);
     return __spreadArray2([
-      React11.createElement("div", { className: prefix("line"), key: "middeLine1", style: getLineStyle(linePosFrom1, linePosTo1, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine2", style: getLineStyle(linePosFrom2, linePosTo2, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine3", style: getLineStyle(linePosFrom3, linePosTo3, zoom) }),
-      React11.createElement("div", { className: prefix("line"), key: "middeLine4", style: getLineStyle(linePosFrom4, linePosTo4, zoom) })
-    ], __read(renderAllDirections(moveable, "warpable", React11)), false);
+      React12.createElement("div", { className: prefix("line"), key: "middeLine1", style: getLineStyle(linePosFrom1, linePosTo1, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine2", style: getLineStyle(linePosFrom2, linePosTo2, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine3", style: getLineStyle(linePosFrom3, linePosTo3, zoom) }),
+      React12.createElement("div", { className: prefix("line"), key: "middeLine4", style: getLineStyle(linePosFrom4, linePosTo4, zoom) })
+    ], __read(renderAllDirections(moveable, "warpable", React12)), false);
   },
   dragControlCondition: function(moveable, e) {
     if (e.isRequest) {
@@ -16582,14 +16605,14 @@ function restoreStyle(moveable) {
   removeClass(el, AVOID);
   el.style.cssText += "left: 0px; top: 0px; width: ".concat(width, "px; height: ").concat(height, "px");
 }
-function renderPieces(React11) {
-  return React11.createElement(
+function renderPieces(React12) {
+  return React12.createElement(
     "div",
     { key: "area_pieces", className: AREA_PIECES },
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE }),
-    React11.createElement("div", { className: AREA_PIECE })
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE }),
+    React12.createElement("div", { className: AREA_PIECE })
   );
 }
 var DragArea = {
@@ -16602,14 +16625,14 @@ var DragArea = {
     "click",
     "clickGroup"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, target = _a.target, dragArea = _a.dragArea, groupable = _a.groupable, passDragArea = _a.passDragArea;
     var _b = moveable.getState(), width = _b.width, height = _b.height, renderPoses = _b.renderPoses;
     var className = passDragArea ? prefix("area", "pass") : prefix("area");
     if (groupable) {
       return [
-        React11.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className }),
-        renderPieces(React11)
+        React12.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className }),
+        renderPieces(React12)
       ];
     }
     if (!target || !dragArea) {
@@ -16618,7 +16641,7 @@ var DragArea = {
     var h = createWarpMatrix([0, 0], [width, 0], [0, height], [width, height], renderPoses[0], renderPoses[1], renderPoses[2], renderPoses[3]);
     var transform = h.length ? makeMatrixCSS(h, true) : "none";
     return [
-      React11.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className, style: {
+      React12.createElement("div", { key: "area", ref: ref(moveable, "areaElement"), className, style: {
         top: "0px",
         left: "0px",
         width: "".concat(width, "px"),
@@ -16626,7 +16649,7 @@ var DragArea = {
         transformOrigin: "0 0",
         transform
       } }),
-      renderPieces(React11)
+      renderPieces(React12)
     ];
   },
   dragStart: function(moveable, _a) {
@@ -16703,7 +16726,7 @@ var DragArea = {
 };
 var Origin = makeAble("origin", {
   props: ["origin", "svgOrigin"],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, zoom = _a.zoom, svgOrigin = _a.svgOrigin, groupable = _a.groupable;
     var _b = moveable.getState(), beforeOrigin = _b.beforeOrigin, rotation = _b.rotation, svg = _b.svg, allMatrix = _b.allMatrix, is3d = _b.is3d, left = _b.left, top = _b.top, offsetWidth = _b.offsetWidth, offsetHeight = _b.offsetHeight;
     var originStyle;
@@ -16716,7 +16739,7 @@ var Origin = makeAble("origin", {
       originStyle = getControlTransform(rotation, zoom, beforeOrigin);
     }
     return [
-      React11.createElement("div", { className: prefix("control", "origin"), style: originStyle, key: "beforeOrigin" })
+      React12.createElement("div", { className: prefix("control", "origin"), style: originStyle, key: "beforeOrigin" })
     ];
   }
 });
@@ -16868,7 +16891,7 @@ var Default = {
 };
 var Padding = makeAble("padding", {
   props: ["padding"],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var props = moveable.props;
     if (props.dragArea) {
       return [];
@@ -16899,7 +16922,7 @@ var Padding = makeAble("padding", {
       if (!h.length) {
         return void 0;
       }
-      return React11.createElement("div", { key: "padding".concat(i), className: prefix("padding"), style: {
+      return React12.createElement("div", { key: "padding".concat(i), className: prefix("padding"), style: {
         transform: makeMatrixCSS(h, true)
       } });
     });
@@ -17565,7 +17588,7 @@ var Clippable = {
     ".guideline {\npointer-events: none;\nz-index: 2;\n}",
     ".line.guideline.bounds {\nbackground: #d66;\nbackground: var(--bounds-color);\n}"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.props, customClipPath = _a.customClipPath, defaultClipPath = _a.defaultClipPath, clipArea = _a.clipArea, zoom = _a.zoom, groupable = _a.groupable;
     var _b = moveable.getState(), target = _b.target, width = _b.width, height = _b.height, allMatrix = _b.allMatrix, is3d = _b.is3d, left = _b.left, top = _b.top, pos1 = _b.pos1, pos2 = _b.pos2, pos3 = _b.pos3, pos4 = _b.pos4, clipPathState = _b.clipPathState, snapBoundInfos = _b.snapBoundInfos, rotationRad = _b.rotation;
     if (!target || groupable) {
@@ -17596,20 +17619,20 @@ var Clippable = {
         var from = i2 === 0 ? linePoses_1[linePoses_1.length - 1] : linePoses_1[i2 - 1];
         var rad2 = getRad(from, to);
         var dist = getDiagonalSize(from, to);
-        return React11.createElement("div", { key: "clipLine".concat(i2), className: prefix("line", "clip-line", "snap-control"), "data-clip-index": i2, style: {
+        return React12.createElement("div", { key: "clipLine".concat(i2), className: prefix("line", "clip-line", "snap-control"), "data-clip-index": i2, style: {
           width: "".concat(dist, "px"),
           transform: "translate(".concat(from[0], "px, ").concat(from[1], "px) rotate(").concat(rad2, "rad) scaleY(").concat(zoom, ")")
         } });
       });
     }
     controls = poses.map(function(pos, i2) {
-      return React11.createElement("div", { key: "clipControl".concat(i2), className: prefix("control", "clip-control", "snap-control"), "data-clip-index": i2, style: {
+      return React12.createElement("div", { key: "clipControl".concat(i2), className: prefix("control", "clip-control", "snap-control"), "data-clip-index": i2, style: {
         transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rotationRad, "rad) scale(").concat(zoom, ")")
       } });
     });
     if (isInset) {
       controls.push.apply(controls, __spreadArray2([], __read(poses.slice(8).map(function(pos, i2) {
-        return React11.createElement("div", { key: "clipRadiusControl".concat(i2), className: prefix("control", "clip-control", "clip-radius", "snap-control"), "data-clip-index": 8 + i2, style: {
+        return React12.createElement("div", { key: "clipRadiusControl".concat(i2), className: prefix("control", "clip-control", "clip-radius", "snap-control"), "data-clip-index": 8 + i2, style: {
           transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) rotate(").concat(rotationRad, "rad) scale(").concat(zoom, ")")
         } });
       })), false));
@@ -17638,7 +17661,7 @@ var Clippable = {
           return "".concat(pos[0], "px ").concat(pos[1], "px");
         }).join(", "), ")");
       }
-      controls.push(React11.createElement("div", { key: "clipEllipse", className: prefix("clip-ellipse", "snap-control"), style: {
+      controls.push(React12.createElement("div", { key: "clipEllipse", className: prefix("clip-ellipse", "snap-control"), style: {
         width: "".concat(radiusX * 2, "px"),
         height: "".concat(radiusY * 2, "px"),
         clipPath: ellipseClipPath,
@@ -17649,7 +17672,7 @@ var Clippable = {
       var _d = getRect(__spreadArray2([pos1, pos2, pos3, pos4], __read(poses), false)), allWidth = _d.width, allHeight = _d.height, allLeft_1 = _d.left, allTop_1 = _d.top;
       if (isPolygon || isRect || isInset) {
         var areaPoses = isInset ? poses.slice(0, 8) : poses;
-        controls.push(React11.createElement("div", { key: "clipArea", className: prefix("clip-area", "snap-control"), style: {
+        controls.push(React12.createElement("div", { key: "clipArea", className: prefix("clip-area", "snap-control"), style: {
           width: "".concat(allWidth, "px"),
           height: "".concat(allHeight, "px"),
           transform: "translate(".concat(allLeft_1, "px, ").concat(allTop_1, "px)"),
@@ -17668,7 +17691,7 @@ var Clippable = {
             var pos = _a2.pos;
             var snapPos1 = minus(calculatePosition(allMatrix, isHorizontal ? [0, pos] : [pos, 0], n), [left, top]);
             var snapPos2 = minus(calculatePosition(allMatrix, isHorizontal ? [width, pos] : [pos, height], n), [left, top]);
-            return renderLine(React11, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "snap").concat(i2), "guideline");
+            return renderLine(React12, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "snap").concat(i2), "guideline");
           })), false));
         }
         if (info.isBound) {
@@ -17676,7 +17699,7 @@ var Clippable = {
             var pos = _a2.pos;
             var snapPos1 = minus(calculatePosition(allMatrix, isHorizontal ? [0, pos] : [pos, 0], n), [left, top]);
             var snapPos2 = minus(calculatePosition(allMatrix, isHorizontal ? [width, pos] : [pos, height], n), [left, top]);
-            return renderLine(React11, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "bounds").concat(i2), "guideline", "bounds", "bold");
+            return renderLine(React12, "", snapPos1, snapPos2, zoom, "clip".concat(directionType, "bounds").concat(i2), "guideline", "bounds", "bold");
           })), false));
         }
       });
@@ -18306,7 +18329,7 @@ var Roundable = {
   requestChildStyle: function() {
     return ["borderRadius"];
   },
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a = moveable.getState(), target = _a.target, width = _a.width, height = _a.height, allMatrix = _a.allMatrix, is3d = _a.is3d, left = _a.left, top = _a.top, borderRadiusState = _a.borderRadiusState;
     var _b = moveable.props, _c = _b.minRoundControls, minRoundControls = _c === void 0 ? [0, 0] : _c, _d = _b.maxRoundControls, maxRoundControls = _d === void 0 ? [4, 4] : _d, zoom = _b.zoom, _e = _b.roundPadding, roundPadding = _e === void 0 ? 0 : _e, isDisplayShadowRoundControls = _b.isDisplayShadowRoundControls, groupable = _b.groupable;
     if (!target) {
@@ -18342,7 +18365,7 @@ var Roundable = {
       }
       var pos = minus(calculatePosition(allMatrix, originalPos, n), basePos);
       var isDisplay = v.vertical ? verticalCount <= maxRoundControls[1] && (isDisplayShadowRoundControls || !v.virtual) : horizontalCount <= maxRoundControls[0] && (isDisplayShadowRoundControls || !v.virtual);
-      return React11.createElement("div", { key: "borderRadiusControl".concat(i), className: prefix("control", "border-radius", v.vertical ? "vertical" : "", v.virtual ? "virtual" : ""), "data-radius-index": i, style: {
+      return React12.createElement("div", { key: "borderRadiusControl".concat(i), className: prefix("control", "border-radius", v.vertical ? "vertical" : "", v.virtual ? "virtual" : ""), "data-radius-index": i, style: {
         display: isDisplay ? "block" : "none",
         transform: "translate(".concat(pos[0], "px, ").concat(pos[1], "px) scale(").concat(zoom, ")")
       } });
@@ -19294,7 +19317,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     if (controlPadding) {
       style["--moveable-control-padding"] = controlPadding;
     }
-    return React9.createElement(
+    return React10.createElement(
       ControlBoxElement,
       __assign7({ cspNonce, ref: ref(this, "controlBox"), className: "".concat(prefix("control-box", direction === -1 ? "reverse" : "", isDragging ? "dragging" : ""), " ").concat(ableClassName, " ").concat(className) }, ableAttributes, { onClick: this._onPreventClick, style }),
       this.renderAbles(),
@@ -20018,7 +20041,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     useAccuratePosition: false
   };
   return MoveableManager2;
-}(React9.PureComponent);
+}(React10.PureComponent);
 var Groupable = {
   name: "groupable",
   props: [
@@ -20031,7 +20054,7 @@ var Groupable = {
     "hideChildMoveableDefaultLines"
   ],
   events: [],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var _a;
     var props = moveable.props;
     var targets = props.targets || [];
@@ -20054,7 +20077,7 @@ var Groupable = {
     });
     moveable.moveables = moveable.moveables.slice(0, targets.length);
     return __spreadArray2(__spreadArray2([], __read(targets.map(function(target, i) {
-      return React11.createElement(MoveableManager, { key: "moveable" + i, ref: refs(moveable, "moveables", i), target, origin: false, requestStyles, cssStyled: props.cssStyled, customStyledMap: props.customStyledMap, useResizeObserver: props.useResizeObserver, useMutationObserver: props.useMutationObserver, hideChildMoveableDefaultLines: props.hideChildMoveableDefaultLines, parentMoveable: moveable, parentPosition: [left, top], persistData: persistDatChildren[i], zoom });
+      return React12.createElement(MoveableManager, { key: "moveable" + i, ref: refs(moveable, "moveables", i), target, origin: false, requestStyles, cssStyled: props.cssStyled, customStyledMap: props.customStyledMap, useResizeObserver: props.useResizeObserver, useMutationObserver: props.useMutationObserver, hideChildMoveableDefaultLines: props.hideChildMoveableDefaultLines, parentMoveable: moveable, parentPosition: [left, top], persistData: persistDatChildren[i], zoom });
     })), false), __read(flat(renderGroupRects.map(function(_a2, i) {
       var pos1 = _a2.pos1, pos2 = _a2.pos2, pos3 = _a2.pos3, pos4 = _a2.pos4;
       var poses = [pos1, pos2, pos3, pos4];
@@ -20065,7 +20088,7 @@ var Groupable = {
         [2, 0]
       ].map(function(_a3, j) {
         var _b2 = __read(_a3, 2), from = _b2[0], to = _b2[1];
-        return renderLine(React11, "", minus(poses[from], parentPosition), minus(poses[to], parentPosition), zoom, "group-rect-".concat(i, "-").concat(j));
+        return renderLine(React12, "", minus(poses[from], parentPosition), minus(poses[to], parentPosition), zoom, "group-rect-".concat(i, "-").concat(j));
       });
     }))), false);
   }
@@ -20153,13 +20176,13 @@ var edgeDraggable = makeAble("edgeDraggable", {
   css: [
     ".edge.edgeDraggable.line {\ncursor: move;\n}"
   ],
-  render: function(moveable, React11) {
+  render: function(moveable, React12) {
     var props = moveable.props;
     var edge = props.edgeDraggable;
     if (!edge) {
       return [];
     }
-    return renderEdgeLines(React11, "edgeDraggable", edge, moveable.getState().renderPoses, props.zoom);
+    return renderEdgeLines(React12, "edgeDraggable", edge, moveable.getState().renderPoses, props.zoom);
   },
   dragCondition: function(moveable, e) {
     var _a;
@@ -20627,10 +20650,10 @@ var MoveableIndividualGroup = /* @__PURE__ */ function(_super) {
     } else if (!canPersist) {
       persistDatChildren = [];
     }
-    return React9.createElement(ControlBoxElement, { cspNonce, ref: ref(this, "controlBox"), className: prefix("control-box") }, targets.map(function(target, i) {
+    return React10.createElement(ControlBoxElement, { cspNonce, ref: ref(this, "controlBox"), className: prefix("control-box") }, targets.map(function(target, i) {
       var _a2, _b;
       var individualProps = (_b = (_a2 = props.individualGroupableProps) === null || _a2 === void 0 ? void 0 : _a2.call(props, target, i)) !== null && _b !== void 0 ? _b : {};
-      return React9.createElement(MoveableManager, __assign7({ key: "moveable" + i, ref: refs(_this, "moveables", i) }, props, individualProps, { target, wrapperMoveable: _this, isWrapperMounted: _this.isMoveableMounted, persistData: persistDatChildren[i] }));
+      return React10.createElement(MoveableManager, __assign7({ key: "moveable" + i, ref: refs(_this, "moveables", i) }, props, individualProps, { target, wrapperMoveable: _this, isWrapperMounted: _this.isMoveableMounted, persistData: persistDatChildren[i] }));
     }));
   };
   MoveableIndividualGroup2.prototype.componentDidMount = function() {
@@ -20830,7 +20853,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
       isGroup = true;
     }
     if (props.individualGroupable) {
-      return React9.createElement(MoveableIndividualGroup, __assign7({ key: "individual-group", ref: ref(this, "moveable") }, nextProps, { target: null, targets: elementTargets }));
+      return React10.createElement(MoveableIndividualGroup, __assign7({ key: "individual-group", ref: ref(this, "moveable") }, nextProps, { target: null, targets: elementTargets }));
     }
     if (isGroup) {
       var targetGroups = getTargetGroups(refTargets, nextSelectorMap);
@@ -20840,7 +20863,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
           firstRenderState = __assign7({}, prevMoveable.state);
         }
       }
-      return React9.createElement(MoveableGroup, __assign7({ key: "group", ref: ref(this, "moveable") }, nextProps, (_a = props.groupableProps) !== null && _a !== void 0 ? _a : {}, { target: null, targets: elementTargets, targetGroups, firstRenderState }));
+      return React10.createElement(MoveableGroup, __assign7({ key: "group", ref: ref(this, "moveable") }, nextProps, (_a = props.groupableProps) !== null && _a !== void 0 ? _a : {}, { target: null, targets: elementTargets, targetGroups, firstRenderState }));
     } else {
       var target_1 = elementTargets[0];
       if (prevMoveable && (prevMoveable.props.groupable || prevMoveable.props.individualGroupable)) {
@@ -20852,7 +20875,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
           firstRenderState = __assign7({}, prevTargetMoveable.state);
         }
       }
-      return React9.createElement(MoveableManager, __assign7({ key: "single", ref: ref(this, "moveable") }, nextProps, { target: target_1, firstRenderState }));
+      return React10.createElement(MoveableManager, __assign7({ key: "single", ref: ref(this, "moveable") }, nextProps, { target: target_1, firstRenderState }));
     }
   };
   InitialMoveable2.prototype.componentDidMount = function() {
@@ -20951,7 +20974,7 @@ var InitialMoveable = /* @__PURE__ */ function(_super) {
     withMethods(MOVEABLE_METHODS)
   ], InitialMoveable2.prototype, "moveable", void 0);
   return InitialMoveable2;
-}(React9.PureComponent);
+}(React10.PureComponent);
 var Moveable = /* @__PURE__ */ function(_super) {
   __extends4(Moveable2, _super);
   function Moveable2() {
@@ -21038,13 +21061,13 @@ var loading_dots_default = LoadingDots;
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
 import { useCompletion as useCompletion4 } from "ai/react";
 import { X, Clipboard, Replace } from "lucide-react";
-import { useContext as useContext5, useEffect as useEffect13, useState as useState9 } from "react";
+import { useContext as useContext6, useEffect as useEffect13, useState as useState9 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState9(false);
-  const { completionApi, additionalData: { body, headers } } = useContext5(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext6(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -21126,13 +21149,13 @@ function AIGeneratingLoading({ stop: stop2 }) {
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-bubble.tsx
 import { useCompletion as useCompletion5 } from "ai/react";
 import { X as X2, Clipboard as Clipboard2, Replace as Replace2 } from "lucide-react";
-import { useContext as useContext6, useEffect as useEffect14, useState as useState10 } from "react";
+import { useContext as useContext7, useEffect as useEffect14, useState as useState10 } from "react";
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
-  const { completionApi, additionalData: { body, headers } } = useContext6(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion5({
     id: "ai-translate",
     api: `${completionApi}/translate`,
@@ -21195,7 +21218,7 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext13, useEffect as useEffect18, useRef as useRef11, useState as useState11 } from "react";
+import { useContext as useContext14, useEffect as useEffect18, useRef as useRef11, useState as useState11 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
@@ -21237,8 +21260,8 @@ function Magic1({ className }) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/index.mjs
-import * as React10 from "react";
-import { forwardRef as forwardRef5, useContext as useContext9 } from "react";
+import * as React11 from "react";
+import { forwardRef as forwardRef5, useContext as useContext10 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionConfigContext.mjs
 import { createContext as createContext3 } from "react";
@@ -21253,7 +21276,7 @@ import { createContext as createContext4 } from "react";
 var MotionContext = createContext4({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-import { useContext as useContext7, useRef as useRef9, useInsertionEffect, useEffect as useEffect16 } from "react";
+import { useContext as useContext8, useRef as useRef9, useInsertionEffect, useEffect as useEffect16 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
 import { createContext as createContext5 } from "react";
@@ -21274,10 +21297,10 @@ var LazyContext = createContext6({ strict: false });
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
 function useVisualElement(Component2, visualState, props, createVisualElement) {
-  const { visualElement: parent } = useContext7(MotionContext);
-  const lazyContext = useContext7(LazyContext);
-  const presenceContext = useContext7(PresenceContext);
-  const reducedMotionConfig = useContext7(MotionConfigContext).reducedMotion;
+  const { visualElement: parent } = useContext8(MotionContext);
+  const lazyContext = useContext8(LazyContext);
+  const presenceContext = useContext8(PresenceContext);
+  const reducedMotionConfig = useContext8(MotionConfigContext).reducedMotion;
   const visualElementRef = useRef9();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
@@ -21343,7 +21366,7 @@ function useMotionRef(visualState, visualElement, externalRef) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
-import { useContext as useContext8, useMemo as useMemo3 } from "react";
+import { useContext as useContext9, useMemo as useMemo3 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/is-variant-label.mjs
 function isVariantLabel(v) {
@@ -21389,7 +21412,7 @@ function getCurrentTreeVariants(props, context) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
 function useCreateMotionContext(props) {
-  const { initial, animate } = getCurrentTreeVariants(props, useContext8(MotionContext));
+  const { initial, animate } = getCurrentTreeVariants(props, useContext9(MotionContext));
   return useMemo3(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
 }
 function variantLabelsAsDependency(prop) {
@@ -21447,7 +21470,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   preloadedFeatures2 && loadFeatures(preloadedFeatures2);
   function MotionComponent(props, externalRef) {
     let MeasureLayout2;
-    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, useContext9(MotionConfigContext)), props), {
+    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, useContext10(MotionConfigContext)), props), {
       layoutId: useLayoutId(props)
     });
     const { isStatic } = configAndProps;
@@ -21455,8 +21478,8 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
     const visualState = useVisualState(props, isStatic);
     if (!isStatic && isBrowser) {
       context.visualElement = useVisualElement(Component2, visualState, configAndProps, createVisualElement);
-      const initialLayoutGroupConfig = useContext9(SwitchLayoutGroupContext);
-      const isStrict = useContext9(LazyContext).strict;
+      const initialLayoutGroupConfig = useContext10(SwitchLayoutGroupContext);
+      const isStrict = useContext10(LazyContext).strict;
       if (context.visualElement) {
         MeasureLayout2 = context.visualElement.loadFeatures(
           // Note: Pass the full new combined props to correctly re-render dynamic feature components.
@@ -21467,10 +21490,10 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
         );
       }
     }
-    return React10.createElement(
+    return React11.createElement(
       MotionContext.Provider,
       { value: context },
-      MeasureLayout2 && context.visualElement ? React10.createElement(MeasureLayout2, __spreadValues({ visualElement: context.visualElement }, configAndProps)) : null,
+      MeasureLayout2 && context.visualElement ? React11.createElement(MeasureLayout2, __spreadValues({ visualElement: context.visualElement }, configAndProps)) : null,
       useRender(Component2, props, useMotionRef(visualState, context.visualElement, externalRef), visualState, isStatic, context.visualElement)
     );
   }
@@ -21479,7 +21502,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   return ForwardRefComponent;
 }
 function useLayoutId({ layoutId }) {
-  const layoutGroupId = useContext9(LayoutGroupContext).id;
+  const layoutGroupId = useContext10(LayoutGroupContext).id;
   return layoutGroupId && layoutId !== void 0 ? layoutGroupId + "-" + layoutId : layoutId;
 }
 
@@ -22104,7 +22127,7 @@ function scrapeMotionValuesFromProps2(props, prevProps) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-state.mjs
-import { useContext as useContext10 } from "react";
+import { useContext as useContext11 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/resolve-variants.mjs
 function resolveVariantFromProps(props, definition, custom, currentValues2 = {}, currentVelocity = {}) {
@@ -22161,8 +22184,8 @@ function makeState({ scrapeMotionValuesFromProps: scrapeMotionValuesFromProps3, 
   return state;
 }
 var makeUseVisualState = (config) => (props, isStatic) => {
-  const context = useContext10(MotionContext);
-  const presenceContext = useContext10(PresenceContext);
+  const context = useContext11(MotionContext);
+  const presenceContext = useContext11(PresenceContext);
   const make = () => makeState(config, props, context, presenceContext);
   return isStatic ? make() : useConstant(make);
 };
@@ -25687,12 +25710,12 @@ var PanGesture = class extends Feature {
 };
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs
-import React__default, { useContext as useContext12 } from "react";
+import React__default, { useContext as useContext13 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.mjs
-import { useContext as useContext11, useId as useId2, useEffect as useEffect17 } from "react";
+import { useContext as useContext12, useId as useId2, useEffect as useEffect17 } from "react";
 function usePresence() {
-  const context = useContext11(PresenceContext);
+  const context = useContext12(PresenceContext);
   if (context === null)
     return [true, null];
   const { isPresent, onExitComplete, register } = context;
@@ -25845,8 +25868,8 @@ var MeasureLayoutWithContext = class extends React__default.Component {
 };
 function MeasureLayout(props) {
   const [isPresent, safeToRemove] = usePresence();
-  const layoutGroup = useContext12(LayoutGroupContext);
-  return React__default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: useContext12(SwitchLayoutGroupContext), isPresent, safeToRemove }));
+  const layoutGroup = useContext13(LayoutGroupContext);
+  return React__default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: useContext13(SwitchLayoutGroupContext), isPresent, safeToRemove }));
 }
 var defaultScaleCorrectors = {
   borderRadius: __spreadProps(__spreadValues({}, correctBorderRadius), {
@@ -27989,7 +28012,7 @@ function ChatBot(props) {
   const { editor, history } = props;
   const [isOpen, setIsOpen] = useState11(false);
   const inputRef = useRef11(null);
-  const { completionApi, additionalData: { body, headers } } = useContext13(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext14(NovelContext);
   const initialMessage = {
     id: "start",
     role: "system",

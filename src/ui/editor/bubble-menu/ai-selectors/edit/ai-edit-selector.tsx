@@ -16,27 +16,28 @@ import {
   Bot,
   Trash,
   Wand,
+  LucideIcon,
 } from "lucide-react";
-import { FC, useContext, useEffect, useRef } from "react";
+import React, { FC, useContext, useEffect, useRef } from "react";
 import { Command } from "cmdk";
 import Magic from "@/ui/icons/magic";
 import { useCompletion } from "ai/react";
 import { NovelContext } from "../../../provider";
 import { toast } from "sonner";
 
+export interface AIMenuItem { name: string; detail: string, icon: LucideIcon };
+
 interface AISelectorProps {
   editor: Editor;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   showSubmenu?: boolean;
+  subMenuItems?: AIMenuItem[]
 }
 
-export const AISelector: FC<AISelectorProps> = ({
-  editor,
-  isOpen,
-  setIsOpen,
-  showSubmenu
-}) => {
+export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
+  const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
+
   const items = [
     {
       name: "Improve writing",
@@ -85,6 +86,7 @@ export const AISelector: FC<AISelectorProps> = ({
       detail: "Identify and fix repetitive words or phrases in the content",
       icon: Scissors,
     },
+    ...(subMenuItems || []),
   ];
 
   const inputRef = useRef<HTMLInputElement>(null);
