@@ -21198,7 +21198,7 @@ var ai_edit_bubble_default = AIEditorBubble;
 import { PauseCircle as PauseCircle4 } from "lucide-react";
 import { jsx as jsx14, jsxs as jsxs13 } from "react/jsx-runtime";
 function AIGeneratingLoading({ stop: stop2 }) {
-  return /* @__PURE__ */ jsxs13("div", { className: "flex items-center justify-start novel-bg-white shadow-lg rounded-full px-3 py-2 w-16 h-10", children: [
+  return /* @__PURE__ */ jsxs13("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
     /* @__PURE__ */ jsx14(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
     /* @__PURE__ */ jsx14("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
     /* @__PURE__ */ jsx14(
