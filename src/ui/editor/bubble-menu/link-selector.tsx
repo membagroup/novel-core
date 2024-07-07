@@ -1,8 +1,9 @@
 import { cn, getUrlFromString } from "@/lib/utils";
 import { Editor } from "@tiptap/core";
 import { Check, Trash } from "lucide-react";
-import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, FC, SetStateAction, useContext, useEffect, useRef } from "react";
 import { useClickOutside } from "../hooks";
+import { NovelContext } from "../provider";
 
 interface LinkSelectorProps {
   editor: Editor;
@@ -10,11 +11,9 @@ interface LinkSelectorProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const LinkSelector: FC<LinkSelectorProps> = ({
-  editor,
-  isOpen,
-  setIsOpen,
-}) => {
+export const LinkSelector: FC<LinkSelectorProps> = ({ editor, isOpen, setIsOpen, }) => {
+  // const context = useContext(NovelContext);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Autofocus on input by default
@@ -22,7 +21,12 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
     inputRef.current && inputRef.current?.focus();
   });
 
-  useClickOutside(inputRef, () => { setIsOpen(false); });
+  useClickOutside(inputRef, () => {
+    // if (inputRef.current && inputRef.current.value) {
+    //   context.setLastText(inputRef.current.value);
+    // }
+    setIsOpen(false);
+  });
 
   return (
     <div className="novel-relative">

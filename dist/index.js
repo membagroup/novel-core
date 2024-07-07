@@ -2006,7 +2006,10 @@ var getPrevText = (editor, {
 var import_react = require("react");
 var NovelContext = (0, import_react.createContext)({
   completionApi: "/api/generate",
-  additionalData: {}
+  additionalData: {},
+  lastInput: "",
+  setLastInput: (text) => {
+  }
 });
 
 // src/ui/editor/extensions/slash-command.tsx
@@ -3336,11 +3339,7 @@ var useClickOutside = (ref2, handler) => {
 
 // src/ui/editor/bubble-menu/link-selector.tsx
 var import_jsx_runtime6 = require("react/jsx-runtime");
-var LinkSelector = ({
-  editor,
-  isOpen,
-  setIsOpen
-}) => {
+var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
   const inputRef = (0, import_react7.useRef)(null);
   (0, import_react7.useEffect)(() => {
     var _a;
@@ -3606,7 +3605,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
       value
     }, children);
   }
-  function useContext15(consumerName) {
+  function useContext16(consumerName) {
     const context = (0, import_react9.useContext)(Context);
     if (context)
       return context;
@@ -3617,7 +3616,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
   Provider.displayName = rootComponentName + "Provider";
   return [
     Provider,
-    useContext15
+    useContext16
   ];
 }
 function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeDeps = []) {
@@ -3640,7 +3639,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
         value
       }, children);
     }
-    function useContext15(consumerName, scope) {
+    function useContext16(consumerName, scope) {
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
       const context = (0, import_react9.useContext)(Context);
       if (context)
@@ -3652,7 +3651,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     Provider.displayName = rootComponentName + "Provider";
     return [
       Provider,
-      useContext15
+      useContext16
     ];
   }
   const createScope = () => {
@@ -5846,6 +5845,7 @@ var import_react24 = require("ai/react");
 var import_jsx_runtime8 = require("react/jsx-runtime");
 var AISelector = (props) => {
   const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
+  const context = (0, import_react23.useContext)(NovelContext);
   const items = [
     {
       name: "Improve writing",
@@ -5905,6 +5905,9 @@ var AISelector = (props) => {
     setIsOpen(false);
   };
   (0, import_react23.useEffect)(() => {
+    if (isOpen && context.lastInput && (inputRef == null ? void 0 : inputRef.current)) {
+      inputRef.current.value = context.lastInput;
+    }
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
@@ -5928,6 +5931,9 @@ var AISelector = (props) => {
     };
   }, [isOpen]);
   useClickOutside(inputRef, () => {
+    if (inputRef.current && inputRef.current.value) {
+      context.setLastInput(inputRef.current.value);
+    }
     setIsOpen(false);
   });
   (0, import_react23.useEffect)(() => {
@@ -28302,12 +28308,13 @@ function Editor2({
     collaboration: false,
     id: "",
     userDetails: {},
-    lastTextKey: "??"
+    lastInputKey: "??"
   }
 }) {
-  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
+  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastInputKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react56.useState)(false);
+  const [lastInput, setLastInput] = (0, import_react56.useState)("");
   const [isLoadingOutside, setLoadingOutside] = (0, import_react56.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28341,7 +28348,7 @@ function Editor2({
       const lastTwo = getPrevText(e.editor, {
         chars: 2
       });
-      if (lastTwo === lastTextKey && !isLoading) {
+      if (lastTwo === lastInputKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
@@ -28408,36 +28415,27 @@ function Editor2({
       return;
     editor.commands.setContent(defaultValue);
   }, [defaultValue]);
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-    NovelContext.Provider,
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+    "div",
     {
-      value: {
-        completionApi,
-        additionalData
+      onClick: () => {
+        editor == null ? void 0 : editor.chain().focus().run();
       },
-      children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
-        "div",
-        {
-          onClick: () => {
-            editor == null ? void 0 : editor.chain().focus().run();
-          },
-          className,
-          children: [
-            editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { editor }),
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_edit_bubble_default, { editor }),
-              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_translate_bubble_default, { editor })
-            ] }),
-            editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
-            (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react57.EditorContent, { editor }),
-            isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
-          ]
-        }
-      )
+      className,
+      children: [
+        editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { editor }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_edit_bubble_default, { editor }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_translate_bubble_default, { editor })
+        ] }),
+        editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
+        (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react57.EditorContent, { editor }),
+        isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
+        bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
+      ]
     }
-  );
+  ) });
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

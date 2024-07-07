@@ -37,6 +37,7 @@ interface AISelectorProps {
 
 export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
+  const context = useContext(NovelContext);
 
   const items = [
     {
@@ -100,6 +101,10 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   };
 
   useEffect(() => {
+    if (isOpen && context.lastInput && inputRef?.current) {
+      inputRef.current.value = context.lastInput;
+    }
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
@@ -125,20 +130,12 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
     };
   }, [isOpen]);
 
-  useClickOutside(inputRef, () => { setIsOpen(false); });
-
-  // useEffect(() => {
-  //   // handle isOpen and click outside input
-  //   function handleClickOutside(event: MouseEvent) {
-  //     if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
-  //       setIsOpen(false);
-  //     }
-  //   }
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [inputRef]);
+  useClickOutside(inputRef, () => {
+    if (inputRef.current && inputRef.current.value) {
+      context.setLastInput(inputRef.current.value);
+    }
+    setIsOpen(false);
+  });
 
   useEffect(() => {
     inputRef.current && inputRef.current?.focus();

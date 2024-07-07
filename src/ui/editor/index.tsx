@@ -47,7 +47,7 @@ export default function Editor({
     collaboration: false,
     id: "",
     userDetails: {},
-    lastTextKey: '??',
+    lastInputKey: '??',
   }
 }: {
   /**
@@ -117,11 +117,12 @@ export default function Editor({
   */
   additionalData?: Record<string, any>;
 }) {
-  const { bot, collaboration, id, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
+  const { bot, collaboration, id, userDetails, body, headers, customProvider, lastInputKey } = additionalData;
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
   // const [panelOpen, setPanelOpen] = useState(true);
+  const [lastInput, setLastInput] = useState('');
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -173,7 +174,7 @@ export default function Editor({
       const lastTwo = getPrevText(e.editor, {
         chars: 2,
       });
-      if (lastTwo === lastTextKey && !isLoading) {
+      if (lastTwo === lastInputKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
@@ -253,11 +254,7 @@ export default function Editor({
   }, [defaultValue]);
 
   return (
-    <NovelContext.Provider
-      value={{
-        completionApi,
-        additionalData,
-      }}>
+    <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, }}>
       <div
         onClick={() => { editor?.chain().focus().run(); }}
         className={className}>

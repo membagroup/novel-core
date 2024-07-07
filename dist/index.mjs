@@ -2019,7 +2019,10 @@ var getPrevText = (editor, {
 import { createContext } from "react";
 var NovelContext = createContext({
   completionApi: "/api/generate",
-  additionalData: {}
+  additionalData: {},
+  lastInput: "",
+  setLastInput: (text) => {
+  }
 });
 
 // src/ui/editor/extensions/slash-command.tsx
@@ -2949,7 +2952,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useContext as useContext5, useState as useState8 } from "react";
+import { useContext as useContext6, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -3369,11 +3372,7 @@ var useClickOutside = (ref2, handler) => {
 
 // src/ui/editor/bubble-menu/link-selector.tsx
 import { jsx as jsx6, jsxs as jsxs6 } from "react/jsx-runtime";
-var LinkSelector = ({
-  editor,
-  isOpen,
-  setIsOpen
-}) => {
+var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
   const inputRef = useRef2(null);
   useEffect4(() => {
     var _a;
@@ -3605,7 +3604,7 @@ import {
   Bot,
   Wand
 } from "lucide-react";
-import { useContext as useContext3, useEffect as useEffect10, useRef as useRef6 } from "react";
+import { useContext as useContext4, useEffect as useEffect10, useRef as useRef6 } from "react";
 
 // ../../node_modules/.pnpm/@babel+runtime@7.24.7/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
@@ -3662,7 +3661,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
       value
     }, children);
   }
-  function useContext15(consumerName) {
+  function useContext16(consumerName) {
     const context = $3bkAK$useContext(Context);
     if (context)
       return context;
@@ -3673,7 +3672,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
   Provider.displayName = rootComponentName + "Provider";
   return [
     Provider,
-    useContext15
+    useContext16
   ];
 }
 function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeDeps = []) {
@@ -3696,7 +3695,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
         value
       }, children);
     }
-    function useContext15(consumerName, scope) {
+    function useContext16(consumerName, scope) {
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
       const context = $3bkAK$useContext(Context);
       if (context)
@@ -3708,7 +3707,7 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     Provider.displayName = rootComponentName + "Provider";
     return [
       Provider,
-      useContext15
+      useContext16
     ];
   }
   const createScope = () => {
@@ -5902,6 +5901,7 @@ import { useCompletion as useCompletion2 } from "ai/react";
 import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
 var AISelector = (props) => {
   const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
+  const context = useContext4(NovelContext);
   const items = [
     {
       name: "Improve writing",
@@ -5961,6 +5961,9 @@ var AISelector = (props) => {
     setIsOpen(false);
   };
   useEffect10(() => {
+    if (isOpen && context.lastInput && (inputRef == null ? void 0 : inputRef.current)) {
+      inputRef.current.value = context.lastInput;
+    }
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
@@ -5984,13 +5987,16 @@ var AISelector = (props) => {
     };
   }, [isOpen]);
   useClickOutside(inputRef, () => {
+    if (inputRef.current && inputRef.current.value) {
+      context.setLastInput(inputRef.current.value);
+    }
     setIsOpen(false);
   });
   useEffect10(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi, additionalData: { body, headers } } = useContext3(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext4(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion2({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -6072,7 +6078,7 @@ var AISelector = (props) => {
 
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-selector.tsx
 import { Languages, PauseCircle as PauseCircle3 } from "lucide-react";
-import { useContext as useContext4, useEffect as useEffect11 } from "react";
+import { useContext as useContext5, useEffect as useEffect11 } from "react";
 import { useCompletion as useCompletion3 } from "ai/react";
 import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
 var TranslateSelector = ({
@@ -6137,7 +6143,7 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi, additionalData: { body, headers } } = useContext4(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext5(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion3({
     id: "ai-translate",
     api: `${completionApi}/translate`,
@@ -6181,7 +6187,7 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 import { Fragment as Fragment4, jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
-  const { additionalData } = useContext5(NovelContext);
+  const { additionalData } = useContext6(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -21086,13 +21092,13 @@ var loading_dots_default = LoadingDots;
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
 import { useCompletion as useCompletion4 } from "ai/react";
 import { X, Clipboard, Replace } from "lucide-react";
-import { useContext as useContext6, useEffect as useEffect14, useState as useState9 } from "react";
+import { useContext as useContext7, useEffect as useEffect14, useState as useState9 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState9(false);
-  const { completionApi, additionalData: { body, headers } } = useContext6(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -21174,13 +21180,13 @@ function AIGeneratingLoading({ stop: stop2 }) {
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-bubble.tsx
 import { useCompletion as useCompletion5 } from "ai/react";
 import { X as X2, Clipboard as Clipboard2, Replace as Replace2 } from "lucide-react";
-import { useContext as useContext7, useEffect as useEffect15, useState as useState10 } from "react";
+import { useContext as useContext8, useEffect as useEffect15, useState as useState10 } from "react";
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
-  const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext8(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion5({
     id: "ai-translate",
     api: `${completionApi}/translate`,
@@ -21243,7 +21249,7 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext14, useEffect as useEffect19, useRef as useRef11, useState as useState11 } from "react";
+import { useContext as useContext15, useEffect as useEffect19, useRef as useRef11, useState as useState11 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
@@ -21286,7 +21292,7 @@ function Magic1({ className }) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/index.mjs
 import * as React11 from "react";
-import { forwardRef as forwardRef5, useContext as useContext10 } from "react";
+import { forwardRef as forwardRef5, useContext as useContext11 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionConfigContext.mjs
 import { createContext as createContext3 } from "react";
@@ -21301,7 +21307,7 @@ import { createContext as createContext4 } from "react";
 var MotionContext = createContext4({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-import { useContext as useContext8, useRef as useRef9, useInsertionEffect, useEffect as useEffect17 } from "react";
+import { useContext as useContext9, useRef as useRef9, useInsertionEffect, useEffect as useEffect17 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
 import { createContext as createContext5 } from "react";
@@ -21322,10 +21328,10 @@ var LazyContext = createContext6({ strict: false });
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
 function useVisualElement(Component2, visualState, props, createVisualElement) {
-  const { visualElement: parent } = useContext8(MotionContext);
-  const lazyContext = useContext8(LazyContext);
-  const presenceContext = useContext8(PresenceContext);
-  const reducedMotionConfig = useContext8(MotionConfigContext).reducedMotion;
+  const { visualElement: parent } = useContext9(MotionContext);
+  const lazyContext = useContext9(LazyContext);
+  const presenceContext = useContext9(PresenceContext);
+  const reducedMotionConfig = useContext9(MotionConfigContext).reducedMotion;
   const visualElementRef = useRef9();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
@@ -21391,7 +21397,7 @@ function useMotionRef(visualState, visualElement, externalRef) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
-import { useContext as useContext9, useMemo as useMemo3 } from "react";
+import { useContext as useContext10, useMemo as useMemo3 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/is-variant-label.mjs
 function isVariantLabel(v) {
@@ -21437,7 +21443,7 @@ function getCurrentTreeVariants(props, context) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
 function useCreateMotionContext(props) {
-  const { initial, animate } = getCurrentTreeVariants(props, useContext9(MotionContext));
+  const { initial, animate } = getCurrentTreeVariants(props, useContext10(MotionContext));
   return useMemo3(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
 }
 function variantLabelsAsDependency(prop) {
@@ -21495,7 +21501,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   preloadedFeatures2 && loadFeatures(preloadedFeatures2);
   function MotionComponent(props, externalRef) {
     let MeasureLayout2;
-    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, useContext10(MotionConfigContext)), props), {
+    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, useContext11(MotionConfigContext)), props), {
       layoutId: useLayoutId(props)
     });
     const { isStatic } = configAndProps;
@@ -21503,8 +21509,8 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
     const visualState = useVisualState(props, isStatic);
     if (!isStatic && isBrowser) {
       context.visualElement = useVisualElement(Component2, visualState, configAndProps, createVisualElement);
-      const initialLayoutGroupConfig = useContext10(SwitchLayoutGroupContext);
-      const isStrict = useContext10(LazyContext).strict;
+      const initialLayoutGroupConfig = useContext11(SwitchLayoutGroupContext);
+      const isStrict = useContext11(LazyContext).strict;
       if (context.visualElement) {
         MeasureLayout2 = context.visualElement.loadFeatures(
           // Note: Pass the full new combined props to correctly re-render dynamic feature components.
@@ -21527,7 +21533,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   return ForwardRefComponent;
 }
 function useLayoutId({ layoutId }) {
-  const layoutGroupId = useContext10(LayoutGroupContext).id;
+  const layoutGroupId = useContext11(LayoutGroupContext).id;
   return layoutGroupId && layoutId !== void 0 ? layoutGroupId + "-" + layoutId : layoutId;
 }
 
@@ -22152,7 +22158,7 @@ function scrapeMotionValuesFromProps2(props, prevProps) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-state.mjs
-import { useContext as useContext11 } from "react";
+import { useContext as useContext12 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/resolve-variants.mjs
 function resolveVariantFromProps(props, definition, custom, currentValues2 = {}, currentVelocity = {}) {
@@ -22209,8 +22215,8 @@ function makeState({ scrapeMotionValuesFromProps: scrapeMotionValuesFromProps3, 
   return state;
 }
 var makeUseVisualState = (config) => (props, isStatic) => {
-  const context = useContext11(MotionContext);
-  const presenceContext = useContext11(PresenceContext);
+  const context = useContext12(MotionContext);
+  const presenceContext = useContext12(PresenceContext);
   const make = () => makeState(config, props, context, presenceContext);
   return isStatic ? make() : useConstant(make);
 };
@@ -25735,12 +25741,12 @@ var PanGesture = class extends Feature {
 };
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs
-import React__default, { useContext as useContext13 } from "react";
+import React__default, { useContext as useContext14 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.mjs
-import { useContext as useContext12, useId as useId2, useEffect as useEffect18 } from "react";
+import { useContext as useContext13, useId as useId2, useEffect as useEffect18 } from "react";
 function usePresence() {
-  const context = useContext12(PresenceContext);
+  const context = useContext13(PresenceContext);
   if (context === null)
     return [true, null];
   const { isPresent, onExitComplete, register } = context;
@@ -25893,8 +25899,8 @@ var MeasureLayoutWithContext = class extends React__default.Component {
 };
 function MeasureLayout(props) {
   const [isPresent, safeToRemove] = usePresence();
-  const layoutGroup = useContext13(LayoutGroupContext);
-  return React__default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: useContext13(SwitchLayoutGroupContext), isPresent, safeToRemove }));
+  const layoutGroup = useContext14(LayoutGroupContext);
+  return React__default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: useContext14(SwitchLayoutGroupContext), isPresent, safeToRemove }));
 }
 var defaultScaleCorrectors = {
   borderRadius: __spreadProps(__spreadValues({}, correctBorderRadius), {
@@ -28037,7 +28043,7 @@ function ChatBot(props) {
   const { editor, history } = props;
   const [isOpen, setIsOpen] = useState11(false);
   const inputRef = useRef11(null);
-  const { completionApi, additionalData: { body, headers } } = useContext14(NovelContext);
+  const { completionApi, additionalData: { body, headers } } = useContext15(NovelContext);
   const initialMessage = {
     id: "start",
     role: "system",
@@ -28369,12 +28375,13 @@ function Editor2({
     collaboration: false,
     id: "",
     userDetails: {},
-    lastTextKey: "??"
+    lastInputKey: "??"
   }
 }) {
-  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
+  const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastInputKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
+  const [lastInput, setLastInput] = useState12("");
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28408,7 +28415,7 @@ function Editor2({
       const lastTwo = getPrevText(e.editor, {
         chars: 2
       });
-      if (lastTwo === lastTextKey && !isLoading) {
+      if (lastTwo === lastInputKey && !isLoading) {
         setLoadingOutside(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
@@ -28475,36 +28482,27 @@ function Editor2({
       return;
     editor.commands.setContent(defaultValue);
   }, [defaultValue]);
-  return /* @__PURE__ */ jsx19(
-    NovelContext.Provider,
+  return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput }, children: /* @__PURE__ */ jsxs17(
+    "div",
     {
-      value: {
-        completionApi,
-        additionalData
+      onClick: () => {
+        editor == null ? void 0 : editor.chain().focus().run();
       },
-      children: /* @__PURE__ */ jsxs17(
-        "div",
-        {
-          onClick: () => {
-            editor == null ? void 0 : editor.chain().focus().run();
-          },
-          className,
-          children: [
-            editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
-              /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
-              /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
-              /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
-            ] }),
-            editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
-            (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
-            /* @__PURE__ */ jsx19(EditorContent, { editor }),
-            isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-            bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
-          ]
-        }
-      )
+      className,
+      children: [
+        editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
+          /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
+          /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
+          /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
+        ] }),
+        editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
+        (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
+        /* @__PURE__ */ jsx19(EditorContent, { editor }),
+        isLoadingOutside && isLoading && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
+        bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
+      ]
     }
-  );
+  ) });
 }
 export {
   Editor2 as Editor
