@@ -5987,8 +5987,8 @@ var AISelector = (props) => {
     };
   }, [isOpen]);
   useClickOutside(inputRef, () => {
-    if (inputRef.current && inputRef.current.value) {
-      context.setLastInput(inputRef.current.value);
+    if (inputRef.current) {
+      context.setLastInput(inputRef.current.value || "");
     }
     setIsOpen(false);
   });
