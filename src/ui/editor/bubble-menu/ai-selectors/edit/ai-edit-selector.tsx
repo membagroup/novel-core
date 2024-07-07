@@ -18,13 +18,14 @@ import {
   Wand,
   LucideIcon,
 } from "lucide-react";
-import React, { FC, useContext, useEffect, useRef } from "react";
+import React, { FC, SyntheticEvent, useContext, useEffect, useRef } from "react";
 import { Command } from "cmdk";
 import Magic from "@/ui/icons/magic";
 import { useCompletion } from "ai/react";
 import { NovelContext } from "../../../provider";
 import { toast } from "sonner";
 import { AIMenuItem } from "@/ui/editor/interfaces";
+import { useClickOutside } from "@/ui/editor/hooks";
 
 interface AISelectorProps {
   editor: Editor;
@@ -113,6 +114,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
         }
       }
     };
+
     if (isOpen) {
       document.addEventListener("keydown", onKeyDown);
     } else {
@@ -122,6 +124,21 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
+
+  useClickOutside(inputRef, () => { setIsOpen(false); });
+
+  // useEffect(() => {
+  //   // handle isOpen and click outside input
+  //   function handleClickOutside(event: MouseEvent) {
+  //     if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+  //       setIsOpen(false);
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [inputRef]);
 
   useEffect(() => {
     inputRef.current && inputRef.current?.focus();

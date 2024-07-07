@@ -1717,8 +1717,8 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-var import_react55 = require("react");
-var import_react56 = require("@tiptap/react");
+var import_react56 = require("react");
+var import_react57 = require("@tiptap/react");
 
 // src/ui/editor/plugins/upload-images.tsx
 var import_sonner = require("sonner");
@@ -2919,7 +2919,7 @@ var use_local_storage_default = useLocalStorage;
 
 // src/ui/editor/index.tsx
 var import_use_debounce = require("use-debounce");
-var import_react57 = require("ai/react");
+var import_react58 = require("ai/react");
 var import_sonner6 = require("sonner");
 
 // src/ui/editor/default-content.tsx
@@ -2935,8 +2935,8 @@ var defaultEditorContent = {
 };
 
 // src/ui/editor/bubble-menu/index.tsx
-var import_react26 = require("@tiptap/react");
-var import_react27 = require("react");
+var import_react27 = require("@tiptap/react");
+var import_react28 = require("react");
 var import_lucide_react9 = require("lucide-react");
 
 // src/ui/editor/bubble-menu/node-selector.tsx
@@ -3315,17 +3315,39 @@ var ColorSelector = ({
 
 // src/ui/editor/bubble-menu/link-selector.tsx
 var import_lucide_react5 = require("lucide-react");
+var import_react7 = require("react");
+
+// src/ui/editor/hooks.ts
 var import_react6 = require("react");
+var useClickOutside = (ref2, handler) => {
+  (0, import_react6.useEffect)(() => {
+    const listener = (event) => {
+      if (!ref2.current || ref2.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+    document.addEventListener("mousedown", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+    };
+  }, [ref2, handler]);
+};
+
+// src/ui/editor/bubble-menu/link-selector.tsx
 var import_jsx_runtime6 = require("react/jsx-runtime");
 var LinkSelector = ({
   editor,
   isOpen,
   setIsOpen
 }) => {
-  const inputRef = (0, import_react6.useRef)(null);
-  (0, import_react6.useEffect)(() => {
+  const inputRef = (0, import_react7.useRef)(null);
+  (0, import_react7.useEffect)(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
+  });
+  useClickOutside(inputRef, () => {
+    setIsOpen(false);
   });
   return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-relative", children: [
     /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
@@ -3527,7 +3549,7 @@ var TableSelector = ({
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 var import_lucide_react7 = require("lucide-react");
-var import_react22 = require("react");
+var import_react23 = require("react");
 
 // ../../node_modules/.pnpm/@babel+runtime@7.24.7/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
@@ -3542,7 +3564,7 @@ function _extends() {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-dialog@1.0.0_@types+react@18.0.28_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-dialog/dist/index.module.js
-var import_react21 = require("react");
+var import_react22 = require("react");
 
 // ../../node_modules/.pnpm/@radix-ui+primitive@1.0.0/node_modules/@radix-ui/primitive/dist/index.module.js
 function $e42e1063c40fb3ef$export$b9ecd428b558ff10(originalEventHandler, ourEventHandler, { checkForDefaultPrevented = true } = {}) {
@@ -3554,7 +3576,7 @@ function $e42e1063c40fb3ef$export$b9ecd428b558ff10(originalEventHandler, ourEven
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-compose-refs@1.0.0_react@18.2.0/node_modules/@radix-ui/react-compose-refs/dist/index.module.js
-var import_react7 = require("react");
+var import_react8 = require("react");
 function $6ed0406888f73fc4$var$setRef(ref2, value) {
   if (typeof ref2 === "function")
     ref2(value);
@@ -3567,25 +3589,25 @@ function $6ed0406888f73fc4$export$43e446d32b3d21af(...refs2) {
   );
 }
 function $6ed0406888f73fc4$export$c7b2cbe3552a0d05(...refs2) {
-  return (0, import_react7.useCallback)($6ed0406888f73fc4$export$43e446d32b3d21af(...refs2), refs2);
+  return (0, import_react8.useCallback)($6ed0406888f73fc4$export$43e446d32b3d21af(...refs2), refs2);
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-context@1.0.0_react@18.2.0/node_modules/@radix-ui/react-context/dist/index.module.js
-var import_react8 = require("react");
+var import_react9 = require("react");
 function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultContext) {
-  const Context = /* @__PURE__ */ (0, import_react8.createContext)(defaultContext);
+  const Context = /* @__PURE__ */ (0, import_react9.createContext)(defaultContext);
   function Provider(props) {
     const _a = props, { children } = _a, context = __objRest(_a, ["children"]);
-    const value = (0, import_react8.useMemo)(
+    const value = (0, import_react9.useMemo)(
       () => context,
       Object.values(context)
     );
-    return /* @__PURE__ */ (0, import_react8.createElement)(Context.Provider, {
+    return /* @__PURE__ */ (0, import_react9.createElement)(Context.Provider, {
       value
     }, children);
   }
   function useContext15(consumerName) {
-    const context = (0, import_react8.useContext)(Context);
+    const context = (0, import_react9.useContext)(Context);
     if (context)
       return context;
     if (defaultContext !== void 0)
@@ -3601,7 +3623,7 @@ function $c512c27ab02ef895$export$fd42f52fd3ae1109(rootComponentName, defaultCon
 function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeDeps = []) {
   let defaultContexts = [];
   function $c512c27ab02ef895$export$fd42f52fd3ae11092(rootComponentName, defaultContext) {
-    const BaseContext = /* @__PURE__ */ (0, import_react8.createContext)(defaultContext);
+    const BaseContext = /* @__PURE__ */ (0, import_react9.createContext)(defaultContext);
     const index2 = defaultContexts.length;
     defaultContexts = [
       ...defaultContexts,
@@ -3610,17 +3632,17 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
     function Provider(props) {
       const _a = props, { scope, children } = _a, context = __objRest(_a, ["scope", "children"]);
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
-      const value = (0, import_react8.useMemo)(
+      const value = (0, import_react9.useMemo)(
         () => context,
         Object.values(context)
       );
-      return /* @__PURE__ */ (0, import_react8.createElement)(Context.Provider, {
+      return /* @__PURE__ */ (0, import_react9.createElement)(Context.Provider, {
         value
       }, children);
     }
     function useContext15(consumerName, scope) {
       const Context = (scope === null || scope === void 0 ? void 0 : scope[scopeName][index2]) || BaseContext;
-      const context = (0, import_react8.useContext)(Context);
+      const context = (0, import_react9.useContext)(Context);
       if (context)
         return context;
       if (defaultContext !== void 0)
@@ -3635,11 +3657,11 @@ function $c512c27ab02ef895$export$50c7b4e9d9f19c1(scopeName, createContextScopeD
   }
   const createScope = () => {
     const scopeContexts = defaultContexts.map((defaultContext) => {
-      return /* @__PURE__ */ (0, import_react8.createContext)(defaultContext);
+      return /* @__PURE__ */ (0, import_react9.createContext)(defaultContext);
     });
     return function useScope(scope) {
       const contexts = (scope === null || scope === void 0 ? void 0 : scope[scopeName]) || scopeContexts;
-      return (0, import_react8.useMemo)(
+      return (0, import_react9.useMemo)(
         () => ({
           [`__scope${scopeName}`]: __spreadProps(__spreadValues({}, scope), {
             [scopeName]: contexts
@@ -3675,7 +3697,7 @@ function $c512c27ab02ef895$var$composeContextScopes(...scopes) {
         const currentScope = scopeProps[`__scope${scopeName}`];
         return __spreadValues(__spreadValues({}, nextScopes), currentScope);
       }, {});
-      return (0, import_react8.useMemo)(
+      return (0, import_react9.useMemo)(
         () => ({
           [`__scope${baseScope.scopeName}`]: nextScopes1
         }),
@@ -3693,8 +3715,8 @@ function $c512c27ab02ef895$var$composeContextScopes(...scopes) {
 var $2AODx$react = __toESM(require("react"));
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-layout-effect@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-layout-effect/dist/index.module.js
-var import_react9 = require("react");
-var $9f79659886946c16$export$e5c5a5f917a5871c = Boolean(globalThis === null || globalThis === void 0 ? void 0 : globalThis.document) ? import_react9.useLayoutEffect : () => {
+var import_react10 = require("react");
+var $9f79659886946c16$export$e5c5a5f917a5871c = Boolean(globalThis === null || globalThis === void 0 ? void 0 : globalThis.document) ? import_react10.useLayoutEffect : () => {
 };
 
 // ../../node_modules/.pnpm/@radix-ui+react-id@1.0.0_react@18.2.0/node_modules/@radix-ui/react-id/dist/index.module.js
@@ -3714,16 +3736,16 @@ function $1746a345f3d73bb7$export$f680877a34711e37(deterministicId) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-controllable-state@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-controllable-state/dist/index.module.js
-var import_react11 = require("react");
+var import_react12 = require("react");
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-callback-ref@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-callback-ref/dist/index.module.js
-var import_react10 = require("react");
+var import_react11 = require("react");
 function $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(callback) {
-  const callbackRef = (0, import_react10.useRef)(callback);
-  (0, import_react10.useEffect)(() => {
+  const callbackRef = (0, import_react11.useRef)(callback);
+  (0, import_react11.useEffect)(() => {
     callbackRef.current = callback;
   });
-  return (0, import_react10.useMemo)(
+  return (0, import_react11.useMemo)(
     () => (...args) => {
       var _callbackRef$current;
       return (_callbackRef$current = callbackRef.current) === null || _callbackRef$current === void 0 ? void 0 : _callbackRef$current.call(callbackRef, ...args);
@@ -3742,7 +3764,7 @@ function $71cd76cc60e0454e$export$6f32135080cb4c3({ prop, defaultProp, onChange 
   const isControlled = prop !== void 0;
   const value1 = isControlled ? prop : uncontrolledProp;
   const handleChange = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onChange);
-  const setValue = (0, import_react11.useCallback)((nextValue) => {
+  const setValue = (0, import_react12.useCallback)((nextValue) => {
     if (isControlled) {
       const setter = nextValue;
       const value = typeof nextValue === "function" ? setter(prop) : nextValue;
@@ -3762,11 +3784,11 @@ function $71cd76cc60e0454e$export$6f32135080cb4c3({ prop, defaultProp, onChange 
   ];
 }
 function $71cd76cc60e0454e$var$useUncontrolledState({ defaultProp, onChange }) {
-  const uncontrolledState = (0, import_react11.useState)(defaultProp);
+  const uncontrolledState = (0, import_react12.useState)(defaultProp);
   const [value] = uncontrolledState;
-  const prevValueRef = (0, import_react11.useRef)(value);
+  const prevValueRef = (0, import_react12.useRef)(value);
   const handleChange = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onChange);
-  (0, import_react11.useEffect)(() => {
+  (0, import_react12.useEffect)(() => {
     if (prevValueRef.current !== value) {
       handleChange(value);
       prevValueRef.current = value;
@@ -3780,51 +3802,51 @@ function $71cd76cc60e0454e$var$useUncontrolledState({ defaultProp, onChange }) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-dismissable-layer@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-dismissable-layer/dist/index.module.js
-var import_react15 = require("react");
+var import_react16 = require("react");
 
 // ../../node_modules/.pnpm/@radix-ui+react-primitive@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-primitive/dist/index.module.js
-var import_react13 = require("react");
+var import_react14 = require("react");
 var import_react_dom = require("react-dom");
 
 // ../../node_modules/.pnpm/@radix-ui+react-slot@1.0.0_react@18.2.0/node_modules/@radix-ui/react-slot/dist/index.module.js
-var import_react12 = require("react");
-var $5e63c961fc1ce211$export$8c6ed5c666ac1360 = /* @__PURE__ */ (0, import_react12.forwardRef)((props, forwardedRef) => {
+var import_react13 = require("react");
+var $5e63c961fc1ce211$export$8c6ed5c666ac1360 = /* @__PURE__ */ (0, import_react13.forwardRef)((props, forwardedRef) => {
   const _a = props, { children } = _a, slotProps = __objRest(_a, ["children"]);
-  const childrenArray = import_react12.Children.toArray(children);
+  const childrenArray = import_react13.Children.toArray(children);
   const slottable = childrenArray.find($5e63c961fc1ce211$var$isSlottable);
   if (slottable) {
     const newElement = slottable.props.children;
     const newChildren = childrenArray.map((child) => {
       if (child === slottable) {
-        if (import_react12.Children.count(newElement) > 1)
-          return import_react12.Children.only(null);
-        return /* @__PURE__ */ (0, import_react12.isValidElement)(newElement) ? newElement.props.children : null;
+        if (import_react13.Children.count(newElement) > 1)
+          return import_react13.Children.only(null);
+        return /* @__PURE__ */ (0, import_react13.isValidElement)(newElement) ? newElement.props.children : null;
       } else
         return child;
     });
-    return /* @__PURE__ */ (0, import_react12.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
+    return /* @__PURE__ */ (0, import_react13.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
       ref: forwardedRef
-    }), /* @__PURE__ */ (0, import_react12.isValidElement)(newElement) ? /* @__PURE__ */ (0, import_react12.cloneElement)(newElement, void 0, newChildren) : null);
+    }), /* @__PURE__ */ (0, import_react13.isValidElement)(newElement) ? /* @__PURE__ */ (0, import_react13.cloneElement)(newElement, void 0, newChildren) : null);
   }
-  return /* @__PURE__ */ (0, import_react12.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
+  return /* @__PURE__ */ (0, import_react13.createElement)($5e63c961fc1ce211$var$SlotClone, _extends({}, slotProps, {
     ref: forwardedRef
   }), children);
 });
 $5e63c961fc1ce211$export$8c6ed5c666ac1360.displayName = "Slot";
-var $5e63c961fc1ce211$var$SlotClone = /* @__PURE__ */ (0, import_react12.forwardRef)((props, forwardedRef) => {
+var $5e63c961fc1ce211$var$SlotClone = /* @__PURE__ */ (0, import_react13.forwardRef)((props, forwardedRef) => {
   const _a = props, { children } = _a, slotProps = __objRest(_a, ["children"]);
-  if (/* @__PURE__ */ (0, import_react12.isValidElement)(children))
-    return /* @__PURE__ */ (0, import_react12.cloneElement)(children, __spreadProps(__spreadValues({}, $5e63c961fc1ce211$var$mergeProps(slotProps, children.props)), {
+  if (/* @__PURE__ */ (0, import_react13.isValidElement)(children))
+    return /* @__PURE__ */ (0, import_react13.cloneElement)(children, __spreadProps(__spreadValues({}, $5e63c961fc1ce211$var$mergeProps(slotProps, children.props)), {
       ref: $6ed0406888f73fc4$export$43e446d32b3d21af(forwardedRef, children.ref)
     }));
-  return import_react12.Children.count(children) > 1 ? import_react12.Children.only(null) : null;
+  return import_react13.Children.count(children) > 1 ? import_react13.Children.only(null) : null;
 });
 $5e63c961fc1ce211$var$SlotClone.displayName = "SlotClone";
 var $5e63c961fc1ce211$export$d9f1ccf0bdb05d45 = ({ children }) => {
-  return /* @__PURE__ */ (0, import_react12.createElement)(import_react12.Fragment, null, children);
+  return /* @__PURE__ */ (0, import_react13.createElement)(import_react13.Fragment, null, children);
 };
 function $5e63c961fc1ce211$var$isSlottable(child) {
-  return /* @__PURE__ */ (0, import_react12.isValidElement)(child) && child.type === $5e63c961fc1ce211$export$d9f1ccf0bdb05d45;
+  return /* @__PURE__ */ (0, import_react13.isValidElement)(child) && child.type === $5e63c961fc1ce211$export$d9f1ccf0bdb05d45;
 }
 function $5e63c961fc1ce211$var$mergeProps(slotProps, childProps) {
   const overrideProps = __spreadValues({}, childProps);
@@ -3865,13 +3887,13 @@ var $8927f6f2acc4f386$var$NODES = [
   "ul"
 ];
 var $8927f6f2acc4f386$export$250ffa63cdc0d034 = $8927f6f2acc4f386$var$NODES.reduce((primitive, node) => {
-  const Node = /* @__PURE__ */ (0, import_react13.forwardRef)((props, forwardedRef) => {
+  const Node = /* @__PURE__ */ (0, import_react14.forwardRef)((props, forwardedRef) => {
     const _a = props, { asChild } = _a, primitiveProps = __objRest(_a, ["asChild"]);
     const Comp = asChild ? $5e63c961fc1ce211$export$8c6ed5c666ac1360 : node;
-    (0, import_react13.useEffect)(() => {
+    (0, import_react14.useEffect)(() => {
       window[Symbol.for("radix-ui")] = true;
     }, []);
-    return /* @__PURE__ */ (0, import_react13.createElement)(Comp, _extends({}, primitiveProps, {
+    return /* @__PURE__ */ (0, import_react14.createElement)(Comp, _extends({}, primitiveProps, {
       ref: forwardedRef
     }));
   });
@@ -3888,10 +3910,10 @@ function $8927f6f2acc4f386$export$6d1a0317bde7de7f(target, event) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-use-escape-keydown@1.0.0_react@18.2.0/node_modules/@radix-ui/react-use-escape-keydown/dist/index.module.js
-var import_react14 = require("react");
+var import_react15 = require("react");
 function $addc16e1bbe58fd0$export$3a72a57244d6e765(onEscapeKeyDownProp) {
   const onEscapeKeyDown = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onEscapeKeyDownProp);
-  (0, import_react14.useEffect)(() => {
+  (0, import_react15.useEffect)(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape")
         onEscapeKeyDown(event);
@@ -3908,16 +3930,16 @@ var $5cb92bef7577960e$var$CONTEXT_UPDATE = "dismissableLayer.update";
 var $5cb92bef7577960e$var$POINTER_DOWN_OUTSIDE = "dismissableLayer.pointerDownOutside";
 var $5cb92bef7577960e$var$FOCUS_OUTSIDE = "dismissableLayer.focusOutside";
 var $5cb92bef7577960e$var$originalBodyPointerEvents;
-var $5cb92bef7577960e$var$DismissableLayerContext = /* @__PURE__ */ (0, import_react15.createContext)({
+var $5cb92bef7577960e$var$DismissableLayerContext = /* @__PURE__ */ (0, import_react16.createContext)({
   layers: /* @__PURE__ */ new Set(),
   layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
   branches: /* @__PURE__ */ new Set()
 });
-var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react15.forwardRef)((props, forwardedRef) => {
+var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react16.forwardRef)((props, forwardedRef) => {
   const _a = props, { disableOutsidePointerEvents = false, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, onDismiss } = _a, layerProps = __objRest(_a, ["disableOutsidePointerEvents", "onEscapeKeyDown", "onPointerDownOutside", "onFocusOutside", "onInteractOutside", "onDismiss"]);
-  const context = (0, import_react15.useContext)($5cb92bef7577960e$var$DismissableLayerContext);
-  const [node1, setNode] = (0, import_react15.useState)(null);
-  const [, force] = (0, import_react15.useState)({});
+  const context = (0, import_react16.useContext)($5cb92bef7577960e$var$DismissableLayerContext);
+  const [node1, setNode] = (0, import_react16.useState)(null);
+  const [, force] = (0, import_react16.useState)({});
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
     forwardedRef,
     (node) => setNode(node)
@@ -3968,7 +3990,7 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
       onDismiss();
     }
   });
-  (0, import_react15.useEffect)(() => {
+  (0, import_react16.useEffect)(() => {
     if (!node1)
       return;
     if (disableOutsidePointerEvents) {
@@ -3989,7 +4011,7 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
     disableOutsidePointerEvents,
     context
   ]);
-  (0, import_react15.useEffect)(() => {
+  (0, import_react16.useEffect)(() => {
     return () => {
       if (!node1)
         return;
@@ -4001,12 +4023,12 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
     node1,
     context
   ]);
-  (0, import_react15.useEffect)(() => {
+  (0, import_react16.useEffect)(() => {
     const handleUpdate = () => force({});
     document.addEventListener($5cb92bef7577960e$var$CONTEXT_UPDATE, handleUpdate);
     return () => document.removeEventListener($5cb92bef7577960e$var$CONTEXT_UPDATE, handleUpdate);
   }, []);
-  return /* @__PURE__ */ (0, import_react15.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, layerProps, {
+  return /* @__PURE__ */ (0, import_react16.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, layerProps, {
     ref: composedRefs,
     style: __spreadValues({
       pointerEvents: isBodyPointerEventsDisabled ? isPointerEventsEnabled ? "auto" : "none" : void 0
@@ -4018,10 +4040,10 @@ var $5cb92bef7577960e$export$177fb62ff3ec1f22 = /* @__PURE__ */ (0, import_react
 });
 function $5cb92bef7577960e$var$usePointerDownOutside(onPointerDownOutside) {
   const handlePointerDownOutside = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onPointerDownOutside);
-  const isPointerInsideReactTreeRef = (0, import_react15.useRef)(false);
-  const handleClickRef = (0, import_react15.useRef)(() => {
+  const isPointerInsideReactTreeRef = (0, import_react16.useRef)(false);
+  const handleClickRef = (0, import_react16.useRef)(() => {
   });
-  (0, import_react15.useEffect)(() => {
+  (0, import_react16.useEffect)(() => {
     const handlePointerDown = (event) => {
       if (event.target && !isPointerInsideReactTreeRef.current) {
         let handleAndDispatchPointerDownOutsideEvent2 = function() {
@@ -4062,8 +4084,8 @@ function $5cb92bef7577960e$var$usePointerDownOutside(onPointerDownOutside) {
 }
 function $5cb92bef7577960e$var$useFocusOutside(onFocusOutside) {
   const handleFocusOutside = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onFocusOutside);
-  const isFocusInsideReactTreeRef = (0, import_react15.useRef)(false);
-  (0, import_react15.useEffect)(() => {
+  const isFocusInsideReactTreeRef = (0, import_react16.useRef)(false);
+  (0, import_react16.useEffect)(() => {
     const handleFocus = (event) => {
       if (event.target && !isFocusInsideReactTreeRef.current) {
         const eventDetail = {
@@ -4106,24 +4128,24 @@ function $5cb92bef7577960e$var$handleAndDispatchCustomEvent(name, handler, detai
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-focus-scope@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-focus-scope/dist/index.module.js
-var import_react16 = require("react");
+var import_react17 = require("react");
 var $d3863c46a17e8a28$var$AUTOFOCUS_ON_MOUNT = "focusScope.autoFocusOnMount";
 var $d3863c46a17e8a28$var$AUTOFOCUS_ON_UNMOUNT = "focusScope.autoFocusOnUnmount";
 var $d3863c46a17e8a28$var$EVENT_OPTIONS = {
   bubbles: false,
   cancelable: true
 };
-var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react16.forwardRef)((props, forwardedRef) => {
+var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react17.forwardRef)((props, forwardedRef) => {
   const _a = props, { loop = false, trapped = false, onMountAutoFocus: onMountAutoFocusProp, onUnmountAutoFocus: onUnmountAutoFocusProp } = _a, scopeProps = __objRest(_a, ["loop", "trapped", "onMountAutoFocus", "onUnmountAutoFocus"]);
-  const [container1, setContainer] = (0, import_react16.useState)(null);
+  const [container1, setContainer] = (0, import_react17.useState)(null);
   const onMountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onMountAutoFocusProp);
   const onUnmountAutoFocus = $b1b2314f5f9a1d84$export$25bec8c6f54ee79a(onUnmountAutoFocusProp);
-  const lastFocusedElementRef = (0, import_react16.useRef)(null);
+  const lastFocusedElementRef = (0, import_react17.useRef)(null);
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(
     forwardedRef,
     (node) => setContainer(node)
   );
-  const focusScope = (0, import_react16.useRef)({
+  const focusScope = (0, import_react17.useRef)({
     paused: false,
     pause() {
       this.paused = true;
@@ -4132,7 +4154,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
       this.paused = false;
     }
   }).current;
-  (0, import_react16.useEffect)(() => {
+  (0, import_react17.useEffect)(() => {
     if (trapped) {
       let handleFocusIn2 = function(event) {
         if (focusScope.paused || !container1)
@@ -4165,7 +4187,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
     container1,
     focusScope.paused
   ]);
-  (0, import_react16.useEffect)(() => {
+  (0, import_react17.useEffect)(() => {
     if (container1) {
       $d3863c46a17e8a28$var$focusScopesStack.add(focusScope);
       const previouslyFocusedElement = document.activeElement;
@@ -4203,7 +4225,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
     onUnmountAutoFocus,
     focusScope
   ]);
-  const handleKeyDown = (0, import_react16.useCallback)((event) => {
+  const handleKeyDown = (0, import_react17.useCallback)((event) => {
     if (!loop && !trapped)
       return;
     if (focusScope.paused)
@@ -4238,7 +4260,7 @@ var $d3863c46a17e8a28$export$20e40289641fbbb6 = /* @__PURE__ */ (0, import_react
     trapped,
     focusScope.paused
   ]);
-  return /* @__PURE__ */ (0, import_react16.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
+  return /* @__PURE__ */ (0, import_react17.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
     tabIndex: -1
   }, scopeProps, {
     ref: composedRefs,
@@ -4345,21 +4367,21 @@ function $d3863c46a17e8a28$var$removeLinks(items) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-portal@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-portal/dist/index.module.js
-var import_react17 = require("react");
+var import_react18 = require("react");
 var import_react_dom2 = __toESM(require("react-dom"));
-var $f1701beae083dbae$export$602eac185826482c = /* @__PURE__ */ (0, import_react17.forwardRef)((props, forwardedRef) => {
+var $f1701beae083dbae$export$602eac185826482c = /* @__PURE__ */ (0, import_react18.forwardRef)((props, forwardedRef) => {
   var _globalThis$document;
   const _a = props, { container = globalThis === null || globalThis === void 0 ? void 0 : (_globalThis$document = globalThis.document) === null || _globalThis$document === void 0 ? void 0 : _globalThis$document.body } = _a, portalProps = __objRest(_a, ["container"]);
-  return container ? /* @__PURE__ */ import_react_dom2.default.createPortal(/* @__PURE__ */ (0, import_react17.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, portalProps, {
+  return container ? /* @__PURE__ */ import_react_dom2.default.createPortal(/* @__PURE__ */ (0, import_react18.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({}, portalProps, {
     ref: forwardedRef
   })), container) : null;
 });
 
 // ../../node_modules/.pnpm/@radix-ui+react-presence@1.0.0_react-dom@18.2.0_react@18.2.0/node_modules/@radix-ui/react-presence/dist/index.module.js
-var import_react18 = require("react");
+var import_react19 = require("react");
 var import_react_dom3 = require("react-dom");
 function $fe963b355347cc68$export$3e6543de14f8614f(initialState, machine) {
-  return (0, import_react18.useReducer)((state, event) => {
+  return (0, import_react19.useReducer)((state, event) => {
     const nextState = machine[state][event];
     return nextState !== null && nextState !== void 0 ? nextState : state;
   }, initialState);
@@ -4369,19 +4391,19 @@ var $921a889cee6df7e8$export$99c2b779aa4e8b8b = (props) => {
   const presence = $921a889cee6df7e8$var$usePresence(present);
   const child = typeof children === "function" ? children({
     present: presence.isPresent
-  }) : import_react18.Children.only(children);
+  }) : import_react19.Children.only(children);
   const ref2 = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(presence.ref, child.ref);
   const forceMount = typeof children === "function";
-  return forceMount || presence.isPresent ? /* @__PURE__ */ (0, import_react18.cloneElement)(child, {
+  return forceMount || presence.isPresent ? /* @__PURE__ */ (0, import_react19.cloneElement)(child, {
     ref: ref2
   }) : null;
 };
 $921a889cee6df7e8$export$99c2b779aa4e8b8b.displayName = "Presence";
 function $921a889cee6df7e8$var$usePresence(present) {
-  const [node1, setNode] = (0, import_react18.useState)();
-  const stylesRef = (0, import_react18.useRef)({});
-  const prevPresentRef = (0, import_react18.useRef)(present);
-  const prevAnimationNameRef = (0, import_react18.useRef)("none");
+  const [node1, setNode] = (0, import_react19.useState)();
+  const stylesRef = (0, import_react19.useRef)({});
+  const prevPresentRef = (0, import_react19.useRef)(present);
+  const prevAnimationNameRef = (0, import_react19.useRef)("none");
   const initialState = present ? "mounted" : "unmounted";
   const [state, send] = $fe963b355347cc68$export$3e6543de14f8614f(initialState, {
     mounted: {
@@ -4396,7 +4418,7 @@ function $921a889cee6df7e8$var$usePresence(present) {
       MOUNT: "mounted"
     }
   });
-  (0, import_react18.useEffect)(() => {
+  (0, import_react19.useEffect)(() => {
     const currentAnimationName = $921a889cee6df7e8$var$getAnimationName(stylesRef.current);
     prevAnimationNameRef.current = state === "mounted" ? currentAnimationName : "none";
   }, [
@@ -4459,7 +4481,7 @@ function $921a889cee6df7e8$var$usePresence(present) {
       "mounted",
       "unmountSuspended"
     ].includes(state),
-    ref: (0, import_react18.useCallback)((node) => {
+    ref: (0, import_react19.useCallback)((node) => {
       if (node)
         stylesRef.current = getComputedStyle(node);
       setNode(node);
@@ -4471,10 +4493,10 @@ function $921a889cee6df7e8$var$getAnimationName(styles) {
 }
 
 // ../../node_modules/.pnpm/@radix-ui+react-focus-guards@1.0.0_react@18.2.0/node_modules/@radix-ui/react-focus-guards/dist/index.module.js
-var import_react19 = require("react");
+var import_react20 = require("react");
 var $3db38b7d1fb3fe6a$var$count = 0;
 function $3db38b7d1fb3fe6a$export$b7ece24a22aeda8c() {
-  (0, import_react19.useEffect)(() => {
+  (0, import_react20.useEffect)(() => {
     var _edgeGuards$, _edgeGuards$2;
     const edgeGuards = document.querySelectorAll("[data-radix-focus-guard]");
     document.body.insertAdjacentElement("afterbegin", (_edgeGuards$ = edgeGuards[0]) !== null && _edgeGuards$ !== void 0 ? _edgeGuards$ : $3db38b7d1fb3fe6a$var$createFocusGuard());
@@ -4557,9 +4579,9 @@ function assignRef(ref2, value) {
 }
 
 // ../../node_modules/.pnpm/use-callback-ref@1.3.2_@types+react@18.0.28_react@18.2.0/node_modules/use-callback-ref/dist/es2015/useRef.js
-var import_react20 = require("react");
+var import_react21 = require("react");
 function useCallbackRef(initialValue, callback) {
-  var ref2 = (0, import_react20.useState)(function() {
+  var ref2 = (0, import_react21.useState)(function() {
     return {
       // value
       value: initialValue,
@@ -5315,14 +5337,14 @@ var [$5d3850c4d0b4e6c7$var$createDialogContext, $5d3850c4d0b4e6c7$export$cc70277
 var [$5d3850c4d0b4e6c7$var$DialogProvider, $5d3850c4d0b4e6c7$var$useDialogContext] = $5d3850c4d0b4e6c7$var$createDialogContext($5d3850c4d0b4e6c7$var$DIALOG_NAME);
 var $5d3850c4d0b4e6c7$export$3ddf2d174ce01153 = (props) => {
   const { __scopeDialog, children, open: openProp, defaultOpen, onOpenChange, modal = true } = props;
-  const triggerRef = (0, import_react21.useRef)(null);
-  const contentRef = (0, import_react21.useRef)(null);
+  const triggerRef = (0, import_react22.useRef)(null);
+  const contentRef = (0, import_react22.useRef)(null);
   const [open = false, setOpen] = $71cd76cc60e0454e$export$6f32135080cb4c3({
     prop: openProp,
     defaultProp: defaultOpen,
     onChange: onOpenChange
   });
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogProvider, {
+  return /* @__PURE__ */ (0, import_react22.createElement)($5d3850c4d0b4e6c7$var$DialogProvider, {
     scope: __scopeDialog,
     triggerRef,
     contentRef,
@@ -5331,7 +5353,7 @@ var $5d3850c4d0b4e6c7$export$3ddf2d174ce01153 = (props) => {
     descriptionId: $1746a345f3d73bb7$export$f680877a34711e37(),
     open,
     onOpenChange: setOpen,
-    onOpenToggle: (0, import_react21.useCallback)(
+    onOpenToggle: (0, import_react22.useCallback)(
       () => setOpen(
         (prevOpen) => !prevOpen
       ),
@@ -5349,43 +5371,43 @@ var [$5d3850c4d0b4e6c7$var$PortalProvider, $5d3850c4d0b4e6c7$var$usePortalContex
 var $5d3850c4d0b4e6c7$export$dad7c95542bacce0 = (props) => {
   const { __scopeDialog, forceMount, children, container } = props;
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$PORTAL_NAME, __scopeDialog);
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$PortalProvider, {
+  return /* @__PURE__ */ (0, import_react22.createElement)($5d3850c4d0b4e6c7$var$PortalProvider, {
     scope: __scopeDialog,
     forceMount
-  }, import_react21.Children.map(
+  }, import_react22.Children.map(
     children,
-    (child) => /* @__PURE__ */ (0, import_react21.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
+    (child) => /* @__PURE__ */ (0, import_react22.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
       present: forceMount || context.open
-    }, /* @__PURE__ */ (0, import_react21.createElement)($f1701beae083dbae$export$602eac185826482c, {
+    }, /* @__PURE__ */ (0, import_react22.createElement)($f1701beae083dbae$export$602eac185826482c, {
       asChild: true,
       container
     }, child))
   ));
 };
 var $5d3850c4d0b4e6c7$var$OVERLAY_NAME = "DialogOverlay";
-var $5d3850c4d0b4e6c7$export$bd1d06c79be19e17 = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$export$bd1d06c79be19e17 = /* @__PURE__ */ (0, import_react22.forwardRef)((props, forwardedRef) => {
   const portalContext = $5d3850c4d0b4e6c7$var$usePortalContext($5d3850c4d0b4e6c7$var$OVERLAY_NAME, props.__scopeDialog);
   const _a = props, { forceMount = portalContext.forceMount } = _a, overlayProps = __objRest(_a, ["forceMount"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$OVERLAY_NAME, props.__scopeDialog);
-  return context.modal ? /* @__PURE__ */ (0, import_react21.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
+  return context.modal ? /* @__PURE__ */ (0, import_react22.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
     present: forceMount || context.open
-  }, /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogOverlayImpl, _extends({}, overlayProps, {
+  }, /* @__PURE__ */ (0, import_react22.createElement)($5d3850c4d0b4e6c7$var$DialogOverlayImpl, _extends({}, overlayProps, {
     ref: forwardedRef
   }))) : null;
 });
-var $5d3850c4d0b4e6c7$var$DialogOverlayImpl = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogOverlayImpl = /* @__PURE__ */ (0, import_react22.forwardRef)((props, forwardedRef) => {
   const _a = props, { __scopeDialog } = _a, overlayProps = __objRest(_a, ["__scopeDialog"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$OVERLAY_NAME, __scopeDialog);
   return (
     // Make sure `Content` is scrollable even when it doesn't live inside `RemoveScroll`
     // ie. when `Overlay` and `Content` are siblings
-    /* @__PURE__ */ (0, import_react21.createElement)(Combination_default, {
+    /* @__PURE__ */ (0, import_react22.createElement)(Combination_default, {
       as: $5e63c961fc1ce211$export$8c6ed5c666ac1360,
       allowPinchZoom: true,
       shards: [
         context.contentRef
       ]
-    }, /* @__PURE__ */ (0, import_react21.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
+    }, /* @__PURE__ */ (0, import_react22.createElement)($8927f6f2acc4f386$export$250ffa63cdc0d034.div, _extends({
       "data-state": $5d3850c4d0b4e6c7$var$getState(context.open)
     }, overlayProps, {
       ref: forwardedRef,
@@ -5396,28 +5418,28 @@ var $5d3850c4d0b4e6c7$var$DialogOverlayImpl = /* @__PURE__ */ (0, import_react21
   );
 });
 var $5d3850c4d0b4e6c7$var$CONTENT_NAME = "DialogContent";
-var $5d3850c4d0b4e6c7$export$b6d9565de1e068cf = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$export$b6d9565de1e068cf = /* @__PURE__ */ (0, import_react22.forwardRef)((props, forwardedRef) => {
   const portalContext = $5d3850c4d0b4e6c7$var$usePortalContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
   const _a = props, { forceMount = portalContext.forceMount } = _a, contentProps = __objRest(_a, ["forceMount"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
-  return /* @__PURE__ */ (0, import_react21.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
+  return /* @__PURE__ */ (0, import_react22.createElement)($921a889cee6df7e8$export$99c2b779aa4e8b8b, {
     present: forceMount || context.open
-  }, context.modal ? /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentModal, _extends({}, contentProps, {
+  }, context.modal ? /* @__PURE__ */ (0, import_react22.createElement)($5d3850c4d0b4e6c7$var$DialogContentModal, _extends({}, contentProps, {
     ref: forwardedRef
-  })) : /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentNonModal, _extends({}, contentProps, {
+  })) : /* @__PURE__ */ (0, import_react22.createElement)($5d3850c4d0b4e6c7$var$DialogContentNonModal, _extends({}, contentProps, {
     ref: forwardedRef
   })));
 });
-var $5d3850c4d0b4e6c7$var$DialogContentModal = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogContentModal = /* @__PURE__ */ (0, import_react22.forwardRef)((props, forwardedRef) => {
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
-  const contentRef = (0, import_react21.useRef)(null);
+  const contentRef = (0, import_react22.useRef)(null);
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, context.contentRef, contentRef);
-  (0, import_react21.useEffect)(() => {
+  (0, import_react22.useEffect)(() => {
     const content = contentRef.current;
     if (content)
       return hideOthers(content);
   }, []);
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
+  return /* @__PURE__ */ (0, import_react22.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
     ref: composedRefs,
     trapFocus: context.open,
     disableOutsidePointerEvents: true,
@@ -5439,10 +5461,10 @@ var $5d3850c4d0b4e6c7$var$DialogContentModal = /* @__PURE__ */ (0, import_react2
     )
   }));
 });
-var $5d3850c4d0b4e6c7$var$DialogContentNonModal = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogContentNonModal = /* @__PURE__ */ (0, import_react22.forwardRef)((props, forwardedRef) => {
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, props.__scopeDialog);
-  const hasInteractedOutsideRef = (0, import_react21.useRef)(false);
-  return /* @__PURE__ */ (0, import_react21.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
+  const hasInteractedOutsideRef = (0, import_react22.useRef)(false);
+  return /* @__PURE__ */ (0, import_react22.createElement)($5d3850c4d0b4e6c7$var$DialogContentImpl, _extends({}, props, {
     ref: forwardedRef,
     trapFocus: false,
     disableOutsidePointerEvents: false,
@@ -5469,19 +5491,19 @@ var $5d3850c4d0b4e6c7$var$DialogContentNonModal = /* @__PURE__ */ (0, import_rea
     }
   }));
 });
-var $5d3850c4d0b4e6c7$var$DialogContentImpl = /* @__PURE__ */ (0, import_react21.forwardRef)((props, forwardedRef) => {
+var $5d3850c4d0b4e6c7$var$DialogContentImpl = /* @__PURE__ */ (0, import_react22.forwardRef)((props, forwardedRef) => {
   const _a = props, { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus } = _a, contentProps = __objRest(_a, ["__scopeDialog", "trapFocus", "onOpenAutoFocus", "onCloseAutoFocus"]);
   const context = $5d3850c4d0b4e6c7$var$useDialogContext($5d3850c4d0b4e6c7$var$CONTENT_NAME, __scopeDialog);
-  const contentRef = (0, import_react21.useRef)(null);
+  const contentRef = (0, import_react22.useRef)(null);
   const composedRefs = $6ed0406888f73fc4$export$c7b2cbe3552a0d05(forwardedRef, contentRef);
   $3db38b7d1fb3fe6a$export$b7ece24a22aeda8c();
-  return /* @__PURE__ */ (0, import_react21.createElement)(import_react21.Fragment, null, /* @__PURE__ */ (0, import_react21.createElement)($d3863c46a17e8a28$export$20e40289641fbbb6, {
+  return /* @__PURE__ */ (0, import_react22.createElement)(import_react22.Fragment, null, /* @__PURE__ */ (0, import_react22.createElement)($d3863c46a17e8a28$export$20e40289641fbbb6, {
     asChild: true,
     loop: true,
     trapped: trapFocus,
     onMountAutoFocus: onOpenAutoFocus,
     onUnmountAutoFocus: onCloseAutoFocus
-  }, /* @__PURE__ */ (0, import_react21.createElement)($5cb92bef7577960e$export$177fb62ff3ec1f22, _extends({
+  }, /* @__PURE__ */ (0, import_react22.createElement)($5cb92bef7577960e$export$177fb62ff3ec1f22, _extends({
     role: "dialog",
     id: context.contentId,
     "aria-describedby": context.descriptionId,
@@ -5820,7 +5842,7 @@ var ye = () => {
 var xe = { position: "absolute", width: "1px", height: "1px", padding: "0", margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", borderWidth: "0" };
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
-var import_react23 = require("ai/react");
+var import_react24 = require("ai/react");
 var import_jsx_runtime8 = require("react/jsx-runtime");
 var AISelector = (props) => {
   const { editor, isOpen, setIsOpen, showSubmenu, subMenuItems } = props;
@@ -5872,7 +5894,7 @@ var AISelector = (props) => {
     },
     ...subMenuItems || []
   ];
-  const inputRef = (0, import_react22.useRef)(null);
+  const inputRef = (0, import_react23.useRef)(null);
   const handleSubmit = (input) => {
     if (!input.value)
       return;
@@ -5882,7 +5904,7 @@ var AISelector = (props) => {
  ${text}`);
     setIsOpen(false);
   };
-  (0, import_react22.useEffect)(() => {
+  (0, import_react23.useEffect)(() => {
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
@@ -5905,12 +5927,15 @@ var AISelector = (props) => {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  (0, import_react22.useEffect)(() => {
+  useClickOutside(inputRef, () => {
+    setIsOpen(false);
+  });
+  (0, import_react23.useEffect)(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi, additionalData: { body, headers } } = (0, import_react22.useContext)(NovelContext);
-  const { complete, isLoading, stop: stop2 } = (0, import_react23.useCompletion)({
+  const { completionApi, additionalData: { body, headers } } = (0, import_react23.useContext)(NovelContext);
+  const { complete, isLoading, stop: stop2 } = (0, import_react24.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
@@ -5991,8 +6016,8 @@ var AISelector = (props) => {
 
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-selector.tsx
 var import_lucide_react8 = require("lucide-react");
-var import_react24 = require("react");
-var import_react25 = require("ai/react");
+var import_react25 = require("react");
+var import_react26 = require("ai/react");
 var import_jsx_runtime9 = require("react/jsx-runtime");
 var TranslateSelector = ({
   editor,
@@ -6041,7 +6066,7 @@ var TranslateSelector = ({
       command: "Translate into Portuguese"
     }
   ];
-  (0, import_react24.useEffect)(() => {
+  (0, import_react25.useEffect)(() => {
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
@@ -6056,8 +6081,8 @@ var TranslateSelector = ({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-  const { completionApi, additionalData: { body, headers } } = (0, import_react24.useContext)(NovelContext);
-  const { complete, isLoading, stop: stop2 } = (0, import_react25.useCompletion)({
+  const { completionApi, additionalData: { body, headers } } = (0, import_react25.useContext)(NovelContext);
+  const { complete, isLoading, stop: stop2 } = (0, import_react26.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
     body: __spreadValues({}, body || {}),
@@ -6100,7 +6125,7 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 var import_jsx_runtime10 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
-  const { additionalData } = (0, import_react27.useContext)(NovelContext);
+  const { additionalData } = (0, import_react28.useContext)(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -6142,7 +6167,7 @@ var EditorBubbleMenu = (props) => {
       const { selection } = state;
       const { empty } = selection;
       setHasSection(!empty);
-      if (editor.isActive("image") || (0, import_react26.isNodeSelection)(selection)) {
+      if (editor.isActive("image") || (0, import_react27.isNodeSelection)(selection)) {
         return false;
       }
       if (!empty) {
@@ -6164,15 +6189,15 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
-  const [hasSelection, setHasSection] = (0, import_react27.useState)(false);
-  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = (0, import_react27.useState)(false);
-  const [isColorSelectorOpen, setIsColorSelectorOpen] = (0, import_react27.useState)(false);
-  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = (0, import_react27.useState)(false);
-  const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react27.useState)(false);
-  const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react27.useState)(false);
-  const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react27.useState)(false);
+  const [hasSelection, setHasSection] = (0, import_react28.useState)(false);
+  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = (0, import_react28.useState)(false);
+  const [isColorSelectorOpen, setIsColorSelectorOpen] = (0, import_react28.useState)(false);
+  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = (0, import_react28.useState)(false);
+  const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react28.useState)(false);
+  const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react28.useState)(false);
+  const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react28.useState)(false);
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-    import_react26.BubbleMenu,
+    import_react27.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
@@ -8612,7 +8637,7 @@ function getOverlapSize(points1, points2) {
 
 // ../../node_modules/.pnpm/react-moveable@0.54.1/node_modules/react-moveable/dist/moveable.esm.js
 var React10 = __toESM(require("react"));
-var import_react29 = require("react");
+var import_react30 = require("react");
 
 // ../../node_modules/.pnpm/gesto@1.19.4/node_modules/gesto/dist/gesto.esm.js
 var extendStatics3 = function(d, b) {
@@ -9396,7 +9421,7 @@ function styled(css3) {
 var styled_esm_default = styled;
 
 // ../../node_modules/.pnpm/react-css-styled@1.1.9/node_modules/react-css-styled/dist/styled.esm.js
-var import_react28 = require("react");
+var import_react29 = require("react");
 var __assign6 = function() {
   __assign6 = Object.assign || function __assign8(t2) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9424,13 +9449,13 @@ function __rest2(s, e) {
 function styled2(Tag, css3) {
   var injector = styled_esm_default(css3);
   var cssId = injector.className;
-  return (0, import_react28.forwardRef)(function(props, ref2) {
+  return (0, import_react29.forwardRef)(function(props, ref2) {
     var _a = props.className, className = _a === void 0 ? "" : _a, cspNonce = props.cspNonce, attributes = __rest2(props, ["className", "cspNonce"]);
-    var targetRef = (0, import_react28.useRef)();
-    (0, import_react28.useImperativeHandle)(ref2, function() {
+    var targetRef = (0, import_react29.useRef)();
+    (0, import_react29.useImperativeHandle)(ref2, function() {
       return targetRef.current;
     }, []);
-    (0, import_react28.useEffect)(function() {
+    (0, import_react29.useEffect)(function() {
       var injectResult = injector.inject(targetRef.current, {
         nonce: props.cspNonce
       });
@@ -9438,7 +9463,7 @@ function styled2(Tag, css3) {
         injectResult.destroy();
       };
     }, []);
-    return (0, import_react28.createElement)(Tag, __assign6({
+    return (0, import_react29.createElement)(Tag, __assign6({
       "ref": targetRef,
       "data-styled-id": cssId,
       "className": "".concat(className, " ").concat(cssId)
@@ -19691,7 +19716,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     var props = this.props;
     var triggerAblesSimultaneously = props.triggerAblesSimultaneously;
     var Renderer = {
-      createElement: import_react29.createElement
+      createElement: import_react30.createElement
     };
     this.renderState = {};
     return groupByMap(flat(filterAbles(this.getEnabledAbles(), ["render"], triggerAblesSimultaneously).map(function(_a) {
@@ -19759,7 +19784,7 @@ var MoveableManager = /* @__PURE__ */ function(_super) {
     }
     var renderPoses = this.getState().renderPoses;
     var Renderer = {
-      createElement: import_react29.createElement
+      createElement: import_react30.createElement
     };
     return [
       [0, 1],
@@ -21003,16 +21028,16 @@ var LoadingDots = ({ color: color2 = "#000" }) => {
 var loading_dots_default = LoadingDots;
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
-var import_react30 = require("ai/react");
+var import_react31 = require("ai/react");
 var import_lucide_react10 = require("lucide-react");
-var import_react31 = require("react");
+var import_react32 = require("react");
 var import_sonner3 = require("sonner");
 var import_react_markdown = __toESM(require("react-markdown"));
 var import_jsx_runtime13 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
-  const [isShow, setIsShow] = (0, import_react31.useState)(false);
-  const { completionApi, additionalData: { body, headers } } = (0, import_react31.useContext)(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react30.useCompletion)({
+  const [isShow, setIsShow] = (0, import_react32.useState)(false);
+  const { completionApi, additionalData: { body, headers } } = (0, import_react32.useContext)(NovelContext);
+  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react31.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
@@ -21021,7 +21046,7 @@ var AIEditorBubble = ({ editor }) => {
       import_sonner3.toast.error(err.message);
     }
   });
-  (0, import_react31.useEffect)(() => {
+  (0, import_react32.useEffect)(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21091,16 +21116,16 @@ function AIGeneratingLoading({ stop: stop2 }) {
 }
 
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-bubble.tsx
-var import_react32 = require("ai/react");
+var import_react33 = require("ai/react");
 var import_lucide_react12 = require("lucide-react");
-var import_react33 = require("react");
+var import_react34 = require("react");
 var import_sonner4 = require("sonner");
 var import_react_markdown2 = __toESM(require("react-markdown"));
 var import_jsx_runtime15 = require("react/jsx-runtime");
 var AITranslateBubble = ({ editor }) => {
-  const [isShow, setIsShow] = (0, import_react33.useState)(false);
-  const { completionApi, additionalData: { body, headers } } = (0, import_react33.useContext)(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react32.useCompletion)({
+  const [isShow, setIsShow] = (0, import_react34.useState)(false);
+  const { completionApi, additionalData: { body, headers } } = (0, import_react34.useContext)(NovelContext);
+  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react33.useCompletion)({
     id: "ai-translate",
     api: `${completionApi}/translate`,
     body: __spreadValues({}, body || {}),
@@ -21109,7 +21134,7 @@ var AITranslateBubble = ({ editor }) => {
       import_sonner4.toast.error(err.message);
     }
   });
-  (0, import_react33.useEffect)(() => {
+  (0, import_react34.useEffect)(() => {
     if (completion.length > 0) {
       setIsShow(true);
     }
@@ -21162,8 +21187,8 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-var import_react52 = require("react");
-var import_react53 = require("ai/react");
+var import_react53 = require("react");
+var import_react54 = require("ai/react");
 var import_lucide_react13 = require("lucide-react");
 
 // src/ui/icons/magic-1.tsx
@@ -21194,47 +21219,47 @@ function Magic1({ className }) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/index.mjs
 var React11 = __toESM(require("react"), 1);
-var import_react44 = require("react");
+var import_react45 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionConfigContext.mjs
-var import_react34 = require("react");
-var MotionConfigContext = (0, import_react34.createContext)({
+var import_react35 = require("react");
+var MotionConfigContext = (0, import_react35.createContext)({
   transformPagePoint: (p) => p,
   isStatic: false,
   reducedMotion: "never"
 });
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/index.mjs
-var import_react35 = require("react");
-var MotionContext = (0, import_react35.createContext)({});
+var import_react36 = require("react");
+var MotionContext = (0, import_react36.createContext)({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-var import_react39 = require("react");
+var import_react40 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
-var import_react36 = require("react");
-var PresenceContext = (0, import_react36.createContext)(null);
+var import_react37 = require("react");
+var PresenceContext = (0, import_react37.createContext)(null);
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-var import_react37 = require("react");
+var import_react38 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/is-browser.mjs
 var isBrowser = typeof document !== "undefined";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs
-var useIsomorphicLayoutEffect2 = isBrowser ? import_react37.useLayoutEffect : import_react37.useEffect;
+var useIsomorphicLayoutEffect2 = isBrowser ? import_react38.useLayoutEffect : import_react38.useEffect;
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/LazyContext.mjs
-var import_react38 = require("react");
-var LazyContext = (0, import_react38.createContext)({ strict: false });
+var import_react39 = require("react");
+var LazyContext = (0, import_react39.createContext)({ strict: false });
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
 function useVisualElement(Component2, visualState, props, createVisualElement) {
-  const { visualElement: parent } = (0, import_react39.useContext)(MotionContext);
-  const lazyContext = (0, import_react39.useContext)(LazyContext);
-  const presenceContext = (0, import_react39.useContext)(PresenceContext);
-  const reducedMotionConfig = (0, import_react39.useContext)(MotionConfigContext).reducedMotion;
-  const visualElementRef = (0, import_react39.useRef)();
+  const { visualElement: parent } = (0, import_react40.useContext)(MotionContext);
+  const lazyContext = (0, import_react40.useContext)(LazyContext);
+  const presenceContext = (0, import_react40.useContext)(PresenceContext);
+  const reducedMotionConfig = (0, import_react40.useContext)(MotionConfigContext).reducedMotion;
+  const visualElementRef = (0, import_react40.useRef)();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
     visualElementRef.current = createVisualElement(Component2, {
@@ -21247,16 +21272,16 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
     });
   }
   const visualElement = visualElementRef.current;
-  (0, import_react39.useInsertionEffect)(() => {
+  (0, import_react40.useInsertionEffect)(() => {
     visualElement && visualElement.update(props, presenceContext);
   });
   useIsomorphicLayoutEffect2(() => {
     visualElement && visualElement.render();
   });
-  (0, import_react39.useEffect)(() => {
+  (0, import_react40.useEffect)(() => {
     visualElement && visualElement.updateFeatures();
   });
-  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : import_react39.useEffect;
+  const useAnimateChangesEffect = window.HandoffAppearAnimations ? useIsomorphicLayoutEffect2 : import_react40.useEffect;
   useAnimateChangesEffect(() => {
     if (visualElement && visualElement.animationState) {
       visualElement.animationState.animateChanges();
@@ -21266,7 +21291,7 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-motion-ref.mjs
-var import_react40 = require("react");
+var import_react41 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/is-ref-object.mjs
 function isRefObject(ref2) {
@@ -21275,7 +21300,7 @@ function isRefObject(ref2) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-motion-ref.mjs
 function useMotionRef(visualState, visualElement, externalRef) {
-  return (0, import_react40.useCallback)(
+  return (0, import_react41.useCallback)(
     (instance) => {
       instance && visualState.mount && visualState.mount(instance);
       if (visualElement) {
@@ -21299,7 +21324,7 @@ function useMotionRef(visualState, visualElement, externalRef) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
-var import_react41 = require("react");
+var import_react42 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/is-variant-label.mjs
 function isVariantLabel(v) {
@@ -21345,8 +21370,8 @@ function getCurrentTreeVariants(props, context) {
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/MotionContext/create.mjs
 function useCreateMotionContext(props) {
-  const { initial, animate } = getCurrentTreeVariants(props, (0, import_react41.useContext)(MotionContext));
-  return (0, import_react41.useMemo)(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
+  const { initial, animate } = getCurrentTreeVariants(props, (0, import_react42.useContext)(MotionContext));
+  return (0, import_react42.useMemo)(() => ({ initial, animate }), [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]);
 }
 function variantLabelsAsDependency(prop) {
   return Array.isArray(prop) ? prop.join(" ") : prop;
@@ -21388,12 +21413,12 @@ function loadFeatures(features) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/LayoutGroupContext.mjs
-var import_react42 = require("react");
-var LayoutGroupContext = (0, import_react42.createContext)({});
+var import_react43 = require("react");
+var LayoutGroupContext = (0, import_react43.createContext)({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/SwitchLayoutGroupContext.mjs
-var import_react43 = require("react");
-var SwitchLayoutGroupContext = (0, import_react43.createContext)({});
+var import_react44 = require("react");
+var SwitchLayoutGroupContext = (0, import_react44.createContext)({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/symbol.mjs
 var motionComponentSymbol = Symbol.for("motionComponentSymbol");
@@ -21403,7 +21428,7 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
   preloadedFeatures2 && loadFeatures(preloadedFeatures2);
   function MotionComponent(props, externalRef) {
     let MeasureLayout2;
-    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, (0, import_react44.useContext)(MotionConfigContext)), props), {
+    const configAndProps = __spreadProps(__spreadValues(__spreadValues({}, (0, import_react45.useContext)(MotionConfigContext)), props), {
       layoutId: useLayoutId(props)
     });
     const { isStatic } = configAndProps;
@@ -21411,8 +21436,8 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
     const visualState = useVisualState(props, isStatic);
     if (!isStatic && isBrowser) {
       context.visualElement = useVisualElement(Component2, visualState, configAndProps, createVisualElement);
-      const initialLayoutGroupConfig = (0, import_react44.useContext)(SwitchLayoutGroupContext);
-      const isStrict = (0, import_react44.useContext)(LazyContext).strict;
+      const initialLayoutGroupConfig = (0, import_react45.useContext)(SwitchLayoutGroupContext);
+      const isStrict = (0, import_react45.useContext)(LazyContext).strict;
       if (context.visualElement) {
         MeasureLayout2 = context.visualElement.loadFeatures(
           // Note: Pass the full new combined props to correctly re-render dynamic feature components.
@@ -21430,12 +21455,12 @@ function createMotionComponent({ preloadedFeatures: preloadedFeatures2, createVi
       useRender(Component2, props, useMotionRef(visualState, context.visualElement, externalRef), visualState, isStatic, context.visualElement)
     );
   }
-  const ForwardRefComponent = (0, import_react44.forwardRef)(MotionComponent);
+  const ForwardRefComponent = (0, import_react45.forwardRef)(MotionComponent);
   ForwardRefComponent[motionComponentSymbol] = Component2;
   return ForwardRefComponent;
 }
 function useLayoutId({ layoutId }) {
-  const layoutGroupId = (0, import_react44.useContext)(LayoutGroupContext).id;
+  const layoutGroupId = (0, import_react45.useContext)(LayoutGroupContext).id;
   return layoutGroupId && layoutId !== void 0 ? layoutGroupId + "-" + layoutId : layoutId;
 }
 
@@ -21520,10 +21545,10 @@ function isSVGComponent(Component2) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/dom/use-render.mjs
-var import_react47 = require("react");
+var import_react48 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/html/use-props.mjs
-var import_react45 = require("react");
+var import_react46 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/projection/styles/scale-correction.mjs
 var scaleCorrectors = {};
@@ -21773,7 +21798,7 @@ function copyRawValuesOnly(target, source, props) {
   }
 }
 function useInitialMotionValues({ transformTemplate }, visualState, isStatic) {
-  return (0, import_react45.useMemo)(() => {
+  return (0, import_react46.useMemo)(() => {
     const state = createHtmlRenderState();
     buildHTMLStyles(state, visualState, { enableHardwareAcceleration: !isStatic }, transformTemplate);
     return Object.assign({}, state.vars, state.style);
@@ -21866,7 +21891,7 @@ function filterProps(props, isDom, forwardMotionProps) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/svg/use-props.mjs
-var import_react46 = require("react");
+var import_react47 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/svg/utils/transform-origin.mjs
 function calcOrigin(origin, offset, size) {
@@ -21956,7 +21981,7 @@ var isSVGTag = (tag) => typeof tag === "string" && tag.toLowerCase() === "svg";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/svg/use-props.mjs
 function useSVGProps(props, visualState, _isStatic, Component2) {
-  const visualProps = (0, import_react46.useMemo)(() => {
+  const visualProps = (0, import_react47.useMemo)(() => {
     const state = createSvgRenderState();
     buildSVGAttrs(state, visualState, { enableHardwareAcceleration: false }, isSVGTag(Component2), props.transformTemplate);
     return __spreadProps(__spreadValues({}, state.attrs), {
@@ -21981,8 +22006,8 @@ function createUseRender(forwardMotionProps = false) {
       ref: ref2
     });
     const { children } = props;
-    const renderedChildren = (0, import_react47.useMemo)(() => isMotionValue(children) ? children.get() : children, [children]);
-    return (0, import_react47.createElement)(Component2, __spreadProps(__spreadValues({}, elementProps), {
+    const renderedChildren = (0, import_react48.useMemo)(() => isMotionValue(children) ? children.get() : children, [children]);
+    return (0, import_react48.createElement)(Component2, __spreadProps(__spreadValues({}, elementProps), {
       children: renderedChildren
     }));
   };
@@ -22060,7 +22085,7 @@ function scrapeMotionValuesFromProps2(props, prevProps) {
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-state.mjs
-var import_react49 = require("react");
+var import_react50 = require("react");
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/render/utils/resolve-variants.mjs
 function resolveVariantFromProps(props, definition, custom, currentValues2 = {}, currentVelocity = {}) {
@@ -22077,9 +22102,9 @@ function resolveVariantFromProps(props, definition, custom, currentValues2 = {},
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-constant.mjs
-var import_react48 = require("react");
+var import_react49 = require("react");
 function useConstant(init) {
-  const ref2 = (0, import_react48.useRef)(null);
+  const ref2 = (0, import_react49.useRef)(null);
   if (ref2.current === null) {
     ref2.current = init();
   }
@@ -22117,8 +22142,8 @@ function makeState({ scrapeMotionValuesFromProps: scrapeMotionValuesFromProps3, 
   return state;
 }
 var makeUseVisualState = (config) => (props, isStatic) => {
-  const context = (0, import_react49.useContext)(MotionContext);
-  const presenceContext = (0, import_react49.useContext)(PresenceContext);
+  const context = (0, import_react50.useContext)(MotionContext);
+  const presenceContext = (0, import_react50.useContext)(PresenceContext);
   const make = () => makeState(config, props, context, presenceContext);
   return isStatic ? make() : useConstant(make);
 };
@@ -25643,17 +25668,17 @@ var PanGesture = class extends Feature {
 };
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs
-var import_react51 = __toESM(require("react"), 1);
+var import_react52 = __toESM(require("react"), 1);
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.mjs
-var import_react50 = require("react");
+var import_react51 = require("react");
 function usePresence() {
-  const context = (0, import_react50.useContext)(PresenceContext);
+  const context = (0, import_react51.useContext)(PresenceContext);
   if (context === null)
     return [true, null];
   const { isPresent, onExitComplete, register } = context;
-  const id3 = (0, import_react50.useId)();
-  (0, import_react50.useEffect)(() => register(id3), []);
+  const id3 = (0, import_react51.useId)();
+  (0, import_react51.useEffect)(() => register(id3), []);
   const safeToRemove = () => onExitComplete && onExitComplete(id3);
   return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
 }
@@ -25718,7 +25743,7 @@ var correctBoxShadow = {
 };
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs
-var MeasureLayoutWithContext = class extends import_react51.default.Component {
+var MeasureLayoutWithContext = class extends import_react52.default.Component {
   /**
    * This only mounts projection nodes for components that
    * need measuring, we might want to do it for all components
@@ -25801,8 +25826,8 @@ var MeasureLayoutWithContext = class extends import_react51.default.Component {
 };
 function MeasureLayout(props) {
   const [isPresent, safeToRemove] = usePresence();
-  const layoutGroup = (0, import_react51.useContext)(LayoutGroupContext);
-  return import_react51.default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: (0, import_react51.useContext)(SwitchLayoutGroupContext), isPresent, safeToRemove }));
+  const layoutGroup = (0, import_react52.useContext)(LayoutGroupContext);
+  return import_react52.default.createElement(MeasureLayoutWithContext, __spreadProps(__spreadValues({}, props), { layoutGroup, switchLayoutGroup: (0, import_react52.useContext)(SwitchLayoutGroupContext), isPresent, safeToRemove }));
 }
 var defaultScaleCorrectors = {
   borderRadius: __spreadProps(__spreadValues({}, correctBorderRadius), {
@@ -27943,9 +27968,9 @@ var import_sonner5 = require("sonner");
 var import_jsx_runtime17 = require("react/jsx-runtime");
 function ChatBot(props) {
   const { editor, history } = props;
-  const [isOpen, setIsOpen] = (0, import_react52.useState)(false);
-  const inputRef = (0, import_react52.useRef)(null);
-  const { completionApi, additionalData: { body, headers } } = (0, import_react52.useContext)(NovelContext);
+  const [isOpen, setIsOpen] = (0, import_react53.useState)(false);
+  const inputRef = (0, import_react53.useRef)(null);
+  const { completionApi, additionalData: { body, headers } } = (0, import_react53.useContext)(NovelContext);
   const initialMessage = {
     id: "start",
     role: "system",
@@ -27959,7 +27984,7 @@ function ChatBot(props) {
     reload,
     handleInputChange,
     handleSubmit
-  } = (0, import_react53.useChat)({
+  } = (0, import_react54.useChat)({
     id: "ai-bot",
     api: `${completionApi}/bot`,
     body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
@@ -27969,11 +27994,11 @@ function ChatBot(props) {
       import_sonner5.toast.error(err.message);
     }
   });
-  (0, import_react52.useEffect)(() => {
+  (0, import_react53.useEffect)(() => {
     var _a;
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  (0, import_react52.useEffect)(() => {
+  (0, import_react53.useEffect)(() => {
     if (history == null ? void 0 : history.length) {
       setMessages([initialMessage, ...history]);
     }
@@ -28176,11 +28201,11 @@ function ChatBot(props) {
 var import_extension_collaboration = __toESM(require("@tiptap/extension-collaboration"));
 var import_extension_collaboration_cursor = __toESM(require("@tiptap/extension-collaboration-cursor"));
 var import_provider8 = require("@hocuspocus/provider");
-var import_react54 = require("react");
+var import_react55 = require("react");
 var import_lucide_react14 = require("lucide-react");
 var import_jsx_runtime18 = require("react/jsx-runtime");
 function useCollaborationExt(active, id3, user, customProvider) {
-  const collaborationData = (0, import_react54.useMemo)(() => {
+  const collaborationData = (0, import_react55.useMemo)(() => {
     if (!active)
       return {};
     const provider = customProvider || new import_provider8.HocuspocusProvider({
@@ -28282,8 +28307,8 @@ function Editor2({
 }) {
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, lastTextKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
-  const [hydrated, setHydrated] = (0, import_react55.useState)(false);
-  const [isLoadingOutside, setLoadingOutside] = (0, import_react55.useState)(false);
+  const [hydrated, setHydrated] = (0, import_react56.useState)(false);
+  const [isLoadingOutside, setLoadingOutside] = (0, import_react56.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
     const text = editor2.getText();
@@ -28293,7 +28318,7 @@ function Editor2({
       setContent(json);
     }
   }), debounceDuration);
-  const [status, setStatus] = (0, import_react55.useState)("connecting");
+  const [status, setStatus] = (0, import_react56.useState)("connecting");
   const user = __spreadProps(__spreadValues({}, userDetails), {
     color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
   });
@@ -28303,7 +28328,7 @@ function Editor2({
     user,
     customProvider
   );
-  const editor = (0, import_react56.useEditor)({
+  const editor = (0, import_react57.useEditor)({
     extensions: [
       ...defaultExtensions(collaboration),
       ...extensions,
@@ -28334,7 +28359,7 @@ function Editor2({
     },
     autofocus: false
   });
-  (0, import_react55.useEffect)(() => {
+  (0, import_react56.useEffect)(() => {
     if (collaboration) {
       provider.on("status", (event) => {
         setStatus(event.status);
@@ -28345,7 +28370,7 @@ function Editor2({
       additionalData.getEditor(editor);
     }
   }, [editor]);
-  const { complete, completion, isLoading, stop: stop2 } = (0, import_react57.useCompletion)({
+  const { complete, completion, isLoading, stop: stop2 } = (0, import_react58.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
@@ -28360,8 +28385,8 @@ function Editor2({
       import_sonner6.toast.error(err.message);
     }
   });
-  const prev = (0, import_react55.useRef)("");
-  (0, import_react55.useEffect)(() => {
+  const prev = (0, import_react56.useRef)("");
+  (0, import_react56.useEffect)(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
     editor == null ? void 0 : editor.commands.insertContent(diff3);
@@ -28369,7 +28394,7 @@ function Editor2({
       setLoadingOutside(false);
     }
   }, [isLoading, editor, completion]);
-  (0, import_react55.useEffect)(() => {
+  (0, import_react56.useEffect)(() => {
     if (!editor || hydrated || disableLocalStorage !== false)
       return;
     const value = disableLocalStorage ? defaultValue : content;
@@ -28378,7 +28403,7 @@ function Editor2({
       setHydrated(true);
     }
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
-  (0, import_react55.useEffect)(() => {
+  (0, import_react56.useEffect)(() => {
     if (!editor || (0, import_isEmpty.default)(defaultValue) || disableLocalStorage !== true)
       return;
     editor.commands.setContent(defaultValue);
@@ -28405,7 +28430,7 @@ function Editor2({
             ] }),
             editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
             (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react56.EditorContent, { editor }),
+            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react57.EditorContent, { editor }),
             isLoadingOutside && isLoading && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
             bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
           ]
