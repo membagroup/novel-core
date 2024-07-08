@@ -3625,7 +3625,6 @@ import {
   PauseCircle as PauseCircle2,
   Scissors,
   Send,
-  Bot,
   Wand
 } from "lucide-react";
 import { useContext as useContext4, useEffect as useEffect10, useRef as useRef9 } from "react";
@@ -5922,11 +5921,39 @@ var xe = { position: "absolute", width: "1px", height: "1px", padding: "0", marg
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 import { useCompletion as useCompletion2 } from "ai/react";
-import { Fragment as Fragment3, jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
+
+// src/ui/icons/magic-1.tsx
+import { jsx as jsx8 } from "react/jsx-runtime";
+function Magic1({ className }) {
+  return /* @__PURE__ */ jsx8(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      viewBox: "0 0 24 24",
+      width: "24",
+      height: "24",
+      className,
+      children: /* @__PURE__ */ jsx8(
+        "path",
+        {
+          d: "M9.2467 3C9.65074 6.17905 12.5275 9.00324 15.6934 9.5C12.5275 9.99676 9.65074 12.8209 9.24669 16C8.84265 12.8209 6.16589 9.99676 3 9.5C6.16589 9.00324 8.84265 6.19877 9.2467 3.01971M17.3 20L17.2329 19.5924C17.0448 18.4504 16.1496 17.5552 15.0076 17.3671L14.6 17.3L15.0076 17.2329C16.1496 17.0448 17.0448 16.1496 17.2329 15.0076L17.3 14.6L17.3671 15.0076C17.5552 16.1496 18.4504 17.0448 19.5924 17.2329L20 17.3L19.5924 17.3671C18.4504 17.5552 17.5552 18.4504 17.3671 19.5924L17.3 20Z",
+          stroke: "currentColor",
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          fill: "none"
+        }
+      )
+    }
+  );
+}
+
+// src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
+import { Fragment as Fragment3, jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
 var AISelector = (props) => {
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
   const context = useContext4(NovelContext);
-  const items = [
+  const defaultItems = [
     {
       name: "Improve writing",
       command: "Improve writing",
@@ -5971,7 +5998,10 @@ var AISelector = (props) => {
       name: "Fix repetitive",
       command: "Identify and fix repetitive words or phrases in the content",
       icon: Scissors
-    },
+    }
+  ];
+  const items = [
+    ...defaultItems,
     ...subMenuItems || []
   ];
   const inputRef = useRef9(null);
@@ -6032,7 +6062,7 @@ var AISelector = (props) => {
     headers: __spreadValues({}, headers || {})
   });
   return /* @__PURE__ */ jsxs8("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
-    /* @__PURE__ */ jsx8("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ jsxs8(
+    /* @__PURE__ */ jsx9("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ jsxs8(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -6044,14 +6074,15 @@ var AISelector = (props) => {
           editor.chain().blur().run();
         },
         children: [
-          /* @__PURE__ */ jsx8(Bot, { className: "novel-h-5 novel-w-5" }),
-          isLoading ? /* @__PURE__ */ jsx8(
+          /* @__PURE__ */ jsx9(Magic1, { className: "novel-h-5 novel-w-5" }),
+          " Ask AI",
+          isLoading ? /* @__PURE__ */ jsx9(
             PauseCircle2,
             {
               onClick: stop2,
               className: "novel-h-4 hover:novel-text-stone-500 cursor-pointer novel-w-4 novel-text-stone-300"
             }
-          ) : /* @__PURE__ */ jsx8(ChevronDown4, { className: "novel-h-4 novel-w-4" })
+          ) : /* @__PURE__ */ jsx9(ChevronDown4, { className: "novel-h-4 novel-w-4" })
         ]
       }
     ) }),
@@ -6066,7 +6097,7 @@ var AISelector = (props) => {
           },
           className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
           children: [
-            /* @__PURE__ */ jsx8(
+            /* @__PURE__ */ jsx9(
               "input",
               {
                 ref: inputRef,
@@ -6076,11 +6107,11 @@ var AISelector = (props) => {
                 defaultValue: editor.getAttributes("link").href || ""
               }
             ),
-            /* @__PURE__ */ jsx8("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx8(Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
+            /* @__PURE__ */ jsx9("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx9(Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
         }
       ),
-      hasSelection ? /* @__PURE__ */ jsx8(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx8(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx8(
+      hasSelection ? /* @__PURE__ */ jsx9(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx9(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx9(
         Le.Item,
         {
           onSelect: () => {
@@ -6094,8 +6125,8 @@ var AISelector = (props) => {
           },
           className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
           children: /* @__PURE__ */ jsxs8("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
-            /* @__PURE__ */ jsx8(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
-            /* @__PURE__ */ jsx8("span", { children: item.name })
+            /* @__PURE__ */ jsx9(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
+            /* @__PURE__ */ jsx9("span", { children: item.name })
           ] })
         },
         index2
@@ -6108,7 +6139,7 @@ var AISelector = (props) => {
 import { Languages, PauseCircle as PauseCircle3 } from "lucide-react";
 import { useContext as useContext5, useEffect as useEffect11, useRef as useRef10 } from "react";
 import { useCompletion as useCompletion3 } from "ai/react";
-import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx10, jsxs as jsxs9 } from "react/jsx-runtime";
 var TranslateSelector = ({
   editor,
   isOpen,
@@ -6185,20 +6216,20 @@ var TranslateSelector = ({
     setIsOpen(false);
   });
   return /* @__PURE__ */ jsxs9("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
-    /* @__PURE__ */ jsx9("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
+    /* @__PURE__ */ jsx10("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ jsx10("button", { className: "p-2", children: /* @__PURE__ */ jsx10(
       PauseCircle3,
       {
         onClick: stop2,
         className: "novel-h-5 hover:novel-text-stone-500 cursor-pointer novel-w-4 novel-text-stone-300"
       }
-    ) }) : /* @__PURE__ */ jsx9("button", { className: "p-2", children: /* @__PURE__ */ jsx9(
+    ) }) : /* @__PURE__ */ jsx10("button", { className: "p-2", children: /* @__PURE__ */ jsx10(
       Languages,
       {
         onClick: () => setIsOpen(!isOpen),
         className: "novel-h-5 novel-w-4"
       }
     ) }) }),
-    isOpen && /* @__PURE__ */ jsx9(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx9(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx9(
+    isOpen && /* @__PURE__ */ jsx10(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx10(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ jsx10(
       Le.Item,
       {
         onSelect: () => {
@@ -6211,7 +6242,7 @@ var TranslateSelector = ({
           }
         },
         className: "novel-flex novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
-        children: /* @__PURE__ */ jsx9("span", { children: item.name })
+        children: /* @__PURE__ */ jsx10("span", { children: item.name })
       },
       index2
     )) }) })
@@ -6219,7 +6250,7 @@ var TranslateSelector = ({
 };
 
 // src/ui/editor/bubble-menu/index.tsx
-import { Fragment as Fragment4, jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
+import { Fragment as Fragment4, jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
   const { additionalData } = useContext6(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
@@ -6292,12 +6323,12 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = useState8(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = useState8(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState8(false);
-  return /* @__PURE__ */ jsx10(
+  return /* @__PURE__ */ jsx11(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && /* @__PURE__ */ jsxs10(Fragment4, { children: [
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           AISelector,
           {
             editor: props.editor,
@@ -6314,7 +6345,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           NodeSelector,
           {
             editor: props.editor,
@@ -6329,7 +6360,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        props.editor.isActive("table") && /* @__PURE__ */ jsx10(
+        props.editor.isActive("table") && /* @__PURE__ */ jsx11(
           TableSelector,
           {
             editor: props.editor,
@@ -6344,7 +6375,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           LinkSelector,
           {
             editor: props.editor,
@@ -6359,13 +6390,13 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ jsx10("div", { className: "novel-flex", children: items.map((item, index2) => /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11("div", { className: "novel-flex", children: items.map((item, index2) => /* @__PURE__ */ jsx11(
           "button",
           {
             onClick: item.command,
             className: "novel-p-2 novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
             type: "button",
-            children: /* @__PURE__ */ jsx10(
+            children: /* @__PURE__ */ jsx11(
               item.icon,
               {
                 className: cn("novel-h-4 novel-w-4", {
@@ -6376,7 +6407,7 @@ var EditorBubbleMenu = (props) => {
           },
           index2
         )) }),
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           ColorSelector,
           {
             editor: props.editor,
@@ -6391,7 +6422,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ jsx10(
+        /* @__PURE__ */ jsx11(
           TranslateSelector,
           {
             editor: props.editor,
@@ -6408,7 +6439,7 @@ var EditorBubbleMenu = (props) => {
         ),
         CustomMenuItems.length ? CustomMenuItems.map((item, index2) => (
           //  React.cloneElement(item, { key: index })
-          /* @__PURE__ */ jsx10(
+          /* @__PURE__ */ jsx11(
             item.component,
             {
               editor: props.editor,
@@ -21050,7 +21081,7 @@ var Moveable = /* @__PURE__ */ function(_super) {
 }(InitialMoveable);
 
 // src/ui/editor/extensions/image-resizer.tsx
-import { Fragment as Fragment5, jsx as jsx11 } from "react/jsx-runtime";
+import { Fragment as Fragment5, jsx as jsx12 } from "react/jsx-runtime";
 var ImageResizer = ({ editor }) => {
   const updateMediaSize = () => {
     const imageInfo = document.querySelector(
@@ -21066,7 +21097,7 @@ var ImageResizer = ({ editor }) => {
       editor.commands.setNodeSelection(selection.from);
     }
   };
-  return /* @__PURE__ */ jsx11(Fragment5, { children: /* @__PURE__ */ jsx11(
+  return /* @__PURE__ */ jsx12(Fragment5, { children: /* @__PURE__ */ jsx12(
     Moveable,
     {
       target: document.querySelector(".ProseMirror-selectednode"),
@@ -21113,12 +21144,12 @@ styleInject('.tiptap pre {\n  background: #000;\n  border-radius: 0.5rem;\n  col
 styleInject(".loading {\n  display: inline-flex;\n  align-items: center;\n}\n.loading .spacer {\n  margin-right: 2px;\n}\n.loading span {\n  animation-name: blink;\n  animation-duration: 1.4s;\n  animation-iteration-count: infinite;\n  animation-fill-mode: both;\n  width: 5px;\n  height: 5px;\n  border-radius: 50%;\n  display: inline-block;\n  margin: 0 1px;\n}\n.loading span:nth-of-type(2) {\n  animation-delay: 0.2s;\n}\n.loading span:nth-of-type(3) {\n  animation-delay: 0.4s;\n}\n@keyframes blink {\n  0% {\n    opacity: 0.2;\n  }\n  20% {\n    opacity: 1;\n  }\n  100% {\n    opacity: 0.2;\n  }\n}\n");
 
 // src/ui/icons/loading-dots/index.tsx
-import { jsx as jsx12, jsxs as jsxs11 } from "react/jsx-runtime";
+import { jsx as jsx13, jsxs as jsxs11 } from "react/jsx-runtime";
 var LoadingDots = ({ color: color2 = "#000" }) => {
   return /* @__PURE__ */ jsxs11("span", { className: "loading", children: [
-    /* @__PURE__ */ jsx12("span", { style: { backgroundColor: color2 } }),
-    /* @__PURE__ */ jsx12("span", { style: { backgroundColor: color2 } }),
-    /* @__PURE__ */ jsx12("span", { style: { backgroundColor: color2 } })
+    /* @__PURE__ */ jsx13("span", { style: { backgroundColor: color2 } }),
+    /* @__PURE__ */ jsx13("span", { style: { backgroundColor: color2 } }),
+    /* @__PURE__ */ jsx13("span", { style: { backgroundColor: color2 } })
   ] });
 };
 var loading_dots_default = LoadingDots;
@@ -21129,7 +21160,7 @@ import { X, Clipboard, Replace } from "lucide-react";
 import { useContext as useContext7, useEffect as useEffect14, useState as useState9 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
-import { jsx as jsx13, jsxs as jsxs12 } from "react/jsx-runtime";
+import { jsx as jsx14, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState9(false);
   const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
@@ -21158,26 +21189,26 @@ var AIEditorBubble = ({ editor }) => {
       });
     }
   };
-  return isShow || isLoading ? /* @__PURE__ */ jsx13("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
+  return isShow || isLoading ? /* @__PURE__ */ jsx14("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs12("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ jsx13(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
-      isLoading && /* @__PURE__ */ jsx13("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx13(loading_dots_default, { color: "#9e9e9e" }) }),
+      /* @__PURE__ */ jsx14(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
+      isLoading && /* @__PURE__ */ jsx14("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx14(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ jsxs12("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
-        /* @__PURE__ */ jsx13("button", { children: /* @__PURE__ */ jsx13(
+        /* @__PURE__ */ jsx14("button", { children: /* @__PURE__ */ jsx14(
           Replace,
           {
             onClick: handleReplace,
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ jsx13("button", { children: /* @__PURE__ */ jsx13(
+        /* @__PURE__ */ jsx14("button", { children: /* @__PURE__ */ jsx14(
           Clipboard,
           {
             onClick: handleCopy,
             className: "novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ jsx13(
+        /* @__PURE__ */ jsx14(
           X,
           {
             onClick: () => {
@@ -21189,19 +21220,19 @@ var AIEditorBubble = ({ editor }) => {
         )
       ] })
     ] }),
-    completion.length > 0 && /* @__PURE__ */ jsx13(ReactMarkdown, { className: "novel-text-sm mt-2", children: completion })
+    completion.length > 0 && /* @__PURE__ */ jsx14(ReactMarkdown, { className: "novel-text-sm mt-2", children: completion })
   ] }) }) : null;
 };
 var ai_edit_bubble_default = AIEditorBubble;
 
 // src/ui/editor/bubble-menu/ai-selectors/ai-loading.tsx
 import { PauseCircle as PauseCircle4 } from "lucide-react";
-import { jsx as jsx14, jsxs as jsxs13 } from "react/jsx-runtime";
+import { jsx as jsx15, jsxs as jsxs13 } from "react/jsx-runtime";
 function AIGeneratingLoading({ stop: stop2 }) {
   return /* @__PURE__ */ jsxs13("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
-    /* @__PURE__ */ jsx14(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
-    /* @__PURE__ */ jsx14("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
-    /* @__PURE__ */ jsx14(
+    /* @__PURE__ */ jsx15(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
+    /* @__PURE__ */ jsx15("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
+    /* @__PURE__ */ jsx15(
       PauseCircle4,
       {
         onClick: stop2,
@@ -21217,7 +21248,7 @@ import { X as X2, Clipboard as Clipboard2, Replace as Replace2 } from "lucide-re
 import { useContext as useContext8, useEffect as useEffect15, useState as useState10 } from "react";
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
-import { jsx as jsx15, jsxs as jsxs14 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs14 } from "react/jsx-runtime";
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
   const { completionApi, additionalData: { body, headers } } = useContext8(NovelContext);
@@ -21246,26 +21277,26 @@ var AITranslateBubble = ({ editor }) => {
       });
     }
   };
-  return isShow || isLoading ? /* @__PURE__ */ jsx15("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs14("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
+  return isShow || isLoading ? /* @__PURE__ */ jsx16("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs14("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs14("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ jsx15(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
-      isLoading && /* @__PURE__ */ jsx15("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx15(loading_dots_default, { color: "#9e9e9e" }) }),
+      /* @__PURE__ */ jsx16(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
+      isLoading && /* @__PURE__ */ jsx16("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx16(loading_dots_default, { color: "#9e9e9e" }) }),
       /* @__PURE__ */ jsxs14("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
-        /* @__PURE__ */ jsx15("button", { children: /* @__PURE__ */ jsx15(
+        /* @__PURE__ */ jsx16("button", { children: /* @__PURE__ */ jsx16(
           Replace2,
           {
             onClick: handleReplace,
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ jsx15("button", { children: /* @__PURE__ */ jsx15(
+        /* @__PURE__ */ jsx16("button", { children: /* @__PURE__ */ jsx16(
           Clipboard2,
           {
             onClick: handleCopy,
             className: "novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ jsx15(
+        /* @__PURE__ */ jsx16(
           X2,
           {
             onClick: () => {
@@ -21277,7 +21308,7 @@ var AITranslateBubble = ({ editor }) => {
         )
       ] })
     ] }),
-    completion.length > 0 && /* @__PURE__ */ jsx15(ReactMarkdown2, { className: "novel-text-sm mt-2", children: completion })
+    completion.length > 0 && /* @__PURE__ */ jsx16(ReactMarkdown2, { className: "novel-text-sm mt-2", children: completion })
   ] }) }) : null;
 };
 var ai_translate_bubble_default = AITranslateBubble;
@@ -21297,32 +21328,6 @@ import {
   Trash2 as Trash22,
   MessageCircle
 } from "lucide-react";
-
-// src/ui/icons/magic-1.tsx
-import { jsx as jsx16 } from "react/jsx-runtime";
-function Magic1({ className }) {
-  return /* @__PURE__ */ jsx16(
-    "svg",
-    {
-      xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 24 24",
-      width: "24",
-      height: "24",
-      className,
-      children: /* @__PURE__ */ jsx16(
-        "path",
-        {
-          d: "M9.2467 3C9.65074 6.17905 12.5275 9.00324 15.6934 9.5C12.5275 9.99676 9.65074 12.8209 9.24669 16C8.84265 12.8209 6.16589 9.99676 3 9.5C6.16589 9.00324 8.84265 6.19877 9.2467 3.01971M17.3 20L17.2329 19.5924C17.0448 18.4504 16.1496 17.5552 15.0076 17.3671L14.6 17.3L15.0076 17.2329C16.1496 17.0448 17.0448 16.1496 17.2329 15.0076L17.3 14.6L17.3671 15.0076C17.5552 16.1496 18.4504 17.0448 19.5924 17.2329L20 17.3L19.5924 17.3671C18.4504 17.5552 17.5552 18.4504 17.3671 19.5924L17.3 20Z",
-          stroke: "currentColor",
-          strokeWidth: "2",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          fill: "none"
-        }
-      )
-    }
-  );
-}
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/index.mjs
 import * as React11 from "react";

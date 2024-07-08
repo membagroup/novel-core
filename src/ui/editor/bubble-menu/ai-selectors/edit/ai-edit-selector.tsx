@@ -26,6 +26,7 @@ import { NovelContext } from "../../../provider";
 import { toast } from "sonner";
 import { AIMenuItem } from "@/ui/editor/interfaces";
 import { useClickOutside } from "@/ui/editor/hooks";
+import Magic1 from "@/ui/icons/magic-1";
 
 interface AISelectorProps {
   editor: Editor;
@@ -39,7 +40,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
   const context = useContext(NovelContext);
 
-  const items = [
+  const defaultItems = [
     {
       name: "Improve writing",
       command: "Improve writing",
@@ -87,6 +88,10 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
       command: "Identify and fix repetitive words or phrases in the content",
       icon: Scissors,
     },
+  ];
+
+  const items = [
+    ...defaultItems,
     ...(subMenuItems || []),
   ];
 
@@ -164,7 +169,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
             setIsOpen(!isOpen);
             editor.chain().blur().run();
           }}>
-          <Bot className="novel-h-5 novel-w-5" />
+          <Magic1 className="novel-h-5 novel-w-5" /> Ask AI
           {isLoading ? (
             <PauseCircle
               onClick={stop}
