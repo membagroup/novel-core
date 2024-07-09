@@ -3056,7 +3056,7 @@ var NodeSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Popover.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Popover.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
       Popover.Trigger,
       {
@@ -3227,7 +3227,7 @@ var ColorSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
       Popover2.Trigger,
       {
@@ -3365,7 +3365,7 @@ var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-relative", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
       "button",
       {
@@ -3504,7 +3504,7 @@ var TableSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
       Popover3.Trigger,
       {
@@ -5866,11 +5866,39 @@ var xe = { position: "absolute", width: "1px", height: "1px", padding: "0", marg
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 var import_react27 = require("ai/react");
+
+// src/ui/icons/magic-1.tsx
 var import_jsx_runtime8 = require("react/jsx-runtime");
+function Magic1({ className }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      viewBox: "0 0 24 24",
+      width: "24",
+      height: "24",
+      className,
+      children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "path",
+        {
+          d: "M9.2467 3C9.65074 6.17905 12.5275 9.00324 15.6934 9.5C12.5275 9.99676 9.65074 12.8209 9.24669 16C8.84265 12.8209 6.16589 9.99676 3 9.5C6.16589 9.00324 8.84265 6.19877 9.2467 3.01971M17.3 20L17.2329 19.5924C17.0448 18.4504 16.1496 17.5552 15.0076 17.3671L14.6 17.3L15.0076 17.2329C16.1496 17.0448 17.0448 16.1496 17.2329 15.0076L17.3 14.6L17.3671 15.0076C17.5552 16.1496 18.4504 17.0448 19.5924 17.2329L20 17.3L19.5924 17.3671C18.4504 17.5552 17.5552 18.4504 17.3671 19.5924L17.3 20Z",
+          stroke: "currentColor",
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          fill: "none"
+        }
+      )
+    }
+  );
+}
+
+// src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
+var import_jsx_runtime9 = require("react/jsx-runtime");
 var AISelector = (props) => {
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
   const context = (0, import_react26.useContext)(NovelContext);
-  const items = [
+  const defaultItems = [
     {
       name: "Improve writing",
       command: "Improve writing",
@@ -5915,7 +5943,10 @@ var AISelector = (props) => {
       name: "Fix repetitive",
       command: "Identify and fix repetitive words or phrases in the content",
       icon: import_lucide_react7.Scissors
-    },
+    }
+  ];
+  const items = [
+    ...defaultItems,
     ...subMenuItems || []
   ];
   const inputRef = (0, import_react26.useRef)(null);
@@ -5975,8 +6006,8 @@ var AISelector = (props) => {
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
       "button",
       {
         className: "novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2",
@@ -5988,19 +6019,20 @@ var AISelector = (props) => {
           editor.chain().blur().run();
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Bot, { className: "novel-h-5 novel-w-5" }),
-          isLoading ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Magic1, { className: "novel-h-5 novel-w-5" }),
+          " AI",
+          isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
             import_lucide_react7.PauseCircle,
             {
               onClick: stop2,
               className: "novel-h-4 hover:novel-text-stone-500 cursor-pointer novel-w-4 novel-text-stone-300"
             }
-          ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.ChevronDown, { className: "novel-h-4 novel-w-4" })
+          ) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react7.ChevronDown, { className: "novel-h-4 novel-w-4" })
         ]
       }
     ) }),
-    isOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    isOpen && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
         "form",
         {
           onSubmit: (e) => {
@@ -6010,7 +6042,7 @@ var AISelector = (props) => {
           },
           className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
               "input",
               {
                 ref: inputRef,
@@ -6020,11 +6052,11 @@ var AISelector = (props) => {
                 defaultValue: editor.getAttributes("link").href || ""
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
         }
       ),
-      hasSelection ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      hasSelection ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         Le.Item,
         {
           onSelect: () => {
@@ -6037,9 +6069,9 @@ var AISelector = (props) => {
             }
           },
           className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
-          children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: item.name })
+          children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: item.name })
           ] })
         },
         index2
@@ -6052,7 +6084,7 @@ var AISelector = (props) => {
 var import_lucide_react8 = require("lucide-react");
 var import_react28 = require("react");
 var import_react29 = require("ai/react");
-var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_jsx_runtime10 = require("react/jsx-runtime");
 var TranslateSelector = ({
   editor,
   isOpen,
@@ -6128,21 +6160,21 @@ var TranslateSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
       import_lucide_react8.PauseCircle,
       {
         onClick: stop2,
         className: "novel-h-5 hover:novel-text-stone-500 cursor-pointer novel-w-4 novel-text-stone-300"
       }
-    ) }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    ) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
       import_lucide_react8.Languages,
       {
         onClick: () => setIsOpen(!isOpen),
         className: "novel-h-5 novel-w-4"
       }
     ) }) }),
-    isOpen && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    isOpen && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-28 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
       Le.Item,
       {
         onSelect: () => {
@@ -6155,7 +6187,7 @@ var TranslateSelector = ({
           }
         },
         className: "novel-flex novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
-        children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: item.name })
+        children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: item.name })
       },
       index2
     )) }) })
@@ -6163,7 +6195,7 @@ var TranslateSelector = ({
 };
 
 // src/ui/editor/bubble-menu/index.tsx
-var import_jsx_runtime10 = require("react/jsx-runtime");
+var import_jsx_runtime11 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
   const { additionalData } = (0, import_react31.useContext)(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
@@ -6236,12 +6268,12 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react31.useState)(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react31.useState)(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react31.useState)(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
     import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           AISelector,
           {
             editor: props.editor,
@@ -6258,7 +6290,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           NodeSelector,
           {
             editor: props.editor,
@@ -6273,7 +6305,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        props.editor.isActive("table") && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        props.editor.isActive("table") && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           TableSelector,
           {
             editor: props.editor,
@@ -6288,7 +6320,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           LinkSelector,
           {
             editor: props.editor,
@@ -6303,13 +6335,13 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "novel-flex", children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "novel-flex", children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           "button",
           {
             onClick: item.command,
             className: "novel-p-2 novel-text-stone-600 hover:novel-bg-stone-100 active:novel-bg-stone-200",
             type: "button",
-            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
               item.icon,
               {
                 className: cn("novel-h-4 novel-w-4", {
@@ -6320,7 +6352,7 @@ var EditorBubbleMenu = (props) => {
           },
           index2
         )) }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           ColorSelector,
           {
             editor: props.editor,
@@ -6335,11 +6367,11 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        hasSelection ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           TranslateSelector,
           {
             editor: props.editor,
-            isOpen: hasSelection && isTranslateSelectorOpen,
+            isOpen: isTranslateSelectorOpen,
             setIsOpen: () => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -6349,10 +6381,10 @@ var EditorBubbleMenu = (props) => {
               setIsLinkSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         CustomMenuItems.length ? CustomMenuItems.map((item, index2) => (
           //  React.cloneElement(item, { key: index })
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
             item.component,
             {
               editor: props.editor,
@@ -20994,7 +21026,7 @@ var Moveable = /* @__PURE__ */ function(_super) {
 }(InitialMoveable);
 
 // src/ui/editor/extensions/image-resizer.tsx
-var import_jsx_runtime11 = require("react/jsx-runtime");
+var import_jsx_runtime12 = require("react/jsx-runtime");
 var ImageResizer = ({ editor }) => {
   const updateMediaSize = () => {
     const imageInfo = document.querySelector(
@@ -21010,7 +21042,7 @@ var ImageResizer = ({ editor }) => {
       editor.commands.setNodeSelection(selection.from);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_jsx_runtime11.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_jsx_runtime12.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
     Moveable,
     {
       target: document.querySelector(".ProseMirror-selectednode"),
@@ -21057,12 +21089,12 @@ styleInject('.tiptap pre {\n  background: #000;\n  border-radius: 0.5rem;\n  col
 styleInject(".loading {\n  display: inline-flex;\n  align-items: center;\n}\n.loading .spacer {\n  margin-right: 2px;\n}\n.loading span {\n  animation-name: blink;\n  animation-duration: 1.4s;\n  animation-iteration-count: infinite;\n  animation-fill-mode: both;\n  width: 5px;\n  height: 5px;\n  border-radius: 50%;\n  display: inline-block;\n  margin: 0 1px;\n}\n.loading span:nth-of-type(2) {\n  animation-delay: 0.2s;\n}\n.loading span:nth-of-type(3) {\n  animation-delay: 0.4s;\n}\n@keyframes blink {\n  0% {\n    opacity: 0.2;\n  }\n  20% {\n    opacity: 1;\n  }\n  100% {\n    opacity: 0.2;\n  }\n}\n");
 
 // src/ui/icons/loading-dots/index.tsx
-var import_jsx_runtime12 = require("react/jsx-runtime");
+var import_jsx_runtime13 = require("react/jsx-runtime");
 var LoadingDots = ({ color: color2 = "#000" }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "loading", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { backgroundColor: color2 } }),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { backgroundColor: color2 } }),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { backgroundColor: color2 } })
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { className: "loading", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { backgroundColor: color2 } }),
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { backgroundColor: color2 } }),
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { backgroundColor: color2 } })
   ] });
 };
 var loading_dots_default = LoadingDots;
@@ -21073,7 +21105,7 @@ var import_lucide_react10 = require("lucide-react");
 var import_react35 = require("react");
 var import_sonner3 = require("sonner");
 var import_react_markdown = __toESM(require("react-markdown"));
-var import_jsx_runtime13 = require("react/jsx-runtime");
+var import_jsx_runtime14 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react35.useState)(false);
   const { completionApi, additionalData: { body, headers } } = (0, import_react35.useContext)(NovelContext);
@@ -21102,26 +21134,26 @@ var AIEditorBubble = ({ editor }) => {
       });
     }
   };
-  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
-      isLoading && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
+      isLoading && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           import_lucide_react10.Replace,
           {
             onClick: handleReplace,
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           import_lucide_react10.Clipboard,
           {
             onClick: handleCopy,
             className: "novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           import_lucide_react10.X,
           {
             onClick: () => {
@@ -21133,19 +21165,19 @@ var AIEditorBubble = ({ editor }) => {
         )
       ] })
     ] }),
-    completion.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react_markdown.default, { className: "novel-text-sm mt-2", children: completion })
+    completion.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react_markdown.default, { className: "novel-text-sm mt-2", children: completion })
   ] }) }) : null;
 };
 var ai_edit_bubble_default = AIEditorBubble;
 
 // src/ui/editor/bubble-menu/ai-selectors/ai-loading.tsx
 var import_lucide_react11 = require("lucide-react");
-var import_jsx_runtime14 = require("react/jsx-runtime");
+var import_jsx_runtime15 = require("react/jsx-runtime");
 function AIGeneratingLoading({ stop: stop2 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
       import_lucide_react11.PauseCircle,
       {
         onClick: stop2,
@@ -21161,7 +21193,7 @@ var import_lucide_react12 = require("lucide-react");
 var import_react37 = require("react");
 var import_sonner4 = require("sonner");
 var import_react_markdown2 = __toESM(require("react-markdown"));
-var import_jsx_runtime15 = require("react/jsx-runtime");
+var import_jsx_runtime16 = require("react/jsx-runtime");
 var AITranslateBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react37.useState)(false);
   const { completionApi, additionalData: { body, headers } } = (0, import_react37.useContext)(NovelContext);
@@ -21190,26 +21222,26 @@ var AITranslateBubble = ({ editor }) => {
       });
     }
   };
-  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
-      isLoading && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "novel-fixed novel-z-[10001] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
+      isLoading && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
           import_lucide_react12.Replace,
           {
             onClick: handleReplace,
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
           import_lucide_react12.Clipboard,
           {
             onClick: handleCopy,
             className: "novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
           import_lucide_react12.X,
           {
             onClick: () => {
@@ -21221,7 +21253,7 @@ var AITranslateBubble = ({ editor }) => {
         )
       ] })
     ] }),
-    completion.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_react_markdown2.default, { className: "novel-text-sm mt-2", children: completion })
+    completion.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_react_markdown2.default, { className: "novel-text-sm mt-2", children: completion })
   ] }) }) : null;
 };
 var ai_translate_bubble_default = AITranslateBubble;
@@ -21230,32 +21262,6 @@ var ai_translate_bubble_default = AITranslateBubble;
 var import_react56 = require("react");
 var import_react57 = require("ai/react");
 var import_lucide_react13 = require("lucide-react");
-
-// src/ui/icons/magic-1.tsx
-var import_jsx_runtime16 = require("react/jsx-runtime");
-function Magic1({ className }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
-    "svg",
-    {
-      xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 24 24",
-      width: "24",
-      height: "24",
-      className,
-      children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
-        "path",
-        {
-          d: "M9.2467 3C9.65074 6.17905 12.5275 9.00324 15.6934 9.5C12.5275 9.99676 9.65074 12.8209 9.24669 16C8.84265 12.8209 6.16589 9.99676 3 9.5C6.16589 9.00324 8.84265 6.19877 9.2467 3.01971M17.3 20L17.2329 19.5924C17.0448 18.4504 16.1496 17.5552 15.0076 17.3671L14.6 17.3L15.0076 17.2329C16.1496 17.0448 17.0448 16.1496 17.2329 15.0076L17.3 14.6L17.3671 15.0076C17.5552 16.1496 18.4504 17.0448 19.5924 17.2329L20 17.3L19.5924 17.3671C18.4504 17.5552 17.5552 18.4504 17.3671 19.5924L17.3 20Z",
-          stroke: "currentColor",
-          strokeWidth: "2",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          fill: "none"
-        }
-      )
-    }
-  );
-}
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/index.mjs
 var React11 = __toESM(require("react"), 1);
