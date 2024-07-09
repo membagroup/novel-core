@@ -169,7 +169,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
             setIsOpen(!isOpen);
             editor.chain().blur().run();
           }}>
-          <Magic1 className="novel-h-5 novel-w-5" /> Ask AI
+          <Magic1 className="novel-h-5 novel-w-5" /> AI
           {isLoading ? (
             <PauseCircle
               onClick={stop}

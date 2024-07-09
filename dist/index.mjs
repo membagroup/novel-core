@@ -6075,7 +6075,7 @@ var AISelector = (props) => {
         },
         children: [
           /* @__PURE__ */ jsx9(Magic1, { className: "novel-h-5 novel-w-5" }),
-          " Ask AI",
+          " AI",
           isLoading ? /* @__PURE__ */ jsx9(
             PauseCircle2,
             {
@@ -6422,11 +6422,11 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ jsx11(
+        hasSelection ? /* @__PURE__ */ jsx11(
           TranslateSelector,
           {
             editor: props.editor,
-            isOpen: hasSelection && isTranslateSelectorOpen,
+            isOpen: isTranslateSelectorOpen,
             setIsOpen: () => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -6436,7 +6436,7 @@ var EditorBubbleMenu = (props) => {
               setIsLinkSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         CustomMenuItems.length ? CustomMenuItems.map((item, index2) => (
           //  React.cloneElement(item, { key: index })
           /* @__PURE__ */ jsx11(

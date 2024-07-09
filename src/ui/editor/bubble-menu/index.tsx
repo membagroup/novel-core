@@ -191,9 +191,9 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               setIsTranslateSelectorOpen(false);
             }}
           />
-          <TranslateSelector
+          {hasSelection ? <TranslateSelector
             editor={props.editor}
-            isOpen={hasSelection && isTranslateSelectorOpen}
+            isOpen={isTranslateSelectorOpen}
             setIsOpen={() => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -202,7 +202,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               setIsTableSelectorOpen(false);
               setIsLinkSelectorOpen(false);
             }}
-          />
+          /> : null}
           {CustomMenuItems.length ?
             CustomMenuItems.map((item, index) => (
               //  React.cloneElement(item, { key: index })

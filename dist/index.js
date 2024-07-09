@@ -6020,7 +6020,7 @@ var AISelector = (props) => {
         },
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Magic1, { className: "novel-h-5 novel-w-5" }),
-          " Ask AI",
+          " AI",
           isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
             import_lucide_react7.PauseCircle,
             {
@@ -6367,11 +6367,11 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        hasSelection ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           TranslateSelector,
           {
             editor: props.editor,
-            isOpen: hasSelection && isTranslateSelectorOpen,
+            isOpen: isTranslateSelectorOpen,
             setIsOpen: () => {
               setIsTranslateSelectorOpen(!isTranslateSelectorOpen);
               setIsAISelectorOpen(false);
@@ -6381,7 +6381,7 @@ var EditorBubbleMenu = (props) => {
               setIsLinkSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         CustomMenuItems.length ? CustomMenuItems.map((item, index2) => (
           //  React.cloneElement(item, { key: index })
           /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
