@@ -3056,7 +3056,7 @@ var NodeSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Popover.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(Popover.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
       Popover.Trigger,
       {
@@ -3227,7 +3227,7 @@ var ColorSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Popover2.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
       Popover2.Trigger,
       {
@@ -3365,7 +3365,7 @@ var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-relative", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
       "button",
       {
@@ -3504,7 +3504,7 @@ var TableSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Popover3.Root, { open: isOpen, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
       Popover3.Trigger,
       {
@@ -6006,7 +6006,7 @@ var AISelector = (props) => {
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {})
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
       "button",
       {
@@ -6160,7 +6160,7 @@ var TranslateSelector = ({
       return;
     setIsOpen(false);
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "novel-relative novel-h-full", ref: ref2, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "novel-flex", ref: ref2, children: [
     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: `novel-flex novel-h-full novel-items-center novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? "novel-text-purple-500" : "novel-text-stone-600"}`, children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "p-2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
       import_lucide_react8.PauseCircle,
       {

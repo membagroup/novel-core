@@ -158,7 +158,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   });
 
   return (
-    <div className="novel-relative novel-h-full" ref={ref}>
+    <div className="novel-flex" ref={ref}>
       <div className={`novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}>
         <button
           className="novel-p-2 novel-flex novel-h-full novel-items-center novel-gap-2"
