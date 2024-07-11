@@ -74,21 +74,21 @@ export function CollaborationInfo({
               {usersList.length} user{usersList.length === 1 ? "" : "s"}{" "}online
             </p>
 
-            {usersList?.map((i: User) => (
+            {usersList?.map((u: User, idx: number) => (
               <div
-                key={i.clientId}
+                key={idx}
                 className="novel-truncate novel-flex novel-items-center novel-gap-2 novel-cursor-pointer hover:novel-opacity-80 novel-font-mono novel-pt-1 novel-text-xs novel-text-slate-500">
                 <i
                   style={{
                     width: "8px",
                     height: "8px",
                     borderRadius: "50%",
-                    backgroundColor: i.color,
+                    backgroundColor: u.color,
                     display: "block",
                     transition: "all 0.5s",
                   }}
                 />
-                <span>{`${i?.name} ${localStorage?.getItem('userId') === i.clientId ? '(you)' : ''}`}</span>
+                <span>{`${u?.name} ${localStorage?.getItem('userId') === u.clientId ? '(you)' : ''}`}</span>
               </div>
             ))}
           </div>

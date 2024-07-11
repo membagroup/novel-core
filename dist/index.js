@@ -28298,7 +28298,7 @@ function CollaborationInfo({
         " ",
         "online"
       ] }),
-      usersList == null ? void 0 : usersList.map((i) => /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
+      usersList == null ? void 0 : usersList.map((u, idx) => /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
         "div",
         {
           className: "novel-truncate novel-flex novel-items-center novel-gap-2 novel-cursor-pointer hover:novel-opacity-80 novel-font-mono novel-pt-1 novel-text-xs novel-text-slate-500",
@@ -28310,16 +28310,16 @@ function CollaborationInfo({
                   width: "8px",
                   height: "8px",
                   borderRadius: "50%",
-                  backgroundColor: i.color,
+                  backgroundColor: u.color,
                   display: "block",
                   transition: "all 0.5s"
                 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: `${i == null ? void 0 : i.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === i.clientId ? "(you)" : ""}` })
+            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: `${u == null ? void 0 : u.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === u.clientId ? "(you)" : ""}` })
           ]
         },
-        i.clientId
+        idx
       ))
     ] })
   ] }) : /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-sm novel-animate-pulse novel-text-slate-500", children: "connecting..." }) });
