@@ -3408,7 +3408,7 @@ var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
             {
               ref: inputRef,
               type: "text",
-              placeholder: "Paste a link",
+              placeholder: "Paste a link to embed in the document",
               className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
               defaultValue: editor.getAttributes("link").href || ""
             }
