@@ -267,7 +267,7 @@ export default function Editor({
         <EditorContent editor={editor} />
         {(additionalData?.showGenLoader || (isLoadingOutside && isLoading)) &&
           (
-            <div className="novel-fixed novel-bottom-3 novel-mx-auto">
+            <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
               <AIGeneratingLoading stop={stop} />
             </div>
           )}

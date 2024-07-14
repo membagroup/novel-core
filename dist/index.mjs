@@ -28538,7 +28538,7 @@ function Editor2({
         editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
         /* @__PURE__ */ jsx19(EditorContent, { editor }),
-        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
+        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
         bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
       ]
     }
