@@ -6198,6 +6198,7 @@ var TranslateSelector = ({
 var import_jsx_runtime11 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
   const { additionalData } = (0, import_react31.useContext)(NovelContext);
+  const [showBubbleMenu, setShowBubbleMenu] = (0, import_react31.useState)(additionalData == null ? void 0 : additionalData.menuOpen);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -6242,10 +6243,7 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || (0, import_react30.isNodeSelection)(selection)) {
         return false;
       }
-      if (!empty) {
-        return true;
-      }
-      return true;
+      return showBubbleMenu !== void 0 ? showBubbleMenu : true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6261,6 +6259,9 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
+  (0, import_react31.useEffect)(() => {
+    setShowBubbleMenu(additionalData == null ? void 0 : additionalData.menuOpen);
+  }, [additionalData == null ? void 0 : additionalData.menuOpen]);
   const [hasSelection, setHasSection] = (0, import_react31.useState)(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = (0, import_react31.useState)(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = (0, import_react31.useState)(false);

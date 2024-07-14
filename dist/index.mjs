@@ -2952,7 +2952,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useContext as useContext6, useState as useState8 } from "react";
+import { useContext as useContext6, useEffect as useEffect12, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -6253,6 +6253,7 @@ var TranslateSelector = ({
 import { Fragment as Fragment4, jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
   const { additionalData } = useContext6(NovelContext);
+  const [showBubbleMenu, setShowBubbleMenu] = useState8(additionalData == null ? void 0 : additionalData.menuOpen);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -6297,10 +6298,7 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
-      if (!empty) {
-        return true;
-      }
-      return true;
+      return showBubbleMenu !== void 0 ? showBubbleMenu : true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6316,6 +6314,9 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
+  useEffect12(() => {
+    setShowBubbleMenu(additionalData == null ? void 0 : additionalData.menuOpen);
+  }, [additionalData == null ? void 0 : additionalData.menuOpen]);
   const [hasSelection, setHasSection] = useState8(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState8(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState8(false);

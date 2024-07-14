@@ -15,7 +15,7 @@ import { TableSelector } from "./table-selector";
 import { AISelector } from "./ai-selectors/edit/ai-edit-selector";
 import { TranslateSelector } from "./ai-selectors/translate/ai-translate-selector";
 import { NovelContext } from "../provider";
-import { add } from "lodash";
+// import { add } from "lodash";
 import React from "react";
 import { AIMenuItem, BubbleMenuItem } from "../interfaces";
 
@@ -24,6 +24,8 @@ type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const { additionalData } = useContext(NovelContext);
+
+  const [showBubbleMenu, setShowBubbleMenu] = useState<boolean | undefined>(additionalData?.menuOpen);
   const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
   const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
   const CustomMenuItems = (additionalData?.customMenuItems || []) as {
@@ -77,11 +79,8 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
-      if (!empty) {
-        return true;
-      }
       // https://github.com/ueberdosis/tiptap/issues/2305
-      return true;
+      return showBubbleMenu !== undefined ? showBubbleMenu : true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -97,6 +96,10 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       },
     },
   };
+
+  useEffect(() => {
+    setShowBubbleMenu(additionalData?.menuOpen);
+  }, [additionalData?.menuOpen]);
 
   const [hasSelection, setHasSection] = useState(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
