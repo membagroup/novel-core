@@ -28285,7 +28285,7 @@ function CollaborationInfo({
   editor
 }) {
   var _a, _b;
-  const usersList = ((_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users).filter((u) => (u == null ? void 0 : u.name) !== void 0).filter((user, index2, self) => self.findIndex((t2) => user.clientId === t2.clientId) === -1);
+  const usersList = ((_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users).filter((u) => (u == null ? void 0 : u.name) !== void 0).filter((user, index2, self) => !self.find((u) => u.clientId === user.clientId));
   return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-xs novel-text-slate-500", children: usersList == null ? void 0 : usersList.length }),

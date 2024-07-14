@@ -61,7 +61,7 @@ export function CollaborationInfo({
   const usersList = (editor.storage?.collaborationCursor?.users as User[])
   .filter(u => u?.name !== undefined)
   // filter existing user clientId
-  .filter((user, index, self) => self.findIndex((t) => user.clientId === t.clientId) === -1);
+  .filter((user, index, self) => !self.find(u => u.clientId === user.clientId));
 
   return (
     <div className="novel-fixed novel-z-[999] novel-bottom-3 novel-right-3">
