@@ -3,7 +3,7 @@ import { PauseCircle } from "lucide-react";
 
 export default function AIGeneratingLoading({ stop }: { stop: () => void }) {
   return (
-    <div className="flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10">
+    <div className="flex items-center justify-center novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10">
       <Magic className="novel-w-7 novel-animate-pulse novel-text-purple-500" />
       <span className="text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500">
         generating...

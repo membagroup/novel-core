@@ -21174,7 +21174,7 @@ var ai_edit_bubble_default = AIEditorBubble;
 var import_lucide_react11 = require("lucide-react");
 var import_jsx_runtime15 = require("react/jsx-runtime");
 function AIGeneratingLoading({ stop: stop2 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "flex items-center justify-center novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
     /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
     /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
     /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
