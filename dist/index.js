@@ -6204,10 +6204,6 @@ var EditorBubbleMenu = (props) => {
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
-  const [show, setShow] = (0, import_react31.useState)(showBubbleMenu);
-  (0, import_react31.useEffect)(() => {
-    setShow(showBubbleMenu);
-  }, [showBubbleMenu]);
   const items = [
     {
       name: "bold",
@@ -6265,7 +6261,7 @@ var EditorBubbleMenu = (props) => {
       },
       // hide tippy if not showBubbleMenu
       // hideOnClick: showBubbleMenu,
-      arrow: show
+      arrow: false
       // followCursor: showBubbleMenu,
     }
   });
