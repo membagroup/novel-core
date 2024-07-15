@@ -6245,7 +6245,7 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || (0, import_react30.isNodeSelection)(selection)) {
         return false;
       }
-      return showBubbleMenu;
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6268,7 +6268,7 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react31.useState)(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react31.useState)(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react31.useState)(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+  return showBubbleMenu ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
     import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
@@ -6404,7 +6404,7 @@ var EditorBubbleMenu = (props) => {
         )) : null
       ] })
     })
-  );
+  ) : null;
 };
 
 // ../../node_modules/.pnpm/@egjs+agent@2.4.3/node_modules/@egjs/agent/dist/agent.esm.js

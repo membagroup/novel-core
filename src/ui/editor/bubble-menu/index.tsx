@@ -79,7 +79,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         return false;
       }
       // https://github.com/ueberdosis/tiptap/issues/2305
-      return showBubbleMenu;
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -105,7 +105,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState(false);
 
   return (
-    <BubbleMenu
+    showBubbleMenu ? <BubbleMenu
       {...bubbleMenuProps}
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
       {props.editor && (
@@ -222,6 +222,6 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
           }
         </>
       )}
-    </BubbleMenu>
+    </BubbleMenu> : null
   );
 };

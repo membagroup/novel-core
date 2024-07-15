@@ -6300,7 +6300,7 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
-      return showBubbleMenu;
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6323,7 +6323,7 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = useState8(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = useState8(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState8(false);
-  return /* @__PURE__ */ jsx11(
+  return showBubbleMenu ? /* @__PURE__ */ jsx11(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
@@ -6459,7 +6459,7 @@ var EditorBubbleMenu = (props) => {
         )) : null
       ] })
     })
-  );
+  ) : null;
 };
 
 // ../../node_modules/.pnpm/@egjs+agent@2.4.3/node_modules/@egjs/agent/dist/agent.esm.js
