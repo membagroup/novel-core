@@ -213,7 +213,6 @@ export default function Editor({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
-      setShowBubbleMenu(true);
     },
     onError: (err) => {
       toast.error(err.message);
@@ -229,6 +228,7 @@ export default function Editor({
     editor?.commands.insertContent(diff);
     if (!isLoading) {
       setLoadingOutside(false);
+      setShowBubbleMenu(true);
     }
   }, [isLoading, editor, completion]);
 

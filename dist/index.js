@@ -28430,7 +28430,6 @@ function Editor2({
         from: editor.state.selection.from - completion2.length,
         to: editor.state.selection.from
       });
-      setShowBubbleMenu(true);
     },
     onError: (err) => {
       import_sonner6.toast.error(err.message);
@@ -28443,6 +28442,7 @@ function Editor2({
     editor == null ? void 0 : editor.commands.insertContent(diff3);
     if (!isLoading) {
       setLoadingOutside(false);
+      setShowBubbleMenu(true);
     }
   }, [isLoading, editor, completion]);
   (0, import_react59.useEffect)(() => {
