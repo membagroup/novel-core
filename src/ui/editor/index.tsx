@@ -179,6 +179,7 @@ export default function Editor({
           from: selection.from - 2,
           to: selection.from,
         });
+        setShowBubbleMenu(false);
         complete(getPrevText(e.editor, { chars: 5000, }));
         // va.track("Autocomplete Shortcut Used");
       } else {
@@ -212,6 +213,7 @@ export default function Editor({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
+      setShowBubbleMenu(true);
     },
     onError: (err) => {
       toast.error(err.message);

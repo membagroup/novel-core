@@ -28466,6 +28466,7 @@ function Editor2({
           from: selection.from - 2,
           to: selection.from
         });
+        setShowBubbleMenu(false);
         complete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
         onUpdate(e.editor);
@@ -28495,6 +28496,7 @@ function Editor2({
         from: editor.state.selection.from - completion2.length,
         to: editor.state.selection.from
       });
+      setShowBubbleMenu(true);
     },
     onError: (err) => {
       toast6.error(err.message);
