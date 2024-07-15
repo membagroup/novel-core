@@ -6313,7 +6313,11 @@ var EditorBubbleMenu = (props) => {
         setIsTableSelectorOpen(false);
         setIsAISelectorOpen(false);
         setIsTranslateSelectorOpen(false);
-      }
+      },
+      // hide tippy if not showBubbleMenu
+      // hideOnClick: showBubbleMenu,
+      arrow: showBubbleMenu,
+      followCursor: showBubbleMenu
     }
   });
   const [hasSelection, setHasSection] = useState8(false);
@@ -6323,11 +6327,11 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = useState8(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = useState8(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState8(false);
-  return showBubbleMenu ? /* @__PURE__ */ jsx11(
+  return /* @__PURE__ */ jsx11(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && /* @__PURE__ */ jsxs10(Fragment4, { children: [
+      children: props.editor && showBubbleMenu && /* @__PURE__ */ jsxs10(Fragment4, { children: [
         /* @__PURE__ */ jsx11(
           AISelector,
           {
@@ -6459,7 +6463,7 @@ var EditorBubbleMenu = (props) => {
         )) : null
       ] })
     })
-  ) : null;
+  );
 };
 
 // ../../node_modules/.pnpm/@egjs+agent@2.4.3/node_modules/@egjs/agent/dist/agent.esm.js

@@ -93,6 +93,10 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         setIsAISelectorOpen(false);
         setIsTranslateSelectorOpen(false);
       },
+      // hide tippy if not showBubbleMenu
+      // hideOnClick: showBubbleMenu,
+      arrow: showBubbleMenu,
+      followCursor: showBubbleMenu,
     },
   };
 
@@ -105,10 +109,10 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState(false);
 
   return (
-    showBubbleMenu ? <BubbleMenu
+    <BubbleMenu
       {...bubbleMenuProps}
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
-      {props.editor && (
+      {props.editor && showBubbleMenu && (
         <>
           <AISelector
             editor={props.editor}
@@ -222,6 +226,6 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
           }
         </>
       )}
-    </BubbleMenu> : null
+    </BubbleMenu>
   );
 };

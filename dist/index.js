@@ -6258,7 +6258,11 @@ var EditorBubbleMenu = (props) => {
         setIsTableSelectorOpen(false);
         setIsAISelectorOpen(false);
         setIsTranslateSelectorOpen(false);
-      }
+      },
+      // hide tippy if not showBubbleMenu
+      // hideOnClick: showBubbleMenu,
+      arrow: showBubbleMenu,
+      followCursor: showBubbleMenu
     }
   });
   const [hasSelection, setHasSection] = (0, import_react31.useState)(false);
@@ -6268,11 +6272,11 @@ var EditorBubbleMenu = (props) => {
   const [isTableSelectorOpen, setIsTableSelectorOpen] = (0, import_react31.useState)(false);
   const [isAISelectorOpen, setIsAISelectorOpen] = (0, import_react31.useState)(false);
   const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = (0, import_react31.useState)(false);
-  return showBubbleMenu ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
     import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+      children: props.editor && showBubbleMenu && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           AISelector,
           {
@@ -6404,7 +6408,7 @@ var EditorBubbleMenu = (props) => {
         )) : null
       ] })
     })
-  ) : null;
+  );
 };
 
 // ../../node_modules/.pnpm/@egjs+agent@2.4.3/node_modules/@egjs/agent/dist/agent.esm.js
