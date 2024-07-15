@@ -23,9 +23,8 @@ type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 // & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
-  const { additionalData } = useContext(NovelContext);
+  const { additionalData, showBubbleMenu } = useContext(NovelContext);
 
-  const [showBubbleMenu, setShowBubbleMenu] = useState<boolean | undefined>(additionalData?.menuOpen);
   const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
   const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
   const CustomMenuItems = (additionalData?.customMenuItems || []) as {
@@ -80,7 +79,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         return false;
       }
       // https://github.com/ueberdosis/tiptap/issues/2305
-      return showBubbleMenu !== undefined ? showBubbleMenu : true;
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -97,10 +96,6 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     },
   };
 
-  useEffect(() => {
-    setShowBubbleMenu(additionalData?.menuOpen);
-  }, [additionalData?.menuOpen]);
-
   const [hasSelection, setHasSection] = useState(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
@@ -113,7 +108,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     <BubbleMenu
       {...bubbleMenuProps}
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
-      {props.editor && (
+      {props.editor && showBubbleMenu && (
         <>
           <AISelector
             editor={props.editor}

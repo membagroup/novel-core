@@ -2022,6 +2022,9 @@ var NovelContext = createContext({
   additionalData: {},
   lastInput: "",
   setLastInput: (text) => {
+  },
+  showBubbleMenu: void 0,
+  setShowBubbleMenu: () => {
   }
 });
 
@@ -2952,7 +2955,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useContext as useContext6, useEffect as useEffect12, useState as useState8 } from "react";
+import { useContext as useContext6, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -6252,8 +6255,7 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 import { Fragment as Fragment4, jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
-  const { additionalData } = useContext6(NovelContext);
-  const [showBubbleMenu, setShowBubbleMenu] = useState8(additionalData == null ? void 0 : additionalData.menuOpen);
+  const { additionalData, showBubbleMenu } = useContext6(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -6298,7 +6300,7 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
-      return showBubbleMenu !== void 0 ? showBubbleMenu : true;
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6314,9 +6316,6 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
-  useEffect12(() => {
-    setShowBubbleMenu(additionalData == null ? void 0 : additionalData.menuOpen);
-  }, [additionalData == null ? void 0 : additionalData.menuOpen]);
   const [hasSelection, setHasSection] = useState8(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState8(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState8(false);
@@ -6328,7 +6327,7 @@ var EditorBubbleMenu = (props) => {
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && /* @__PURE__ */ jsxs10(Fragment4, { children: [
+      children: props.editor && showBubbleMenu && /* @__PURE__ */ jsxs10(Fragment4, { children: [
         /* @__PURE__ */ jsx11(
           AISelector,
           {
@@ -28429,6 +28428,7 @@ function Editor2({
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
   const [lastInput, setLastInput] = useState12("");
+  const [showBubbleMenu, setShowBubbleMenu] = useState12(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28523,7 +28523,10 @@ function Editor2({
       return;
     editor.commands.setContent(defaultValue);
   }, [defaultValue]);
-  return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput }, children: /* @__PURE__ */ jsxs17(
+  useEffect20(() => {
+    setShowBubbleMenu(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
+  }, [additionalData == null ? void 0 : additionalData.bubbleMenuOpen]);
+  return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ jsxs17(
     "div",
     {
       onClick: () => {

@@ -123,6 +123,7 @@ export default function Editor({
   const [hydrated, setHydrated] = useState(false);
   // const [panelOpen, setPanelOpen] = useState(true);
   const [lastInput, setLastInput] = useState('');
+  const [showBubbleMenu, setShowBubbleMenu] = useState<boolean | undefined>(additionalData?.bubbleMenuOpen);
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -247,8 +248,12 @@ export default function Editor({
     editor.commands.setContent(defaultValue)
   }, [defaultValue]);
 
+  useEffect(() => {
+    setShowBubbleMenu(additionalData?.bubbleMenuOpen);
+  }, [additionalData?.bubbleMenuOpen]);
+
   return (
-    <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, }}>
+    <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }}>
       <div
         onClick={() => { editor?.chain().focus().run(); }}
         className={className}>

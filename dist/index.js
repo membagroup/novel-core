@@ -2009,6 +2009,9 @@ var NovelContext = (0, import_react.createContext)({
   additionalData: {},
   lastInput: "",
   setLastInput: (text) => {
+  },
+  showBubbleMenu: void 0,
+  setShowBubbleMenu: () => {
   }
 });
 
@@ -6197,8 +6200,7 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 var import_jsx_runtime11 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
-  const { additionalData } = (0, import_react31.useContext)(NovelContext);
-  const [showBubbleMenu, setShowBubbleMenu] = (0, import_react31.useState)(additionalData == null ? void 0 : additionalData.menuOpen);
+  const { additionalData, showBubbleMenu } = (0, import_react31.useContext)(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -6243,7 +6245,7 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || (0, import_react30.isNodeSelection)(selection)) {
         return false;
       }
-      return showBubbleMenu !== void 0 ? showBubbleMenu : true;
+      return true;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6259,9 +6261,6 @@ var EditorBubbleMenu = (props) => {
       }
     }
   });
-  (0, import_react31.useEffect)(() => {
-    setShowBubbleMenu(additionalData == null ? void 0 : additionalData.menuOpen);
-  }, [additionalData == null ? void 0 : additionalData.menuOpen]);
   const [hasSelection, setHasSection] = (0, import_react31.useState)(false);
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = (0, import_react31.useState)(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = (0, import_react31.useState)(false);
@@ -6273,7 +6272,7 @@ var EditorBubbleMenu = (props) => {
     import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+      children: props.editor && showBubbleMenu && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           AISelector,
           {
@@ -28363,6 +28362,7 @@ function Editor2({
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react59.useState)(false);
   const [lastInput, setLastInput] = (0, import_react59.useState)("");
+  const [showBubbleMenu, setShowBubbleMenu] = (0, import_react59.useState)(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react59.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28457,7 +28457,10 @@ function Editor2({
       return;
     editor.commands.setContent(defaultValue);
   }, [defaultValue]);
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+  (0, import_react59.useEffect)(() => {
+    setShowBubbleMenu(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
+  }, [additionalData == null ? void 0 : additionalData.bubbleMenuOpen]);
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
     "div",
     {
       onClick: () => {
