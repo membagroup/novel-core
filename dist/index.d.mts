@@ -2,6 +2,7 @@ import { LucideIcon } from 'lucide-react';
 import { JSONContent } from '@tiptap/react';
 import { EditorProps } from '@tiptap/pm/view';
 import { Extensions, Editor as Editor$1 } from '@tiptap/core';
+import * as react from 'react';
 
 interface AIMenuItem {
     name: string;
@@ -77,4 +78,13 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
     additionalData?: Record<string, any>;
 }): JSX.Element;
 
-export { AIMenuItem, BubbleMenuItem, Editor };
+declare const NovelContext: react.Context<{
+    completionApi: string;
+    additionalData: Record<string, any>;
+    lastInput: string;
+    setLastInput: (text: string) => void;
+    showBubbleMenu: boolean | undefined;
+    setShowBubbleMenu: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+}>;
+
+export { AIMenuItem, BubbleMenuItem, Editor, NovelContext };
