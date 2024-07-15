@@ -229,6 +229,7 @@ export default function Editor({
     try {
       editor?.commands.insertContent(diff);
     } catch (e) {
+      editor?.commands.insertContent(' ');
       console.log("error", (e as Error)?.stack);
     }
     if (!isLoading) {

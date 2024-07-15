@@ -28513,6 +28513,7 @@ function Editor2({
     try {
       editor == null ? void 0 : editor.commands.insertContent(diff3);
     } catch (e) {
+      editor == null ? void 0 : editor.commands.insertContent(" ");
       console.log("error", e == null ? void 0 : e.stack);
     }
     if (!isLoading) {
