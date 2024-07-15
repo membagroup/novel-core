@@ -2955,7 +2955,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useContext as useContext6, useState as useState8 } from "react";
+import { useContext as useContext6, useEffect as useEffect12, useState as useState8 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -6259,6 +6259,10 @@ var EditorBubbleMenu = (props) => {
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
+  const [show, setShow] = useState8(showBubbleMenu);
+  useEffect12(() => {
+    setShow(showBubbleMenu);
+  }, [showBubbleMenu]);
   const items = [
     {
       name: "bold",
@@ -6316,8 +6320,8 @@ var EditorBubbleMenu = (props) => {
       },
       // hide tippy if not showBubbleMenu
       // hideOnClick: showBubbleMenu,
-      arrow: showBubbleMenu,
-      followCursor: showBubbleMenu
+      arrow: show
+      // followCursor: showBubbleMenu,
     }
   });
   const [hasSelection, setHasSection] = useState8(false);

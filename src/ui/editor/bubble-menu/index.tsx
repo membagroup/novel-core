@@ -31,6 +31,12 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     component: (props: any) => JSX.Element, isOpen: boolean, setIsOpen: (value: React.SetStateAction<boolean>) => void
   }[];
 
+  const [show, setShow] = useState(showBubbleMenu);
+
+  useEffect(() => {
+    setShow(showBubbleMenu)
+  }, [showBubbleMenu]);
+
   const items: BubbleMenuItem[] = [
     {
       name: "bold",
@@ -95,8 +101,8 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       },
       // hide tippy if not showBubbleMenu
       // hideOnClick: showBubbleMenu,
-      arrow: showBubbleMenu,
-      followCursor: showBubbleMenu,
+      arrow: show,
+      // followCursor: showBubbleMenu,
     },
   };
 
