@@ -123,7 +123,7 @@ export default function Editor({
   const [hydrated, setHydrated] = useState(false);
   // const [panelOpen, setPanelOpen] = useState(true);
   const [lastInput, setLastInput] = useState('');
-  const [showBubbleMenu, setShowBubbleMenu] = useState<boolean | undefined>(additionalData?.bubbleMenuOpen);
+  const [showBubbleMenu, setShowBubbleMenu] = useState<boolean>(additionalData?.bubbleMenuOpen);
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -213,6 +213,7 @@ export default function Editor({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
+      setShowBubbleMenu(true);
     },
     onError: (err) => {
       toast.error(err.message);
@@ -225,10 +226,13 @@ export default function Editor({
   useEffect(() => {
     const diff = completion.slice(prev.current.length);
     prev.current = completion;
-    editor?.commands.insertContent(diff);
+    try {
+      editor?.commands.insertContent(diff);
+    } catch (e) {
+      console.log("error", (e as Error)?.stack);
+    }
     if (!isLoading) {
       setLoadingOutside(false);
-      setShowBubbleMenu(true);
     }
   }, [isLoading, editor, completion]);
 

@@ -7,13 +7,13 @@ export const NovelContext = createContext<{
   additionalData: Record<string, any>;
   lastInput: string;
   setLastInput: (text: string) => void; // https://stackoverflow.com/a/64517088
-  showBubbleMenu: boolean | undefined;
-  setShowBubbleMenu: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  showBubbleMenu: boolean;
+  setShowBubbleMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
   completionApi: "/api/generate",
   additionalData: {},
   lastInput: '',
   setLastInput: (text) => { },
-  showBubbleMenu: undefined,
+  showBubbleMenu: true,
   setShowBubbleMenu: () => { },
 });

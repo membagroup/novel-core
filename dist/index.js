@@ -2010,7 +2010,7 @@ var NovelContext = (0, import_react.createContext)({
   lastInput: "",
   setLastInput: (text) => {
   },
-  showBubbleMenu: void 0,
+  showBubbleMenu: true,
   setShowBubbleMenu: () => {
   }
 });
@@ -6245,7 +6245,7 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || (0, import_react30.isNodeSelection)(selection)) {
         return false;
       }
-      return true;
+      return showBubbleMenu;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -6272,7 +6272,7 @@ var EditorBubbleMenu = (props) => {
     import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && showBubbleMenu && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+      children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           AISelector,
           {
@@ -28430,6 +28430,7 @@ function Editor2({
         from: editor.state.selection.from - completion2.length,
         to: editor.state.selection.from
       });
+      setShowBubbleMenu(true);
     },
     onError: (err) => {
       import_sonner6.toast.error(err.message);
@@ -28439,10 +28440,13 @@ function Editor2({
   (0, import_react59.useEffect)(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
-    editor == null ? void 0 : editor.commands.insertContent(diff3);
+    try {
+      editor == null ? void 0 : editor.commands.insertContent(diff3);
+    } catch (e) {
+      console.log("error", e == null ? void 0 : e.stack);
+    }
     if (!isLoading) {
       setLoadingOutside(false);
-      setShowBubbleMenu(true);
     }
   }, [isLoading, editor, completion]);
   (0, import_react59.useEffect)(() => {

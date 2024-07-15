@@ -79,7 +79,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         return false;
       }
       // https://github.com/ueberdosis/tiptap/issues/2305
-      return true;
+      return showBubbleMenu;
     },
     tippyOptions: {
       // https://atomiks.github.io/tippyjs/v6/all-props/#placement
@@ -108,7 +108,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     <BubbleMenu
       {...bubbleMenuProps}
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
-      {props.editor && showBubbleMenu && (
+      {props.editor && (
         <>
           <AISelector
             editor={props.editor}
