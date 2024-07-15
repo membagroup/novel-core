@@ -2249,7 +2249,7 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = (0, import_react2.useState)(0);
-  const { completionApi, additionalData: { body, headers } } = (0, import_react2.useContext)(NovelContext);
+  const { completionApi, additionalData: { body, headers }, setShowBubbleMenu } = (0, import_react2.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react4.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
@@ -2267,6 +2267,7 @@ var CommandList = ({
         from: range.from,
         to: range.from + completion.length
       });
+      setShowBubbleMenu(true);
     },
     onError: (e) => {
       import_sonner2.toast.error(e.message);
@@ -2279,12 +2280,8 @@ var CommandList = ({
         if (item.title === "Continue writing") {
           if (isLoading)
             return;
-          complete(
-            getPrevText(editor, {
-              chars: 5e3,
-              offset: 1
-            })
-          );
+          setShowBubbleMenu(false);
+          complete(getPrevText(editor, { chars: 5e3, offset: 1 }));
         } else {
           command(item);
         }
