@@ -28549,8 +28549,7 @@ function Editor2({
   ) });
 }
 export {
-  Editor2 as Editor,
-  NovelContext
+  Editor2 as Editor
 };
 /*! Bundled license information:
 

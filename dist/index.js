@@ -196,8 +196,7 @@ var init_is_prop_valid_esm = __esm({
 // src/index.ts
 var src_exports = {};
 __export(src_exports, {
-  Editor: () => Editor2,
-  NovelContext: () => NovelContext
+  Editor: () => Editor2
 });
 module.exports = __toCommonJS(src_exports);
 
@@ -28485,8 +28484,7 @@ function Editor2({
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  Editor,
-  NovelContext
+  Editor
 });
 /*! Bundled license information:
 

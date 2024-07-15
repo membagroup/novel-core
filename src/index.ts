@@ -4,4 +4,3 @@ import "./styles/prosemirror.css";
 
 export * from "./ui/editor/interfaces";
 export { default as Editor } from "./ui/editor";
-export * from './ui/editor/provider';
