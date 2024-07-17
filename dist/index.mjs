@@ -28429,6 +28429,7 @@ function Editor2({
   const [hydrated, setHydrated] = useState12(false);
   const [lastInput, setLastInput] = useState12("");
   const [showBubbleMenu, setShowBubbleMenu] = useState12(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
+  const [chatHistory, setChatHistory] = useState12((additionalData == null ? void 0 : additionalData.chatHistory) || []);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28533,6 +28534,9 @@ function Editor2({
   useEffect20(() => {
     setShowBubbleMenu(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   }, [additionalData == null ? void 0 : additionalData.bubbleMenuOpen]);
+  useEffect20(() => {
+    setChatHistory(additionalData == null ? void 0 : additionalData.chatHistory);
+  }, [additionalData == null ? void 0 : additionalData.chatHistory]);
   return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ jsxs17(
     "div",
     {
@@ -28550,7 +28554,7 @@ function Editor2({
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
         /* @__PURE__ */ jsx19(EditorContent, { editor }),
         ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: stop2 }) }),
-        bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
+        bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: chatHistory })
       ]
     }
   ) });

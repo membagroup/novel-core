@@ -6,7 +6,7 @@ import { defaultEditorProps } from "./props";
 import { defaultExtensions } from "./extensions";
 import useLocalStorage from "@/lib/hooks/use-local-storage";
 import { useDebouncedCallback } from "use-debounce";
-import { useCompletion } from "ai/react";
+import { Message, useCompletion } from "ai/react";
 import { toast } from "sonner";
 // import va from "@vercel/analytics";
 import { defaultEditorContent } from "./default-content";
@@ -121,9 +121,10 @@ export default function Editor({
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
-  // const [panelOpen, setPanelOpen] = useState(true);
+
   const [lastInput, setLastInput] = useState('');
   const [showBubbleMenu, setShowBubbleMenu] = useState<boolean>(additionalData?.bubbleMenuOpen);
+  const [chatHistory, setChatHistory] = useState<Message[]>(additionalData?.chatHistory || []);
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -139,12 +140,6 @@ export default function Editor({
       setContent(json);
     }
   }, debounceDuration);
-
-  // const togglePanel = () => {
-  //   // if (!editor) return;
-  //   // editor.chain().blur().run();
-  //   setPanelOpen(!panelOpen);
-  // };
 
   const [status, setStatus] = useState("connecting");
   const user = {
@@ -259,6 +254,10 @@ export default function Editor({
     setShowBubbleMenu(additionalData?.bubbleMenuOpen);
   }, [additionalData?.bubbleMenuOpen]);
 
+  useEffect(() => {
+    setChatHistory(additionalData?.chatHistory);
+  }, [additionalData?.chatHistory]);
+
   return (
     <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }}>
       <div
@@ -292,7 +291,7 @@ export default function Editor({
             </button>
           </div>
         } */}
-        {bot && editor && <ChatBot editor={editor} history={additionalData?.chatHistory || []} />}
+        {bot && editor && <ChatBot editor={editor} history={chatHistory} />}
       </div>
     </NovelContext.Provider>
   );

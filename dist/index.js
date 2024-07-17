@@ -28363,6 +28363,7 @@ function Editor2({
   const [hydrated, setHydrated] = (0, import_react59.useState)(false);
   const [lastInput, setLastInput] = (0, import_react59.useState)("");
   const [showBubbleMenu, setShowBubbleMenu] = (0, import_react59.useState)(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
+  const [chatHistory, setChatHistory] = (0, import_react59.useState)((additionalData == null ? void 0 : additionalData.chatHistory) || []);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react59.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28467,6 +28468,9 @@ function Editor2({
   (0, import_react59.useEffect)(() => {
     setShowBubbleMenu(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   }, [additionalData == null ? void 0 : additionalData.bubbleMenuOpen]);
+  (0, import_react59.useEffect)(() => {
+    setChatHistory(additionalData == null ? void 0 : additionalData.chatHistory);
+  }, [additionalData == null ? void 0 : additionalData.chatHistory]);
   return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
     "div",
     {
@@ -28484,7 +28488,7 @@ function Editor2({
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react60.EditorContent, { editor }),
         ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
-        bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
+        bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: chatHistory })
       ]
     }
   ) });
