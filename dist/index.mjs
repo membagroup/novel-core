@@ -6252,7 +6252,7 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 import { Fragment as Fragment4, jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
-  const { additionalData } = useContext6(NovelContext);
+  const { additionalData, showBubbleMenu } = useContext6(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -6310,9 +6310,9 @@ var EditorBubbleMenu = (props) => {
         setIsTableSelectorOpen(false);
         setIsAISelectorOpen(false);
         setIsTranslateSelectorOpen(false);
-      }
+      },
       // hide tippy if not showBubbleMenu
-      // arrow: false,
+      arrow: false
       // followCursor: showBubbleMenu,
     }
   });
@@ -6327,7 +6327,7 @@ var EditorBubbleMenu = (props) => {
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && /* @__PURE__ */ jsxs10(Fragment4, { children: [
+      children: props.editor && showBubbleMenu && /* @__PURE__ */ jsxs10(Fragment4, { children: [
         /* @__PURE__ */ jsx11(
           AISelector,
           {
@@ -28542,7 +28542,7 @@ function Editor2({
       className,
       children: [
         editor && /* @__PURE__ */ jsxs17(Fragment6, { children: [
-          showBubbleMenu ? /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }) : null,
+          /* @__PURE__ */ jsx19(EditorBubbleMenu, { editor }),
           /* @__PURE__ */ jsx19(ai_edit_bubble_default, { editor }),
           /* @__PURE__ */ jsx19(ai_translate_bubble_default, { editor })
         ] }),

@@ -22,7 +22,7 @@ type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 // & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
-  const { additionalData } = useContext(NovelContext);
+  const { additionalData, showBubbleMenu } = useContext(NovelContext);
 
   const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
   const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
@@ -93,7 +93,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         setIsTranslateSelectorOpen(false);
       },
       // hide tippy if not showBubbleMenu
-      // arrow: false,
+      arrow: false,
       // followCursor: showBubbleMenu,
     },
   };
@@ -110,7 +110,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     <BubbleMenu
       {...bubbleMenuProps}
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
-      {props.editor && (
+      {props.editor && showBubbleMenu && (
         <>
           <AISelector
             editor={props.editor}
