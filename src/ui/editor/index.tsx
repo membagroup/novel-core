@@ -266,7 +266,7 @@ export default function Editor({
         className={className}>
         {editor && (
           <>
-            <EditorBubbleMenu editor={editor} />
+            {showBubbleMenu ? <EditorBubbleMenu editor={editor} /> : null}
             <AIEditorBubble editor={editor} />
             <AITranslateBubble editor={editor} />
           </>

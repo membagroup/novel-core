@@ -15,7 +15,6 @@ import { TableSelector } from "./table-selector";
 import { AISelector } from "./ai-selectors/edit/ai-edit-selector";
 import { TranslateSelector } from "./ai-selectors/translate/ai-translate-selector";
 import { NovelContext } from "../provider";
-// import { add } from "lodash";
 import React from "react";
 import { AIMenuItem, BubbleMenuItem } from "../interfaces";
 
@@ -23,7 +22,7 @@ type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 // & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
-  const { additionalData, showBubbleMenu } = useContext(NovelContext);
+  const { additionalData } = useContext(NovelContext);
 
   const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
   const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
@@ -94,8 +93,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         setIsTranslateSelectorOpen(false);
       },
       // hide tippy if not showBubbleMenu
-      // hideOnClick: showBubbleMenu,
-      arrow: false,
+      // arrow: false,
       // followCursor: showBubbleMenu,
     },
   };
@@ -112,7 +110,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     <BubbleMenu
       {...bubbleMenuProps}
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
-      {props.editor && showBubbleMenu && (
+      {props.editor && (
         <>
           <AISelector
             editor={props.editor}

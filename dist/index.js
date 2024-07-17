@@ -6197,7 +6197,7 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 var import_jsx_runtime11 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
-  const { additionalData, showBubbleMenu } = (0, import_react31.useContext)(NovelContext);
+  const { additionalData } = (0, import_react31.useContext)(NovelContext);
   const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
   const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
   const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
@@ -6255,10 +6255,9 @@ var EditorBubbleMenu = (props) => {
         setIsTableSelectorOpen(false);
         setIsAISelectorOpen(false);
         setIsTranslateSelectorOpen(false);
-      },
+      }
       // hide tippy if not showBubbleMenu
-      // hideOnClick: showBubbleMenu,
-      arrow: false
+      // arrow: false,
       // followCursor: showBubbleMenu,
     }
   });
@@ -6273,7 +6272,7 @@ var EditorBubbleMenu = (props) => {
     import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && showBubbleMenu && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+      children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           AISelector,
           {
@@ -28477,7 +28476,7 @@ function Editor2({
       className,
       children: [
         editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { editor }),
+          showBubbleMenu ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(EditorBubbleMenu, { editor }) : null,
           /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_edit_bubble_default, { editor }),
           /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ai_translate_bubble_default, { editor })
         ] }),
