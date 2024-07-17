@@ -28045,9 +28045,7 @@ function ChatBot(props) {
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
   (0, import_react56.useEffect)(() => {
-    if (history == null ? void 0 : history.length) {
-      setMessages([initialMessage, ...history]);
-    }
+    setMessages([initialMessage, ...history]);
   }, [history == null ? void 0 : history.length]);
   const handleChat = () => {
     var _a;

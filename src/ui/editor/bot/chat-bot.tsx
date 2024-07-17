@@ -67,9 +67,7 @@ export function ChatBot(props: Props) {
   });
 
   useEffect(() => {
-    if (history?.length) {
-      setMessages([initialMessage, ...history]);
-    }
+    setMessages([initialMessage, ...history]);
   }, [history?.length]);
 
   const handleChat = () => {
