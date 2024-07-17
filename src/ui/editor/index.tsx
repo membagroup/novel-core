@@ -261,7 +261,9 @@ export default function Editor({
   return (
     <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }}>
       <div
-        onClick={() => { editor?.chain().focus().run(); }}
+        onClick={() => {
+          if (additionalData?.focusOnEnter) editor?.chain().focus().run();
+        }}
         className={className}>
         {editor && (
           <>

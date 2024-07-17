@@ -28473,7 +28473,8 @@ function Editor2({
     "div",
     {
       onClick: () => {
-        editor == null ? void 0 : editor.chain().focus().run();
+        if (additionalData == null ? void 0 : additionalData.focusOnEnter)
+          editor == null ? void 0 : editor.chain().focus().run();
       },
       className,
       children: [
