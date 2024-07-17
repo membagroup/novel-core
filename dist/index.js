@@ -28333,6 +28333,7 @@ function generateRandomColorCode() {
 
 // src/ui/editor/index.tsx
 var import_isEmpty = __toESM(require("lodash/isEmpty"));
+var import_isEqual = __toESM(require("lodash/isEqual"));
 var import_jsx_runtime19 = require("react/jsx-runtime");
 function Editor2({
   completionApi = "/api/generate",
@@ -28359,7 +28360,7 @@ function Editor2({
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react59.useState)(false);
-  const [lastInput, setLastInput] = (0, import_react59.useState)("");
+  const [aiTextInput, setAiTextInput] = (0, import_react59.useState)("");
   const [showBubbleMenu, setShowBubbleMenu] = (0, import_react59.useState)(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = (0, import_react59.useState)((additionalData == null ? void 0 : additionalData.chatHistory) || []);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react59.useState)(false);
@@ -28402,8 +28403,11 @@ function Editor2({
         setShowBubbleMenu(false);
         complete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
-        onUpdate(e.editor);
-        debouncedUpdates(e);
+        const hasChanges = !(0, import_isEqual.default)(e.editor.getJSON(), defaultValue);
+        if (hasChanges) {
+          onUpdate(e.editor);
+          debouncedUpdates(e);
+        }
       }
     },
     autofocus: false
@@ -28469,7 +28473,7 @@ function Editor2({
   (0, import_react59.useEffect)(() => {
     setChatHistory(additionalData == null ? void 0 : additionalData.chatHistory);
   }, [additionalData == null ? void 0 : additionalData.chatHistory]);
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
     "div",
     {
       onClick: () => {

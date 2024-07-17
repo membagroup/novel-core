@@ -28399,6 +28399,7 @@ function generateRandomColorCode() {
 
 // src/ui/editor/index.tsx
 import isEmpty from "lodash/isEmpty";
+import isEqual from "lodash/isEqual";
 import { Fragment as Fragment6, jsx as jsx19, jsxs as jsxs17 } from "react/jsx-runtime";
 function Editor2({
   completionApi = "/api/generate",
@@ -28425,7 +28426,7 @@ function Editor2({
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = useState12(false);
-  const [lastInput, setLastInput] = useState12("");
+  const [aiTextInput, setAiTextInput] = useState12("");
   const [showBubbleMenu, setShowBubbleMenu] = useState12(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = useState12((additionalData == null ? void 0 : additionalData.chatHistory) || []);
   const [isLoadingOutside, setLoadingOutside] = useState12(false);
@@ -28468,8 +28469,11 @@ function Editor2({
         setShowBubbleMenu(false);
         complete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
-        onUpdate(e.editor);
-        debouncedUpdates(e);
+        const hasChanges = !isEqual(e.editor.getJSON(), defaultValue);
+        if (hasChanges) {
+          onUpdate(e.editor);
+          debouncedUpdates(e);
+        }
       }
     },
     autofocus: false
@@ -28535,7 +28539,7 @@ function Editor2({
   useEffect20(() => {
     setChatHistory(additionalData == null ? void 0 : additionalData.chatHistory);
   }, [additionalData == null ? void 0 : additionalData.chatHistory]);
-  return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ jsxs17(
+  return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ jsxs17(
     "div",
     {
       onClick: () => {

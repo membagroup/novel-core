@@ -29,6 +29,7 @@ import {
 } from "./extensions/collaboration";
 import { Users, Bot } from "lucide-react";
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -122,7 +123,7 @@ export default function Editor({
 
   const [hydrated, setHydrated] = useState(false);
 
-  const [lastInput, setLastInput] = useState('');
+  const [aiTextInput, setAiTextInput] = useState('');
   const [showBubbleMenu, setShowBubbleMenu] = useState<boolean>(additionalData?.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = useState<Message[]>(additionalData?.chatHistory || []);
 
@@ -178,8 +179,12 @@ export default function Editor({
         complete(getPrevText(e.editor, { chars: 5000, }));
         // va.track("Autocomplete Shortcut Used");
       } else {
-        onUpdate(e.editor);
-        debouncedUpdates(e);
+        // check if the user has typed something new on editor
+        const hasChanges = !isEqual(e.editor.getJSON(), defaultValue);
+        if (hasChanges) {
+          onUpdate(e.editor);
+          debouncedUpdates(e);
+        }
       }
     },
     autofocus: false,
@@ -259,7 +264,7 @@ export default function Editor({
   }, [additionalData?.chatHistory]);
 
   return (
-    <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, showBubbleMenu, setShowBubbleMenu }}>
+    <NovelContext.Provider value={{ completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }}>
       <div
         onClick={() => {
           if (additionalData?.focusOnEnter) editor?.chain().focus().run();
