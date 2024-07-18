@@ -1012,6 +1012,9 @@ video {
 .novel-animate-spin {
   animation: novel-spin 1s linear infinite;
 }
+.novel-cursor-default {
+  cursor: default;
+}
 .novel-cursor-pointer {
   cursor: pointer;
 }
@@ -5896,6 +5899,7 @@ function Magic1({ className }) {
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 var import_jsx_runtime9 = require("react/jsx-runtime");
 var AISelector = (props) => {
+  var _a;
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
   const context = (0, import_react26.useContext)(NovelContext);
   const defaultItems = [
@@ -5995,9 +5999,9 @@ var AISelector = (props) => {
     setIsOpen(false);
   });
   (0, import_react26.useEffect)(() => {
-    var _a;
+    var _a2;
     if (!hasSelection)
-      inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
+      inputRef.current && ((_a2 = inputRef.current) == null ? void 0 : _a2.focus());
   });
   const { completionApi, additionalData: { body, headers, aiSelectorTitle } } = (0, import_react26.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react27.useCompletion)({
@@ -6057,9 +6061,10 @@ var AISelector = (props) => {
           ]
         }
       ),
-      hasSelection ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: (_a = items == null ? void 0 : items.filter((i) => (i == null ? void 0 : i.visible) !== false)) == null ? void 0 : _a.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         Le.Item,
         {
+          disabled: !hasSelection,
           onSelect: () => {
             if (!isLoading) {
               const { from, to } = editor.state.selection;
@@ -6069,14 +6074,14 @@ var AISelector = (props) => {
               setIsOpen(false);
             }
           },
-          className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
+          className: `novel-flex group novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100 ${!hasSelection ? "novel-cursor-default" : "novel-cursor-pointer"}`,
           children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: item.name })
           ] })
         },
         index2
-      )) }) }) : null
+      )) }) })
     ] })
   ] });
 };

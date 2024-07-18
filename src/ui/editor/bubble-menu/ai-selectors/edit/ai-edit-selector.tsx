@@ -93,7 +93,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   const items = [
     ...defaultItems,
     ...(subMenuItems || []),
-  ];
+  ] as AIMenuItem[];
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -201,12 +201,13 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
               <Send className="novel-h-4 novel-w-4 novel-text-purple-500" />
             </button>
           </form>
-          {hasSelection ?
+          {
             <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
               <Command.List>
-                {items.map((item, index) => (
+                {items?.filter(i => i?.visible !== false)?.map((item, index) => (
                   <Command.Item
                     key={index}
+                    disabled={!hasSelection}
                     onSelect={() => {
                       if (!isLoading) {
                         const { from, to } = editor.state.selection;
@@ -215,7 +216,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
                         setIsOpen(false);
                       }
                     }}
-                    className="novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100">
+                    className={`novel-flex group novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100 ${!hasSelection ? 'novel-cursor-default' : 'novel-cursor-pointer'}`}>
                     <div className="novel-flex novel-items-center novel-space-x-2">
                       <item.icon className="novel-h-4 novel-w-4 novel-text-purple-500" />
                       <span>{item.name}</span>
@@ -224,7 +225,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
                   </Command.Item>
                 ))}
               </Command.List>
-            </Command> : null
+            </Command>
           }
         </>
       )}

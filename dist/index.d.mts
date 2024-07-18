@@ -16,12 +16,14 @@ interface AIMenuItem {
     name: string;
     command: string;
     icon: LucideIcon;
+    visible?: boolean;
 }
 interface BubbleMenuItem {
     name: string;
     isActive: () => boolean;
     command: () => void;
     icon: LucideIcon;
+    visible?: boolean;
 }
 
 declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, editable, additionalData }: {
