@@ -197,7 +197,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
               type="text"
               placeholder="Enter a prompt or question..."
               className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500"
-              defaultValue={editor.getAttributes("link").href || ""}
+              defaultValue={""}
             />
             <button className="novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100">
               <Send className="novel-h-4 novel-w-4 novel-text-purple-500" />
@@ -206,12 +206,13 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
           {
             <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
               <Command.List>
-                <Command.Group heading="Requires Text Selection" className="novel-text-slate-500">
+                <Command.Group heading="Requires Text Selection" className="novel-text-slate-400">
                   {items?.filter(i => i?.visible !== false)?.map((item, index) => (
                     <Command.Item
                       key={index}
                       disabled={!hasSelection}
                       onSelect={() => {
+                        if (!hasSelection) return;
                         if (!isLoading) {
                           const { from, to } = editor.state.selection;
                           const text = editor.state.doc.textBetween(from, to, " ");

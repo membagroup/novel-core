@@ -6054,18 +6054,20 @@ var AISelector = (props) => {
                 type: "text",
                 placeholder: "Enter a prompt or question...",
                 className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
-                defaultValue: editor.getAttributes("link").href || ""
+                defaultValue: ""
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.Group, { heading: "Requires Text Selection", className: "novel-text-slate-500", children: (_a = items == null ? void 0 : items.filter((i) => (i == null ? void 0 : i.visible) !== false)) == null ? void 0 : _a.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.Group, { heading: "Requires Text Selection", className: "novel-text-slate-400", children: (_a = items == null ? void 0 : items.filter((i) => (i == null ? void 0 : i.visible) !== false)) == null ? void 0 : _a.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         Le.Item,
         {
           disabled: !hasSelection,
           onSelect: () => {
+            if (!hasSelection)
+              return;
             if (!isLoading) {
               const { from, to } = editor.state.selection;
               const text = editor.state.doc.textBetween(from, to, " ");
