@@ -42,7 +42,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
 
   const defaultItems = [
     {
-      name: "Improve writing",
+      name: "Improve selection",
       command: "Improve writing",
       icon: Wand,
     },
@@ -157,6 +157,8 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
     headers: { ...(headers || {}), },
   });
 
+  // https://github.com/pacocoursey/cmdk?tab=readme-ov-file#nested-items
+
   return (
     <div className="novel-flex" ref={ref}>
       <div className={`novel-flex novel-h-full novel-items-center novel-gap-1 novel-text-sm novel-font-medium hover:novel-bg-stone-100 active:novel-bg-stone-200 ${isOpen ? 'novel-text-purple-500' : 'novel-text-stone-600'}`}>
@@ -204,26 +206,28 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
           {
             <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
               <Command.List>
-                {items?.filter(i => i?.visible !== false)?.map((item, index) => (
-                  <Command.Item
-                    key={index}
-                    disabled={!hasSelection}
-                    onSelect={() => {
-                      if (!isLoading) {
-                        const { from, to } = editor.state.selection;
-                        const text = editor.state.doc.textBetween(from, to, " ");
-                        complete(`${item.command}:\n ${text}`);
-                        setIsOpen(false);
-                      }
-                    }}
-                    className={`novel-flex group novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100 ${!hasSelection ? 'novel-cursor-default' : 'novel-cursor-pointer'}`}>
-                    <div className="novel-flex novel-items-center novel-space-x-2">
-                      <item.icon className="novel-h-4 novel-w-4 novel-text-purple-500" />
-                      <span>{item.name}</span>
-                    </div>
-                    {/* <CornerDownLeft className="novel-hidden novel-h-4 novel-w-4 group-hover:novel-block" /> */}
-                  </Command.Item>
-                ))}
+                <Command.Group heading="Requires Text Selection">
+                  {items?.filter(i => i?.visible !== false)?.map((item, index) => (
+                    <Command.Item
+                      key={index}
+                      disabled={!hasSelection}
+                      onSelect={() => {
+                        if (!isLoading) {
+                          const { from, to } = editor.state.selection;
+                          const text = editor.state.doc.textBetween(from, to, " ");
+                          complete(`${item.command}:\n ${text}`);
+                          setIsOpen(false);
+                        }
+                      }}
+                      className={`novel-flex group novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100 ${!hasSelection ? 'novel-cursor-default' : 'novel-cursor-pointer'}`}>
+                      <div className="novel-flex novel-items-center novel-space-x-2">
+                        <item.icon className="novel-h-4 novel-w-4 novel-text-purple-500" />
+                        <span>{item.name}</span>
+                      </div>
+                      {/* <CornerDownLeft className="novel-hidden novel-h-4 novel-w-4 group-hover:novel-block" /> */}
+                    </Command.Item>
+                  ))}
+                </Command.Group>
               </Command.List>
             </Command>
           }
