@@ -6116,7 +6116,7 @@ var AISelector = (props) => {
           ]
         }
       ),
-      /* @__PURE__ */ jsx9(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx9(Le.List, { children: /* @__PURE__ */ jsx9(Le.Group, { heading: "Requires Text Selection", children: (_a = items == null ? void 0 : items.filter((i) => (i == null ? void 0 : i.visible) !== false)) == null ? void 0 : _a.map((item, index2) => /* @__PURE__ */ jsx9(
+      /* @__PURE__ */ jsx9(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx9(Le.List, { children: /* @__PURE__ */ jsx9(Le.Group, { heading: "Requires Text Selection", className: "novel-text-slate-500", children: (_a = items == null ? void 0 : items.filter((i) => (i == null ? void 0 : i.visible) !== false)) == null ? void 0 : _a.map((item, index2) => /* @__PURE__ */ jsx9(
         Le.Item,
         {
           disabled: !hasSelection,
