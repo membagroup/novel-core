@@ -6442,6 +6442,7 @@ var EditorBubbleMenu = (props) => {
           /* @__PURE__ */ jsx11(
             item.component,
             {
+              context: NovelContext,
               editor: props.editor,
               isOpen: item == null ? void 0 : item.isOpen,
               setIsOpen: () => {

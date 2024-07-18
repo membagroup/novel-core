@@ -208,6 +208,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               //  React.cloneElement(item, { key: index })
               <item.component
                 key={index}
+                context={NovelContext}
                 editor={props.editor}
                 isOpen={item?.isOpen}
                 setIsOpen={() => {
