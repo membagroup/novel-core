@@ -21120,7 +21120,7 @@ var AIEditorBubble = ({ editor }) => {
   const { completionApi, additionalData: { body, headers } } = (0, import_react35.useContext)(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react34.useCompletion)({
     id: "ai-edit",
-    api: `${completionApi}/edit`,
+    api: `${completionApi}/draft` || `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onError: (err) => {
