@@ -148,7 +148,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
     if (!hasSelection) inputRef.current && inputRef.current?.focus();
   });
 
-  const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
+  const { completionApi, additionalData: { body, headers, aiSelectorTitle } } = useContext(NovelContext);
 
   const { complete, isLoading, stop } = useCompletion({
     id: "ai-edit",
@@ -169,7 +169,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
             setIsOpen(!isOpen);
             editor.chain().blur().run();
           }}>
-          <Magic1 className="novel-h-5 novel-w-5" /> AI
+          <Magic1 className="novel-h-5 novel-w-5" /> {aiSelectorTitle || 'AI'}
           {isLoading ? (
             <PauseCircle
               onClick={stop}

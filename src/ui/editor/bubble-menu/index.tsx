@@ -23,10 +23,9 @@ type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const { additionalData, showBubbleMenu } = useContext(NovelContext);
-
-  const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
-  const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
-  const CustomMenuItems = (additionalData?.customMenuItems || []) as {
+  const { showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const bubbleMenuItems = (menuItems || []) as BubbleMenuItem[];
+  const CustomMenuItems = (customMenuItems || []) as {
     component: (props: any) => JSX.Element, isOpen: boolean, setIsOpen: (value: React.SetStateAction<boolean>) => void
   }[];
 
@@ -116,7 +115,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
             editor={props.editor}
             isOpen={isAISelectorOpen}
             hasSelection={hasSelection}
-            subMenuItems={aiMenuItems}
+            subMenuItems={aiMenuItems || []}
             setIsOpen={() => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -152,7 +151,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               }}
             />
           )}
-          <LinkSelector
+          {showLinkSelector !== false ? <LinkSelector
             editor={props.editor}
             isOpen={isLinkSelectorOpen}
             setIsOpen={() => {
@@ -163,7 +162,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               setIsAISelectorOpen(false);
               setIsTranslateSelectorOpen(false);
             }}
-          />
+          /> : null}
           <div className="novel-flex">
             {items.map((item, index) => (
               <button

@@ -5999,7 +5999,7 @@ var AISelector = (props) => {
     if (!hasSelection)
       inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi, additionalData: { body, headers } } = (0, import_react26.useContext)(NovelContext);
+  const { completionApi, additionalData: { body, headers, aiSelectorTitle } } = (0, import_react26.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react27.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -6020,7 +6020,8 @@ var AISelector = (props) => {
         },
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Magic1, { className: "novel-h-5 novel-w-5" }),
-          " AI",
+          " ",
+          aiSelectorTitle || "AI",
           isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
             import_lucide_react7.PauseCircle,
             {
@@ -6198,9 +6199,9 @@ var TranslateSelector = ({
 var import_jsx_runtime11 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
   const { additionalData, showBubbleMenu } = (0, import_react31.useContext)(NovelContext);
-  const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
-  const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
-  const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
+  const { showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const bubbleMenuItems = menuItems || [];
+  const CustomMenuItems = customMenuItems || [];
   const items = [
     {
       name: "bold",
@@ -6279,7 +6280,7 @@ var EditorBubbleMenu = (props) => {
             editor: props.editor,
             isOpen: isAISelectorOpen,
             hasSelection,
-            subMenuItems: aiMenuItems,
+            subMenuItems: aiMenuItems || [],
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -6320,7 +6321,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        showLinkSelector !== false ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           LinkSelector,
           {
             editor: props.editor,
@@ -6334,7 +6335,7 @@ var EditorBubbleMenu = (props) => {
               setIsTranslateSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "novel-flex", children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           "button",
           {

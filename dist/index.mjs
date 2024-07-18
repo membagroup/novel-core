@@ -6054,7 +6054,7 @@ var AISelector = (props) => {
     if (!hasSelection)
       inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
-  const { completionApi, additionalData: { body, headers } } = useContext4(NovelContext);
+  const { completionApi, additionalData: { body, headers, aiSelectorTitle } } = useContext4(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion2({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -6075,7 +6075,8 @@ var AISelector = (props) => {
         },
         children: [
           /* @__PURE__ */ jsx9(Magic1, { className: "novel-h-5 novel-w-5" }),
-          " AI",
+          " ",
+          aiSelectorTitle || "AI",
           isLoading ? /* @__PURE__ */ jsx9(
             PauseCircle2,
             {
@@ -6253,9 +6254,9 @@ var TranslateSelector = ({
 import { Fragment as Fragment4, jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
   const { additionalData, showBubbleMenu } = useContext6(NovelContext);
-  const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
-  const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
-  const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
+  const { showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const bubbleMenuItems = menuItems || [];
+  const CustomMenuItems = customMenuItems || [];
   const items = [
     {
       name: "bold",
@@ -6334,7 +6335,7 @@ var EditorBubbleMenu = (props) => {
             editor: props.editor,
             isOpen: isAISelectorOpen,
             hasSelection,
-            subMenuItems: aiMenuItems,
+            subMenuItems: aiMenuItems || [],
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -6375,7 +6376,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ jsx11(
+        showLinkSelector !== false ? /* @__PURE__ */ jsx11(
           LinkSelector,
           {
             editor: props.editor,
@@ -6389,7 +6390,7 @@ var EditorBubbleMenu = (props) => {
               setIsTranslateSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         /* @__PURE__ */ jsx11("div", { className: "novel-flex", children: items.map((item, index2) => /* @__PURE__ */ jsx11(
           "button",
           {
