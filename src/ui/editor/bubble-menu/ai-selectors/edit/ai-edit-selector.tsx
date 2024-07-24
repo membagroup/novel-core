@@ -211,7 +211,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
             </button>
           </form>
           {
-            <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
+            <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[6rem] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
               <Command.List>
                 <Command.Group heading="Requires Text Selection" className="novel-text-slate-400">
                   {items?.filter(i => i?.visible !== false)?.map((item, index) => (
