@@ -18,15 +18,34 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
 
   const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
 
-  const { completion, setCompletion, isLoading, stop, complete, input } = useCompletion({
+  const { completion: editCompletion, setCompletion: setEditCompletion, isLoading: isEditLoading, stop: stopEdit, complete: completeEdit, input: editInput } = useCompletion({
     id: "ai-edit",
-    api: `${completionApi}/edit` || `${completionApi}/draft`,
+    api: `${completionApi}/edit`,
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onError: (err) => {
       toast.error(err.message);
     },
   });
+
+  const { completion: draftCompletion, setCompletion: setDraftCompletion, isLoading: isDraftLoading, stop: stopDraft, complete: completeDraft, input: draftInput } = useCompletion({
+    id: "ai-draft",
+    api: `${completionApi}/draft`,
+    body: { ...(body || {}) },
+    headers: { ...(headers || {}), },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const isEdit = !!editCompletion;
+
+  const completion = isEdit ? editCompletion : draftCompletion;
+  const isLoading = isEdit ? isEditLoading : isDraftLoading;
+  const input = isEdit ? editInput : draftInput;
+  const complete = isEdit ? completeEdit : completeDraft;
+  const stop = isEdit ? stopEdit : stopDraft;
+  const setCompletion = isEdit ? setEditCompletion : setDraftCompletion;
 
   useEffect(() => {
     if (completion.length > 0) {
@@ -53,7 +72,10 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
         <div className=" novel-flex novel-gap-2 novel-items-center novel-text-slate-500">
           <Magic className="novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" />
           {isLoading && (
-            <div className="novel-mr-auto novel-flex novel-items-center">
+            <div
+              className="novel-mr-auto novel-flex novel-items-center"
+              onClick={() => { stop(); }}
+            >
               <LoadingDots color="#9e9e9e" />
             </div>
           )}

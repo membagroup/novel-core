@@ -21180,15 +21180,31 @@ import { jsx as jsx14, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
   const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2, complete, input } = useCompletion4({
+  const { completion: editCompletion, setCompletion: setEditCompletion, isLoading: isEditLoading, stop: stopEdit, complete: completeEdit, input: editInput } = useCompletion4({
     id: "ai-edit",
-    api: `${completionApi}/edit` || `${completionApi}/draft`,
+    api: `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       toast3.error(err.message);
     }
   });
+  const { completion: draftCompletion, setCompletion: setDraftCompletion, isLoading: isDraftLoading, stop: stopDraft, complete: completeDraft, input: draftInput } = useCompletion4({
+    id: "ai-draft",
+    api: `${completionApi}/draft`,
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
+    onError: (err) => {
+      toast3.error(err.message);
+    }
+  });
+  const isEdit = !!editCompletion;
+  const completion = isEdit ? editCompletion : draftCompletion;
+  const isLoading = isEdit ? isEditLoading : isDraftLoading;
+  const input = isEdit ? editInput : draftInput;
+  const complete = isEdit ? completeEdit : completeDraft;
+  const stop2 = isEdit ? stopEdit : stopDraft;
+  const setCompletion = isEdit ? setEditCompletion : setDraftCompletion;
   useEffect14(() => {
     if (completion.length > 0) {
       setIsShow(true);
@@ -21208,7 +21224,16 @@ var AIEditorBubble = ({ editor }) => {
   return isShow || isLoading ? /* @__PURE__ */ jsx14("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs12("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
       /* @__PURE__ */ jsx14(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
-      isLoading && /* @__PURE__ */ jsx14("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ jsx14(loading_dots_default, { color: "#9e9e9e" }) }),
+      isLoading && /* @__PURE__ */ jsx14(
+        "div",
+        {
+          className: "novel-mr-auto novel-flex novel-items-center",
+          onClick: () => {
+            stop2();
+          },
+          children: /* @__PURE__ */ jsx14(loading_dots_default, { color: "#9e9e9e" })
+        }
+      ),
       /* @__PURE__ */ jsxs12("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ jsx14("button", { children: /* @__PURE__ */ jsx14(
           Replace,
@@ -28515,9 +28540,9 @@ function Editor2({
       additionalData.getEditor(editor);
     }
   }, [editor]);
-  const { complete, completion, isLoading, stop: stop2 } = useCompletion6({
+  const { complete: completeContinue, completion: continueCompletion, isLoading: isContinuing, stop: stopContinue, setCompletion: setContCompletion } = useCompletion6({
     id: "ai-continue",
-    api: `${completionApi}/continue` || `${completionApi}/write`,
+    api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion2) => {
@@ -28526,11 +28551,35 @@ function Editor2({
         to: editor.state.selection.from
       });
       setShowBubbleMenu(true);
+      setCompletion("");
     },
     onError: (err) => {
       toast6.error(err.message);
     }
   });
+  const { complete: completeWrite, completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion6({
+    id: "ai-write",
+    api: `${completionApi}/write`,
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
+    onFinish: (_prompt, completion2) => {
+      editor == null ? void 0 : editor.commands.setTextSelection({
+        from: editor.state.selection.from - completion2.length,
+        to: editor.state.selection.from
+      });
+      setShowBubbleMenu(true);
+      setCompletion("");
+    },
+    onError: (err) => {
+      toast6.error(err.message);
+    }
+  });
+  const isWrite = !!completeContinue;
+  const completion = isWrite ? writeCompletion : continueCompletion;
+  const isLoading = isWrite ? isWriting : isContinuing;
+  const complete = isWrite ? completeWrite : completeContinue;
+  const stop2 = isWrite ? stopWrite : stopContinue;
+  const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
   const prev = useRef16("");
   useEffect20(() => {
     const diff3 = completion.slice(prev.current.length);

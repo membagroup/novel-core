@@ -21125,15 +21125,31 @@ var import_jsx_runtime14 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react35.useState)(false);
   const { completionApi, additionalData: { body, headers } } = (0, import_react35.useContext)(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2, complete, input } = (0, import_react34.useCompletion)({
+  const { completion: editCompletion, setCompletion: setEditCompletion, isLoading: isEditLoading, stop: stopEdit, complete: completeEdit, input: editInput } = (0, import_react34.useCompletion)({
     id: "ai-edit",
-    api: `${completionApi}/edit` || `${completionApi}/draft`,
+    api: `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onError: (err) => {
       import_sonner3.toast.error(err.message);
     }
   });
+  const { completion: draftCompletion, setCompletion: setDraftCompletion, isLoading: isDraftLoading, stop: stopDraft, complete: completeDraft, input: draftInput } = (0, import_react34.useCompletion)({
+    id: "ai-draft",
+    api: `${completionApi}/draft`,
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
+    onError: (err) => {
+      import_sonner3.toast.error(err.message);
+    }
+  });
+  const isEdit = !!editCompletion;
+  const completion = isEdit ? editCompletion : draftCompletion;
+  const isLoading = isEdit ? isEditLoading : isDraftLoading;
+  const input = isEdit ? editInput : draftInput;
+  const complete = isEdit ? completeEdit : completeDraft;
+  const stop2 = isEdit ? stopEdit : stopDraft;
+  const setCompletion = isEdit ? setEditCompletion : setDraftCompletion;
   (0, import_react35.useEffect)(() => {
     if (completion.length > 0) {
       setIsShow(true);
@@ -21153,7 +21169,16 @@ var AIEditorBubble = ({ editor }) => {
   return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
-      isLoading && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
+      isLoading && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        "div",
+        {
+          className: "novel-mr-auto novel-flex novel-items-center",
+          onClick: () => {
+            stop2();
+          },
+          children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(loading_dots_default, { color: "#9e9e9e" })
+        }
+      ),
       /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           import_lucide_react10.Replace,
@@ -28449,9 +28474,9 @@ function Editor2({
       additionalData.getEditor(editor);
     }
   }, [editor]);
-  const { complete, completion, isLoading, stop: stop2 } = (0, import_react61.useCompletion)({
+  const { complete: completeContinue, completion: continueCompletion, isLoading: isContinuing, stop: stopContinue, setCompletion: setContCompletion } = (0, import_react61.useCompletion)({
     id: "ai-continue",
-    api: `${completionApi}/continue` || `${completionApi}/write`,
+    api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion2) => {
@@ -28460,11 +28485,35 @@ function Editor2({
         to: editor.state.selection.from
       });
       setShowBubbleMenu(true);
+      setCompletion("");
     },
     onError: (err) => {
       import_sonner6.toast.error(err.message);
     }
   });
+  const { complete: completeWrite, completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = (0, import_react61.useCompletion)({
+    id: "ai-write",
+    api: `${completionApi}/write`,
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
+    onFinish: (_prompt, completion2) => {
+      editor == null ? void 0 : editor.commands.setTextSelection({
+        from: editor.state.selection.from - completion2.length,
+        to: editor.state.selection.from
+      });
+      setShowBubbleMenu(true);
+      setCompletion("");
+    },
+    onError: (err) => {
+      import_sonner6.toast.error(err.message);
+    }
+  });
+  const isWrite = !!completeContinue;
+  const completion = isWrite ? writeCompletion : continueCompletion;
+  const isLoading = isWrite ? isWriting : isContinuing;
+  const complete = isWrite ? completeWrite : completeContinue;
+  const stop2 = isWrite ? stopWrite : stopContinue;
+  const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
   const prev = (0, import_react59.useRef)("");
   (0, import_react59.useEffect)(() => {
     const diff3 = completion.slice(prev.current.length);

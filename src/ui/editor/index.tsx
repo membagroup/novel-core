@@ -203,9 +203,9 @@ export default function Editor({
     }
   }, [editor]);
 
-  const { complete, completion, isLoading, stop } = useCompletion({
+  const { complete: completeContinue, completion: continueCompletion, isLoading: isContinuing, stop: stopContinue, setCompletion: setContCompletion } = useCompletion({
     id: "ai-continue",
-    api: `${completionApi}/continue` || `${completionApi}/write`,
+    api: `${completionApi}/continue`,
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
@@ -214,11 +214,38 @@ export default function Editor({
         to: editor.state.selection.from,
       });
       setShowBubbleMenu(true);
+      setCompletion('');
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
+
+  const { complete: completeWrite, completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion({
+    id: "ai-write",
+    api: `${completionApi}/write`,
+    body: { ...(body || {}) },
+    headers: { ...(headers || {}), },
+    onFinish: (_prompt, completion) => {
+      editor?.commands.setTextSelection({
+        from: editor.state.selection.from - completion.length,
+        to: editor.state.selection.from,
+      });
+      setShowBubbleMenu(true);
+      setCompletion('');
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const isWrite = !!completeContinue;
+
+  const completion = isWrite ? writeCompletion : continueCompletion;
+  const isLoading = isWrite ? isWriting : isContinuing;
+  const complete = isWrite ? completeWrite : completeContinue;
+  const stop = isWrite ? stopWrite : stopContinue;
+  const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
 
   const prev = useRef("");
 
