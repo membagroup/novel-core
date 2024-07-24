@@ -186,7 +186,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
               handleSubmit();
             }}
             className="novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1 novel-flex novel-flex-col">
-            <div>
+            <div className="novel-flex novel-w-full">
               <input
                 ref={inputRef}
                 type="text"
@@ -198,7 +198,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
                   setOptions({ ...options, command: value });
                 }}
               />
-              <button className="novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100">
+              <button type="submit" className="novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100">
                 <Send className="novel-h-4 novel-w-4 novel-text-purple-500" />
               </button>
             </div>
