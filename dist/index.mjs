@@ -1712,7 +1712,7 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-import { useEffect as useEffect20, useRef as useRef16, useState as useState13 } from "react";
+import { useEffect as useEffect20, useRef as useRef17, useState as useState13 } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
 // src/ui/editor/plugins/upload-images.tsx
@@ -21173,7 +21173,7 @@ var loading_dots_default = LoadingDots;
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
 import { useCompletion as useCompletion4 } from "ai/react";
 import { X, Clipboard, Replace, Repeat } from "lucide-react";
-import { useContext as useContext7, useEffect as useEffect14, useState as useState10 } from "react";
+import { useContext as useContext7, useEffect as useEffect14, useRef as useRef13, useState as useState10 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx14, jsxs as jsxs12 } from "react/jsx-runtime";
@@ -21221,7 +21221,17 @@ var AIEditorBubble = ({ editor }) => {
       });
     }
   };
-  return isShow || isLoading ? /* @__PURE__ */ jsx14("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
+  const handleClose = () => {
+    setIsShow(false);
+    setCompletion("");
+  };
+  const ref2 = useRef13(null);
+  useClickOutside(ref2, () => {
+    if (!isShow)
+      return;
+    handleClose();
+  });
+  return isShow || isLoading ? /* @__PURE__ */ jsx14("div", { ref: ref2, className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs12("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
       /* @__PURE__ */ jsx14(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ jsx14(
@@ -21263,8 +21273,7 @@ var AIEditorBubble = ({ editor }) => {
           X,
           {
             onClick: () => {
-              setIsShow(false);
-              setCompletion("");
+              handleClose();
             },
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
@@ -21365,7 +21374,7 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext15, useEffect as useEffect19, useRef as useRef15, useState as useState12 } from "react";
+import { useContext as useContext15, useEffect as useEffect19, useRef as useRef16, useState as useState12 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
@@ -21397,7 +21406,7 @@ import { createContext as createContext4 } from "react";
 var MotionContext = createContext4({});
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs
-import { useContext as useContext9, useRef as useRef13, useInsertionEffect, useEffect as useEffect17 } from "react";
+import { useContext as useContext9, useRef as useRef14, useInsertionEffect, useEffect as useEffect17 } from "react";
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/context/PresenceContext.mjs
 import { createContext as createContext5 } from "react";
@@ -21422,7 +21431,7 @@ function useVisualElement(Component2, visualState, props, createVisualElement) {
   const lazyContext = useContext9(LazyContext);
   const presenceContext = useContext9(PresenceContext);
   const reducedMotionConfig = useContext9(MotionConfigContext).reducedMotion;
-  const visualElementRef = useRef13();
+  const visualElementRef = useRef14();
   createVisualElement = createVisualElement || lazyContext.renderer;
   if (!visualElementRef.current && createVisualElement) {
     visualElementRef.current = createVisualElement(Component2, {
@@ -22265,9 +22274,9 @@ function resolveVariantFromProps(props, definition, custom, currentValues2 = {},
 }
 
 // ../../node_modules/.pnpm/framer-motion@10.15.1_react-dom@18.2.0_react@18.2.0/node_modules/framer-motion/dist/es/utils/use-constant.mjs
-import { useRef as useRef14 } from "react";
+import { useRef as useRef15 } from "react";
 function useConstant(init) {
-  const ref2 = useRef14(null);
+  const ref2 = useRef15(null);
   if (ref2.current === null) {
     ref2.current = init();
   }
@@ -28132,7 +28141,7 @@ import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
 function ChatBot(props) {
   const { editor, history } = props;
   const [isOpen, setIsOpen] = useState12(false);
-  const inputRef = useRef15(null);
+  const inputRef = useRef16(null);
   const { completionApi, additionalData: { body, headers } } = useContext15(NovelContext);
   const initialMessage = {
     id: "start",
@@ -28182,7 +28191,7 @@ function ChatBot(props) {
     editor.chain().blur();
     setIsOpen(!isOpen);
   };
-  const ref2 = useRef15(null);
+  const ref2 = useRef16(null);
   useClickOutside(ref2, () => {
     if (!isOpen)
       return;
@@ -28580,7 +28589,7 @@ function Editor2({
   const complete = isWrite ? completeWrite : completeContinue;
   const stop2 = isWrite ? stopWrite : stopContinue;
   const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
-  const prev = useRef16("");
+  const prev = useRef17("");
   useEffect20(() => {
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;

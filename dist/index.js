@@ -21166,7 +21166,17 @@ var AIEditorBubble = ({ editor }) => {
       });
     }
   };
-  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
+  const handleClose = () => {
+    setIsShow(false);
+    setCompletion("");
+  };
+  const ref2 = (0, import_react35.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isShow)
+      return;
+    handleClose();
+  });
+  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { ref: ref2, className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
       isLoading && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
@@ -21208,8 +21218,7 @@ var AIEditorBubble = ({ editor }) => {
           import_lucide_react10.X,
           {
             onClick: () => {
-              setIsShow(false);
-              setCompletion("");
+              handleClose();
             },
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }

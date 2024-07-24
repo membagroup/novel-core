@@ -3,11 +3,12 @@ import Magic from "@/ui/icons/magic";
 import { Editor } from "@tiptap/core";
 import { useCompletion } from "ai/react";
 import { X, Clipboard, Replace, Repeat } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 // import va from "@vercel/analytics";
 import { NovelContext } from "../../../provider";
 import ReactMarkdown from "react-markdown";
+import { useClickOutside } from "@/ui/editor/hooks";
 
 type Props = {
   editor: Editor;
@@ -66,8 +67,19 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
     }
   };
 
+  const handleClose = () => {
+    setIsShow(false);
+    setCompletion("");
+  }
+
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
+    if (!isShow) return;
+    handleClose()
+  });
+
   return isShow || isLoading ? (
-    <div className="novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1">
+    <div ref={ref} className="novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1">
       <div className="novel-w-64 novel-max-h-48 novel-overflow-y-auto">
         <div className=" novel-flex novel-gap-2 novel-items-center novel-text-slate-500">
           <Magic className="novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" />
@@ -104,8 +116,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
             </button>
             <X
               onClick={() => {
-                setIsShow(false);
-                setCompletion("");
+                handleClose();
               }}
               className="novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
             />
