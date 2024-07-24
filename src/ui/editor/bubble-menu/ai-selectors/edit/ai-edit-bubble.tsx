@@ -74,7 +74,8 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
             <button>
               <Repeat
                 onClick={() => {
-                  complete(input, { body: { prevResponse: completion } });
+                  const inputSplit = input.split(':\n');
+                  complete(input, { body: { prevResponse: completion, command: inputSplit[0], text: inputSplit[1] || '' } });
                 }}
                 className="novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
               />

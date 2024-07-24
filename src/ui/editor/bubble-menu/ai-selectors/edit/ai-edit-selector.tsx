@@ -18,7 +18,7 @@ import {
   Wand,
   LucideIcon,
 } from "lucide-react";
-import React, { FC, SyntheticEvent, useContext, useEffect, useRef } from "react";
+import React, { FC, SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import { Command } from "cmdk";
 import Magic from "@/ui/icons/magic";
 import { useCompletion } from "ai/react";
@@ -38,7 +38,10 @@ interface AISelectorProps {
 
 export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
-  const context = useContext(NovelContext);
+  // const context = useContext(NovelContext);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [options, setOptions] = useState<Record<string, any>>({});
 
   const defaultItems = [
     {
@@ -95,26 +98,21 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
     ...(subMenuItems || []),
   ] as AIMenuItem[];
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleSubmit = (input: HTMLInputElement) => {
-    if (!input.value) return;
+  const handleSubmit = () => {
+    if (!options?.command) return;
     const { from, to } = editor.state.selection;
     const text = editor.state.doc.textBetween(from, to, " ");
-    complete(`${input.value}:\n ${text}`);
+    complete(`${options?.command}:\n ${text}`, { body: { ...options, text } });
+    setOptions({});
     setIsOpen(false);
   };
 
   useEffect(() => {
-    if (isOpen && context.lastInput && inputRef?.current) {
-      inputRef.current.value = context.lastInput;
-    }
-
     const onKeyDown = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
         if (e.key === "Enter" && inputRef?.current) {
-          handleSubmit(inputRef.current);
+          handleSubmit();
         }
       }
       else if (e.key === "Escape" || (e.metaKey && e.key === "z")) {
@@ -138,9 +136,6 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside(ref, () => {
     if (!isOpen) return;
-    if (inputRef.current) {
-      context.setLastInput(inputRef.current.value || '');
-    }
     setIsOpen(false);
   });
 
@@ -188,8 +183,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              const input = e.currentTarget[0] as HTMLInputElement;
-              handleSubmit(input);
+              handleSubmit();
             }}
             className="novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
             <input
@@ -197,7 +191,20 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
               type="text"
               placeholder="Enter a prompt or question..."
               className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500"
-              defaultValue={""}
+              value={options?.command || ''}
+              onChange={(e) => {
+                let value = e.currentTarget.value;
+                setOptions({ ...options, command: value });
+              }}
+            />
+            <textarea
+              placeholder="Enter additional info..."
+              className="flex-1 bg-white p-1 text-sm border rounded text-slate-500"
+              value={options?.info || ''}
+              onChange={(e) => {
+                let value = e.currentTarget.value;
+                setOptions({ ...options, info: value });
+              }}
             />
             <button className="novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100">
               <Send className="novel-h-4 novel-w-4 novel-text-purple-500" />
@@ -216,7 +223,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
                         if (!isLoading) {
                           const { from, to } = editor.state.selection;
                           const text = editor.state.doc.textBetween(from, to, " ");
-                          complete(`${item.command}:\n ${text}`);
+                          complete(`${item.command}:\n ${text}`, { body: { ...options, command: item.command, text } });
                           setIsOpen(false);
                         }
                       }}

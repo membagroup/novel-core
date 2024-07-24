@@ -5901,7 +5901,8 @@ var import_jsx_runtime9 = require("react/jsx-runtime");
 var AISelector = (props) => {
   var _a;
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
-  const context = (0, import_react26.useContext)(NovelContext);
+  const inputRef = (0, import_react26.useRef)(null);
+  const [options, setOptions] = (0, import_react26.useState)({});
   const defaultItems = [
     {
       name: "Improve selection",
@@ -5953,25 +5954,22 @@ var AISelector = (props) => {
     ...defaultItems,
     ...subMenuItems || []
   ];
-  const inputRef = (0, import_react26.useRef)(null);
-  const handleSubmit = (input) => {
-    if (!input.value)
+  const handleSubmit = () => {
+    if (!(options == null ? void 0 : options.command))
       return;
     const { from, to } = editor.state.selection;
     const text = editor.state.doc.textBetween(from, to, " ");
-    complete(`${input.value}:
- ${text}`);
+    complete(`${options == null ? void 0 : options.command}:
+ ${text}`, { body: __spreadProps(__spreadValues({}, options), { text }) });
+    setOptions({});
     setIsOpen(false);
   };
   (0, import_react26.useEffect)(() => {
-    if (isOpen && context.lastInput && (inputRef == null ? void 0 : inputRef.current)) {
-      inputRef.current.value = context.lastInput;
-    }
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
         if (e.key === "Enter" && (inputRef == null ? void 0 : inputRef.current)) {
-          handleSubmit(inputRef.current);
+          handleSubmit();
         }
       } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
         stop2();
@@ -5993,9 +5991,6 @@ var AISelector = (props) => {
   useClickOutside(ref2, () => {
     if (!isOpen)
       return;
-    if (inputRef.current) {
-      context.setLastInput(inputRef.current.value || "");
-    }
     setIsOpen(false);
   });
   (0, import_react26.useEffect)(() => {
@@ -6042,8 +6037,7 @@ var AISelector = (props) => {
         {
           onSubmit: (e) => {
             e.preventDefault();
-            const input = e.currentTarget[0];
-            handleSubmit(input);
+            handleSubmit();
           },
           className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
           children: [
@@ -6054,7 +6048,23 @@ var AISelector = (props) => {
                 type: "text",
                 placeholder: "Enter a prompt or question...",
                 className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
-                defaultValue: ""
+                value: (options == null ? void 0 : options.command) || "",
+                onChange: (e) => {
+                  let value = e.currentTarget.value;
+                  setOptions(__spreadProps(__spreadValues({}, options), { command: value }));
+                }
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+              "textarea",
+              {
+                placeholder: "Enter additional info...",
+                className: "flex-1 bg-white p-1 text-sm border rounded text-slate-500",
+                value: (options == null ? void 0 : options.info) || "",
+                onChange: (e) => {
+                  let value = e.currentTarget.value;
+                  setOptions(__spreadProps(__spreadValues({}, options), { info: value }));
+                }
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
@@ -6072,7 +6082,7 @@ var AISelector = (props) => {
               const { from, to } = editor.state.selection;
               const text = editor.state.doc.textBetween(from, to, " ");
               complete(`${item.command}:
- ${text}`);
+ ${text}`, { body: __spreadProps(__spreadValues({}, options), { command: item.command, text }) });
               setIsOpen(false);
             }
           },
@@ -21166,7 +21176,8 @@ var AIEditorBubble = ({ editor }) => {
           import_lucide_react10.Repeat,
           {
             onClick: () => {
-              complete(input, { body: { prevResponse: completion } });
+              const inputSplit = input.split(":\n");
+              complete(input, { body: { prevResponse: completion, command: inputSplit[0], text: inputSplit[1] || "" } });
             },
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }

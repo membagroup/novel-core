@@ -1712,7 +1712,7 @@ ul[data-type=taskList] li[data-checked=true] > div > p {
 `);
 
 // src/ui/editor/index.tsx
-import { useEffect as useEffect20, useRef as useRef16, useState as useState12 } from "react";
+import { useEffect as useEffect20, useRef as useRef16, useState as useState13 } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 
 // src/ui/editor/plugins/upload-images.tsx
@@ -2955,7 +2955,7 @@ var defaultEditorContent = {
 
 // src/ui/editor/bubble-menu/index.tsx
 import { BubbleMenu, isNodeSelection } from "@tiptap/react";
-import { useContext as useContext6, useState as useState8 } from "react";
+import { useContext as useContext6, useState as useState9 } from "react";
 import {
   BoldIcon,
   ItalicIcon,
@@ -3630,7 +3630,7 @@ import {
   Send,
   Wand
 } from "lucide-react";
-import { useContext as useContext4, useEffect as useEffect10, useRef as useRef9 } from "react";
+import { useContext as useContext4, useEffect as useEffect10, useRef as useRef9, useState as useState8 } from "react";
 
 // ../../node_modules/.pnpm/@babel+runtime@7.24.7/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
@@ -5956,7 +5956,8 @@ import { Fragment as Fragment3, jsx as jsx9, jsxs as jsxs8 } from "react/jsx-run
 var AISelector = (props) => {
   var _a;
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
-  const context = useContext4(NovelContext);
+  const inputRef = useRef9(null);
+  const [options, setOptions] = useState8({});
   const defaultItems = [
     {
       name: "Improve selection",
@@ -6008,25 +6009,22 @@ var AISelector = (props) => {
     ...defaultItems,
     ...subMenuItems || []
   ];
-  const inputRef = useRef9(null);
-  const handleSubmit = (input) => {
-    if (!input.value)
+  const handleSubmit = () => {
+    if (!(options == null ? void 0 : options.command))
       return;
     const { from, to } = editor.state.selection;
     const text = editor.state.doc.textBetween(from, to, " ");
-    complete(`${input.value}:
- ${text}`);
+    complete(`${options == null ? void 0 : options.command}:
+ ${text}`, { body: __spreadProps(__spreadValues({}, options), { text }) });
+    setOptions({});
     setIsOpen(false);
   };
   useEffect10(() => {
-    if (isOpen && context.lastInput && (inputRef == null ? void 0 : inputRef.current)) {
-      inputRef.current.value = context.lastInput;
-    }
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
         if (e.key === "Enter" && (inputRef == null ? void 0 : inputRef.current)) {
-          handleSubmit(inputRef.current);
+          handleSubmit();
         }
       } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
         stop2();
@@ -6048,9 +6046,6 @@ var AISelector = (props) => {
   useClickOutside(ref2, () => {
     if (!isOpen)
       return;
-    if (inputRef.current) {
-      context.setLastInput(inputRef.current.value || "");
-    }
     setIsOpen(false);
   });
   useEffect10(() => {
@@ -6097,8 +6092,7 @@ var AISelector = (props) => {
         {
           onSubmit: (e) => {
             e.preventDefault();
-            const input = e.currentTarget[0];
-            handleSubmit(input);
+            handleSubmit();
           },
           className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
           children: [
@@ -6109,7 +6103,23 @@ var AISelector = (props) => {
                 type: "text",
                 placeholder: "Enter a prompt or question...",
                 className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
-                defaultValue: ""
+                value: (options == null ? void 0 : options.command) || "",
+                onChange: (e) => {
+                  let value = e.currentTarget.value;
+                  setOptions(__spreadProps(__spreadValues({}, options), { command: value }));
+                }
+              }
+            ),
+            /* @__PURE__ */ jsx9(
+              "textarea",
+              {
+                placeholder: "Enter additional info...",
+                className: "flex-1 bg-white p-1 text-sm border rounded text-slate-500",
+                value: (options == null ? void 0 : options.info) || "",
+                onChange: (e) => {
+                  let value = e.currentTarget.value;
+                  setOptions(__spreadProps(__spreadValues({}, options), { info: value }));
+                }
               }
             ),
             /* @__PURE__ */ jsx9("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx9(Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
@@ -6127,7 +6137,7 @@ var AISelector = (props) => {
               const { from, to } = editor.state.selection;
               const text = editor.state.doc.textBetween(from, to, " ");
               complete(`${item.command}:
- ${text}`);
+ ${text}`, { body: __spreadProps(__spreadValues({}, options), { command: item.command, text }) });
               setIsOpen(false);
             }
           },
@@ -6324,13 +6334,13 @@ var EditorBubbleMenu = (props) => {
       // followCursor: showBubbleMenu,
     }
   });
-  const [hasSelection, setHasSection] = useState8(false);
-  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState8(false);
-  const [isColorSelectorOpen, setIsColorSelectorOpen] = useState8(false);
-  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState8(false);
-  const [isTableSelectorOpen, setIsTableSelectorOpen] = useState8(false);
-  const [isAISelectorOpen, setIsAISelectorOpen] = useState8(false);
-  const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState8(false);
+  const [hasSelection, setHasSection] = useState9(false);
+  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState9(false);
+  const [isColorSelectorOpen, setIsColorSelectorOpen] = useState9(false);
+  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState9(false);
+  const [isTableSelectorOpen, setIsTableSelectorOpen] = useState9(false);
+  const [isAISelectorOpen, setIsAISelectorOpen] = useState9(false);
+  const [isTranslateSelectorOpen, setIsTranslateSelectorOpen] = useState9(false);
   return /* @__PURE__ */ jsx11(
     BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
@@ -21166,12 +21176,12 @@ var loading_dots_default = LoadingDots;
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
 import { useCompletion as useCompletion4 } from "ai/react";
 import { X, Clipboard, Replace, Repeat } from "lucide-react";
-import { useContext as useContext7, useEffect as useEffect14, useState as useState9 } from "react";
+import { useContext as useContext7, useEffect as useEffect14, useState as useState10 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { jsx as jsx14, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
-  const [isShow, setIsShow] = useState9(false);
+  const [isShow, setIsShow] = useState10(false);
   const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2, complete, input } = useCompletion4({
     id: "ai-edit",
@@ -21221,7 +21231,8 @@ var AIEditorBubble = ({ editor }) => {
           Repeat,
           {
             onClick: () => {
-              complete(input, { body: { prevResponse: completion } });
+              const inputSplit = input.split(":\n");
+              complete(input, { body: { prevResponse: completion, command: inputSplit[0], text: inputSplit[1] || "" } });
             },
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
@@ -21263,12 +21274,12 @@ function AIGeneratingLoading({ stop: stop2 }) {
 // src/ui/editor/bubble-menu/ai-selectors/translate/ai-translate-bubble.tsx
 import { useCompletion as useCompletion5 } from "ai/react";
 import { X as X2, Clipboard as Clipboard2, Replace as Replace2 } from "lucide-react";
-import { useContext as useContext8, useEffect as useEffect15, useState as useState10 } from "react";
+import { useContext as useContext8, useEffect as useEffect15, useState as useState11 } from "react";
 import { toast as toast4 } from "sonner";
 import ReactMarkdown2 from "react-markdown";
 import { jsx as jsx16, jsxs as jsxs14 } from "react/jsx-runtime";
 var AITranslateBubble = ({ editor }) => {
-  const [isShow, setIsShow] = useState10(false);
+  const [isShow, setIsShow] = useState11(false);
   const { completionApi, additionalData: { body, headers } } = useContext8(NovelContext);
   const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion5({
     id: "ai-translate",
@@ -21332,7 +21343,7 @@ var AITranslateBubble = ({ editor }) => {
 var ai_translate_bubble_default = AITranslateBubble;
 
 // src/ui/editor/bot/chat-bot.tsx
-import { useContext as useContext15, useEffect as useEffect19, useRef as useRef15, useState as useState11 } from "react";
+import { useContext as useContext15, useEffect as useEffect19, useRef as useRef15, useState as useState12 } from "react";
 import { useChat } from "ai/react";
 import {
   Baby,
@@ -28098,7 +28109,7 @@ import { toast as toast5 } from "sonner";
 import { jsx as jsx17, jsxs as jsxs15 } from "react/jsx-runtime";
 function ChatBot(props) {
   const { editor, history } = props;
-  const [isOpen, setIsOpen] = useState11(false);
+  const [isOpen, setIsOpen] = useState12(false);
   const inputRef = useRef15(null);
   const { completionApi, additionalData: { body, headers } } = useContext15(NovelContext);
   const initialMessage = {
@@ -28443,11 +28454,11 @@ function Editor2({
 }) {
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
-  const [hydrated, setHydrated] = useState12(false);
-  const [aiTextInput, setAiTextInput] = useState12("");
-  const [showBubbleMenu, setShowBubbleMenu] = useState12(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
-  const [chatHistory, setChatHistory] = useState12((additionalData == null ? void 0 : additionalData.chatHistory) || []);
-  const [isLoadingOutside, setLoadingOutside] = useState12(false);
+  const [hydrated, setHydrated] = useState13(false);
+  const [aiTextInput, setAiTextInput] = useState13("");
+  const [showBubbleMenu, setShowBubbleMenu] = useState13(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
+  const [chatHistory, setChatHistory] = useState13((additionalData == null ? void 0 : additionalData.chatHistory) || []);
+  const [isLoadingOutside, setLoadingOutside] = useState13(false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
     const text = editor2.getText();
@@ -28457,7 +28468,7 @@ function Editor2({
       setContent(json);
     }
   }), debounceDuration);
-  const [status, setStatus] = useState12("connecting");
+  const [status, setStatus] = useState13("connecting");
   const user = __spreadProps(__spreadValues({}, userDetails), {
     color: (userDetails == null ? void 0 : userDetails.color) || generateRandomColorCode()
   });
