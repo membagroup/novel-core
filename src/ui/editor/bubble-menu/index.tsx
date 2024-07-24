@@ -23,7 +23,7 @@ type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
   const { additionalData, showBubbleMenu } = useContext(NovelContext);
-  const { showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const { showAiSelector, showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
   const bubbleMenuItems = (menuItems || []) as BubbleMenuItem[];
   const CustomMenuItems = (customMenuItems || []) as {
     component: (props: any) => JSX.Element, isOpen: boolean, setIsOpen: (value: React.SetStateAction<boolean>) => void
@@ -111,7 +111,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
       {props.editor && showBubbleMenu && (
         <>
-          <AISelector
+          {showAiSelector !== false ? <AISelector
             editor={props.editor}
             isOpen={isAISelectorOpen}
             hasSelection={hasSelection}
@@ -124,7 +124,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               setIsLinkSelectorOpen(false);
               setIsTranslateSelectorOpen(false);
             }}
-          />
+          /> : null}
           <NodeSelector
             editor={props.editor}
             isOpen={isNodeSelectorOpen}

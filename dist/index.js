@@ -6043,7 +6043,7 @@ var AISelector = (props) => {
                   ref: inputRef,
                   type: "text",
                   placeholder: "Enter a prompt or question...",
-                  className: "novel-flex-1 novel-bg-white novel-p-1 border novel-text-sm novel-outline-none novel-text-slate-500",
+                  className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
                   value: (options == null ? void 0 : options.command) || "",
                   onChange: (e) => {
                     let value = e.currentTarget.value;
@@ -6213,7 +6213,7 @@ var TranslateSelector = ({
 var import_jsx_runtime11 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
   const { additionalData, showBubbleMenu } = (0, import_react31.useContext)(NovelContext);
-  const { showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const { showAiSelector, showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
   const bubbleMenuItems = menuItems || [];
   const CustomMenuItems = customMenuItems || [];
   const items = [
@@ -6288,7 +6288,7 @@ var EditorBubbleMenu = (props) => {
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && showBubbleMenu && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        showAiSelector !== false ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           AISelector,
           {
             editor: props.editor,
@@ -6304,7 +6304,7 @@ var EditorBubbleMenu = (props) => {
               setIsTranslateSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           NodeSelector,
           {

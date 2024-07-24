@@ -191,7 +191,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
                 ref={inputRef}
                 type="text"
                 placeholder="Enter a prompt or question..."
-                className="novel-flex-1 novel-bg-white novel-p-1 border novel-text-sm novel-outline-none novel-text-slate-500"
+                className="novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500"
                 value={options?.command || ''}
                 onChange={(e) => {
                   let value = e.currentTarget.value;

@@ -6098,7 +6098,7 @@ var AISelector = (props) => {
                   ref: inputRef,
                   type: "text",
                   placeholder: "Enter a prompt or question...",
-                  className: "novel-flex-1 novel-bg-white novel-p-1 border novel-text-sm novel-outline-none novel-text-slate-500",
+                  className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
                   value: (options == null ? void 0 : options.command) || "",
                   onChange: (e) => {
                     let value = e.currentTarget.value;
@@ -6268,7 +6268,7 @@ var TranslateSelector = ({
 import { Fragment as Fragment4, jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 var EditorBubbleMenu = (props) => {
   const { additionalData, showBubbleMenu } = useContext6(NovelContext);
-  const { showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const { showAiSelector, showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
   const bubbleMenuItems = menuItems || [];
   const CustomMenuItems = customMenuItems || [];
   const items = [
@@ -6343,7 +6343,7 @@ var EditorBubbleMenu = (props) => {
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
       children: props.editor && showBubbleMenu && /* @__PURE__ */ jsxs10(Fragment4, { children: [
-        /* @__PURE__ */ jsx11(
+        showAiSelector !== false ? /* @__PURE__ */ jsx11(
           AISelector,
           {
             editor: props.editor,
@@ -6359,7 +6359,7 @@ var EditorBubbleMenu = (props) => {
               setIsTranslateSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         /* @__PURE__ */ jsx11(
           NodeSelector,
           {
