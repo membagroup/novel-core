@@ -204,8 +204,8 @@ export default function Editor({
   }, [editor]);
 
   const { complete, completion, isLoading, stop } = useCompletion({
-    id: "ai-continue",
-    api: `${completionApi}/continue`,
+    id: "ai-continue" || 'ai-write',
+    api: `${completionApi}/continue` || `${completionApi}/write`,
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {

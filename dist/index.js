@@ -6043,7 +6043,7 @@ var AISelector = (props) => {
                   ref: inputRef,
                   type: "text",
                   placeholder: "Enter a prompt or question...",
-                  className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
+                  className: "novel-flex-1 novel-bg-white novel-p-1 border novel-text-sm novel-outline-none novel-text-slate-500",
                   value: (options == null ? void 0 : options.command) || "",
                   onChange: (e) => {
                     let value = e.currentTarget.value;
@@ -28451,7 +28451,7 @@ function Editor2({
   }, [editor]);
   const { complete, completion, isLoading, stop: stop2 } = (0, import_react61.useCompletion)({
     id: "ai-continue",
-    api: `${completionApi}/continue`,
+    api: `${completionApi}/continue` || `${completionApi}/write`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion2) => {
