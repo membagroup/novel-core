@@ -111,20 +111,21 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
       {props.editor && showBubbleMenu && (
         <>
-          {showAiSelector !== false ? <AISelector
-            editor={props.editor}
-            isOpen={isAISelectorOpen}
-            hasSelection={hasSelection}
-            subMenuItems={aiMenuItems || []}
-            setIsOpen={() => {
-              setIsAISelectorOpen(!isAISelectorOpen);
-              setIsNodeSelectorOpen(false);
-              setIsColorSelectorOpen(false);
-              setIsTableSelectorOpen(false);
-              setIsLinkSelectorOpen(false);
-              setIsTranslateSelectorOpen(false);
-            }}
-          /> : null}
+          {showAiSelector !== false ?
+            <AISelector
+              editor={props.editor}
+              isOpen={isAISelectorOpen}
+              hasSelection={hasSelection}
+              subMenuItems={aiMenuItems || []}
+              setIsOpen={() => {
+                setIsAISelectorOpen(!isAISelectorOpen);
+                setIsNodeSelectorOpen(false);
+                setIsColorSelectorOpen(false);
+                setIsTableSelectorOpen(false);
+                setIsLinkSelectorOpen(false);
+                setIsTranslateSelectorOpen(false);
+              }}
+            /> : null}
           <NodeSelector
             editor={props.editor}
             isOpen={isNodeSelectorOpen}
@@ -151,18 +152,19 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               }}
             />
           )}
-          {showLinkSelector !== false ? <LinkSelector
-            editor={props.editor}
-            isOpen={isLinkSelectorOpen}
-            setIsOpen={() => {
-              setIsLinkSelectorOpen(!isLinkSelectorOpen);
-              setIsColorSelectorOpen(false);
-              setIsTableSelectorOpen(false);
-              setIsNodeSelectorOpen(false);
-              setIsAISelectorOpen(false);
-              setIsTranslateSelectorOpen(false);
-            }}
-          /> : null}
+          {showLinkSelector !== false ?
+            <LinkSelector
+              editor={props.editor}
+              isOpen={isLinkSelectorOpen}
+              setIsOpen={() => {
+                setIsLinkSelectorOpen(!isLinkSelectorOpen);
+                setIsColorSelectorOpen(false);
+                setIsTableSelectorOpen(false);
+                setIsNodeSelectorOpen(false);
+                setIsAISelectorOpen(false);
+                setIsTranslateSelectorOpen(false);
+              }}
+            /> : null}
           <div className="novel-flex">
             {items.map((item, index) => (
               <button

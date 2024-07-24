@@ -20,7 +20,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
 
   const { completion, setCompletion, isLoading, stop, complete, input } = useCompletion({
     id: "ai-edit",
-    api: `${completionApi}/draft` || `${completionApi}/edit`,
+    api: `${completionApi}/edit` || `${completionApi}/draft`,
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onError: (err) => {
