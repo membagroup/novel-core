@@ -139,9 +139,9 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
     setIsOpen(false);
   });
 
-  useEffect(() => {
-    if (!hasSelection) inputRef.current && inputRef.current?.focus();
-  });
+  // useEffect(() => {
+  //   if (!hasSelection) inputRef.current && inputRef.current?.focus();
+  // });
 
   const { completionApi, additionalData: { body, headers, aiSelectorTitle } } = useContext(NovelContext);
 
@@ -185,7 +185,7 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
               e.preventDefault();
               handleSubmit();
             }}
-            className="novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1 novel-flex novel-flex-col">
+            className="novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1 novel-flex">
             <input
               ref={inputRef}
               type="text"
@@ -197,19 +197,19 @@ export const AISelector: FC<AISelectorProps> = (props: AISelectorProps) => {
                 setOptions({ ...options, command: value });
               }}
             />
-            <textarea
-              placeholder="Enter additional info..."
-              className="flex-1 bg-white p-1 text-sm border rounded text-slate-500"
-              value={options?.info || ''}
-              onChange={(e) => {
-                let value = e.currentTarget.value;
-                setOptions({ ...options, info: value });
-              }}
-            />
             <button className="novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100">
               <Send className="novel-h-4 novel-w-4 novel-text-purple-500" />
             </button>
           </form>
+          <textarea
+            placeholder="Enter additional info..."
+            className="flex-1 bg-white p-1 text-sm border rounded text-slate-500"
+            value={options?.info || ''}
+            onChange={(e) => {
+              let value = e.currentTarget.value;
+              setOptions({ ...options, info: value });
+            }}
+          />
           {
             <Command className="novel-fixed novel-top-full novel-z-[99999] novel-mt-[6rem] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1">
               <Command.List>

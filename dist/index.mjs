@@ -6048,11 +6048,6 @@ var AISelector = (props) => {
       return;
     setIsOpen(false);
   });
-  useEffect10(() => {
-    var _a2;
-    if (!hasSelection)
-      inputRef.current && ((_a2 = inputRef.current) == null ? void 0 : _a2.focus());
-  });
   const { completionApi, additionalData: { body, headers, aiSelectorTitle } } = useContext4(NovelContext);
   const { complete, isLoading, stop: stop2 } = useCompletion2({
     id: "ai-edit",
@@ -6094,7 +6089,7 @@ var AISelector = (props) => {
             e.preventDefault();
             handleSubmit();
           },
-          className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1 novel-flex novel-flex-col",
+          className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1 novel-flex",
           children: [
             /* @__PURE__ */ jsx9(
               "input",
@@ -6110,20 +6105,20 @@ var AISelector = (props) => {
                 }
               }
             ),
-            /* @__PURE__ */ jsx9(
-              "textarea",
-              {
-                placeholder: "Enter additional info...",
-                className: "flex-1 bg-white p-1 text-sm border rounded text-slate-500",
-                value: (options == null ? void 0 : options.info) || "",
-                onChange: (e) => {
-                  let value = e.currentTarget.value;
-                  setOptions(__spreadProps(__spreadValues({}, options), { info: value }));
-                }
-              }
-            ),
             /* @__PURE__ */ jsx9("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ jsx9(Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
           ]
+        }
+      ),
+      /* @__PURE__ */ jsx9(
+        "textarea",
+        {
+          placeholder: "Enter additional info...",
+          className: "flex-1 bg-white p-1 text-sm border rounded text-slate-500",
+          value: (options == null ? void 0 : options.info) || "",
+          onChange: (e) => {
+            let value = e.currentTarget.value;
+            setOptions(__spreadProps(__spreadValues({}, options), { info: value }));
+          }
         }
       ),
       /* @__PURE__ */ jsx9(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[6rem] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ jsx9(Le.List, { children: /* @__PURE__ */ jsx9(Le.Group, { heading: "Requires Text Selection", className: "novel-text-slate-400", children: (_a = items == null ? void 0 : items.filter((i) => (i == null ? void 0 : i.visible) !== false)) == null ? void 0 : _a.map((item, index2) => /* @__PURE__ */ jsx9(
