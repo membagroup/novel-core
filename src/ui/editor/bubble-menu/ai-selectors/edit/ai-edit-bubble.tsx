@@ -2,7 +2,7 @@ import LoadingDots from "@/ui/icons/loading-dots";
 import Magic from "@/ui/icons/magic";
 import { Editor } from "@tiptap/core";
 import { useCompletion } from "ai/react";
-import { X, Clipboard, Replace } from "lucide-react";
+import { X, Clipboard, Replace, Repeat } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 // import va from "@vercel/analytics";
@@ -18,7 +18,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
 
   const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
 
-  const { completion, setCompletion, isLoading, stop } = useCompletion({
+  const { completion, setCompletion, isLoading, stop, complete, input } = useCompletion({
     id: "ai-edit",
     api: `${completionApi}/draft` || `${completionApi}/edit`,
     body: { ...(body || {}) },
@@ -71,7 +71,14 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
                 className="novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
               />
             </button>
-
+            <button>
+              <Repeat
+                onClick={() => {
+                  complete(input, { body: { prevResponse: completion } });
+                }}
+                className="novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
+              />
+            </button>
             <X
               onClick={() => {
                 setIsShow(false);

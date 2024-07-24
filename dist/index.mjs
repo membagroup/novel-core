@@ -21165,7 +21165,7 @@ var loading_dots_default = LoadingDots;
 
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-bubble.tsx
 import { useCompletion as useCompletion4 } from "ai/react";
-import { X, Clipboard, Replace } from "lucide-react";
+import { X, Clipboard, Replace, Repeat } from "lucide-react";
 import { useContext as useContext7, useEffect as useEffect14, useState as useState9 } from "react";
 import { toast as toast3 } from "sonner";
 import ReactMarkdown from "react-markdown";
@@ -21173,7 +21173,7 @@ import { jsx as jsx14, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState9(false);
   const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2 } = useCompletion4({
+  const { completion, setCompletion, isLoading, stop: stop2, complete, input } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/draft` || `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
@@ -21215,6 +21215,15 @@ var AIEditorBubble = ({ editor }) => {
           {
             onClick: handleCopy,
             className: "novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
+          }
+        ) }),
+        /* @__PURE__ */ jsx14("button", { children: /* @__PURE__ */ jsx14(
+          Repeat,
+          {
+            onClick: () => {
+              complete(input, { body: { prevResponse: completion } });
+            },
+            className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
         /* @__PURE__ */ jsx14(

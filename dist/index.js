@@ -21118,7 +21118,7 @@ var import_jsx_runtime14 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react35.useState)(false);
   const { completionApi, additionalData: { body, headers } } = (0, import_react35.useContext)(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react34.useCompletion)({
+  const { completion, setCompletion, isLoading, stop: stop2, complete, input } = (0, import_react34.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/draft` || `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
@@ -21160,6 +21160,15 @@ var AIEditorBubble = ({ editor }) => {
           {
             onClick: handleCopy,
             className: "novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          import_lucide_react10.Repeat,
+          {
+            onClick: () => {
+              complete(input, { body: { prevResponse: completion } });
+            },
+            className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
