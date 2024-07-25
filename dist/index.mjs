@@ -21180,7 +21180,13 @@ import { jsx as jsx14, jsxs as jsxs12 } from "react/jsx-runtime";
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = useState10(false);
   const { completionApi, additionalData: { body, headers } } = useContext7(NovelContext);
-  const { completion: editCompletion, setCompletion: setEditCompletion, isLoading: isEditLoading, stop: stopEdit, complete: completeEdit, input: editInput } = useCompletion4({
+  const {
+    completion: editCompletion,
+    setCompletion: setEditCompletion,
+    isLoading: isEditLoading,
+    stop: stopEdit,
+    complete: completeEdit
+  } = useCompletion4({
     id: "ai-edit",
     api: `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
@@ -21189,7 +21195,13 @@ var AIEditorBubble = ({ editor }) => {
       toast3.error(err.message);
     }
   });
-  const { completion: draftCompletion, setCompletion: setDraftCompletion, isLoading: isDraftLoading, stop: stopDraft, complete: completeDraft, input: draftInput } = useCompletion4({
+  const {
+    completion: draftCompletion,
+    setCompletion: setDraftCompletion,
+    isLoading: isDraftLoading,
+    stop: stopDraft
+    // complete: completeDraft,
+  } = useCompletion4({
     id: "ai-draft",
     api: `${completionApi}/draft`,
     body: __spreadValues({}, body || {}),
@@ -21201,8 +21213,6 @@ var AIEditorBubble = ({ editor }) => {
   const isEdit = !!editCompletion;
   const completion = isEdit ? editCompletion : draftCompletion;
   const isLoading = isEdit ? isEditLoading : isDraftLoading;
-  const input = isEdit ? editInput : draftInput;
-  const complete = isEdit ? completeEdit : completeDraft;
   const stop2 = isEdit ? stopEdit : stopDraft;
   const setCompletion = isEdit ? setEditCompletion : setDraftCompletion;
   useEffect14(() => {
@@ -21212,6 +21222,8 @@ var AIEditorBubble = ({ editor }) => {
   }, [completion]);
   const handleCopy = () => {
     navigator.clipboard.writeText(completion);
+    toast3.success("Copied to clipboard");
+    handleClose();
   };
   const handleReplace = () => {
     if (completion.length > 0) {
@@ -21220,6 +21232,7 @@ var AIEditorBubble = ({ editor }) => {
         updateSelection: true
       });
     }
+    handleClose();
   };
   const handleClose = () => {
     setIsShow(false);
@@ -21229,7 +21242,7 @@ var AIEditorBubble = ({ editor }) => {
   useClickOutside(ref2, () => {
     if (!isShow)
       return;
-    handleClose();
+    handleCopy();
   });
   return isShow || isLoading ? /* @__PURE__ */ jsx14("div", { ref: ref2, className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ jsxs12("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ jsxs12("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
@@ -21263,8 +21276,10 @@ var AIEditorBubble = ({ editor }) => {
           Repeat,
           {
             onClick: () => {
-              const inputSplit = input.split(":\n");
-              complete(input, { body: { prevResponse: completion, command: inputSplit[0], text: inputSplit[1] || "" } });
+              const command = "Rewrite the text";
+              const prevResponse = completion;
+              completeEdit(`${command}:
+ ${prevResponse}`, { body: { prevResponse, command } });
             },
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }

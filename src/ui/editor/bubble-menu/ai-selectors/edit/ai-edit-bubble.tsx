@@ -19,7 +19,10 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
 
   const { completionApi, additionalData: { body, headers } } = useContext(NovelContext);
 
-  const { completion: editCompletion, setCompletion: setEditCompletion, isLoading: isEditLoading, stop: stopEdit, complete: completeEdit, input: editInput } = useCompletion({
+  const {
+    completion: editCompletion, setCompletion: setEditCompletion,
+    isLoading: isEditLoading, stop: stopEdit, complete: completeEdit,
+  } = useCompletion({
     id: "ai-edit",
     api: `${completionApi}/edit`,
     body: { ...(body || {}) },
@@ -29,7 +32,10 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
     },
   });
 
-  const { completion: draftCompletion, setCompletion: setDraftCompletion, isLoading: isDraftLoading, stop: stopDraft, complete: completeDraft, input: draftInput } = useCompletion({
+  const {
+    completion: draftCompletion, setCompletion: setDraftCompletion,
+    isLoading: isDraftLoading, stop: stopDraft, // complete: completeDraft,
+  } = useCompletion({
     id: "ai-draft",
     api: `${completionApi}/draft`,
     body: { ...(body || {}) },
@@ -43,8 +49,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
 
   const completion = isEdit ? editCompletion : draftCompletion;
   const isLoading = isEdit ? isEditLoading : isDraftLoading;
-  const input = isEdit ? editInput : draftInput;
-  const complete = isEdit ? completeEdit : completeDraft;
+  // const complete = isEdit ? completeEdit : completeDraft;
   const stop = isEdit ? stopEdit : stopDraft;
   const setCompletion = isEdit ? setEditCompletion : setDraftCompletion;
 
@@ -56,6 +61,8 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(completion);
+    toast.success("Copied to clipboard");
+    handleClose();
   };
 
   const handleReplace = () => {
@@ -65,6 +72,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
         updateSelection: true,
       });
     }
+    handleClose();
   };
 
   const handleClose = () => {
@@ -75,7 +83,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   useClickOutside(ref, () => {
     if (!isShow) return;
-    handleClose()
+    handleCopy();
   });
 
   return isShow || isLoading ? (
@@ -108,8 +116,9 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
             <button>
               <Repeat
                 onClick={() => {
-                  const inputSplit = input.split(':\n');
-                  complete(input, { body: { prevResponse: completion, command: inputSplit[0], text: inputSplit[1] || '' } });
+                  const command = 'Rewrite the text';
+                  const prevResponse = completion;
+                  completeEdit(`${command}:\n ${prevResponse}`, { body: { prevResponse, command, } });
                 }}
                 className="novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
               />
