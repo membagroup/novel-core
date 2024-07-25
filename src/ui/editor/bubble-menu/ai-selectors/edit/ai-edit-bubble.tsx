@@ -61,7 +61,7 @@ const AIEditorBubble: React.FC<Props> = ({ editor }: Props) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(completion);
-    toast.success("Copied to clipboard");
+    toast.message("Copied to clipboard");
     handleClose();
   };
 

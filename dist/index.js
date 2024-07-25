@@ -21167,7 +21167,7 @@ var AIEditorBubble = ({ editor }) => {
   }, [completion]);
   const handleCopy = () => {
     navigator.clipboard.writeText(completion);
-    import_sonner3.toast.success("Copied to clipboard");
+    import_sonner3.toast.message("Copied to clipboard");
     handleClose();
   };
   const handleReplace = () => {
@@ -28532,7 +28532,7 @@ function Editor2({
       import_sonner6.toast.error(err.message);
     }
   });
-  const isWrite = !!completeContinue;
+  const isWrite = !!completeWrite;
   const completion = isWrite ? writeCompletion : continueCompletion;
   const isLoading = isWrite ? isWriting : isContinuing;
   const complete = isWrite ? completeWrite : completeContinue;
@@ -28589,7 +28589,7 @@ function Editor2({
         editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react60.EditorContent, { editor }),
-        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
+        ((additionalData == null ? void 0 : additionalData.showGenLoader) || (isLoadingOutside || isLoading)) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
         bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: chatHistory })
       ]
     }
