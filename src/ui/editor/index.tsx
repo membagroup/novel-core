@@ -312,7 +312,10 @@ export default function Editor({
         {(additionalData?.showGenLoader || (isLoadingOutside || isLoading)) &&
           (
             <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
-              <AIGeneratingLoading stop={stop} />
+              <AIGeneratingLoading stop={() => {
+                stop();
+                setCompletion('');
+              }} />
             </div>
           )}
         {/* {editor &&
