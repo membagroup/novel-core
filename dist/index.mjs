@@ -28569,10 +28569,10 @@ function Editor2({
     api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
-    onFinish: (_prompt, completion2) => {
+    onFinish: (_prompt, completion) => {
       setLoadingOutside(false);
       editor == null ? void 0 : editor.commands.setTextSelection({
-        from: editor.state.selection.from - completion2.length,
+        from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from
       });
       setShowBubbleMenu(true);
@@ -28582,14 +28582,14 @@ function Editor2({
       toast6.error(err.message);
     }
   });
-  const { complete: completeWrite, completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion6({
+  const { completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion6({
     id: "ai-write",
     api: `${completionApi}/write`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
-    onFinish: (_prompt, completion2) => {
+    onFinish: (_prompt, completion) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
-        from: editor.state.selection.from - completion2.length,
+        from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from
       });
       setShowBubbleMenu(true);
@@ -28599,14 +28599,11 @@ function Editor2({
       toast6.error(err.message);
     }
   });
-  const isAutoWrite = !!completeWrite;
-  const completion = isAutoWrite ? writeCompletion : autoCompletion;
   const isLoading = isWriting || isCompleting;
-  const stop2 = isAutoWrite ? stopWrite : stopAutoComplete;
-  const setCompletion = isAutoWrite ? setWriteCompletion : setAutoCompletion;
   const prev = useRef17("");
   useEffect20(() => {
     var _a;
+    const completion = autoCompletion || writeCompletion;
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
     try {
@@ -28616,7 +28613,7 @@ function Editor2({
       console.log("error", e == null ? void 0 : e.stack);
     }
     (_a = editor == null ? void 0 : editor.commands) == null ? void 0 : _a.scrollIntoView();
-  }, [isLoading, editor, completion]);
+  }, [isLoading, editor, autoCompletion, writeCompletion]);
   useEffect20(() => {
     if (!editor || hydrated || disableLocalStorage !== false)
       return;
@@ -28637,6 +28634,12 @@ function Editor2({
   useEffect20(() => {
     setChatHistory(additionalData == null ? void 0 : additionalData.chatHistory);
   }, [additionalData == null ? void 0 : additionalData.chatHistory]);
+  const handleResetCompletions = () => {
+    stopWrite();
+    stopAutoComplete();
+    setWriteCompletion("");
+    setAutoCompletion("");
+  };
   return /* @__PURE__ */ jsx19(NovelContext.Provider, { value: { completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ jsxs17(
     "div",
     {
@@ -28655,8 +28658,7 @@ function Editor2({
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
         /* @__PURE__ */ jsx19(EditorContent, { editor }),
         ((additionalData == null ? void 0 : additionalData.showGenLoader) || (isLoadingOutside || isLoading)) && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: () => {
-          stop2();
-          setCompletion("");
+          handleResetCompletions();
         } }) }),
         bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: chatHistory })
       ]
