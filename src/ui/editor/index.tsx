@@ -222,7 +222,7 @@ export default function Editor({
     },
   });
 
-  const { complete: completeWrite, completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion({
+  const { completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion({
     id: "ai-write",
     api: `${completionApi}/write`,
     body: { ...(body || {}) },
@@ -240,16 +240,12 @@ export default function Editor({
     },
   });
 
-  const isAutoWrite = !!completeWrite;
-  const completion = isAutoWrite ? writeCompletion : autoCompletion;
   const isLoading = isWriting || isCompleting;
-  const stop = isAutoWrite ? stopWrite : stopAutoComplete;
-  const setCompletion = isAutoWrite ? setWriteCompletion : setAutoCompletion;
-
   const prev = useRef("");
 
   // Insert chunks of the generated text
   useEffect(() => {
+    const completion = (autoCompletion || writeCompletion);
     const diff = completion.slice(prev.current.length);
     prev.current = completion;
     try {
@@ -257,10 +253,10 @@ export default function Editor({
     } catch (e) {
       editor?.commands.insertContent(' ');
       console.log("error", (e as Error)?.stack);
-    }   
+    }
     // https://tiptap.dev/docs/editor/api/commands/selection/scroll-into-view
     editor?.commands?.scrollIntoView();
-  }, [isLoading, editor, completion]);
+  }, [isLoading, editor, autoCompletion, writeCompletion]);
 
   // Default: Hydrate the editor with the content from localStorage.
   // If disableLocalStorage is true, hydrate the editor with the defaultValue.
@@ -288,6 +284,13 @@ export default function Editor({
     setChatHistory(additionalData?.chatHistory);
   }, [additionalData?.chatHistory]);
 
+  const handleResetCompletions = () => {
+    stopWrite();
+    stopAutoComplete();
+    setWriteCompletion('');
+    setAutoCompletion('');
+  }
+
   return (
     <NovelContext.Provider value={{ completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }}>
       <div
@@ -311,10 +314,7 @@ export default function Editor({
         {(additionalData?.showGenLoader || (isLoadingOutside || isLoading)) &&
           (
             <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
-              <AIGeneratingLoading stop={() => {
-                stop();
-                setCompletion('');
-              }} />
+              <AIGeneratingLoading stop={() => { handleResetCompletions(); }} />
             </div>
           )}
         {/* {editor &&
