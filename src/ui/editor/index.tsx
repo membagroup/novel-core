@@ -243,6 +243,7 @@ export default function Editor({
   const completion = isWrite ? writeCompletion : autoCompletion;
   const isLoading = isWrite ? isWriting : isCompleting;
   const stop = isWrite ? stopWrite : stopAutoComplete;
+  const setCompletion = isWrite ? setWriteCompletion : setAutoCompletion;
 
   const prev = useRef("");
 
