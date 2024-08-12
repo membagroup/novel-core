@@ -28476,7 +28476,7 @@ function Editor2({
           to: selection.from
         });
         setShowBubbleMenu(false);
-        complete(getPrevText(e.editor, { chars: 5e3 }));
+        autoComplete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
         const hasChanges = !(0, import_isEqual.default)(e.editor.getJSON(), defaultValue);
         if (hasChanges) {
@@ -28498,7 +28498,7 @@ function Editor2({
       additionalData.getEditor(editor);
     }
   }, [editor]);
-  const { complete: completeContinue, completion: continueCompletion, isLoading: isContinuing, stop: stopContinue, setCompletion: setContCompletion } = (0, import_react61.useCompletion)({
+  const { complete: autoComplete, completion: autoCompletion, isLoading: isCompleting, stop: stopAutoComplete, setCompletion: setAutoCompletion } = (0, import_react61.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
@@ -28509,7 +28509,7 @@ function Editor2({
         to: editor.state.selection.from
       });
       setShowBubbleMenu(true);
-      setCompletion("");
+      setAutoCompletion("");
     },
     onError: (err) => {
       import_sonner6.toast.error(err.message);
@@ -28526,18 +28526,17 @@ function Editor2({
         to: editor.state.selection.from
       });
       setShowBubbleMenu(true);
-      setCompletion("");
+      setWriteCompletion("");
     },
     onError: (err) => {
       import_sonner6.toast.error(err.message);
     }
   });
   const isWrite = !!completeWrite;
-  const completion = isWrite ? writeCompletion : continueCompletion;
-  const isLoading = isWrite ? isWriting : isContinuing;
-  const complete = isWrite ? completeWrite : completeContinue;
-  const stop2 = isWrite ? stopWrite : stopContinue;
-  const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
+  const completion = isWrite ? writeCompletion : autoCompletion;
+  const isLoading = isWrite ? isWriting : isCompleting;
+  const stop2 = isWrite ? stopWrite : stopAutoComplete;
+  const setCompletion = isWrite ? setWriteCompletion : setAutoCompletion;
   const prev = (0, import_react59.useRef)("");
   (0, import_react59.useEffect)(() => {
     var _a;
