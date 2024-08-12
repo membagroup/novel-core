@@ -209,6 +209,7 @@ export default function Editor({
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
+      setLoadingOutside(false);
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
@@ -239,11 +240,11 @@ export default function Editor({
     },
   });
 
-  const isWrite = !!completeWrite;
-  const completion = isWrite ? writeCompletion : autoCompletion;
-  const isLoading = isWrite ? isWriting : isCompleting;
-  const stop = isWrite ? stopWrite : stopAutoComplete;
-  const setCompletion = isWrite ? setWriteCompletion : setAutoCompletion;
+  const isAutoWrite = !!completeWrite;
+  const completion = isAutoWrite ? writeCompletion : autoCompletion;
+  const isLoading = isWriting || isCompleting;
+  const stop = isAutoWrite ? stopWrite : stopAutoComplete;
+  const setCompletion = isAutoWrite ? setWriteCompletion : setAutoCompletion;
 
   const prev = useRef("");
 
@@ -256,10 +257,7 @@ export default function Editor({
     } catch (e) {
       editor?.commands.insertContent(' ');
       console.log("error", (e as Error)?.stack);
-    }
-    if (!isLoading) {
-      setLoadingOutside(false);
-    }
+    }   
     // https://tiptap.dev/docs/editor/api/commands/selection/scroll-into-view
     editor?.commands?.scrollIntoView();
   }, [isLoading, editor, completion]);
