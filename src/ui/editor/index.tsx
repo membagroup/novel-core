@@ -261,6 +261,8 @@ export default function Editor({
     if (!isLoading) {
       setLoadingOutside(false);
     }
+    // https://tiptap.dev/docs/editor/api/commands/selection/scroll-into-view
+    editor?.commands?.scrollIntoView();
   }, [isLoading, editor, completion]);
 
   // Default: Hydrate the editor with the content from localStorage.
