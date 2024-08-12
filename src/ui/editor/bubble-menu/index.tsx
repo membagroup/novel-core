@@ -15,7 +15,6 @@ import { TableSelector } from "./table-selector";
 import { AISelector } from "./ai-selectors/edit/ai-edit-selector";
 import { TranslateSelector } from "./ai-selectors/translate/ai-translate-selector";
 import { NovelContext } from "../provider";
-import { add } from "lodash";
 import React from "react";
 import { AIMenuItem, BubbleMenuItem } from "../interfaces";
 
@@ -23,10 +22,10 @@ type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">
 // & { panelOpen?: boolean };
 
 export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
-  const { additionalData } = useContext(NovelContext);
-  const bubbleMenuItems = (additionalData?.menuItems || []) as BubbleMenuItem[];
-  const aiMenuItems = (additionalData?.aiMenuItems || []) as AIMenuItem[];
-  const CustomMenuItems = (additionalData?.customMenuItems || []) as {
+  const { additionalData, showBubbleMenu } = useContext(NovelContext);
+  const { showAiSelector, showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const bubbleMenuItems = (menuItems || []) as BubbleMenuItem[];
+  const CustomMenuItems = (customMenuItems || []) as {
     component: (props: any) => JSX.Element, isOpen: boolean, setIsOpen: (value: React.SetStateAction<boolean>) => void
   }[];
 
@@ -77,9 +76,6 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
       if (editor.isActive("image") || isNodeSelection(selection)) {
         return false;
       }
-      if (!empty) {
-        return true;
-      }
       // https://github.com/ueberdosis/tiptap/issues/2305
       return true;
     },
@@ -95,6 +91,9 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
         setIsAISelectorOpen(false);
         setIsTranslateSelectorOpen(false);
       },
+      // hide tippy if not showBubbleMenu
+      arrow: false,
+      // followCursor: showBubbleMenu,
     },
   };
 
@@ -110,22 +109,23 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
     <BubbleMenu
       {...bubbleMenuProps}
       className={`novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`}>
-      {props.editor && (
+      {props.editor && showBubbleMenu && (
         <>
-          <AISelector
-            editor={props.editor}
-            isOpen={isAISelectorOpen}
-            hasSelection={hasSelection}
-            subMenuItems={aiMenuItems}
-            setIsOpen={() => {
-              setIsAISelectorOpen(!isAISelectorOpen);
-              setIsNodeSelectorOpen(false);
-              setIsColorSelectorOpen(false);
-              setIsTableSelectorOpen(false);
-              setIsLinkSelectorOpen(false);
-              setIsTranslateSelectorOpen(false);
-            }}
-          />
+          {showAiSelector !== false ?
+            <AISelector
+              editor={props.editor}
+              isOpen={isAISelectorOpen}
+              hasSelection={hasSelection}
+              subMenuItems={aiMenuItems || []}
+              setIsOpen={() => {
+                setIsAISelectorOpen(!isAISelectorOpen);
+                setIsNodeSelectorOpen(false);
+                setIsColorSelectorOpen(false);
+                setIsTableSelectorOpen(false);
+                setIsLinkSelectorOpen(false);
+                setIsTranslateSelectorOpen(false);
+              }}
+            /> : null}
           <NodeSelector
             editor={props.editor}
             isOpen={isNodeSelectorOpen}
@@ -152,18 +152,19 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               }}
             />
           )}
-          <LinkSelector
-            editor={props.editor}
-            isOpen={isLinkSelectorOpen}
-            setIsOpen={() => {
-              setIsLinkSelectorOpen(!isLinkSelectorOpen);
-              setIsColorSelectorOpen(false);
-              setIsTableSelectorOpen(false);
-              setIsNodeSelectorOpen(false);
-              setIsAISelectorOpen(false);
-              setIsTranslateSelectorOpen(false);
-            }}
-          />
+          {showLinkSelector !== false ?
+            <LinkSelector
+              editor={props.editor}
+              isOpen={isLinkSelectorOpen}
+              setIsOpen={() => {
+                setIsLinkSelectorOpen(!isLinkSelectorOpen);
+                setIsColorSelectorOpen(false);
+                setIsTableSelectorOpen(false);
+                setIsNodeSelectorOpen(false);
+                setIsAISelectorOpen(false);
+                setIsTranslateSelectorOpen(false);
+              }}
+            /> : null}
           <div className="novel-flex">
             {items.map((item, index) => (
               <button
@@ -208,6 +209,7 @@ export const EditorBubbleMenu: FC<EditorBubbleMenuProps> = (props) => {
               //  React.cloneElement(item, { key: index })
               <item.component
                 key={index}
+                context={NovelContext}
                 editor={props.editor}
                 isOpen={item?.isOpen}
                 setIsOpen={() => {

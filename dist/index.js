@@ -874,8 +874,8 @@ video {
 .novel-mt-4 {
   margin-top: 1rem;
 }
-.novel-mt-\\[46\\.5px\\] {
-  margin-top: 46.5px;
+.novel-mt-\\[6rem\\] {
+  margin-top: 6rem;
 }
 .novel-mt-auto {
   margin-top: auto;
@@ -1011,6 +1011,9 @@ video {
 }
 .novel-animate-spin {
   animation: novel-spin 1s linear infinite;
+}
+.novel-cursor-default {
+  cursor: default;
 }
 .novel-cursor-pointer {
   cursor: pointer;
@@ -2009,6 +2012,9 @@ var NovelContext = (0, import_react.createContext)({
   additionalData: {},
   lastInput: "",
   setLastInput: (text) => {
+  },
+  showBubbleMenu: true,
+  setShowBubbleMenu: () => {
   }
 });
 
@@ -2246,7 +2252,7 @@ var CommandList = ({
   range
 }) => {
   const [selectedIndex, setSelectedIndex] = (0, import_react2.useState)(0);
-  const { completionApi, additionalData: { body, headers } } = (0, import_react2.useContext)(NovelContext);
+  const { completionApi, additionalData: { body, headers }, setShowBubbleMenu } = (0, import_react2.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react4.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
@@ -2264,6 +2270,7 @@ var CommandList = ({
         from: range.from,
         to: range.from + completion.length
       });
+      setShowBubbleMenu(true);
     },
     onError: (e) => {
       import_sonner2.toast.error(e.message);
@@ -2276,12 +2283,8 @@ var CommandList = ({
         if (item.title === "Continue writing") {
           if (isLoading)
             return;
-          complete(
-            getPrevText(editor, {
-              chars: 5e3,
-              offset: 1
-            })
-          );
+          setShowBubbleMenu(false);
+          complete(getPrevText(editor, { chars: 5e3, offset: 1 }));
         } else {
           command(item);
         }
@@ -3408,7 +3411,7 @@ var LinkSelector = ({ editor, isOpen, setIsOpen }) => {
             {
               ref: inputRef,
               type: "text",
-              placeholder: "Paste a link",
+              placeholder: "Paste a link to embed in the document",
               className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
               defaultValue: editor.getAttributes("link").href || ""
             }
@@ -5896,11 +5899,13 @@ function Magic1({ className }) {
 // src/ui/editor/bubble-menu/ai-selectors/edit/ai-edit-selector.tsx
 var import_jsx_runtime9 = require("react/jsx-runtime");
 var AISelector = (props) => {
+  var _a;
   const { editor, isOpen, setIsOpen, hasSelection, subMenuItems } = props;
-  const context = (0, import_react26.useContext)(NovelContext);
+  const inputRef = (0, import_react26.useRef)(null);
+  const [options, setOptions] = (0, import_react26.useState)({});
   const defaultItems = [
     {
-      name: "Improve writing",
+      name: "Improve selection",
       command: "Improve writing",
       icon: import_lucide_react7.Wand
     },
@@ -5949,25 +5954,22 @@ var AISelector = (props) => {
     ...defaultItems,
     ...subMenuItems || []
   ];
-  const inputRef = (0, import_react26.useRef)(null);
-  const handleSubmit = (input) => {
-    if (!input.value)
+  const handleSubmit = () => {
+    if (!(options == null ? void 0 : options.command))
       return;
     const { from, to } = editor.state.selection;
     const text = editor.state.doc.textBetween(from, to, " ");
-    complete(`${input.value}:
- ${text}`);
+    complete(`${options == null ? void 0 : options.command}:
+ ${text}`, { body: __spreadProps(__spreadValues({}, options), { text }) });
+    setOptions({});
     setIsOpen(false);
   };
   (0, import_react26.useEffect)(() => {
-    if (isOpen && context.lastInput && (inputRef == null ? void 0 : inputRef.current)) {
-      inputRef.current.value = context.lastInput;
-    }
     const onKeyDown = (e) => {
       if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
         e.preventDefault();
         if (e.key === "Enter" && (inputRef == null ? void 0 : inputRef.current)) {
-          handleSubmit(inputRef.current);
+          handleSubmit();
         }
       } else if (e.key === "Escape" || e.metaKey && e.key === "z") {
         stop2();
@@ -5989,17 +5991,9 @@ var AISelector = (props) => {
   useClickOutside(ref2, () => {
     if (!isOpen)
       return;
-    if (inputRef.current) {
-      context.setLastInput(inputRef.current.value || "");
-    }
     setIsOpen(false);
   });
-  (0, import_react26.useEffect)(() => {
-    var _a;
-    if (!hasSelection)
-      inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
-  });
-  const { completionApi, additionalData: { body, headers } } = (0, import_react26.useContext)(NovelContext);
+  const { completionApi, additionalData: { body, headers, aiSelectorTitle } } = (0, import_react26.useContext)(NovelContext);
   const { complete, isLoading, stop: stop2 } = (0, import_react27.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
@@ -6020,7 +6014,8 @@ var AISelector = (props) => {
         },
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Magic1, { className: "novel-h-5 novel-w-5" }),
-          " AI",
+          " ",
+          aiSelectorTitle || "AI",
           isLoading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
             import_lucide_react7.PauseCircle,
             {
@@ -6037,45 +6032,65 @@ var AISelector = (props) => {
         {
           onSubmit: (e) => {
             e.preventDefault();
-            const input = e.currentTarget[0];
-            handleSubmit(input);
+            handleSubmit();
           },
-          className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-flex novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1",
+          className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-1 novel-w-full novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-1 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1 novel-flex novel-flex-col",
           children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-flex novel-w-full", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+                "input",
+                {
+                  ref: inputRef,
+                  type: "text",
+                  placeholder: "Enter a prompt or question...",
+                  className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
+                  value: (options == null ? void 0 : options.command) || "",
+                  onChange: (e) => {
+                    let value = e.currentTarget.value;
+                    setOptions(__spreadProps(__spreadValues({}, options), { command: value }));
+                  }
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { type: "submit", className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
+            ] }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-              "input",
+              "textarea",
               {
-                ref: inputRef,
-                type: "text",
-                placeholder: "Enter a prompt or question...",
-                className: "novel-flex-1 novel-bg-white novel-p-1 novel-text-sm novel-outline-none novel-text-slate-500",
-                defaultValue: editor.getAttributes("link").href || ""
+                placeholder: "Enter additional info...",
+                className: "flex-1 bg-white p-1 text-sm border rounded text-slate-500",
+                value: (options == null ? void 0 : options.info) || "",
+                onChange: (e) => {
+                  let value = e.currentTarget.value;
+                  setOptions(__spreadProps(__spreadValues({}, options), { info: value }));
+                }
               }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { className: "novel-flex novel-items-center novel-rounded-sm novel-p-1 novel-text-stone-600 novel-transition-all hover:novel-bg-stone-100", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react7.Send, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }) })
+            )
           ]
         }
       ),
-      hasSelection ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[46.5px] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le, { className: "novel-fixed novel-top-full novel-z-[99999] novel-mt-[6rem] novel-w-60 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-p-2 novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-top-1", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.List, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Le.Group, { heading: "Requires Text Selection", className: "novel-text-slate-400", children: (_a = items == null ? void 0 : items.filter((i) => (i == null ? void 0 : i.visible) !== false)) == null ? void 0 : _a.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         Le.Item,
         {
+          disabled: !hasSelection,
           onSelect: () => {
+            if (!hasSelection)
+              return;
             if (!isLoading) {
               const { from, to } = editor.state.selection;
               const text = editor.state.doc.textBetween(from, to, " ");
               complete(`${item.command}:
- ${text}`);
+ ${text}`, { body: __spreadProps(__spreadValues({}, options), { command: item.command, text }) });
               setIsOpen(false);
             }
           },
-          className: "novel-flex group novel-cursor-pointer novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100",
+          className: `novel-flex group novel-items-center novel-justify-between novel-rounded-sm novel-px-2 novel-py-1 novel-text-sm novel-text-gray-600 active:novel-bg-stone-200 aria-selected:novel-bg-stone-100 ${!hasSelection ? "novel-cursor-default" : "novel-cursor-pointer"}`,
           children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "novel-flex novel-items-center novel-space-x-2", children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(item.icon, { className: "novel-h-4 novel-w-4 novel-text-purple-500" }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { children: item.name })
           ] })
         },
         index2
-      )) }) }) : null
+      )) }) }) })
     ] })
   ] });
 };
@@ -6197,10 +6212,10 @@ var TranslateSelector = ({
 // src/ui/editor/bubble-menu/index.tsx
 var import_jsx_runtime11 = require("react/jsx-runtime");
 var EditorBubbleMenu = (props) => {
-  const { additionalData } = (0, import_react31.useContext)(NovelContext);
-  const bubbleMenuItems = (additionalData == null ? void 0 : additionalData.menuItems) || [];
-  const aiMenuItems = (additionalData == null ? void 0 : additionalData.aiMenuItems) || [];
-  const CustomMenuItems = (additionalData == null ? void 0 : additionalData.customMenuItems) || [];
+  const { additionalData, showBubbleMenu } = (0, import_react31.useContext)(NovelContext);
+  const { showAiSelector, showLinkSelector, menuItems, aiMenuItems, customMenuItems } = additionalData;
+  const bubbleMenuItems = menuItems || [];
+  const CustomMenuItems = customMenuItems || [];
   const items = [
     {
       name: "bold",
@@ -6242,9 +6257,6 @@ var EditorBubbleMenu = (props) => {
       if (editor.isActive("image") || (0, import_react30.isNodeSelection)(selection)) {
         return false;
       }
-      if (!empty) {
-        return true;
-      }
       return true;
     },
     tippyOptions: {
@@ -6258,7 +6270,10 @@ var EditorBubbleMenu = (props) => {
         setIsTableSelectorOpen(false);
         setIsAISelectorOpen(false);
         setIsTranslateSelectorOpen(false);
-      }
+      },
+      // hide tippy if not showBubbleMenu
+      arrow: false
+      // followCursor: showBubbleMenu,
     }
   });
   const [hasSelection, setHasSection] = (0, import_react31.useState)(false);
@@ -6272,14 +6287,14 @@ var EditorBubbleMenu = (props) => {
     import_react30.BubbleMenu,
     __spreadProps(__spreadValues({}, bubbleMenuProps), {
       className: `novel-flex novel-w-fit novel-max-w-[97vw] novel-overflow-x-auto novel-divide-x novel-divide-stone-200 novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl`,
-      children: props.editor && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      children: props.editor && showBubbleMenu && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+        showAiSelector !== false ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           AISelector,
           {
             editor: props.editor,
             isOpen: isAISelectorOpen,
             hasSelection,
-            subMenuItems: aiMenuItems,
+            subMenuItems: aiMenuItems || [],
             setIsOpen: () => {
               setIsAISelectorOpen(!isAISelectorOpen);
               setIsNodeSelectorOpen(false);
@@ -6289,7 +6304,7 @@ var EditorBubbleMenu = (props) => {
               setIsTranslateSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           NodeSelector,
           {
@@ -6320,7 +6335,7 @@ var EditorBubbleMenu = (props) => {
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        showLinkSelector !== false ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           LinkSelector,
           {
             editor: props.editor,
@@ -6334,7 +6349,7 @@ var EditorBubbleMenu = (props) => {
               setIsTranslateSelectorOpen(false);
             }
           }
-        ),
+        ) : null,
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "novel-flex", children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
           "button",
           {
@@ -6387,6 +6402,7 @@ var EditorBubbleMenu = (props) => {
           /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
             item.component,
             {
+              context: NovelContext,
               editor: props.editor,
               isOpen: item == null ? void 0 : item.isOpen,
               setIsOpen: () => {
@@ -21109,7 +21125,13 @@ var import_jsx_runtime14 = require("react/jsx-runtime");
 var AIEditorBubble = ({ editor }) => {
   const [isShow, setIsShow] = (0, import_react35.useState)(false);
   const { completionApi, additionalData: { body, headers } } = (0, import_react35.useContext)(NovelContext);
-  const { completion, setCompletion, isLoading, stop: stop2 } = (0, import_react34.useCompletion)({
+  const {
+    completion: editCompletion,
+    setCompletion: setEditCompletion,
+    isLoading: isEditLoading,
+    stop: stopEdit,
+    complete: completeEdit
+  } = (0, import_react34.useCompletion)({
     id: "ai-edit",
     api: `${completionApi}/edit`,
     body: __spreadValues({}, body || {}),
@@ -21118,6 +21140,26 @@ var AIEditorBubble = ({ editor }) => {
       import_sonner3.toast.error(err.message);
     }
   });
+  const {
+    completion: draftCompletion,
+    setCompletion: setDraftCompletion,
+    isLoading: isDraftLoading,
+    stop: stopDraft
+    // complete: completeDraft,
+  } = (0, import_react34.useCompletion)({
+    id: "ai-draft",
+    api: `${completionApi}/draft`,
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
+    onError: (err) => {
+      import_sonner3.toast.error(err.message);
+    }
+  });
+  const isEdit = !!editCompletion;
+  const completion = isEdit ? editCompletion : draftCompletion;
+  const isLoading = isEdit ? isEditLoading : isDraftLoading;
+  const stop2 = isEdit ? stopEdit : stopDraft;
+  const setCompletion = isEdit ? setEditCompletion : setDraftCompletion;
   (0, import_react35.useEffect)(() => {
     if (completion.length > 0) {
       setIsShow(true);
@@ -21125,6 +21167,8 @@ var AIEditorBubble = ({ editor }) => {
   }, [completion]);
   const handleCopy = () => {
     navigator.clipboard.writeText(completion);
+    import_sonner3.toast.message("Copied to clipboard");
+    handleClose();
   };
   const handleReplace = () => {
     if (completion.length > 0) {
@@ -21133,11 +21177,31 @@ var AIEditorBubble = ({ editor }) => {
         updateSelection: true
       });
     }
+    handleClose();
   };
-  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
+  const handleClose = () => {
+    setIsShow(false);
+    setCompletion("");
+  };
+  const ref2 = (0, import_react35.useRef)(null);
+  useClickOutside(ref2, () => {
+    if (!isShow)
+      return;
+    handleCopy();
+  });
+  return isShow || isLoading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { ref: ref2, className: "novel-fixed novel-z-[10000] novel-bottom-3 novel-right-3 novel-p-3 novel-overflow-hidden novel-rounded novel-border novel-border-stone-200 novel-bg-white novel-shadow-xl novel-animate-in novel-fade-in novel-slide-in-from-bottom-1", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-w-64 novel-max-h-48 novel-overflow-y-auto", children: [
     /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: " novel-flex novel-gap-2 novel-items-center novel-text-slate-500", children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Magic, { className: "novel-h-5 novel-animate-pulse novel-w-5 novel-text-purple-500" }),
-      isLoading && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "novel-mr-auto novel-flex novel-items-center", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(loading_dots_default, { color: "#9e9e9e" }) }),
+      isLoading && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        "div",
+        {
+          className: "novel-mr-auto novel-flex novel-items-center",
+          onClick: () => {
+            stop2();
+          },
+          children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(loading_dots_default, { color: "#9e9e9e" })
+        }
+      ),
       /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "novel-flex novel-items-center novel-ml-auto gap-2", children: [
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           import_lucide_react10.Replace,
@@ -21153,12 +21217,23 @@ var AIEditorBubble = ({ editor }) => {
             className: "novel-w-4 active:novel-text-green-500 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
         ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          import_lucide_react10.Repeat,
+          {
+            onClick: () => {
+              const command = "Rewrite the text";
+              const prevResponse = completion;
+              completeEdit(`${command}:
+ ${prevResponse}`, { body: { prevResponse, command } });
+            },
+            className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
+          }
+        ) }),
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           import_lucide_react10.X,
           {
             onClick: () => {
-              setIsShow(false);
-              setCompletion("");
+              handleClose();
             },
             className: "novel-w-4 novel-h-4 novel-cursor-pointer hover:novel-text-slate-300 "
           }
@@ -21174,7 +21249,7 @@ var ai_edit_bubble_default = AIEditorBubble;
 var import_lucide_react11 = require("lucide-react");
 var import_jsx_runtime15 = require("react/jsx-runtime");
 function AIGeneratingLoading({ stop: stop2 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "flex items-center justify-start novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "flex items-center justify-center novel-bg-white shadow-lg w-full rounded-full px-3 py-2 w-16 h-10", children: [
     /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Magic, { className: "novel-w-7 novel-animate-pulse novel-text-purple-500" }),
     /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "text-sm novel-animate-pulse novel-ml-1 novel-text-slate-500", children: "generating..." }),
     /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
@@ -28045,9 +28120,7 @@ function ChatBot(props) {
     inputRef.current && ((_a = inputRef.current) == null ? void 0 : _a.focus());
   });
   (0, import_react56.useEffect)(() => {
-    if (history == null ? void 0 : history.length) {
-      setMessages([initialMessage, ...history]);
-    }
+    setMessages([initialMessage, ...history]);
   }, [history == null ? void 0 : history.length]);
   const handleChat = () => {
     var _a;
@@ -28284,8 +28357,8 @@ function CollaborationInfo({
   status,
   editor
 }) {
-  var _a, _b, _c;
-  const usersList = (_c = (_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users) == null ? void 0 : _c.filter((u) => (u == null ? void 0 : u.name) !== void 0);
+  var _a, _b;
+  const usersList = ((_b = (_a = editor.storage) == null ? void 0 : _a.collaborationCursor) == null ? void 0 : _b.users).filter((u) => (u == null ? void 0 : u.name) !== void 0).filter((u, i, s) => s.findIndex((t2) => t2.clientId === u.clientId) === i);
   return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "novel-fixed novel-z-[999] novel-bottom-3 novel-right-3", children: status === "connected" ? /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "novel-flex novel-group novel-font-semibold novel-gap-1 novel-items-center novel-justify-center", children: [
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_lucide_react14.Users, { className: "novel-h-4 novel-text-purple-500 novel-w-4" }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-xs novel-text-slate-500", children: usersList == null ? void 0 : usersList.length }),
@@ -28298,7 +28371,7 @@ function CollaborationInfo({
         " ",
         "online"
       ] }),
-      usersList == null ? void 0 : usersList.map((i) => /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
+      usersList == null ? void 0 : usersList.map((u, idx) => /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
         "div",
         {
           className: "novel-truncate novel-flex novel-items-center novel-gap-2 novel-cursor-pointer hover:novel-opacity-80 novel-font-mono novel-pt-1 novel-text-xs novel-text-slate-500",
@@ -28310,16 +28383,16 @@ function CollaborationInfo({
                   width: "8px",
                   height: "8px",
                   borderRadius: "50%",
-                  backgroundColor: i.color,
+                  backgroundColor: u.color,
                   display: "block",
                   transition: "all 0.5s"
                 }
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: `${i == null ? void 0 : i.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === i.clientId ? "(you)" : ""}` })
+            /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { children: `${u == null ? void 0 : u.name} ${(localStorage == null ? void 0 : localStorage.getItem("userId")) === u.clientId ? "(you)" : ""}` })
           ]
         },
-        i.clientId
+        idx
       ))
     ] })
   ] }) : /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: "novel-text-sm novel-animate-pulse novel-text-slate-500", children: "connecting..." }) });
@@ -28335,6 +28408,7 @@ function generateRandomColorCode() {
 
 // src/ui/editor/index.tsx
 var import_isEmpty = __toESM(require("lodash/isEmpty"));
+var import_isEqual = __toESM(require("lodash/isEqual"));
 var import_jsx_runtime19 = require("react/jsx-runtime");
 function Editor2({
   completionApi = "/api/generate",
@@ -28361,7 +28435,9 @@ function Editor2({
   const { bot, collaboration, id: id3, userDetails, body, headers, customProvider, autoCompleteShortKey } = additionalData;
   const [content, setContent] = use_local_storage_default(storageKey, defaultValue);
   const [hydrated, setHydrated] = (0, import_react59.useState)(false);
-  const [lastInput, setLastInput] = (0, import_react59.useState)("");
+  const [aiTextInput, setAiTextInput] = (0, import_react59.useState)("");
+  const [showBubbleMenu, setShowBubbleMenu] = (0, import_react59.useState)(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
+  const [chatHistory, setChatHistory] = (0, import_react59.useState)((additionalData == null ? void 0 : additionalData.chatHistory) || []);
   const [isLoadingOutside, setLoadingOutside] = (0, import_react59.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
@@ -28399,10 +28475,14 @@ function Editor2({
           from: selection.from - 2,
           to: selection.from
         });
-        complete(getPrevText(e.editor, { chars: 5e3 }));
+        setShowBubbleMenu(false);
+        autoComplete(getPrevText(e.editor, { chars: 5e3 }));
       } else {
-        onUpdate(e.editor);
-        debouncedUpdates(e);
+        const hasChanges = !(0, import_isEqual.default)(e.editor.getJSON(), defaultValue);
+        if (hasChanges) {
+          onUpdate(e.editor);
+          debouncedUpdates(e);
+        }
       }
     },
     autofocus: false
@@ -28418,30 +28498,56 @@ function Editor2({
       additionalData.getEditor(editor);
     }
   }, [editor]);
-  const { complete, completion, isLoading, stop: stop2 } = (0, import_react61.useCompletion)({
+  const { complete: autoComplete, completion: autoCompletion, isLoading: isCompleting, stop: stopAutoComplete, setCompletion: setAutoCompletion } = (0, import_react61.useCompletion)({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
-    onFinish: (_prompt, completion2) => {
+    onFinish: (_prompt, completion) => {
+      setLoadingOutside(false);
       editor == null ? void 0 : editor.commands.setTextSelection({
-        from: editor.state.selection.from - completion2.length,
+        from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from
       });
+      setShowBubbleMenu(true);
+      setAutoCompletion("");
     },
     onError: (err) => {
       import_sonner6.toast.error(err.message);
     }
   });
+  const { completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = (0, import_react61.useCompletion)({
+    id: "ai-write",
+    api: `${completionApi}/write`,
+    body: __spreadValues({}, body || {}),
+    headers: __spreadValues({}, headers || {}),
+    onFinish: (_prompt, completion) => {
+      editor == null ? void 0 : editor.commands.setTextSelection({
+        from: editor.state.selection.from - completion.length,
+        to: editor.state.selection.from
+      });
+      setShowBubbleMenu(true);
+      setWriteCompletion("");
+    },
+    onError: (err) => {
+      import_sonner6.toast.error(err.message);
+    }
+  });
+  const isLoading = isWriting || isCompleting;
   const prev = (0, import_react59.useRef)("");
   (0, import_react59.useEffect)(() => {
+    var _a;
+    const completion = autoCompletion || writeCompletion;
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
-    editor == null ? void 0 : editor.commands.insertContent(diff3);
-    if (!isLoading) {
-      setLoadingOutside(false);
+    try {
+      editor == null ? void 0 : editor.commands.insertContent(diff3);
+    } catch (e) {
+      editor == null ? void 0 : editor.commands.insertContent(" ");
+      console.log("error", e == null ? void 0 : e.stack);
     }
-  }, [isLoading, editor, completion]);
+    (_a = editor == null ? void 0 : editor.commands) == null ? void 0 : _a.scrollIntoView();
+  }, [isLoading, editor, autoCompletion, writeCompletion]);
   (0, import_react59.useEffect)(() => {
     if (!editor || hydrated || disableLocalStorage !== false)
       return;
@@ -28456,11 +28562,24 @@ function Editor2({
       return;
     editor.commands.setContent(defaultValue);
   }, [defaultValue]);
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput, setLastInput }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+  (0, import_react59.useEffect)(() => {
+    setShowBubbleMenu(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
+  }, [additionalData == null ? void 0 : additionalData.bubbleMenuOpen]);
+  (0, import_react59.useEffect)(() => {
+    setChatHistory(additionalData == null ? void 0 : additionalData.chatHistory);
+  }, [additionalData == null ? void 0 : additionalData.chatHistory]);
+  const handleResetCompletions = () => {
+    stopWrite();
+    stopAutoComplete();
+    setWriteCompletion("");
+    setAutoCompletion("");
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(NovelContext.Provider, { value: { completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
     "div",
     {
       onClick: () => {
-        editor == null ? void 0 : editor.chain().focus().run();
+        if (additionalData == null ? void 0 : additionalData.focusOnEnter)
+          editor == null ? void 0 : editor.chain().focus().run();
       },
       className,
       children: [
@@ -28472,8 +28591,10 @@ function Editor2({
         editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react60.EditorContent, { editor }),
-        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingOutside && isLoading) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: stop2 }) }),
-        bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: (additionalData == null ? void 0 : additionalData.chatHistory) || [] })
+        ((additionalData == null ? void 0 : additionalData.showGenLoader) || (isLoadingOutside || isLoading)) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: () => {
+          handleResetCompletions();
+        } }) }),
+        bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: chatHistory })
       ]
     }
   ) });

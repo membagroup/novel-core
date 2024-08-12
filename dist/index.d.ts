@@ -3,16 +3,27 @@ import { JSONContent } from '@tiptap/react';
 import { EditorProps } from '@tiptap/pm/view';
 import { Extensions, Editor as Editor$1 } from '@tiptap/core';
 
+interface NovelContextType {
+    completionApi: string;
+    additionalData: Record<string, any>;
+    lastInput: string;
+    setLastInput: (text: string) => void;
+    showBubbleMenu: boolean;
+    setShowBubbleMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 interface AIMenuItem {
     name: string;
     command: string;
     icon: LucideIcon;
+    visible?: boolean;
 }
 interface BubbleMenuItem {
     name: string;
     isActive: () => boolean;
     command: () => void;
     icon: LucideIcon;
+    visible?: boolean;
 }
 
 declare function Editor({ completionApi, className, defaultValue, extensions, editorProps, onUpdate, onDebouncedUpdate, debounceDuration, storageKey, disableLocalStorage, editable, additionalData }: {
@@ -77,4 +88,4 @@ declare function Editor({ completionApi, className, defaultValue, extensions, ed
     additionalData?: Record<string, any>;
 }): JSX.Element;
 
-export { AIMenuItem, BubbleMenuItem, Editor };
+export { AIMenuItem, BubbleMenuItem, Editor, NovelContextType };

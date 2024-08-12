@@ -6,7 +6,7 @@ import { defaultEditorProps } from "./props";
 import { defaultExtensions } from "./extensions";
 import useLocalStorage from "@/lib/hooks/use-local-storage";
 import { useDebouncedCallback } from "use-debounce";
-import { useCompletion } from "ai/react";
+import { Message, useCompletion } from "ai/react";
 import { toast } from "sonner";
 // import va from "@vercel/analytics";
 import { defaultEditorContent } from "./default-content";
@@ -29,6 +29,7 @@ import {
 } from "./extensions/collaboration";
 import { Users, Bot } from "lucide-react";
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -121,8 +122,10 @@ export default function Editor({
   const [content, setContent] = useLocalStorage(storageKey, defaultValue);
 
   const [hydrated, setHydrated] = useState(false);
-  // const [panelOpen, setPanelOpen] = useState(true);
-  const [lastInput, setLastInput] = useState('');
+
+  const [aiTextInput, setAiTextInput] = useState('');
+  const [showBubbleMenu, setShowBubbleMenu] = useState<boolean>(additionalData?.bubbleMenuOpen);
+  const [chatHistory, setChatHistory] = useState<Message[]>(additionalData?.chatHistory || []);
 
   const [isLoadingOutside, setLoadingOutside] = useState(false);
 
@@ -138,12 +141,6 @@ export default function Editor({
       setContent(json);
     }
   }, debounceDuration);
-
-  // const togglePanel = () => {
-  //   // if (!editor) return;
-  //   // editor.chain().blur().run();
-  //   setPanelOpen(!panelOpen);
-  // };
 
   const [status, setStatus] = useState("connecting");
   const user = {
@@ -178,11 +175,16 @@ export default function Editor({
           from: selection.from - 2,
           to: selection.from,
         });
-        complete(getPrevText(e.editor, { chars: 5000, }));
+        setShowBubbleMenu(false);
+        autoComplete(getPrevText(e.editor, { chars: 5000, }));
         // va.track("Autocomplete Shortcut Used");
       } else {
-        onUpdate(e.editor);
-        debouncedUpdates(e);
+        // check if the user has typed something new on editor
+        const hasChanges = !isEqual(e.editor.getJSON(), defaultValue);
+        if (hasChanges) {
+          onUpdate(e.editor);
+          debouncedUpdates(e);
+        }
       }
     },
     autofocus: false,
@@ -201,9 +203,28 @@ export default function Editor({
     }
   }, [editor]);
 
-  const { complete, completion, isLoading, stop } = useCompletion({
+  const { complete: autoComplete, completion: autoCompletion, isLoading: isCompleting, stop: stopAutoComplete, setCompletion: setAutoCompletion } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
+    body: { ...(body || {}) },
+    headers: { ...(headers || {}), },
+    onFinish: (_prompt, completion) => {
+      setLoadingOutside(false);
+      editor?.commands.setTextSelection({
+        from: editor.state.selection.from - completion.length,
+        to: editor.state.selection.from,
+      });
+      setShowBubbleMenu(true);
+      setAutoCompletion('');
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const { completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion({
+    id: "ai-write",
+    api: `${completionApi}/write`,
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
@@ -211,23 +232,31 @@ export default function Editor({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
+      setShowBubbleMenu(true);
+      setWriteCompletion('');
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
+  const isLoading = isWriting || isCompleting;
   const prev = useRef("");
 
   // Insert chunks of the generated text
   useEffect(() => {
+    const completion = (autoCompletion || writeCompletion);
     const diff = completion.slice(prev.current.length);
     prev.current = completion;
-    editor?.commands.insertContent(diff);
-    if (!isLoading) {
-      setLoadingOutside(false);
+    try {
+      editor?.commands.insertContent(diff);
+    } catch (e) {
+      editor?.commands.insertContent(' ');
+      console.log("error", (e as Error)?.stack);
     }
-  }, [isLoading, editor, completion]);
+    // https://tiptap.dev/docs/editor/api/commands/selection/scroll-into-view
+    editor?.commands?.scrollIntoView();
+  }, [isLoading, editor, autoCompletion, writeCompletion]);
 
   // Default: Hydrate the editor with the content from localStorage.
   // If disableLocalStorage is true, hydrate the editor with the defaultValue.
@@ -247,10 +276,27 @@ export default function Editor({
     editor.commands.setContent(defaultValue)
   }, [defaultValue]);
 
+  useEffect(() => {
+    setShowBubbleMenu(additionalData?.bubbleMenuOpen);
+  }, [additionalData?.bubbleMenuOpen]);
+
+  useEffect(() => {
+    setChatHistory(additionalData?.chatHistory);
+  }, [additionalData?.chatHistory]);
+
+  const handleResetCompletions = () => {
+    stopWrite();
+    stopAutoComplete();
+    setWriteCompletion('');
+    setAutoCompletion('');
+  }
+
   return (
-    <NovelContext.Provider value={{ completionApi, additionalData, lastInput, setLastInput, }}>
+    <NovelContext.Provider value={{ completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }}>
       <div
-        onClick={() => { editor?.chain().focus().run(); }}
+        onClick={() => {
+          if (additionalData?.focusOnEnter) editor?.chain().focus().run();
+        }}
         className={className}>
         {editor && (
           <>
@@ -265,10 +311,10 @@ export default function Editor({
 
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {(additionalData?.showGenLoader || (isLoadingOutside && isLoading)) &&
+        {(additionalData?.showGenLoader || (isLoadingOutside || isLoading)) &&
           (
-            <div className="novel-fixed novel-bottom-3 novel-mx-auto">
-              <AIGeneratingLoading stop={stop} />
+            <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
+              <AIGeneratingLoading stop={() => { handleResetCompletions(); }} />
             </div>
           )}
         {/* {editor &&
@@ -280,7 +326,7 @@ export default function Editor({
             </button>
           </div>
         } */}
-        {bot && editor && <ChatBot editor={editor} history={additionalData?.chatHistory || []} />}
+        {bot && editor && <ChatBot editor={editor} history={chatHistory} />}
       </div>
     </NovelContext.Provider>
   );
