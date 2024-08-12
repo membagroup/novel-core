@@ -28504,6 +28504,7 @@ function Editor2({
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion2) => {
+      setLoadingOutside(false);
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion2.length,
         to: editor.state.selection.from
@@ -28532,11 +28533,11 @@ function Editor2({
       import_sonner6.toast.error(err.message);
     }
   });
-  const isWrite = !!completeWrite;
-  const completion = isWrite ? writeCompletion : autoCompletion;
-  const isLoading = isWrite ? isWriting : isCompleting;
-  const stop2 = isWrite ? stopWrite : stopAutoComplete;
-  const setCompletion = isWrite ? setWriteCompletion : setAutoCompletion;
+  const isAutoWrite = !!completeWrite;
+  const completion = isAutoWrite ? writeCompletion : autoCompletion;
+  const isLoading = isWriting || isCompleting;
+  const stop2 = isAutoWrite ? stopWrite : stopAutoComplete;
+  const setCompletion = isAutoWrite ? setWriteCompletion : setAutoCompletion;
   const prev = (0, import_react59.useRef)("");
   (0, import_react59.useEffect)(() => {
     var _a;
@@ -28547,9 +28548,6 @@ function Editor2({
     } catch (e) {
       editor == null ? void 0 : editor.commands.insertContent(" ");
       console.log("error", e == null ? void 0 : e.stack);
-    }
-    if (!isLoading) {
-      setLoadingOutside(false);
     }
     (_a = editor == null ? void 0 : editor.commands) == null ? void 0 : _a.scrollIntoView();
   }, [isLoading, editor, completion]);
