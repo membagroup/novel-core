@@ -176,7 +176,7 @@ export default function Editor({
           to: selection.from,
         });
         setShowBubbleMenu(false);
-        complete(getPrevText(e.editor, { chars: 5000, }));
+        autoComplete(getPrevText(e.editor, { chars: 5000, }));
         // va.track("Autocomplete Shortcut Used");
       } else {
         // check if the user has typed something new on editor
@@ -203,7 +203,7 @@ export default function Editor({
     }
   }, [editor]);
 
-  const { complete: completeContinue, completion: continueCompletion, isLoading: isContinuing, stop: stopContinue, setCompletion: setContCompletion } = useCompletion({
+  const { complete: autoComplete, completion: autoCompletion, isLoading: isCompleting, stop: stopAutoComplete, setCompletion: setAutoCompletion } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: { ...(body || {}) },
@@ -214,7 +214,7 @@ export default function Editor({
         to: editor.state.selection.from,
       });
       setShowBubbleMenu(true);
-      setCompletion('');
+      setAutoCompletion('');
     },
     onError: (err) => {
       toast.error(err.message);
@@ -232,7 +232,7 @@ export default function Editor({
         to: editor.state.selection.from,
       });
       setShowBubbleMenu(true);
-      setCompletion('');
+      setWriteCompletion('');
     },
     onError: (err) => {
       toast.error(err.message);
@@ -240,11 +240,9 @@ export default function Editor({
   });
 
   const isWrite = !!completeWrite;
-  const completion = isWrite ? writeCompletion : continueCompletion;
-  const isLoading = isWrite ? isWriting : isContinuing;
-  const complete = isWrite ? completeWrite : completeContinue;
-  const stop = isWrite ? stopWrite : stopContinue;
-  const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
+  const completion = isWrite ? writeCompletion : autoCompletion;
+  const isLoading = isWrite ? isWriting : isCompleting;
+  const stop = isWrite ? stopWrite : stopAutoComplete;
 
   const prev = useRef("");
 
