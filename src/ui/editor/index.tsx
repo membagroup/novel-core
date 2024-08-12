@@ -176,7 +176,7 @@ export default function Editor({
           to: selection.from,
         });
         setShowBubbleMenu(false);
-        complete(getPrevText(e.editor, { chars: 5000, }));
+        autoComplete(getPrevText(e.editor, { chars: 5000, }));
         // va.track("Autocomplete Shortcut Used");
       } else {
         // check if the user has typed something new on editor
@@ -203,25 +203,26 @@ export default function Editor({
     }
   }, [editor]);
 
-  const { complete: completeContinue, completion: continueCompletion, isLoading: isContinuing, stop: stopContinue, setCompletion: setContCompletion } = useCompletion({
+  const { complete: autoComplete, completion: autoCompletion, isLoading: isCompleting, stop: stopAutoComplete, setCompletion: setAutoCompletion } = useCompletion({
     id: "ai-continue",
     api: `${completionApi}/continue`,
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
+      setLoadingOutside(false);
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
       setShowBubbleMenu(true);
-      setCompletion('');
+      setAutoCompletion('');
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
-  const { complete: completeWrite, completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion({
+  const { completion: writeCompletion, isLoading: isWriting, stop: stopWrite, setCompletion: setWriteCompletion } = useCompletion({
     id: "ai-write",
     api: `${completionApi}/write`,
     body: { ...(body || {}) },
@@ -232,24 +233,19 @@ export default function Editor({
         to: editor.state.selection.from,
       });
       setShowBubbleMenu(true);
-      setCompletion('');
+      setWriteCompletion('');
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
-  const isWrite = !!completeWrite;
-  const completion = isWrite ? writeCompletion : continueCompletion;
-  const isLoading = isWrite ? isWriting : isContinuing;
-  const complete = isWrite ? completeWrite : completeContinue;
-  const stop = isWrite ? stopWrite : stopContinue;
-  const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
-
+  const isLoading = isWriting || isCompleting;
   const prev = useRef("");
 
   // Insert chunks of the generated text
   useEffect(() => {
+    const completion = (autoCompletion || writeCompletion);
     const diff = completion.slice(prev.current.length);
     prev.current = completion;
     try {
@@ -258,10 +254,9 @@ export default function Editor({
       editor?.commands.insertContent(' ');
       console.log("error", (e as Error)?.stack);
     }
-    if (!isLoading) {
-      setLoadingOutside(false);
-    }
-  }, [isLoading, editor, completion]);
+    // https://tiptap.dev/docs/editor/api/commands/selection/scroll-into-view
+    editor?.commands?.scrollIntoView();
+  }, [isLoading, editor, autoCompletion, writeCompletion]);
 
   // Default: Hydrate the editor with the content from localStorage.
   // If disableLocalStorage is true, hydrate the editor with the defaultValue.
@@ -289,6 +284,13 @@ export default function Editor({
     setChatHistory(additionalData?.chatHistory);
   }, [additionalData?.chatHistory]);
 
+  const handleResetCompletions = () => {
+    stopWrite();
+    stopAutoComplete();
+    setWriteCompletion('');
+    setAutoCompletion('');
+  }
+
   return (
     <NovelContext.Provider value={{ completionApi, additionalData, lastInput: aiTextInput, setLastInput: setAiTextInput, showBubbleMenu, setShowBubbleMenu }}>
       <div
@@ -312,10 +314,7 @@ export default function Editor({
         {(additionalData?.showGenLoader || (isLoadingOutside || isLoading)) &&
           (
             <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
-              <AIGeneratingLoading stop={() => {
-                stop();
-                setCompletion('');
-              }} />
+              <AIGeneratingLoading stop={() => { handleResetCompletions(); }} />
             </div>
           )}
         {/* {editor &&
