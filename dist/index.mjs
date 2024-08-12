@@ -28606,6 +28606,7 @@ function Editor2({
   const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
   const prev = useRef17("");
   useEffect20(() => {
+    var _a;
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
     try {
@@ -28617,6 +28618,7 @@ function Editor2({
     if (!isLoading) {
       setLoadingOutside(false);
     }
+    (_a = editor == null ? void 0 : editor.commands) == null ? void 0 : _a.scrollIntoView();
   }, [isLoading, editor, completion]);
   useEffect20(() => {
     if (!editor || hydrated || disableLocalStorage !== false)

@@ -28540,6 +28540,7 @@ function Editor2({
   const setCompletion = isWrite ? setWriteCompletion : setContCompletion;
   const prev = (0, import_react59.useRef)("");
   (0, import_react59.useEffect)(() => {
+    var _a;
     const diff3 = completion.slice(prev.current.length);
     prev.current = completion;
     try {
@@ -28551,6 +28552,7 @@ function Editor2({
     if (!isLoading) {
       setLoadingOutside(false);
     }
+    (_a = editor == null ? void 0 : editor.commands) == null ? void 0 : _a.scrollIntoView();
   }, [isLoading, editor, completion]);
   (0, import_react59.useEffect)(() => {
     if (!editor || hydrated || disableLocalStorage !== false)
