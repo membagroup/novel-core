@@ -28438,7 +28438,7 @@ function Editor2({
   const [aiTextInput, setAiTextInput] = (0, import_react59.useState)("");
   const [showBubbleMenu, setShowBubbleMenu] = (0, import_react59.useState)(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = (0, import_react59.useState)((additionalData == null ? void 0 : additionalData.chatHistory) || []);
-  const [isLoadingOutside, setLoadingOutside] = (0, import_react59.useState)(false);
+  const [isLoadingGenAi, setLoadingGenAi] = (0, import_react59.useState)(false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
     const text = editor2.getText();
@@ -28469,8 +28469,8 @@ function Editor2({
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastTwo = getPrevText(e.editor, { chars: 2 });
-      if (lastTwo === autoCompleteShortKey && !isLoading) {
-        setLoadingOutside(true);
+      if (lastTwo === autoCompleteShortKey && !isCompleting) {
+        setLoadingGenAi(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
           to: selection.from
@@ -28504,7 +28504,7 @@ function Editor2({
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion) => {
-      setLoadingOutside(false);
+      setLoadingGenAi(false);
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from
@@ -28521,6 +28521,9 @@ function Editor2({
     api: `${completionApi}/write`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
+    onResponse: (res) => {
+      setLoadingGenAi(true);
+    },
     onFinish: (_prompt, completion) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -28533,7 +28536,6 @@ function Editor2({
       import_sonner6.toast.error(err.message);
     }
   });
-  const isLoading = isWriting || isCompleting;
   const prev = (0, import_react59.useRef)("");
   (0, import_react59.useEffect)(() => {
     var _a;
@@ -28547,7 +28549,7 @@ function Editor2({
       console.log("error", e == null ? void 0 : e.stack);
     }
     (_a = editor == null ? void 0 : editor.commands) == null ? void 0 : _a.scrollIntoView();
-  }, [isLoading, editor, autoCompletion, writeCompletion]);
+  }, [editor, autoCompletion, writeCompletion]);
   (0, import_react59.useEffect)(() => {
     if (!editor || hydrated || disableLocalStorage !== false)
       return;
@@ -28568,7 +28570,9 @@ function Editor2({
   (0, import_react59.useEffect)(() => {
     setChatHistory(additionalData == null ? void 0 : additionalData.chatHistory);
   }, [additionalData == null ? void 0 : additionalData.chatHistory]);
-  const handleResetCompletions = () => {
+  const handleStopGenAi = () => {
+    setLoadingGenAi(false);
+    setShowBubbleMenu(true);
     stopWrite();
     stopAutoComplete();
     setWriteCompletion("");
@@ -28591,8 +28595,8 @@ function Editor2({
         editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react60.EditorContent, { editor }),
-        ((additionalData == null ? void 0 : additionalData.showGenLoader) || (isLoadingOutside || isLoading)) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: () => {
-          handleResetCompletions();
+        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingGenAi) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: () => {
+          handleStopGenAi();
         } }) }),
         bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: chatHistory })
       ]
