@@ -126,8 +126,7 @@ export default function Editor({
   const [aiTextInput, setAiTextInput] = useState('');
   const [showBubbleMenu, setShowBubbleMenu] = useState<boolean>(additionalData?.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = useState<Message[]>(additionalData?.chatHistory || []);
-
-  const [isLoadingGenAi, setLoadingGenAi] = useState(false);
+  const [isLoadingGenAi, setLoadingGenAi] = useState(additionalData?.loadingGenAi || false);
 
   const debouncedUpdates = useDebouncedCallback(async ({ editor }) => {
     const json = editor.getJSON();
@@ -227,9 +226,6 @@ export default function Editor({
     api: `${completionApi}/write`,
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
-    onResponse: (res) => {
-      setLoadingGenAi(true);
-    },
     onFinish: (_prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -279,6 +275,10 @@ export default function Editor({
   }, [defaultValue]);
 
   useEffect(() => {
+    setLoadingGenAi(additionalData?.loadingGenAi);
+  }, [additionalData?.loadingGenAi]);
+
+  useEffect(() => {
     setShowBubbleMenu(additionalData?.bubbleMenuOpen);
   }, [additionalData?.bubbleMenuOpen]);
 
@@ -315,7 +315,7 @@ export default function Editor({
 
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {(additionalData?.showGenLoader || isLoadingGenAi) &&
+        {isLoadingGenAi &&
           (
             <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
               <AIGeneratingLoading stop={() => { handleStopGenAi(); }} />
