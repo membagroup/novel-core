@@ -28438,7 +28438,7 @@ function Editor2({
   const [aiTextInput, setAiTextInput] = (0, import_react59.useState)("");
   const [showBubbleMenu, setShowBubbleMenu] = (0, import_react59.useState)(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = (0, import_react59.useState)((additionalData == null ? void 0 : additionalData.chatHistory) || []);
-  const [isLoadingGenAi, setLoadingGenAi] = (0, import_react59.useState)(false);
+  const [isLoadingGenAi, setLoadingGenAi] = (0, import_react59.useState)((additionalData == null ? void 0 : additionalData.loadingGenAi) || false);
   const debouncedUpdates = (0, import_use_debounce.useDebouncedCallback)((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
     const text = editor2.getText();
@@ -28521,9 +28521,6 @@ function Editor2({
     api: `${completionApi}/write`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
-    onResponse: (res) => {
-      setLoadingGenAi(true);
-    },
     onFinish: (_prompt, completion) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -28565,6 +28562,9 @@ function Editor2({
     editor.commands.setContent(defaultValue);
   }, [defaultValue]);
   (0, import_react59.useEffect)(() => {
+    setLoadingGenAi(additionalData == null ? void 0 : additionalData.loadingGenAi);
+  }, [additionalData == null ? void 0 : additionalData.loadingGenAi]);
+  (0, import_react59.useEffect)(() => {
     setShowBubbleMenu(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   }, [additionalData == null ? void 0 : additionalData.bubbleMenuOpen]);
   (0, import_react59.useEffect)(() => {
@@ -28595,7 +28595,7 @@ function Editor2({
         editor && collaboration && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(CollaborationInfo, { status, editor }),
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ImageResizer, { editor }),
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react60.EditorContent, { editor }),
-        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingGenAi) && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: () => {
+        isLoadingGenAi && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AIGeneratingLoading, { stop: () => {
           handleStopGenAi();
         } }) }),
         bot && editor && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ChatBot, { editor, history: chatHistory })

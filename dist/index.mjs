@@ -28504,7 +28504,7 @@ function Editor2({
   const [aiTextInput, setAiTextInput] = useState13("");
   const [showBubbleMenu, setShowBubbleMenu] = useState13(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = useState13((additionalData == null ? void 0 : additionalData.chatHistory) || []);
-  const [isLoadingGenAi, setLoadingGenAi] = useState13(false);
+  const [isLoadingGenAi, setLoadingGenAi] = useState13((additionalData == null ? void 0 : additionalData.loadingGenAi) || false);
   const debouncedUpdates = useDebouncedCallback((_0) => __async(this, [_0], function* ({ editor: editor2 }) {
     const json = editor2.getJSON();
     const text = editor2.getText();
@@ -28587,9 +28587,6 @@ function Editor2({
     api: `${completionApi}/write`,
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
-    onResponse: (res) => {
-      setLoadingGenAi(true);
-    },
     onFinish: (_prompt, completion) => {
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
@@ -28631,6 +28628,9 @@ function Editor2({
     editor.commands.setContent(defaultValue);
   }, [defaultValue]);
   useEffect20(() => {
+    setLoadingGenAi(additionalData == null ? void 0 : additionalData.loadingGenAi);
+  }, [additionalData == null ? void 0 : additionalData.loadingGenAi]);
+  useEffect20(() => {
     setShowBubbleMenu(additionalData == null ? void 0 : additionalData.bubbleMenuOpen);
   }, [additionalData == null ? void 0 : additionalData.bubbleMenuOpen]);
   useEffect20(() => {
@@ -28661,7 +28661,7 @@ function Editor2({
         editor && collaboration && /* @__PURE__ */ jsx19(CollaborationInfo, { status, editor }),
         (editor == null ? void 0 : editor.isActive("image")) && /* @__PURE__ */ jsx19(ImageResizer, { editor }),
         /* @__PURE__ */ jsx19(EditorContent, { editor }),
-        ((additionalData == null ? void 0 : additionalData.showGenLoader) || isLoadingGenAi) && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: () => {
+        isLoadingGenAi && /* @__PURE__ */ jsx19("div", { className: "novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center", children: /* @__PURE__ */ jsx19(AIGeneratingLoading, { stop: () => {
           handleStopGenAi();
         } }) }),
         bot && editor && /* @__PURE__ */ jsx19(ChatBot, { editor, history: chatHistory })
