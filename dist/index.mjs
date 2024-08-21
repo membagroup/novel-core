@@ -28570,13 +28570,13 @@ function Editor2({
     body: __spreadValues({}, body || {}),
     headers: __spreadValues({}, headers || {}),
     onFinish: (_prompt, completion) => {
-      setLoadingGenAi(false);
       editor == null ? void 0 : editor.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from
       });
       setShowBubbleMenu(true);
       setAutoCompletion("");
+      setLoadingGenAi(false);
     },
     onError: (err) => {
       toast6.error(err.message);
@@ -28594,6 +28594,7 @@ function Editor2({
       });
       setShowBubbleMenu(true);
       setWriteCompletion("");
+      setLoadingGenAi(false);
     },
     onError: (err) => {
       toast6.error(err.message);
