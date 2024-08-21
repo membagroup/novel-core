@@ -208,13 +208,13 @@ export default function Editor({
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
-      setLoadingGenAi(false);
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
       setShowBubbleMenu(true);
       setAutoCompletion('');
+      setLoadingGenAi(false);
     },
     onError: (err) => {
       toast.error(err.message);
@@ -233,6 +233,7 @@ export default function Editor({
       });
       setShowBubbleMenu(true);
       setWriteCompletion('');
+      setLoadingGenAi(false);
     },
     onError: (err) => {
       toast.error(err.message);
