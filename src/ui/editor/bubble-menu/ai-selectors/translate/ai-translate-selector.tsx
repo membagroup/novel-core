@@ -121,7 +121,8 @@ export const TranslateSelector: FC<TranslateSelectorProps> = ({
                   if (!isLoading) {
                     const { from, to } = editor.state.selection;
                     const text = editor.state.doc.textBetween(from, to, " ");
-                    complete(`${item.command}:\n ${text}`);
+                    const input = `${item.command}:\n ${text}`;
+                    complete(input, { body: { command: item.command, text, action: 'translate' } });
                     setIsOpen(false);
                   }
                 }}
