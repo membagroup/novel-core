@@ -28109,7 +28109,7 @@ function ChatBot(props) {
   } = (0, import_react57.useChat)({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText() }),
+    body: __spreadProps(__spreadValues({}, body || {}), { system: editor.getText(), action: "bot" }),
     headers: __spreadValues({}, headers || {}),
     initialMessages: [initialMessage],
     onError: (err) => {
