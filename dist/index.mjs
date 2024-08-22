@@ -6251,8 +6251,9 @@ var TranslateSelector = ({
           if (!isLoading) {
             const { from, to } = editor.state.selection;
             const text = editor.state.doc.textBetween(from, to, " ");
-            complete(`${item.command}:
- ${text}`);
+            const input = `${item.command}:
+ ${text}`;
+            complete(input, { body: { command: item.command, text, action: "translate" } });
             setIsOpen(false);
           }
         },
