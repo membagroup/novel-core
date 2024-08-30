@@ -126,8 +126,7 @@ export default function Editor({
   const [aiTextInput, setAiTextInput] = useState('');
   const [showBubbleMenu, setShowBubbleMenu] = useState<boolean>(additionalData?.bubbleMenuOpen);
   const [chatHistory, setChatHistory] = useState<Message[]>(additionalData?.chatHistory || []);
-
-  const [isLoadingOutside, setLoadingOutside] = useState(false);
+  const [isLoadingGenAi, setLoadingGenAi] = useState(additionalData?.loadingGenAi || false);
 
   const debouncedUpdates = useDebouncedCallback(async ({ editor }) => {
     const json = editor.getJSON();
@@ -169,8 +168,8 @@ export default function Editor({
     onUpdate: (e) => {
       const selection = e.editor.state.selection;
       const lastTwo = getPrevText(e.editor, { chars: 2, });
-      if (lastTwo === autoCompleteShortKey && !isLoading) {
-        setLoadingOutside(true);
+      if (lastTwo === autoCompleteShortKey && !isCompleting) {
+        setLoadingGenAi(true);
         e.editor.commands.deleteRange({
           from: selection.from - 2,
           to: selection.from,
@@ -209,13 +208,13 @@ export default function Editor({
     body: { ...(body || {}) },
     headers: { ...(headers || {}), },
     onFinish: (_prompt, completion) => {
-      setLoadingOutside(false);
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
       setShowBubbleMenu(true);
       setAutoCompletion('');
+      setLoadingGenAi(false);
     },
     onError: (err) => {
       toast.error(err.message);
@@ -234,13 +233,13 @@ export default function Editor({
       });
       setShowBubbleMenu(true);
       setWriteCompletion('');
+      setLoadingGenAi(false);
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
-  const isLoading = isWriting || isCompleting;
   const prev = useRef("");
 
   // Insert chunks of the generated text
@@ -256,7 +255,7 @@ export default function Editor({
     }
     // https://tiptap.dev/docs/editor/api/commands/selection/scroll-into-view
     editor?.commands?.scrollIntoView();
-  }, [isLoading, editor, autoCompletion, writeCompletion]);
+  }, [editor, autoCompletion, writeCompletion]);
 
   // Default: Hydrate the editor with the content from localStorage.
   // If disableLocalStorage is true, hydrate the editor with the defaultValue.
@@ -277,6 +276,10 @@ export default function Editor({
   }, [defaultValue]);
 
   useEffect(() => {
+    setLoadingGenAi(additionalData?.loadingGenAi);
+  }, [additionalData?.loadingGenAi]);
+
+  useEffect(() => {
     setShowBubbleMenu(additionalData?.bubbleMenuOpen);
   }, [additionalData?.bubbleMenuOpen]);
 
@@ -284,7 +287,9 @@ export default function Editor({
     setChatHistory(additionalData?.chatHistory);
   }, [additionalData?.chatHistory]);
 
-  const handleResetCompletions = () => {
+  const handleStopGenAi = () => {
+    setLoadingGenAi(false);
+    setShowBubbleMenu(true);
     stopWrite();
     stopAutoComplete();
     setWriteCompletion('');
@@ -311,10 +316,10 @@ export default function Editor({
 
         {editor?.isActive("image") && <ImageResizer editor={editor} />}
         <EditorContent editor={editor} />
-        {(additionalData?.showGenLoader || (isLoadingOutside || isLoading)) &&
+        {isLoadingGenAi &&
           (
             <div className="novel-fixed novel-bottom-3 novel-mx-auto novel-justify-center">
-              <AIGeneratingLoading stop={() => { handleResetCompletions(); }} />
+              <AIGeneratingLoading stop={() => { handleStopGenAi(); }} />
             </div>
           )}
         {/* {editor &&

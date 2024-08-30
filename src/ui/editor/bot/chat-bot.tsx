@@ -49,7 +49,7 @@ export function ChatBot(props: Props) {
   } = useChat({
     id: "ai-bot",
     api: `${completionApi}/bot`,
-    body: { ...(body || {}), system: editor.getText() },
+    body: { ...(body || {}), system: editor.getText(), action: 'bot' },
     headers: { ...(headers || {}), },
     initialMessages: [initialMessage],
     onError: (err) => {
